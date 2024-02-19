@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "HireVerse_backend": {
+      "main": "src/HireVerse_backend/main.mo",
+      "type": "motoko"
+    },
+    "HireVerse_frontend": {
+      "dependencies": [
+        "HireVerse_backend"
+      ],
+      "source": [
+        "src/HireVerse_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "HireVerse_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
