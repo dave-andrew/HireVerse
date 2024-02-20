@@ -1,3 +1,9 @@
+import PageLayout from "../layouts/PageLayout";
+
 export default function FindCompany() {
-    return <>aa</>;
+    return (
+        <PageLayout>
+            asd
+        </PageLayout>
+    )
 }
