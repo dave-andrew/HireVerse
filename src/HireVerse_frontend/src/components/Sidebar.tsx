@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 import { RiPhoneFindLine } from "react-icons/ri";
 import { LuBuilding2 } from "react-icons/lu";
-import {Link, useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 type Menu = {
     name: string;
@@ -19,7 +19,7 @@ export default function Sidebar() {
             {
                 name: "FIND JOBS",
                 icon: <RiPhoneFindLine size="2rem" />,
-                activeUrl: ['/'],
+                activeUrl: ["/"],
                 redirectUrl: "/",
             },
             {
@@ -47,10 +47,12 @@ export default function Sidebar() {
                 <div className="flex flex-col py-6 px-4 gap-2 grow">
                     {menus.map((menu, index) => {
                         return (
-                            <Link to={menu.redirectUrl || ''} key={index}>
+                            <Link
+                                to={menu.redirectUrl || ""}
+                                key={index}>
                                 <div
                                     key={index}
-                                    className={`${menu.activeUrl.includes(location.pathname) ? 'bg-signature-red text-white' : ''} w-full hover:bg-red-400 font-bold flex px-3 p-5 place-items-center rounded-2xl gap-3`}>
+                                    className={`${menu.activeUrl.includes(location.pathname) ? "bg-signature-red text-white" : ""} w-full hover:bg-red-400 font-bold flex px-3 p-5 place-items-center rounded-2xl gap-3`}>
                                     {menu.icon}
                                     {menu.name}
                                 </div>
@@ -81,7 +83,7 @@ export default function Sidebar() {
                     </div>
                 </div>
             </div>
-            <div className="w-[21rem]" />
+            <div className="w-[21rem] flex" />
         </>
     );
 }

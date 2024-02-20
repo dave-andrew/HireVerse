@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 import Sidebar from "../components/Sidebar";
 
 interface Props {
@@ -7,9 +7,11 @@ interface Props {
 
 export default function PageLayout({ children }: Props) {
     return (
-        <div className={'w-full bg-white min-h-screen flex flex-row'}>
+        <div className="w-full bg-signature-gray min-h-screen flex flex-row">
             <Sidebar />
-            <div className={'w-full bg-signature-gray m-4 rounded-xl'}>{children}</div>
+            <div className="w-full bg-signature-gray m-4 rounded-xl">
+                {children}
+            </div>
         </div>
     );
 }

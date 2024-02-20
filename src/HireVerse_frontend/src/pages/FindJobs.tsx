@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { TbFilterCog } from "react-icons/tb";
 import { IoIosSearch } from "react-icons/io";
@@ -16,7 +15,7 @@ export default function FindJobs() {
 
     return (
         <PageLayout>
-            <div className={"flex flex-col p-6 w-full h-full"}>
+            <div className={"flex flex-col p-6 pt-0 w-full h-full"}>
                 <h1 className="main-title">FIND JOBS</h1>
                 <div className={"flex flex-row w-full h-full gap-3"}>
                     <CardLayout className={"h-full"}>
