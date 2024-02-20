@@ -1,32 +1,38 @@
 import { ReactElement, useEffect, useState } from "react";
 import { RiPhoneFindLine } from "react-icons/ri";
 import { LuBuilding2 } from "react-icons/lu";
+import {Link, useLocation} from "react-router-dom";
 
 type Menu = {
     name: string;
     icon: ReactElement;
-    activeUrl: string;
+    activeUrl: string[];
+    redirectUrl?: string;
 };
 
 export default function Sidebar() {
     const [menus, setMenus] = useState<Menu[]>([]);
+    const location = useLocation();
 
     useEffect(() => {
         setMenus([
             {
                 name: "FIND JOBS",
                 icon: <RiPhoneFindLine size="2rem" />,
-                activeUrl: "/",
+                activeUrl: ['/'],
+                redirectUrl: "/",
             },
             {
                 name: "FIND COMPANY",
                 icon: <LuBuilding2 size="2rem" />,
-                activeUrl: "/find-company",
+                activeUrl: ["/find-company"],
+                redirectUrl: "/find-company",
             },
             {
                 name: "MANAGE COMPANY",
                 icon: <LuBuilding2 size="2rem" />,
-                activeUrl: "/manage-company",
+                activeUrl: ["/manage-company"],
+                redirectUrl: "/manage-company",
             },
         ]);
     }, []);
@@ -41,12 +47,14 @@ export default function Sidebar() {
                 <div className="flex flex-col py-6 px-4 gap-2 grow">
                     {menus.map((menu, index) => {
                         return (
-                            <div
-                                key={index}
-                                className="w-full hover:bg-red-400 font-bold flex px-3 p-5 place-items-center rounded-2xl gap-3">
-                                {menu.icon}
-                                {menu.name}
-                            </div>
+                            <Link to={menu.redirectUrl || ''} key={index}>
+                                <div
+                                    key={index}
+                                    className={`${menu.activeUrl.includes(location.pathname) ? 'bg-signature-red text-white' : ''} w-full hover:bg-red-400 font-bold flex px-3 p-5 place-items-center rounded-2xl gap-3`}>
+                                    {menu.icon}
+                                    {menu.name}
+                                </div>
+                            </Link>
                         );
                     })}
                 </div>

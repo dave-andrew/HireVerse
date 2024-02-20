@@ -37,6 +37,12 @@
   padding: 10px 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
+  height: 100%;
+
+  &:hover {
+    background-color: #990000;
+  
+  }
 }
 
 .main-title {
