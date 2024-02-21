@@ -39,7 +39,7 @@ export default function Sidebar() {
 
     return (
         <>
-            <div className="flex flex-row fixed bg-white w-full h-16 justify-between place-items-center xl:px-24">
+            <div className="flex flex-row bg-white w-full h-16 justify-between place-items-center xl:px-24 px-2">
                 <div className=" text-blue-primary font-bold text-4xl">
                     HIREVERSE
                 </div>
