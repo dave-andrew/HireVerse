@@ -11,7 +11,6 @@ export default function PageLayout({ children }: Props) {
             <Sidebar />
             <div className="w-full bg-signature-gray rounded-xl"
                  style={{
-                     "padding": "2rem",
                      "height": "calc(100vh - 4rem)",
                  }}>
                     {children}

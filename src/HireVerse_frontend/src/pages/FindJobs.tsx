@@ -15,7 +15,7 @@ export default function FindJobs() {
 
     return (
         <PageLayout>
-            <div className={"flex flex-col w-full h-full place-items-center gap-4"}>
+            <div className={"flex flex-col w-full h-full place-items-center gap-4 p-8"}>
                 <div className={"flex flex-row gap-2 w-1/2"}>
                     {/*TODO: Filter*/}
                     <CardLayout className={"p-2 cursor-pointer"}>
