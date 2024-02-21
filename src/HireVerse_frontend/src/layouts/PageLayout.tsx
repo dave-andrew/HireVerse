@@ -9,10 +9,7 @@ export default function PageLayout({ children }: Props) {
     return (
         <div className="w-full bg-signature-gray flex flex-col">
             <Sidebar />
-            <div className="w-full bg-signature-gray rounded-xl"
-                 style={{
-                     "height": "calc(100vh - 4rem)",
-                 }}>
+            <div className="w-full bg-signature-gray rounded-xl mt-16">
                     {children}
             </div>
         </div>

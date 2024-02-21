@@ -21,10 +21,10 @@ export default function CustomTextField({
 }: CustomTextFieldProps) {
     return (
         <div className={`flex flex-col ${className}`}>
-            <div className={"font-bold"}>{label}</div>
+            <div className={"font-bold text-xs"}>{label}</div>
             <input
                 type={type}
-                className={"border-b outline-0 p-2 border-gray-900"}
+                className={"border-b outline-0 border-gray-900"}
                 placeholder={placeholder}
                 onChange={onChange}
                 min={min}
