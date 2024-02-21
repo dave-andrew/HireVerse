@@ -1,19 +1,21 @@
 @import "tailwindcss/base";
-
 @import "tailwindcss/components";
-
 @import "tailwindcss/utilities";
 
-.text-signature-red {
-  color: #aa0000;
+.text-blue-primary {
+  color: #00b4d8;
 }
 
-.bg-signature-red {
-  background-color: #aa0000;
+.bg-blue-primary {
+  background-color: #00b4d8;
 }
 
-.hover\:bg-signature-red:hover {
-  background-color: #990000;
+.border-color-blue-primary {
+  border-color: #00b4d8;
+}
+
+.hover\:bg-signature-blue:hover {
+  background-color: #0077b6;
 }
 
 .bg-signature-gray {
@@ -31,7 +33,7 @@
 
 
 .main-button {
-  background-color: #aa0000;
+  background-color: #00b4d8;
   color: white;
   font-weight: bold;
   padding: 10px 20px;
@@ -41,7 +43,6 @@
 
   &:hover {
     background-color: #990000;
-
   }
 }
 
