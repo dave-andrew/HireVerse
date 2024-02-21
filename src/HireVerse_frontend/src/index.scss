@@ -1,19 +1,41 @@
 @import "tailwindcss/base";
-
 @import "tailwindcss/components";
-
 @import "tailwindcss/utilities";
 
-.text-signature-red {
-  color: #aa0000;
+@layer base {
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("./fonts/Bebas_Neue/BebasNeue-Regular.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Lato";
+    src: url("./fonts/Lato/Lato-Regular.ttf") format("truetype");
+  }
 }
 
-.bg-signature-red {
-  background-color: #aa0000;
+html {
+  font-family: "Lato", sans-serif;
 }
 
-.hover\:bg-signature-red:hover {
-  background-color: #990000;
+.text-blue-primary {
+  color: #00b4d8;
+}
+
+.bg-blue-primary {
+  background-color: #00b4d8;
+}
+
+.bg-yellow-primary {
+  background-image: linear-gradient(90deg, #ffd166, #fac342);
+}
+
+.border-color-blue-primary {
+  border-color: #00b4d8;
+}
+
+.hover\:bg-signature-blue:hover {
+  background-color: #0077b6;
 }
 
 .bg-signature-gray {
@@ -31,7 +53,7 @@
 
 
 .main-button {
-  background-color: #aa0000;
+  background-color: #00b4d8;
   color: white;
   font-weight: bold;
   padding: 10px 20px;
@@ -40,8 +62,7 @@
   height: 100%;
 
   &:hover {
-    background-color: #990000;
-
+    background-color: #00b4d8;
   }
 }
 

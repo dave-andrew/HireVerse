@@ -7,10 +7,10 @@ interface Props {
 
 export default function PageLayout({ children }: Props) {
     return (
-        <div className="w-full bg-signature-gray min-h-screen flex flex-row">
+        <div className="w-full bg-signature-gray flex flex-col">
             <Sidebar />
-            <div className="w-full bg-signature-gray m-4 rounded-xl">
-                {children}
+            <div className="w-full bg-signature-gray rounded-xl mt-16">
+                    {children}
             </div>
         </div>
     );

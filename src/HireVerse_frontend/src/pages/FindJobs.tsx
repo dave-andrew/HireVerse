@@ -15,20 +15,37 @@ export default function FindJobs() {
 
     return (
         <PageLayout>
-            <div className={"flex flex-col p-6 pt-0 w-full h-full"}>
-                <h1 className="main-title">FIND JOBS</h1>
-                <div className={"flex flex-row w-full h-full gap-3"}>
-                    <CardLayout className={"h-full"}>
+            <div className={"flex flex-col w-full h-full place-items-center gap-4 p-8"}>
+                <div className={"flex flex-row gap-2 w-1/2"}>
+                    {/*TODO: Filter*/}
+                    <CardLayout className={"p-2 cursor-pointer"}>
+                        <TbFilterCog size={"1.5rem"} />
+                    </CardLayout>
+                    <CardLayout
+                        className={
+                            "flex flex-row items-center p-2 w-full gap-2"
+                        }>
+                        <IoIosSearch size={"1.5rem"} />
+                        <input
+                            type={"text"}
+                            className={"outline-0"}
+                            placeholder={"Search Job"}
+                        />
+                    </CardLayout>
+                </div>
+                <div className={"flex flex-row w-full h-full gap-3 xl:px-32 px-4"}>
+                    <CardLayout className={"h-[75vh] flex flex-col gap-3 py-3"}>
                         <div
                             className={
-                                "flex flex-row m-6 justify-between items-center"
+                                "flex flex-row mx-6 justify-between items-center"
                             }>
                             1000 Jakarta Jobs
                             <SortDropdown sortStates={sortStates} />
                         </div>
                         <div
                             className={
-                                "w-96 m-6 h-[70vh] overflow-x-hidden overflow-y-auto card-scollbar gap-1"
+                                "w-96 mx-6 overflow-x-hidden overflow-y-auto card-scollbar gap-1"
+
                             }>
                             {Array.from({ length: 21 }).map((_) => {
                                 return <JobItem />;
@@ -36,23 +53,6 @@ export default function FindJobs() {
                         </div>
                     </CardLayout>
                     <div className={"flex flex-col w-full gap-2"}>
-                        <div className={"flex flex-row gap-2 w-full"}>
-                            {/*TODO: Filter*/}
-                            <CardLayout className={"p-2 cursor-pointer"}>
-                                <TbFilterCog size={"1.5rem"} />
-                            </CardLayout>
-                            <CardLayout
-                                className={
-                                    "flex flex-row items-center p-2 w-full gap-2"
-                                }>
-                                <IoIosSearch size={"1.5rem"} />
-                                <input
-                                    type={"text"}
-                                    className={"outline-0"}
-                                    placeholder={"Search Job"}
-                                />
-                            </CardLayout>
-                        </div>
                         <CardLayout className={"h-full"}>aa</CardLayout>
                     </div>
                 </div>
