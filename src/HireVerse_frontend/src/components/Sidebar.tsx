@@ -41,7 +41,7 @@ export default function Sidebar() {
         <>
             <div className="flex flex-col fixed bg-white w-72 h-full">
                 <div className="pl-6 pt-8 pb-6 text-signature-red font-bold text-5xl">
-                    HIREVERSE
+                    HIREJOB
                 </div>
                 <hr />
                 <div className="flex flex-col py-6 px-4 gap-2 grow">
@@ -52,7 +52,9 @@ export default function Sidebar() {
                                 key={index}>
                                 <div
                                     key={index}
-                                    className={`${menu.activeUrl.includes(location.pathname) ? "bg-signature-red text-white" : ""} w-full hover:bg-red-400 font-bold flex px-3 p-5 place-items-center rounded-2xl gap-3`}>
+                                    className={`${menu.activeUrl.includes(location.pathname) ? 
+                                        "bg-signature-red text-white" : "hover:bg-red-400"} w-full 
+                                        font-bold flex px-3 p-5 place-items-center rounded-2xl gap-3`}>
                                     {menu.icon}
                                     {menu.name}
                                 </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Principal } from "@dfinity/principal";
 import { AuthClient } from "@dfinity/auth-client";
 
+
 export default function Landing() {
     const [principal, setPrincipal] = useState<Principal | null>(null);
 
@@ -26,7 +27,7 @@ export default function Landing() {
             }
         };
         fetchPrincipal();
-    }, []);
+    }, [clickHandler]);
 
     return (
         <div>
