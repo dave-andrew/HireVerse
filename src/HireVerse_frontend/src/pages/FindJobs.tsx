@@ -34,7 +34,7 @@ export default function FindJobs() {
                     </CardLayout>
                 </div>
                 <div className={"flex flex-row w-full h-full gap-3 xl:px-32 px-4"}>
-                    <CardLayout className={"h-[76vh] flex flex-col gap-3 py-3"}>
+                    <CardLayout className={"h-[75vh] flex flex-col gap-3 py-3"}>
                         <div
                             className={
                                 "flex flex-row mx-6 justify-between items-center"

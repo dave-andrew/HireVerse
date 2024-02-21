@@ -40,7 +40,7 @@ export default function Sidebar() {
     return (
         <>
             <div className="z-50 fixed flex flex-row bg-white w-full h-16 justify-between place-items-center xl:px-24 px-2">
-                <div className=" text-blue-primary font-bold text-4xl">
+                <div className="text-blue-primary text-5xl font-bebas">
                     HIREVERSE
                 </div>
                 <div className="flex flex-row w-1/2 min-w-96 justify-center h-full place-items-center px-8">
@@ -64,7 +64,7 @@ export default function Sidebar() {
                 </div>
                 <div className="font-bold flex flex-row gap-4 place-items-center ">
                     <div className="flex flex-col place-items-end">
-                        <div className={"text-xs"}>VINCENT TANJAYA</div>
+                        <div className={"text-xs text-end"}>VINCENT TANJAYA</div>
                         <div className="text-sm font-normal">UID: xxx</div>
                     </div>
                     <svg

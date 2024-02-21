@@ -2,6 +2,22 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@layer base {
+  @font-face {
+    font-family: "Bebas Neue";
+    src: url("./fonts/Bebas_Neue/BebasNeue-Regular.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Lato";
+    src: url("./fonts/Lato/Lato-Regular.ttf") format("truetype");
+  }
+}
+
+html {
+  font-family: "Lato", sans-serif;
+}
+
 .text-blue-primary {
   color: #00b4d8;
 }
