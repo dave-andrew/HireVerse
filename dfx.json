@@ -4,9 +4,22 @@
       "main": "src/HireVerse_backend/main.mo",
       "type": "motoko"
     },
+    "HireVerse_company": {
+      "main": "src/HireVerse_company/main.mo",
+      "type": "motoko"
+    },
+    "HireVerse_job": {
+      "main": "src/HireVerse_job/main.mo",
+      "type": "motoko"
+    },
+    "HireVerse_review": {
+      "main": "src/HireVerse_review/main.mo",
+      "type": "motoko"
+    },
     "HireVerse_frontend": {
       "dependencies": [
-        "HireVerse_backend"
+        "HireVerse_backend",
+        "HireVerse_company"
       ],
       "source": [
         "src/HireVerse_frontend/dist"
