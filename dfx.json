@@ -19,7 +19,9 @@
     "HireVerse_frontend": {
       "dependencies": [
         "HireVerse_backend",
-        "HireVerse_company"
+        "HireVerse_company",
+        "HireVerse_job",
+        "HireVerse_review"
       ],
       "source": [
         "src/HireVerse_frontend/dist"
