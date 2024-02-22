@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Principal } from "@dfinity/principal";
-import { AuthClient } from "@dfinity/auth-client";
+// import { AuthClient } from "@dfinity/auth-client";
 
 
 export default function Landing() {
