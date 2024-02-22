@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Sidebar from "../components/Sidebar";
+import ManagementBars from "../components/sidebar/ManagementBars";
 
 interface Props {
     children: ReactNode;
@@ -8,7 +8,7 @@ interface Props {
 export default function CompanyPageLayout({ children }: Props) {
     return (
         <div className="h-full bg-signature-gray flex flex-row">
-            <Sidebar />
+            <ManagementBars />
             <div className="w-full bg-signature-gray rounded-xl min-h-screen">
                 {children}
             </div>
