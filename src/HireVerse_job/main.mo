@@ -2,6 +2,7 @@ import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import TrieMap "mo:base/TrieMap";
+import Helper "canister:HireVerse_helper";
 
 actor Job {
     type Job = {
@@ -19,8 +20,16 @@ actor Job {
 
     let jobs = TrieMap.TrieMap<Principal, Job>(Principal.equal, Principal.hash);
 
-    public func create_job(job : Job) : async () {
+    public func createJob(job : Job) : async () {
         jobs.put(job.id, job);
     };
+
+    public query func updateJob(principal : Principal, job : Job) : async () {
+        jobs.put(principal, job);
+    };
+
+    public shared func deleteJob(id: Principal) : async ?Job {
+        jobs.remove(id);
+    }
 
 }

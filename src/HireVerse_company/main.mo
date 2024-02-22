@@ -3,7 +3,7 @@ import Principal "mo:base/Principal";
 import Nat "mo:base/Nat";
 import Text "mo:base/Text";
 import Blob "mo:base/Blob";
-
+import Helper "canister:HireVerse_helper";
 
 actor Company {
 
@@ -20,10 +20,13 @@ actor Company {
     };
 
     let companies = TrieMap.TrieMap<Principal, Company>(Principal.equal, Principal.hash);
-    
+
     public shared func createCompany(name : Text, founded_year : Nat, country : Text, location : Text, image : Blob, linkedin : Text) : async Company {
+
+        let id = await Helper.generatePrinciple();
+
         let company = {
-            id = Principal.fromActor(Company);
+            id = id;
             name = name;
             founded_year = founded_year;
             country = country;
@@ -37,4 +40,11 @@ actor Company {
         return company;
     };
 
-}
+    public query func updateCompany(principal : Principal, company : Company) : async () {
+        companies.put(principal, company);
+    };
+
+    public shared func deleteCompany(id : Principal) : async ?Company {
+        companies.remove(id);
+    };
+};
