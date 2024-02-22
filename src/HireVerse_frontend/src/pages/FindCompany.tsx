@@ -1,10 +1,8 @@
 import PageLayout from "../layouts/PageLayout";
-import Sidebar from "../components/Sidebar";
-import { TbFilterCog } from "react-icons/tb";
-import { IoIosSearch } from "react-icons/io";
+import { FaLinkedin } from "react-icons/fa";
+import {IoIosSearch} from "react-icons/io";
 import CardLayout from "../layouts/CardLayout";
-import { useState } from "react";
-import JobItem from "../components/job/JobItem";
+import {useState} from "react";
 import CustomTextField from "../components/form/CustomTextField";
 
 export default function FindCompany() {
@@ -37,6 +35,52 @@ export default function FindCompany() {
 
     ]);
 
+    const [resultCompanies, setResultCompanies] = useState([
+        {
+            name: "Universitas Tarumanegara",
+            location: "Jakarta",
+            country: "Indonesia",
+            industry: "Education",
+            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+            linkedin: "in/untar"
+        }, {
+            name: "Universitas Airlangga",
+            location: "Jakarta",
+            country: "Indonesia",
+            industry: "Education",
+            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+            linkedin: "in/untar"
+        }, {
+            name: "Universitas 11 Maret",
+            location: "Surabaya",
+            country: "Indonesia",
+            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+            industry: "Education",
+            linkedin: "in/untar"
+        }, {
+            name: "Universitas 11 Maret",
+            location: "Surabaya",
+            country: "Indonesia",
+            industry: "Education",
+            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+            linkedin: "in/untar"
+        }, {
+            name: "Universitas 11 Maret",
+            location: "Surabaya",
+            country: "Indonesia",
+            industry: "Education",
+            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+            linkedin: "in/untar"
+        }, {
+            name: "Universitas 11 Maret",
+            location: "Surabaya",
+            country: "Indonesia",
+            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+            industry: "Education",
+            linkedin: "in/untar"
+        },
+    ])
+
     return (
         <PageLayout>
             <div className={"flex flex-col"}>
@@ -62,7 +106,7 @@ export default function FindCompany() {
                                                 height={"auto"}
                                                 className={"aspect-square"}
                                                 src={company.logo}
-                                                alt={"Company Image"} />
+                                                alt={"Company Image"}/>
                                             <div className={"flex flex-col"}>
                                                 <div className={"font-semibold"}>{company.name}</div>
                                                 <div>TODO: Taroh star disini {company.rating}</div>
@@ -86,7 +130,7 @@ export default function FindCompany() {
                                     className={
                                         "flex flex-row items-center p-2 w-full gap-2"
                                     }>
-                                    <IoIosSearch size={"1.5rem"} />
+                                    <IoIosSearch size={"1.5rem"}/>
                                     <input
                                         type={"text"}
                                         className={"outline-0"}
@@ -94,44 +138,90 @@ export default function FindCompany() {
                                     />
                                 </CardLayout>
                             </div>
-                            <div className={"flex flex-row"}>
-                                <CardLayout className={"flex flex-col gap-2 w-72 p-4"}>
+                            <div className={"flex flex-row gap-6"}>
+                                <CardLayout className={"flex flex-col gap-2 h-fit w-72 p-4"}>
                                     <div className={"p-1 font-bold text-lg"}>
                                         Filter Companies
                                     </div>
-                                    <hr />
+                                    <hr/>
                                     <div className={"p-4 flex flex-col gap-6"}>
-                                        <CustomTextField label={"Location"} type={"Location"} />
-                                        <CustomTextField label={"Industries"} type={"Industries"} />
-                                        <CustomTextField label={"Job Titles"} type={"Job Titles"} />
+                                        <CustomTextField label={"Location"} type={"Location"}/>
+                                        <CustomTextField label={"Industries"} type={"Industries"}/>
+                                        <CustomTextField label={"Job Titles"} type={"Job Titles"}/>
                                     </div>
-                                    <hr />
+                                    <hr/>
                                     <div className={"flex flex-col gap-2 p-4"}>
                                         <div className={"text-xs font-bold"}>Experience</div>
                                         <div className={"grid grid-cols-2 gap-2"}>
                                             <div className={"flex items-center"}>
                                                 <input type="checkbox" value="" checked={true}
-                                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Full-Time</label>
+                                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                                                <label
+                                                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Full-Time</label>
                                             </div>
                                             <div className={"flex items-center"}>
                                                 <input type="checkbox" value=""
-                                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Part-Time</label>
+                                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                                                <label
+                                                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Part-Time</label>
                                             </div>
                                             <div className={"flex items-center"}>
                                                 <input type="checkbox" value=""
-                                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Internship</label>
+                                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                                                <label
+                                                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Internship</label>
                                             </div>
                                             <div className={"flex items-center"}>
                                                 <input type="checkbox" value=""
-                                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Volunteer</label>
+                                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                                                <label
+                                                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Volunteer</label>
                                             </div>
                                         </div>
                                     </div>
                                 </CardLayout>
+                                <div className={"grow grid grid-cols-2 gap-4"}>
+                                    {resultCompanies.map((cp, index) => {
+                                        return (
+                                            <CardLayout className={"flex flex-col gap-2 px-6 py-5 rounded-md"}>
+                                                <div
+                                                    className={"bg-white flex flex-row place-items-center"}
+                                                    key={index}>
+                                                    <img
+                                                        width={"80rem"}
+                                                        height={"auto"}
+                                                        className={"aspect-square"}
+                                                        src={cp.logo}
+                                                        alt={"Company Image"}/>
+                                                    <div className={"flex flex-col"}>
+                                                        <div className={"font-bold"}>{cp.name}</div>
+                                                        <div>X X X X X 4.9</div>
+                                                    </div>
+                                                </div>
+                                                <div className={"flex flex-col gap-4"}>
+                                                    <div className={"grid grid-cols-3"}>
+                                                        <div className={"flex flex-col"}>
+                                                            <div className={"font-bold text-sm"}>Location:</div>
+                                                            <div>{cp.location}</div>
+                                                        </div>
+                                                        <div className={"flex flex-col"}>
+                                                            <div className={"font-bold text-sm"}>Country:</div>
+                                                            <div>{cp.country}</div>
+                                                        </div>
+                                                        <div className={"flex flex-col"}>
+                                                            <div className={"font-bold text-sm"}>Industry:</div>
+                                                            <div>{cp.industry}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className={"flex flex-col"}>
+                                                        <div className={"font-bold text-sm"}>Linkedin:</div>
+                                                        <div className={"flex flex-row gap-2 place-items-center"}> <FaLinkedin /> {cp.linkedin}</div>
+                                                    </div>
+                                                </div>
+                                            </CardLayout>
+                                        )
+                                    })}
+                                </div>
                             </div>
                         </div>
                     </div>
