@@ -35,19 +35,9 @@ export default function Navbar() {
         ]);
     }, []);
 
-    const getActivePosition = () =>
-        menus
-            .map((menu) =>
-                menu.activeUrl.includes(location.pathname)
-                    ? menu.position
-                    : null,
-            )
-            .toString()
-            .replaceAll(",", "");
-
     return (
         <>
-            <div className="z-50 fixed flex flex-row bg-white w-full h-16 justify-between place-items-center xl:px-24 px-2">
+            <div className="z-50 fixed flex flex-row bg-white w-full h-16 justify-between place-items-center xl:px-24 px-2 shadow-md">
                 <div className="text-blue-primary text-5xl text-center align-middle font-bebas pt-1">
                     HIREVERSE
                 </div>
@@ -55,9 +45,7 @@ export default function Navbar() {
                     {menus.map((menu, index) => {
                         return (
                             <Link
-                                className={
-                                    "w-full h-full flex justify-center place-items-center"
-                                }
+                                className="w-full h-full flex justify-center place-items-center"
                                 to={menu.redirectUrl || ""}
                                 key={index}>
                                 <div

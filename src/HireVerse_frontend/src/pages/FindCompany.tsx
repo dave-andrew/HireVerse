@@ -86,53 +86,63 @@ export default function FindCompany() {
 
     return (
         <FrontPageLayout>
-            <div className={"flex flex-col"}>
-                <div
-                    className={
-                        "flex flex-col bg-yellow-primary place-items-center p-8 gap-8"
-                    }>
-                    <div
-                        style={{
-                            maxWidth: "1000px",
-                        }}>
-                        <div className="flex flex-col">
-                            <div className="font-bold text-2xl ">
-                                Popular Companies
+            <div className="flex flex-col">
+                <div className="w-full h-fit bg-[url(/backgrounds/subtle-prism.svg)] shadow-md place-items-center">
+                    <div className="flex flex-col place-items-center p-8 gap-8">
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="flex flex-col self-start gap-3 w-full">
+                                <h3 className="font-bold text-4xl lg:text-5xl">
+                                    Popular Companies
+                                </h3>
+                                <p className="text-lg lg:text-xl leading-6">
+                                    These companies have the largest visitor
+                                    count this month.
+                                </p>
                             </div>
-                            <div className="text-gray-800 text-sm">
-                                These companies have the largest visitor count
-                                this month.
+                            <div className="flex flex-row w-full gap-10 items-center">
+                                <div className="grid grid-cols-2 h-fit gap-4">
+                                    {popularCompanies
+                                        .slice(0, 4)
+                                        .map((company) => {
+                                            return (
+                                                <CardLayout className="w-64 xl:w-80 h-32 flex p-4">
+                                                    <div className="flex flex-row place-items-center">
+                                                        <img
+                                                            width="80rem"
+                                                            height="auto"
+                                                            className="aspect-square"
+                                                            src={company.logo}
+                                                            alt="Company Image"
+                                                        />
+                                                        <div className="flex flex-col">
+                                                            <div className="font-semibold">
+                                                                {company.name}
+                                                            </div>
+                                                            <div>
+                                                                TODO: Taroh star
+                                                                disini{" "}
+                                                                {company.rating}
+                                                            </div>
+                                                            <div className="text-xs">
+                                                                {
+                                                                    company.reviewCount
+                                                                }{" "}
+                                                                Reviews
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </CardLayout>
+                                            );
+                                        })}
+                                </div>
+                                <div>
+                                    <img
+                                        className="w-[25rem]"
+                                        src="/public/storyset/job-offers-bro.png"
+                                        alt=""
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex flex-row flex-wrap gap-4 mt-4">
-                            {popularCompanies.map((company) => {
-                                return (
-                                    <CardLayout className="w-64 xl:w-80 h-32 flex p-4">
-                                        <div className="flex flex-row place-items-center">
-                                            <img
-                                                width="80rem"
-                                                height="auto"
-                                                className="aspect-square"
-                                                src={company.logo}
-                                                alt="Company Image"
-                                            />
-                                            <div className="flex flex-col">
-                                                <div className="font-semibold">
-                                                    {company.name}
-                                                </div>
-                                                <div>
-                                                    TODO: Taroh star disini{" "}
-                                                    {company.rating}
-                                                </div>
-                                                <div className="text-xs">
-                                                    {company.reviewCount}{" "}
-                                                    Reviews
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </CardLayout>
-                                );
-                            })}
                         </div>
                     </div>
                 </div>

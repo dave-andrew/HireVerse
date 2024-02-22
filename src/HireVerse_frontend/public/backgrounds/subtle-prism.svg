@@ -1,13 +1,13 @@
 ﻿<svg xmlns='http://www.w3.org/2000/svg' width='100%'>
-    <rect fill='#EEA224' width='540' height='450'/>
+    <rect fill='#FFD166' width='540' height='450'/>
     <defs>
         <linearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' x2='0' y1='0' y2='100%'
-                        gradientTransform='rotate(255,683,316)'>
-            <stop offset='0' stop-color='#EEA224'/>
-            <stop offset='1' stop-color='#FBB836'/>
+                        gradientTransform='rotate(271,960,472)'>
+            <stop offset='0' stop-color='#FFD166'/>
+            <stop offset='1' stop-color='#FF9F11'/>
         </linearGradient>
-        <pattern patternUnits='userSpaceOnUse' id='b' width='300' height='250' x='0' y='0' viewBox='0 0 1080 900'>
-            <g fill-opacity='0.02'>
+        <pattern patternUnits='userSpaceOnUse' id='b' width='341' height='284.2' x='0' y='0' viewBox='0 0 1080 900'>
+            <g fill-opacity='0.08'>
                 <polygon fill='#444' points='90 150 0 300 180 300'/>
                 <polygon points='90 150 180 0 0 0'/>
                 <polygon fill='#AAA' points='270 150 360 0 180 0'/>
