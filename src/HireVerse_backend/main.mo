@@ -5,7 +5,6 @@ import Nat "mo:base/Nat";
 import Blob "mo:base/Blob";
 
 actor Database {
-    //TODO: mau coba pake inter canister communication
 
     type User = {
         internet_identity : Principal;
