@@ -1,16 +1,16 @@
 import { ReactNode } from "react";
-import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
 
 interface Props {
     children: ReactNode;
 }
 
-export default function PageLayout({ children }: Props) {
+export default function FrontPageLayout({ children }: Props) {
     return (
         <div className="w-full bg-signature-gray flex flex-col">
-            <Sidebar />
+            <Navbar />
             <div className="w-full bg-signature-gray rounded-xl mt-16">
-                    {children}
+                {children}
             </div>
         </div>
     );

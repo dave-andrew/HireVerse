@@ -8,13 +8,15 @@ import RegisterUser from "./pages/RegisterUser";
 import { Authenticated } from "./middleware/UserMiddleware";
 
 function App() {
-
-
     return (
         <BrowserRouter>
             <Routes>
                 <Route
                     path="/"
+                    element={<FindJobs />}
+                />
+                <Route
+                    path="/find-job"
                     element={<FindJobs />}
                 />
                 <Route

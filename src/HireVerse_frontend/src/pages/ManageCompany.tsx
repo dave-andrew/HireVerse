@@ -1,6 +1,6 @@
 import { TbNotebookOff } from "react-icons/tb";
 import { useState } from "react";
-import PageLayout from "../layouts/PageLayout";
+import FrontPageLayout from "../layouts/FrontPageLayout";
 import ManagedCompanyItem from "../components/company/ManagedCompanyItem";
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,7 @@ export default function ManageCompany() {
     const [invitedCompanies, setInvitedCompanies] = useState([1]);
 
     return (
-        <PageLayout>
+        <FrontPageLayout>
             {managedCompanies.length == 0 && invitedCompanies.length == 0 && (
                 <div className="flex flex-row w-full h-full items-center justify-center">
                     <div className="flex flex-col items-center justify-center gap-5">
@@ -55,6 +55,6 @@ export default function ManageCompany() {
                     </div>
                 </>
             )}
-        </PageLayout>
+        </FrontPageLayout>
     );
 }

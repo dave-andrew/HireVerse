@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TbFilterCog } from "react-icons/tb";
 import { IoIosSearch } from "react-icons/io";
-import PageLayout from "../layouts/PageLayout";
+import FrontPageLayout from "../layouts/FrontPageLayout";
 import CardLayout from "../layouts/CardLayout";
 import SortDropdown from "../components/button/SortDropdown";
 import JobItem from "../components/job/JobItem";
@@ -14,12 +14,32 @@ export default function FindJobs() {
     }, []);
 
     return (
-        <PageLayout>
-            <div className={"flex flex-col w-full h-full place-items-center gap-4 p-8"}>
-                <div className={"flex flex-row gap-2 w-1/2"}>
+        <FrontPageLayout>
+            <div className="flex flex-col w-full h-full place-items-center gap-4">
+                <div className="w-full h-[25rem] bg-[url(/backgrounds/subtle-prism.svg)] ">
+                    <div className="flex flex-row items-center justify-center w-full h-full gap-20">
+                        <div className="flex flex-col w-2/6 gap-5">
+                            <h3 className="font-bold text-4xl lg:text-5xl">
+                                Find Your Dream Job Now.
+                            </h3>
+                            <p className="text-lg lg:text-xl leading-6">
+                                Find your dream job now! Our platform connects
+                                you with top employers and provides valuable
+                                resources to enhance your job search experience.
+                                Start exploring today for a brighter future and
+                                take the first step towards a fulfilling career.
+                            </p>
+                        </div>
+                        <img
+                            className="w-72"
+                            src="/storyset/resume-folder-cuate.png"
+                        />
+                    </div>
+                </div>
+                <div className="flex flex-row gap-2 w-1/2">
                     {/*TODO: Filter*/}
-                    <CardLayout className={"p-2 cursor-pointer"}>
-                        <TbFilterCog size={"1.5rem"} />
+                    <CardLayout className="p-2 cursor-pointer">
+                        <TbFilterCog size="1.5rem" />
                     </CardLayout>
                     <CardLayout
                         className={
@@ -33,7 +53,10 @@ export default function FindJobs() {
                         />
                     </CardLayout>
                 </div>
-                <div className={"flex flex-row w-full h-full gap-3 xl:px-32 px-4"}>
+                <div
+                    className={
+                        "flex flex-row w-full h-full gap-3 xl:px-32 px-4"
+                    }>
                     <CardLayout className={"h-[75vh] flex flex-col gap-3 py-3"}>
                         <div
                             className={
@@ -45,7 +68,6 @@ export default function FindJobs() {
                         <div
                             className={
                                 "w-96 mx-6 overflow-x-hidden overflow-y-auto card-scollbar gap-1"
-
                             }>
                             {Array.from({ length: 21 }).map((_) => {
                                 return <JobItem />;
@@ -57,6 +79,6 @@ export default function FindJobs() {
                     </div>
                 </div>
             </div>
-        </PageLayout>
+        </FrontPageLayout>
     );
 }
