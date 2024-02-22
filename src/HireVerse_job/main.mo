@@ -17,6 +17,7 @@ actor Job {
         job_description : Text;
         requirements : Text;
         company_id : Principal;
+        reviews : [Principal];
     };
 
     let jobs = TrieMap.TrieMap<Principal, Job>(Principal.equal, Principal.hash);
@@ -33,11 +34,16 @@ actor Job {
         jobs.put(principal, job);
     };
 
-    public shared func deleteJob(id: Principal) : async ?Job {
+    public shared func deleteJob(id : Principal) : async ?Job {
         jobs.remove(id);
     };
 
     public shared func displayAllJob() : async [Job] {
         Iter.toArray(jobs.vals());
     };
-}
+
+    public func addReview(jobId : Principal, reviewerId : Principal) : async ?Job {
+        await getJob(jobId);
+    };
+
+};
