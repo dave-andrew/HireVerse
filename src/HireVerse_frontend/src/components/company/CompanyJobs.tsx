@@ -1,16 +1,14 @@
 import CompanyPageLayout from "../../layouts/CompanyPageLayout";
 import {IoIosSearch} from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
-import AutocompleteDropdown from "../form/AutocompleteDropdown";
-import ManagerTable from "./ManagerTable";
+import JobPostingTable from "./JobPostingTable";
 
-export default function CompanyManagers() {
-
+export default function CompanyJobs() {
     return (
         <CompanyPageLayout>
             <div className={"px-14 py-8 flex flex-col gap-16"}>
                 <div className={"text-4xl font-bold mt-8"}>
-                    Managers
+                    Jobs
                 </div>
                 <div className={"flex flex-col gap-4"}>
                     <div className={"flex flex-row place-items-end justify-end h-12 gap-4"}>
@@ -28,11 +26,11 @@ export default function CompanyManagers() {
                         <button className="h-full">
                             <CardLayout
                                 className="h-full flex justify-center place-items-center py-4 px-8 rounded-xl hover:bg-gray-100">
-                                + Add Manager
+                                + Add Job
                             </CardLayout>
                         </button>
                     </div>
-                    <ManagerTable />
+                    <JobPostingTable />
                 </div>
             </div>
         </CompanyPageLayout>

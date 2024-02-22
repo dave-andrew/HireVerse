@@ -1,12 +1,14 @@
 import ManageCompany from "./pages/ManageCompany";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import FindJobs from "./pages/FindJobsPage";
 import RegisterCompany from "./pages/RegisterCompany";
 import FindCompany from "./pages/FindCompany";
 import Landing from "./pages/Landing";
 import RegisterUser from "./pages/RegisterUser";
-import { Authenticated } from "./middleware/UserMiddleware";
+import {Authenticated} from "./middleware/UserMiddleware";
 import CompanyManagers from "./components/company/CompanyManagers";
+import JobPostingTable from "./components/company/JobPostingTable";
+import CompanyJobs from "./components/company/CompanyJobs";
 
 function App() {
     return (
@@ -14,33 +16,37 @@ function App() {
             <Routes>
                 <Route
                     path="/"
-                    element={<FindJobs />}
+                    element={<FindJobs/>}
                 />
                 <Route
                     path="/manage-company"
-                    element={<ManageCompany />}
+                    element={<ManageCompany/>}
                 />
                 <Route
                     path="/manage-company/managers"
-                    element={<CompanyManagers />}
+                    element={<CompanyManagers/>}
+                />
+                <Route
+                    path="/manage-company/jobs"
+                    element={<CompanyJobs/>}
                 />
                 <Route
                     path="/find-company"
-                    element={<FindCompany />}
+                    element={<FindCompany/>}
                 />
                 <Route
                     path="/manage-company/register"
-                    element={<RegisterCompany />}
+                    element={<RegisterCompany/>}
                 />
-                <Route element={<Authenticated />}>
+                <Route element={<Authenticated/>}>
                     <Route
                         path="/login"
-                        element={<Landing />}
+                        element={<Landing/>}
                     />
                 </Route>
                 <Route
                     path="/register"
-                    element={<RegisterUser />}
+                    element={<RegisterUser/>}
                 />
                 <Route
                     path="*"
@@ -48,7 +54,7 @@ function App() {
                 />
                 <Route
                     path="/manage-company"
-                    element={<ManageCompany />}
+                    element={<ManageCompany/>}
                 />
             </Routes>
         </BrowserRouter>
