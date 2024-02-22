@@ -6,5 +6,10 @@ interface Props {
 }
 
 export default function CardLayout({ children, className }: Props) {
-    return <div className={`bg-white rounded-xl ${className}`}>{children}</div>;
+    return (
+        <div
+            className={`bg-white rounded-lg border-[1px] border-gray-200 ${className}`}>
+            {children}
+        </div>
+    );
 }

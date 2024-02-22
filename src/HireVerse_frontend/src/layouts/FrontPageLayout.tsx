@@ -9,9 +9,7 @@ export default function FrontPageLayout({ children }: Props) {
     return (
         <div className="w-full bg-signature-gray flex flex-col">
             <Navbar />
-            <div className="w-full bg-signature-gray rounded-xl mt-16">
-                {children}
-            </div>
+            <div className="w-full bg-white rounded-xl mt-16">{children}</div>
         </div>
     );
 }

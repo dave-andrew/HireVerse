@@ -15,9 +15,15 @@ export default function Navbar() {
     useEffect(() => {
         setMenus([
             {
-                name: "Find Jobs",
-                activeUrl: ["/"],
+                name: "Home",
+                activeUrl: ["/", "/"],
                 redirectUrl: "/",
+                position: "0%",
+            },
+            {
+                name: "Find Jobs",
+                activeUrl: ["/find-job"],
+                redirectUrl: "/find-job",
                 position: "40%",
             },
             {

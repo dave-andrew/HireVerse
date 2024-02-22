@@ -6,7 +6,6 @@ import { useState } from "react";
 import CustomTextField from "../components/form/CustomTextField";
 
 export default function FindCompany() {
-
     const [popularCompanies, setPopularCompanies] = useState([
         {
             name: "BINUS University",
@@ -32,7 +31,6 @@ export default function FindCompany() {
             reviewCount: 12,
             logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
         },
-
     ]);
 
     const [resultCompanies, setResultCompanies] = useState([
@@ -42,44 +40,49 @@ export default function FindCompany() {
             country: "Indonesia",
             industry: "Education",
             logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            linkedin: "in/untar"
-        }, {
+            linkedin: "in/untar",
+        },
+        {
             name: "Universitas Airlangga",
             location: "Jakarta",
             country: "Indonesia",
             industry: "Education",
             logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            linkedin: "in/untar"
-        }, {
-            name: "Universitas 11 Maret",
-            location: "Surabaya",
-            country: "Indonesia",
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            industry: "Education",
-            linkedin: "in/untar"
-        }, {
-            name: "Universitas 11 Maret",
-            location: "Surabaya",
-            country: "Indonesia",
-            industry: "Education",
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            linkedin: "in/untar"
-        }, {
-            name: "Universitas 11 Maret",
-            location: "Surabaya",
-            country: "Indonesia",
-            industry: "Education",
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            linkedin: "in/untar"
-        }, {
-            name: "Universitas 11 Maret",
-            location: "Surabaya",
-            country: "Indonesia",
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            industry: "Education",
-            linkedin: "in/untar"
+            linkedin: "in/untar",
         },
-    ])
+        {
+            name: "Universitas 11 Maret",
+            location: "Surabaya",
+            country: "Indonesia",
+            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+            industry: "Education",
+            linkedin: "in/untar",
+        },
+        {
+            name: "Universitas 11 Maret",
+            location: "Surabaya",
+            country: "Indonesia",
+            industry: "Education",
+            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+            linkedin: "in/untar",
+        },
+        {
+            name: "Universitas 11 Maret",
+            location: "Surabaya",
+            country: "Indonesia",
+            industry: "Education",
+            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+            linkedin: "in/untar",
+        },
+        {
+            name: "Universitas 11 Maret",
+            location: "Surabaya",
+            country: "Indonesia",
+            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+            industry: "Education",
+            linkedin: "in/untar",
+        },
+    ]);
 
     return (
         <FrontPageLayout>
@@ -92,43 +95,36 @@ export default function FindCompany() {
                         style={{
                             maxWidth: "1000px",
                         }}>
-                        <div className={"flex flex-col"}>
-                            <div className={"font-bold text-2xl "}>
+                        <div className="flex flex-col">
+                            <div className="font-bold text-2xl ">
                                 Popular Companies
                             </div>
-                            <div className={"text-gray-800 text-sm"}>
+                            <div className="text-gray-800 text-sm">
                                 These companies have the largest visitor count
                                 this month.
                             </div>
                         </div>
-                        <div className={"flex flex-row flex-wrap gap-4 mt-4"}>
+                        <div className="flex flex-row flex-wrap gap-4 mt-4">
                             {popularCompanies.map((company) => {
                                 return (
-                                    <CardLayout
-                                        className={
-                                            "w-64 xl:w-80 h-32 flex p-4"
-                                        }>
-                                        <div
-                                            className={
-                                                "flex flex-row place-items-center"
-                                            }>
+                                    <CardLayout className="w-64 xl:w-80 h-32 flex p-4">
+                                        <div className="flex flex-row place-items-center">
                                             <img
-                                                width={"80rem"}
-                                                height={"auto"}
-                                                className={"aspect-square"}
+                                                width="80rem"
+                                                height="auto"
+                                                className="aspect-square"
                                                 src={company.logo}
-                                                alt={"Company Image"}
+                                                alt="Company Image"
                                             />
-                                            <div className={"flex flex-col"}>
-                                                <div
-                                                    className={"font-semibold"}>
+                                            <div className="flex flex-col">
+                                                <div className="font-semibold">
                                                     {company.name}
                                                 </div>
                                                 <div>
                                                     TODO: Taroh star disini{" "}
                                                     {company.rating}
                                                 </div>
-                                                <div className={"text-xs"}>
+                                                <div className="text-xs">
                                                     {company.reviewCount}{" "}
                                                     Reviews
                                                 </div>
@@ -140,58 +136,50 @@ export default function FindCompany() {
                         </div>
                     </div>
                 </div>
-                <div className={"flex flex-col place-items-center p-8 gap-8"}>
+                <div className="flex flex-col place-items-center p-8 gap-8">
                     <div
                         style={{
                             width: "min(1000px, 100%)",
                         }}>
-                        <div className={"flex flex-col gap-8 w-full"}>
-                            <div className={"flex flex-col gap-2"}>
+                        <div className="flex flex-col gap-8 w-full">
+                            <div className="flex flex-col gap-2">
                                 Find your dream company
-                                <CardLayout
-                                    className={
-                                        "flex flex-row items-center p-2 w-full gap-2"
-                                    }>
-                                    <IoIosSearch size={"1.5rem"}/>
+                                <CardLayout className="flex flex-row items-center p-2 w-full gap-2">
+                                    <IoIosSearch size="1.5rem" />
                                     <input
-                                        type={"text"}
-                                        className={"outline-0"}
-                                        placeholder={"Search Job"}
+                                        type="text"
+                                        className="outline-0"
+                                        placeholder="Search Job"
                                     />
                                 </CardLayout>
                             </div>
-                            <div className={"flex flex-row gap-4"}>
-                                <CardLayout
-                                    className={"flex flex-col gap-2 h-fit w-72 p-4"}>
-                                    <div className={"p-1 font-bold text-lg"}>
+                            <div className="flex flex-row gap-4">
+                                <CardLayout className="flex flex-col gap-2 h-fit w-72 p-4">
+                                    <div className="p-1 font-bold text-lg">
                                         Filter Companies
                                     </div>
-                                    <hr/>
-                                    <div className={"p-4 flex flex-col gap-6"}>
+                                    <hr />
+                                    <div className="p-4 flex flex-col gap-6">
                                         <CustomTextField
-                                            label={"Location"}
-                                            type={"Location"}
+                                            label="Location"
+                                            type="Location"
                                         />
                                         <CustomTextField
-                                            label={"Industries"}
-                                            type={"Industries"}
+                                            label="Industries"
+                                            type="Industries"
                                         />
                                         <CustomTextField
-                                            label={"Job Titles"}
-                                            type={"Job Titles"}
+                                            label="Job Titles"
+                                            type="Job Titles"
                                         />
                                     </div>
-                                    <hr/>
-                                    <div className={"flex flex-col gap-2 p-4"}>
-                                        <div className={"text-xs font-bold"}>
+                                    <hr />
+                                    <div className="flex flex-col gap-2 p-4">
+                                        <div className="text-xs font-bold">
                                             Experience
                                         </div>
-                                        <div
-                                            className={
-                                                "grid grid-cols-2 gap-2"
-                                            }>
-                                            <div
-                                                className={"flex items-center"}>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="flex items-center">
                                                 <input
                                                     type="checkbox"
                                                     value=""
@@ -202,8 +190,7 @@ export default function FindCompany() {
                                                     Full-Time
                                                 </label>
                                             </div>
-                                            <div
-                                                className={"flex items-center"}>
+                                            <div className="flex items-center">
                                                 <input
                                                     type="checkbox"
                                                     value=""
@@ -213,8 +200,7 @@ export default function FindCompany() {
                                                     Part-Time
                                                 </label>
                                             </div>
-                                            <div
-                                                className={"flex items-center"}>
+                                            <div className="flex items-center">
                                                 <input
                                                     type="checkbox"
                                                     value=""
@@ -224,8 +210,7 @@ export default function FindCompany() {
                                                     Internship
                                                 </label>
                                             </div>
-                                            <div
-                                                className={"flex items-center"}>
+                                            <div className="flex items-center">
                                                 <input
                                                     type="checkbox"
                                                     value=""
@@ -238,46 +223,66 @@ export default function FindCompany() {
                                         </div>
                                     </div>
                                 </CardLayout>
-                                <div className={"grow grid grid-cols-2 gap-4"}>
+                                <div className="grow grid grid-cols-2 gap-4">
                                     {resultCompanies.map((cp, index) => {
                                         return (
-                                            <CardLayout className={"flex flex-col gap-2 px-6 py-5 rounded-md"}>
+                                            <CardLayout className="flex flex-col gap-2 px-6 py-5 rounded-md">
                                                 <div
-                                                    className={"bg-white flex flex-row place-items-center"}
+                                                    className="bg-white flex flex-row place-items-center"
                                                     key={index}>
                                                     <img
-                                                        width={"80rem"}
-                                                        height={"auto"}
-                                                        className={"aspect-square"}
+                                                        width="80rem"
+                                                        height="auto"
+                                                        className="aspect-square"
                                                         src={cp.logo}
-                                                        alt={"Company Image"}/>
-                                                    <div className={"flex flex-col"}>
-                                                        <div className={"font-bold"}>{cp.name}</div>
+                                                        alt="Company Image"
+                                                    />
+                                                    <div className="flex flex-col">
+                                                        <div className="font-bold">
+                                                            {cp.name}
+                                                        </div>
                                                         <div>X X X X X 4.9</div>
                                                     </div>
                                                 </div>
-                                                <div className={"flex flex-col gap-4"}>
-                                                    <div className={"grid grid-cols-3"}>
-                                                        <div className={"flex flex-col"}>
-                                                            <div className={"font-bold text-sm"}>Location:</div>
-                                                            <div>{cp.location}</div>
+                                                <div className="flex flex-col gap-4">
+                                                    <div className="grid grid-cols-3">
+                                                        <div className="flex flex-col">
+                                                            <div className="font-bold text-sm">
+                                                                Location:
+                                                            </div>
+                                                            <div>
+                                                                {cp.location}
+                                                            </div>
                                                         </div>
-                                                        <div className={"flex flex-col"}>
-                                                            <div className={"font-bold text-sm"}>Country:</div>
-                                                            <div>{cp.country}</div>
+                                                        <div className="flex flex-col">
+                                                            <div className="font-bold text-sm">
+                                                                Country:
+                                                            </div>
+                                                            <div>
+                                                                {cp.country}
+                                                            </div>
                                                         </div>
-                                                        <div className={"flex flex-col"}>
-                                                            <div className={"font-bold text-sm"}>Industry:</div>
-                                                            <div>{cp.industry}</div>
+                                                        <div className="flex flex-col">
+                                                            <div className="font-bold text-sm">
+                                                                Industry:
+                                                            </div>
+                                                            <div>
+                                                                {cp.industry}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className={"flex flex-col"}>
-                                                        <div className={"font-bold text-sm"}>Linkedin:</div>
-                                                        <div className={"flex flex-row gap-2 place-items-center"}> <FaLinkedin /> {cp.linkedin}</div>
+                                                    <div className="flex flex-col">
+                                                        <div className="font-bold text-sm">
+                                                            Linkedin:
+                                                        </div>
+                                                        <div className="flex flex-row gap-2 place-items-center">
+                                                            <FaLinkedin />
+                                                            {cp.linkedin}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </CardLayout>
-                                        )
+                                        );
                                     })}
                                 </div>
                             </div>

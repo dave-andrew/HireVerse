@@ -1,6 +1,6 @@
 import ManageCompany from "./pages/ManageCompany";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import FindJobs from "./pages/FindJobs";
+import FindJobs from "./pages/FindJobsPage";
 import RegisterCompany from "./pages/RegisterCompany";
 import FindCompany from "./pages/FindCompany";
 import Landing from "./pages/Landing";
@@ -13,6 +13,10 @@ function App() {
             <Routes>
                 <Route
                     path="/"
+                    element={<FindJobs />}
+                />
+                <Route
+                    path="/find-job"
                     element={<FindJobs />}
                 />
                 <Route
@@ -44,7 +48,7 @@ function App() {
                 <Route
                     path="/manage-company"
                     element={<ManageCompany />}
-                    />
+                />
             </Routes>
         </BrowserRouter>
     );
