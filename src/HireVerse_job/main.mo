@@ -32,4 +32,27 @@ actor Job {
         jobs.remove(id);
     }
 
+    public shared func addReview(job_id : Principal, review_id : Principal) {
+        let job = jobs.get(job_id);
+        switch (job) {
+            case (null) {
+                return;
+            };
+            case (?actualJob) {
+                let updated_job = {
+                    id = actualJob.id;
+                    position = actualJob.position;
+                    location = actualJob.location;
+                    industry = actualJob.industry;
+                    salary_start = actualJob.salary_start;
+                    salary_end = actualJob.salary_end;
+                    short_description = actualJob.short_description;
+                    job_description = actualJob.job_description;
+                    requirements = actualJob.requirements;
+                    company_id = actualJob.company_id;
+                };
+                jobs.put(job_id, updated_job);
+            };
+        };
+    };
 }
