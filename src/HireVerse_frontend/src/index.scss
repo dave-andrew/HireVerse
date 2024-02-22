@@ -22,6 +22,20 @@ html {
   color: #00b4d8;
 }
 
+
+.bg-signature-yellow {
+  background-color: #ffd166;
+}
+
+
+.border-signature-gray {
+  border-color: rgb(229 231 235);
+}
+
+.hover\:bg-signature-hover-gray:hover {
+  background-color: rgb(229 231 235);
+}
+
 .bg-blue-primary {
   background-color: #00b4d8;
 }
@@ -70,4 +84,14 @@ html {
   font-weight: bold;
   font-size: 3rem;
   padding: 1.5rem;
+}
+
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #919191;
+  border-radius: 10px;
 }
