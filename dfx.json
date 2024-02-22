@@ -1,0 +1,56 @@
+{
+  "canisters": {
+    "HireVerse_helper": {
+      "main": "src/HireVerse_helper/main.mo",
+      "type": "motoko"
+    },
+    "HireVerse_backend": {
+      "main": "src/HireVerse_backend/main.mo",
+      "type": "motoko"
+    },
+    "HireVerse_company": {
+      "dependencies": [
+        "HireVerse_helper",
+        "HireVerse_job",
+        "HireVerse_backend"
+      ],
+      "main": "src/HireVerse_company/main.mo",
+      "type": "motoko"
+    },
+    "HireVerse_job": {
+      "dependencies": [
+        "HireVerse_helper"
+      ],
+      "main": "src/HireVerse_job/main.mo",
+      "type": "motoko"
+    },
+    "HireVerse_review": {
+      "dependencies": [
+        "HireVerse_helper"
+      ],
+      "main": "src/HireVerse_review/main.mo",
+      "type": "motoko"
+    },
+    "HireVerse_frontend": {
+      "dependencies": [
+        "HireVerse_backend",
+        "HireVerse_company",
+        "HireVerse_job",
+        "HireVerse_review"
+      ],
+      "source": [
+        "src/HireVerse_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "HireVerse_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
