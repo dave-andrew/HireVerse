@@ -6,7 +6,6 @@ import FindCompany from "./pages/FindCompany";
 import Landing from "./pages/Landing";
 import RegisterUser from "./pages/RegisterUser";
 import { Authenticated } from "./middleware/UserMiddleware";
-import CompanyManagers from "./components/company/CompanyManagers";
 
 function App() {
     return (
@@ -17,12 +16,12 @@ function App() {
                     element={<FindJobs />}
                 />
                 <Route
-                    path="/manage-company"
-                    element={<ManageCompany />}
+                    path="/find-job"
+                    element={<FindJobs />}
                 />
                 <Route
-                    path="/manage-company/managers"
-                    element={<CompanyManagers />}
+                    path="/manage-company"
+                    element={<ManageCompany />}
                 />
                 <Route
                     path="/find-company"
