@@ -16,10 +16,6 @@ function App() {
                     element={<FindJobs />}
                 />
                 <Route
-                    path="/find-job"
-                    element={<FindJobs />}
-                />
-                <Route
                     path="/manage-company"
                     element={<ManageCompany />}
                 />
@@ -45,6 +41,10 @@ function App() {
                     path="*"
                     element={<h1>404 NOT FOUND</h1>}
                 />
+                <Route
+                    path="/manage-company"
+                    element={<ManageCompany />}
+                    />
             </Routes>
         </BrowserRouter>
     );
