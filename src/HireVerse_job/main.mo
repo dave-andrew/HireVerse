@@ -30,7 +30,7 @@ actor Job {
 
     public shared func deleteJob(id: Principal) : async ?Job {
         jobs.remove(id);
-    }
+    };
 
     public shared func addReview(job_id : Principal, review_id : Principal) {
         let job = jobs.get(job_id);
