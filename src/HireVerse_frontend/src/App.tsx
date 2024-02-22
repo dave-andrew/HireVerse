@@ -6,6 +6,7 @@ import FindCompany from "./pages/FindCompany";
 import Landing from "./pages/Landing";
 import RegisterUser from "./pages/RegisterUser";
 import { Authenticated } from "./middleware/UserMiddleware";
+import CompanyManagers from "./components/company/CompanyManagers";
 
 function App() {
     return (
@@ -18,6 +19,10 @@ function App() {
                 <Route
                     path="/manage-company"
                     element={<ManageCompany />}
+                />
+                <Route
+                    path="/manage-company/managers"
+                    element={<CompanyManagers />}
                 />
                 <Route
                     path="/find-company"

@@ -13,7 +13,7 @@ export default function ManageCompany() {
     return (
         <CompanyPageLayout>
             <div className={"p-6 flex flex-col gap-8"}>
-                <div className={"text-2xl font-bold pl-8"}>
+                <div className={"text-4xl font-bold pl-8 mt-8"}>
                     Overview
                 </div>
                 <div className={"bg-white w-full h-64 rounded-xl flex flex-row place-items-center p-8"}>
