@@ -21,16 +21,10 @@ export default function Navbar() {
                 position: "0%",
             },
             {
-                name: "Find Jobs",
-                activeUrl: ["/find-job"],
-                redirectUrl: "/find-job",
-                position: "40%",
-            },
-            {
                 name: "Find Company",
                 activeUrl: ["/find-company"],
                 redirectUrl: "/find-company",
-                position: "70%",
+                position: "50%",
             },
         ]);
     }, []);
@@ -41,7 +35,7 @@ export default function Navbar() {
                 <div className="text-blue-primary text-5xl text-center align-middle font-bebas pt-1">
                     HIREVERSE
                 </div>
-                <div className="relative flex flex-row w-1/2 min-w-96 justify-center h-full place-items-center px-8">
+                <div className="relative flex flex-row w-2/5 min-w-96 justify-center h-full place-items-center px-8">
                     {menus.map((menu, index) => {
                         return (
                             <Link
@@ -57,7 +51,7 @@ export default function Navbar() {
                                             ? "text-blue-primary border-b-2 border-color-blue-primary font-semibold"
                                             : ""
                                     } 
-                                        grow h-full mx-8 flex place-items-center justify-center text-s xl:text-base
+                                        grow h-full mx-8 flex place-items-center justify-center text-xs xl:text-base
                                         `}>
                                     {menu.name}
                                 </div>
