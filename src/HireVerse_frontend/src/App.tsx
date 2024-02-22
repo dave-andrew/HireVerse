@@ -16,10 +16,6 @@ function App() {
                     element={<FindJobs />}
                 />
                 <Route
-                    path="/find-job"
-                    element={<FindJobs />}
-                />
-                <Route
                     path="/manage-company"
                     element={<ManageCompany />}
                 />

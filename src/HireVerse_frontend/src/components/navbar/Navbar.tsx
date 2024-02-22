@@ -15,22 +15,16 @@ export default function Navbar() {
     useEffect(() => {
         setMenus([
             {
-                name: "Home",
-                activeUrl: ["/", "/"],
+                name: "Find Jobs",
+                activeUrl: ["/"],
                 redirectUrl: "/",
                 position: "0%",
-            },
-            {
-                name: "Find Jobs",
-                activeUrl: ["/find-job"],
-                redirectUrl: "/find-job",
-                position: "40%",
             },
             {
                 name: "Find Company",
                 activeUrl: ["/find-company"],
                 redirectUrl: "/find-company",
-                position: "70%",
+                position: "50%",
             },
         ]);
     }, []);
@@ -41,7 +35,7 @@ export default function Navbar() {
                 <div className="text-blue-primary text-5xl text-center align-middle font-bebas pt-1">
                     HIREVERSE
                 </div>
-                <div className="relative flex flex-row w-1/2 min-w-96 justify-center h-full place-items-center px-8">
+                <div className="relative flex flex-row w-1/3 min-w-[400px] justify-center h-full place-items-center px-8">
                     {menus.map((menu, index) => {
                         return (
                             <Link
