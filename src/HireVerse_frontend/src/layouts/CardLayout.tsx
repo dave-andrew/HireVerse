@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 interface Props {
     children: ReactNode;
@@ -6,5 +6,5 @@ interface Props {
 }
 
 export default function CardLayout({ children, className }: Props) {
-    return <div className={`bg-white rounded-xl drop-shadow-md ${className}`}>{children}</div>;
+    return <div className={`bg-white rounded-xl ${className}`}>{children}</div>;
 }

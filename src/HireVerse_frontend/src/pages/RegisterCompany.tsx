@@ -1,4 +1,4 @@
-import PageLayout from "../layouts/PageLayout";
+import FrontPageLayout from "../layouts/FrontPageLayout";
 import CardLayout from "../layouts/CardLayout";
 import { PiLockKeyOpenBold } from "react-icons/pi";
 import { TbWorldSearch } from "react-icons/tb";
@@ -7,7 +7,7 @@ import { CustomCheckBox } from "../components/form/CustomCheckBox";
 
 export default function RegisterCompany() {
     return (
-        <PageLayout>
+        <FrontPageLayout>
             <div className="flex flex-col h-full pb-6">
                 <div className="flex flex-row-reverse px-5 gap-5 w-full h-full items-start">
                     <div className="fixed flex flex-col w-96 gap-4 top-[6%]">
@@ -115,6 +115,6 @@ export default function RegisterCompany() {
                     </div>
                 </div>
             </div>
-        </PageLayout>
+        </FrontPageLayout>
     );
 }
