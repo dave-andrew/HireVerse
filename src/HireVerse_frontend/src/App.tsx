@@ -5,10 +5,14 @@ import RegisterCompany from "./pages/RegisterCompany";
 import FindCompany from "./pages/FindCompany";
 import Landing from "./pages/Landing";
 import RegisterUser from "./pages/RegisterUser";
+<<<<<<< HEAD
 import {Authenticated} from "./middleware/UserMiddleware";
 import CompanyManagers from "./components/company/CompanyManagers";
 import JobPostingTable from "./components/company/JobPostingTable";
 import CompanyJobs from "./components/company/CompanyJobs";
+=======
+import { Authenticated } from "./middleware/UserMiddleware";
+>>>>>>> caf82958e0ef7c6e75c74f1e4e4e122706360505
 
 function App() {
     return (
@@ -19,6 +23,7 @@ function App() {
                     element={<FindJobs/>}
                 />
                 <Route
+<<<<<<< HEAD
                     path="/manage-company"
                     element={<ManageCompany/>}
                 />
@@ -29,6 +34,14 @@ function App() {
                 <Route
                     path="/manage-company/jobs"
                     element={<CompanyJobs/>}
+=======
+                    path="/find-job"
+                    element={<FindJobs />}
+                />
+                <Route
+                    path="/manage-company"
+                    element={<ManageCompany />}
+>>>>>>> caf82958e0ef7c6e75c74f1e4e4e122706360505
                 />
                 <Route
                     path="/find-company"
