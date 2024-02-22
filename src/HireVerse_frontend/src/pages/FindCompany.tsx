@@ -160,9 +160,9 @@ export default function FindCompany() {
                                     />
                                 </CardLayout>
                             </div>
-                            <div className={"flex flex-row"}>
+                            <div className={"flex flex-row gap-4"}>
                                 <CardLayout
-                                    className={"flex flex-col gap-2 w-72 p-4"}>
+                                    className={"flex flex-col gap-2 h-fit w-72 p-4"}>
                                     <div className={"p-1 font-bold text-lg"}>
                                         Filter Companies
                                     </div>
