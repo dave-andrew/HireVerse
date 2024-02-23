@@ -3,6 +3,9 @@ import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import TrieMap "mo:base/TrieMap";
 import Helper "canister:HireVerse_helper";
+import List "mo:base/List";
+import Array "mo:base/Array";
+import Buffer "mo:base/Buffer";
 
 actor Job {
     type Job = {
@@ -16,6 +19,7 @@ actor Job {
         job_description : Text;
         requirements : Text;
         company_id : Principal;
+        reviews : [Principal];
     };
 
     let jobs = TrieMap.TrieMap<Principal, Job>(Principal.equal, Principal.hash);
@@ -39,6 +43,11 @@ actor Job {
                 return;
             };
             case (?actualJob) {
+
+                let buffer : [Principal] = actualJob.reviews;
+
+                let updatedReviews = Array.append<Principal>(actualJob.reviews, [review_id]);
+
                 let updated_job = {
                     id = actualJob.id;
                     position = actualJob.position;
@@ -50,6 +59,7 @@ actor Job {
                     job_description = actualJob.job_description;
                     requirements = actualJob.requirements;
                     company_id = actualJob.company_id;
+                    reviews = updatedReviews;
                 };
                 jobs.put(job_id, updated_job);
             };
