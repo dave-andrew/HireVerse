@@ -8,10 +8,7 @@ interface Props {
 export default function ManagementPageLayout({ children }: Props) {
     return (
         <div className="h-full bg-signature-gray flex flex-row">
-            <ManagementBars />
-            <div className="w-full bg-signature-gray rounded-xl min-h-screen">
-                {children}
-            </div>
+            <ManagementBars>{children}</ManagementBars>
         </div>
     );
 }

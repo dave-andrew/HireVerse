@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { TbFilterCog } from "react-icons/tb";
 import { IoIosSearch } from "react-icons/io";
-import FrontPageLayout from "../layouts/FrontPageLayout";
-import CardLayout from "../layouts/CardLayout";
+import FrontPageLayout from "../../layouts/FrontPageLayout";
+import CardLayout from "../../layouts/CardLayout";
 import CustomDropdown, {
     DropdownItems,
-} from "../components/form/CustomDropdown";
-import JobItem from "../components/job/JobItem";
+} from "../../components/form/CustomDropdown";
+import JobItem from "../../components/job/JobItem";
 import { IoLocationOutline } from "react-icons/io5";
-import AutocompleteDropdown from "../components/form/AutocompleteDropdown";
-import JobDetail from "../components/job/JobDetail";
-import { HireVerse_job } from "../../../declarations/HireVerse_job";
+import AutocompleteDropdown from "../../components/form/AutocompleteDropdown";
+import JobDetail from "../../components/job/JobDetail";
+import { HireVerse_job } from "../../../../declarations/HireVerse_job";
 
 export default function FindJobs() {
     const [sortStates, setSortStates] = useState<DropdownItems[]>();
@@ -29,7 +29,7 @@ export default function FindJobs() {
         const temp1 = async () => {
             const response = await job.getAllJobs();
             console.log(response);
-        }
+        };
         temp1();
     }, []);
 

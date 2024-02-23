@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Profile from "../navbar/Profile";
 import CustomDropdown, { DropdownItems } from "../form/CustomDropdown";
 import { IconType } from "react-icons";
@@ -17,7 +17,11 @@ type Menu = {
     icon: IconType;
 };
 
-export default function ManagementBars() {
+interface Props {
+    children?: ReactNode;
+}
+
+export default function ManagementBars({ children }: Props) {
     const [managedCompanies, setManagedCompanies] = useState<DropdownItems[]>(
         [],
     );
@@ -59,7 +63,7 @@ export default function ManagementBars() {
     const isActive = (menu: string[]) => menu.includes(location.pathname);
 
     return (
-        <>
+        <div className="flex flex-row w-[100vw] h-[100vh]">
             <div className="z-50 fixed flex flex-row justify-between w-full h-16 bg-white shadow-md">
                 <div className="pl-64 flex flex-row h-full place-items-center">
                     <CustomDropdown
@@ -103,7 +107,11 @@ export default function ManagementBars() {
                     </div>
                 </div>
             </div>
-            <div className="w-[20rem] flex" />
-        </>
+            <div className="w-[16rem] h-full flex" />
+            <div className="flex flex-col w-full">
+                <div className="h-10 w-full" />
+                {children}
+            </div>
+        </div>
     );
 }

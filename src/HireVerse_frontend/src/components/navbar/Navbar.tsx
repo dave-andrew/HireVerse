@@ -66,7 +66,7 @@ export default function Navbar() {
                 </div>
                 <div className="flex flex-row h-full place-items-center">
                     <a
-                        href="/manage-company"
+                        href="/employer"
                         className="flex h-full mr-6 justify-center items-center transition-colors border-b-2 border-transparent hover:border-blue-primary cursor-pointer">
                         Employer
                     </a>

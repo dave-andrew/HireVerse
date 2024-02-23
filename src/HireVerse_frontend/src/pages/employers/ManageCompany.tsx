@@ -1,4 +1,4 @@
-import ManagementPageLayout from "../layouts/ManagementPageLayout";
+import ManagementPageLayout from "../../layouts/ManagementPageLayout";
 
 export default function ManageCompany() {
     return (
