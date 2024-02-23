@@ -43,7 +43,7 @@ const backRoutes: RouteObject[] = [
         Component: EmptyPage,
     },
     {
-        path: "/employer/manage-company",
+        path: "/employer/manage",
         Component: ManageCompany,
     },
     {

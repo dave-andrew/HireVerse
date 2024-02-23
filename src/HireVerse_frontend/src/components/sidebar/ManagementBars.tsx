@@ -107,9 +107,9 @@ export default function ManagementBars({ children }: Props) {
                     </div>
                 </div>
             </div>
-            <div className="w-[16rem] h-full flex" />
-            <div className="flex flex-col w-full">
-                <div className="h-10 w-full" />
+            <div className="flex min-w-[16rem] h-full" />
+            <div className="flex flex-col flex-grow-1 w-full h-full">
+                <div className="min-h-16 w-full" />
                 {children}
             </div>
         </div>
