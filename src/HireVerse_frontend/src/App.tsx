@@ -6,9 +6,10 @@ import FindCompany from "./pages/FindCompany";
 import Landing from "./pages/Landing";
 import RegisterUser from "./pages/RegisterUser";
 
-import { Authenticated } from "./middleware/UserMiddleware";
+import {Authenticated} from "./middleware/UserMiddleware";
 import CompanyJobs from "./components/company/CompanyJobs";
 import CompanyManagers from "./components/company/CompanyManagers";
+import CompleteRegistration from "./pages/CompleteRegistration";
 
 function App() {
     return (
@@ -32,7 +33,7 @@ function App() {
                 />
                 <Route
                     path="/manage-company"
-                    element={<ManageCompany />}
+                    element={<ManageCompany/>}
                 />
                 <Route
                     path="/find-company"
@@ -59,6 +60,9 @@ function App() {
                 <Route
                     path="/manage-company"
                     element={<ManageCompany/>}
+                />
+                <Route path="/complete-registration"
+                       element={<CompleteRegistration/>}
                 />
             </Routes>
         </BrowserRouter>

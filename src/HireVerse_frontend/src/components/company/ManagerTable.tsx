@@ -66,25 +66,25 @@ export default function ManagerTable() {
                     return (
                         <tr key={index}
                             className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b">
-                            <td className="px-4 py-4 flex justify-center">
+                            <td className="px-4 flex justify-center place-items-start">
                                 {index + 1}
                             </td>
-                            <th className="px-2 py-4 font-medium text-black whitespace-nowrap">
+                            <th className="px-2 font-medium text-black whitespace-nowrap">
                                 {manager.uid}
                             </th>
-                            <td className="px-6 py-4">
+                            <td className="px-6">
                                 {manager.fullName}
                             </td>
-                            <td className="px-6 py-4">
+                            <td className="px-6">
                                 {manager.birthDate}
                             </td>
-                            <td className="px-6 py-4">
+                            <td className="px-6">
                                 {manager.email}
                             </td>
-                            <td className={"font-semibold px-6 py-4 " + (manager.status == "Active" ? "text-green-600" : manager.status == "Pending" ? "text-yellow-600" : "text-red-600")}>
+                            <td className={"font-semibold px-6 " + (manager.status == "Active" ? "text-green-600" : manager.status == "Pending" ? "text-yellow-600" : "text-red-600")}>
                                 {manager.status}
                             </td>
-                            <td className="flex place-items-center justify-start">
+                            <td className="flex justify-start pl-3">
                                 <div className="p-2 bg-red-700 rounded-md text-white w-fit">
                                     <FaRegTrashAlt/>
                                 </div>
