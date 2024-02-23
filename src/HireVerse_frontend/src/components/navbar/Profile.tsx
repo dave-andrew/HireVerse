@@ -35,7 +35,7 @@ export default function Profile() {
                                         </span>
                                     </div>
                                     <div className="bg-gray-50 p-2">
-                                        <span className="flow-root rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-signature-hover-gray cursor-pointer">
+                                        <span className="flow-root rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-blue-primary hover:text-white cursor-pointer">
                                             <span className="flex items-center justify-center">
                                                 <span className="w-full text-sm font-medium text-gray-900">
                                                     Sign Out
