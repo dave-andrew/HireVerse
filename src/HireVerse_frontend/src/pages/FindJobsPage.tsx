@@ -3,17 +3,25 @@ import { TbFilterCog } from "react-icons/tb";
 import { IoIosSearch } from "react-icons/io";
 import FrontPageLayout from "../layouts/FrontPageLayout";
 import CardLayout from "../layouts/CardLayout";
-import SortDropdown from "../components/form/SortDropdown";
+import CustomDropdown, {
+    DropdownItems,
+} from "../components/form/CustomDropdown";
 import JobItem from "../components/job/JobItem";
 import { IoLocationOutline } from "react-icons/io5";
 import AutocompleteDropdown from "../components/form/AutocompleteDropdown";
 import JobDetail from "../components/job/JobDetail";
 
 export default function FindJobs() {
-    const [sortStates, setSortStates] = useState<string[]>();
+    const [sortStates, setSortStates] = useState<DropdownItems[]>();
 
     useEffect(() => {
-        setSortStates(["Newest", "Oldest", "Highest Salary", "Lowest Salary"]);
+        const temp = [
+            { label: "Newest", value: "Newest" },
+            { label: "Oldest", value: "Oldest" },
+            { label: "Highest Salary", value: "Highest Salary" },
+            { label: "Lowest Salary", value: "Lowest Salary" },
+        ];
+        setSortStates(temp);
     }, []);
 
     return (
@@ -54,7 +62,7 @@ export default function FindJobs() {
                                     placeholder="Search Job"
                                 />
                             </span>
-                            <span className="flex flex-row gap-2 items-center border-signature-gray border-l-[1px]  has-[:focus]:bg-gray-100 transition-colors rounded-tr-xl rounded-br-xl p-1 pl-5">
+                            <span className="flex flex-row gap-2 items-center border-signature-gray border-l-[1px] has-[:focus]:bg-gray-100 transition-colors rounded-tr-xl rounded-br-xl p-1 pl-5">
                                 <IoLocationOutline size="1.5rem" />
                                 <AutocompleteDropdown />
                             </span>
@@ -64,7 +72,7 @@ export default function FindJobs() {
                         <div className="h-auto flex flex-col gap-1">
                             <CardLayout className="flex flex-row ps-5 pe-2 justify-between items-center mr-2">
                                 1000 Jakarta Jobs
-                                <SortDropdown sortStates={sortStates} />
+                                <CustomDropdown states={sortStates} />
                             </CardLayout>
                             <div className="flex flex-col w-96 overflow-x-hidden overflow-y-auto card-scollr gap-2 pr-1">
                                 {Array.from({ length: 21 }).map((_) => {

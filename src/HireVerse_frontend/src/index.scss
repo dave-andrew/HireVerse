@@ -40,6 +40,10 @@ html {
   background-color: #00b4d8;
 }
 
+.hover\:bg-blue-primary:hover {
+  background-color: #00b4d8;
+}
+
 .bg-yellow-primary {
   background-image: linear-gradient(90deg, #ffd166, #fac342);
 }
@@ -50,6 +54,10 @@ html {
 
 .hover\:bg-signature-blue:hover {
   background-color: #0077b6;
+}
+
+.hover\:border-blue-primary:hover {
+  border-color: #00b4d8;
 }
 
 .bg-signature-gray {
