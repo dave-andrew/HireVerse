@@ -50,10 +50,6 @@ function App() {
                     />
                 </Route>
                 <Route
-                    path="/register"
-                    element={<RegisterUser/>}
-                />
-                <Route
                     path="*"
                     element={<h1>404 NOT FOUND</h1>}
                 />
