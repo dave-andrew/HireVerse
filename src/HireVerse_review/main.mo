@@ -24,4 +24,16 @@ actor Review {
     public func addReview(review : Review) : async () {
         reviews.put(review.id, review);
     };
+
+    public func updateReview(review : Review) : async () {
+        reviews.put(review.id, review);
+    };
+
+    public func deleteReview(id: Principal) : async ?Review {
+        reviews.remove(id);
+    };
+
+    public func getReview(id: Principal) : async ?Review {
+        return reviews.get(id);
+    };
 }

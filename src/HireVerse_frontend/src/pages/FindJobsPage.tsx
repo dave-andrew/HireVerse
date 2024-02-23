@@ -10,9 +10,12 @@ import JobItem from "../components/job/JobItem";
 import { IoLocationOutline } from "react-icons/io5";
 import AutocompleteDropdown from "../components/form/AutocompleteDropdown";
 import JobDetail from "../components/job/JobDetail";
+import { HireVerse_job } from "../../../declarations/HireVerse_job";
 
 export default function FindJobs() {
     const [sortStates, setSortStates] = useState<DropdownItems[]>();
+
+    let job = HireVerse_job;
 
     useEffect(() => {
         const temp = [
@@ -22,6 +25,12 @@ export default function FindJobs() {
             { label: "Lowest Salary", value: "Lowest Salary" },
         ];
         setSortStates(temp);
+
+        const temp1 = async () => {
+            const response = await job.getAllJobs();
+            console.log(response);
+        }
+        temp1();
     }, []);
 
     return (

@@ -3,6 +3,7 @@ import Principal "mo:base/Principal";
 import Nat "mo:base/Nat";
 import Text "mo:base/Text";
 import Blob "mo:base/Blob";
+import Iter "mo:base/Iter";
 import Helper "canister:HireVerse_helper";
 
 actor Company {
@@ -46,5 +47,9 @@ actor Company {
 
     public shared func deleteCompany(id : Principal) : async ?Company {
         companies.remove(id);
+    };
+
+    public query func getAllCompany() : async [Company] {
+        return Iter.toArray(companies.vals());
     };
 };

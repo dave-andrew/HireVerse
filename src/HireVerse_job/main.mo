@@ -6,6 +6,7 @@ import Helper "canister:HireVerse_helper";
 import List "mo:base/List";
 import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
+import Iter "mo:base/Iter";
 
 actor Job {
     type Job = {
@@ -64,5 +65,9 @@ actor Job {
                 jobs.put(job_id, updated_job);
             };
         };
+    };
+
+    public query func getAllJobs() : async [Job] {
+        return Iter.toArray(jobs.vals());
     };
 }
