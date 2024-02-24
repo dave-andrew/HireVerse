@@ -15,7 +15,7 @@ export function CustomCheckBox({ className }: CustomCheckBoxProps) {
                 htmlFor="link-checkbox"
                 className="ms-2 text-sm font-medium text-gray-900 ">
                 I agree with all{" "}
-                <b className={"text-blue-primary"}>HireVerse</b>
+                <b className="text-blue-primary">HireVerse</b>
                 <a
                     href="#"
                     className="text-blue-600 hover:underline">

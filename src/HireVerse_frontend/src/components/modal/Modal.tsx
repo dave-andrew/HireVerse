@@ -11,7 +11,7 @@ export default function Modal({ handleClose, show, modalTitle, children }: {
         show ? <div className="modal block">
             <div className="modal-main flex flex-col gap-5">
                 <div className="w-full flex flex-row justify-between place-items-center pb-5">
-                    <div className={"font-bold text-4xl"}>
+                    <div className="font-bold text-4xl">
                         {modalTitle}
                     </div>
                     <button className="shadow-md rounded-full border border-black h-fit w-fit text-xl text-end" type="button" onClick={handleClose}>
