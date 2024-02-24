@@ -8,6 +8,7 @@ import Debug "mo:base/Debug";
 import Array "mo:base/Array";
 import Bool "mo:base/Bool";
 import Helper "canister:HireVerse_helper";
+import User "canister:HireVerse_backend";
 
 actor Company {
 
@@ -133,6 +134,37 @@ actor Company {
                 };
                 
                 return companies.put(company_id, updatedCompany);
+            };
+        };
+    };
+
+    public shared func removeInvite(id : Principal) : async ?Invite {
+        return invitations.remove(id);
+    };
+
+    public shared func GetManagersFromCompany(company_id: Principal) : async ?[User.User] {
+        let companies : ?Company = await getCompany(company_id);
+
+        switch (companies) {
+            case null {
+                return null;
+            };
+            case (?company) {
+                let manager_ids = company.company_manager_ids;
+                var managers : [User.User] = [];
+                for (manager_id in manager_ids.vals()) {
+                    let manager : ?User.User = await User.getUser(manager_id);
+                    switch (manager) {
+                        case null {
+                            return null;
+                        };
+                        case (?m) {
+                            managers := Array.append<User.User>(managers, [m]);
+                        };
+                    };
+                };
+
+                return ?managers;
             };
         };
     };
