@@ -36,7 +36,7 @@ export default function FindJobs() {
     return (
         <FrontPageLayout>
             <div className="flex flex-col w-full h-full place-items-center gap-20">
-                <div className="w-full h-[60vh] bg-[url(/backgrounds/subtle-prism.svg)] shadow-md">
+                <div className="w-full h-[60vh] bg-[url(src/HireVerse_frontend/backgrounds/subtle-prism.svg)] shadow-md">
                     <div className="flex flex-row items-center justify-center w-full h-full gap-20">
                         <div className="flex flex-col w-2/6 gap-5">
                             <h3 className="font-bold text-4xl lg:text-5xl">

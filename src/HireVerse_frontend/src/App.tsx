@@ -8,11 +8,11 @@ import FindJobs from "./pages/employee/FindJobsPage";
 import RegisterCompany from "./pages/employers/RegisterCompany";
 import FindCompany from "./pages/employee/FindCompany";
 import Landing from "./pages/employee/Landing";
-import CompanyJobs from "./components/company/CompanyJobs";
-import CompanyManagers from "./components/company/CompanyManagers";
 import CompleteRegistration from "./pages/employee/CompleteRegistration";
 import EmptyPage from "./pages/employers/EmptyPage";
 import CompanyDetail from "./pages/employee/CompanyDetail";
+import CompanyManagers from "./pages/employers/CompanyManagers";
+import CompanyJobs from "./pages/employers/CompanyJobs";
 
 const frontRoutes: RouteObject[] = [
     {

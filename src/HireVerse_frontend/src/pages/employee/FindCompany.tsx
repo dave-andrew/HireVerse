@@ -87,7 +87,7 @@ export default function FindCompany() {
     return (
         <FrontPageLayout>
             <div className="flex flex-col">
-                <div className="w-full h-fit bg-[url(/backgrounds/subtle-prism.svg)] shadow-md place-items-center">
+                <div className="w-full h-fit bg-[url(src/HireVerse_frontend/backgrounds/subtle-prism.svg)] shadow-md place-items-center">
                     <div className="flex flex-col place-items-center p-8 gap-8">
                         <div className="flex flex-col items-center justify-center">
                             <div className="flex flex-col self-start gap-3 w-full">
