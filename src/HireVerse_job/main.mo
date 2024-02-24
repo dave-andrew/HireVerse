@@ -7,6 +7,7 @@ import List "mo:base/List";
 import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
 import Iter "mo:base/Iter";
+import Company "canister:HireVerse_company";
 
 actor Job {
     type Job = {
@@ -25,8 +26,29 @@ actor Job {
 
     let jobs = TrieMap.TrieMap<Principal, Job>(Principal.equal, Principal.hash);
 
-    public func createJob(job : Job) : async () {
-        jobs.put(job.id, job);
+    // Data Seeder
+    
+
+    public shared func createJob(position: Text, location: Text, industry: Text, salary_start: Nat, salary_end: Nat, short_description: Text, job_description: Text, requirements: Text, company_id: Principal) : async Job {
+        let id : Principal = await Helper.generatePrinciple();
+
+        let job : Job = {
+            id = id;
+            position = position;
+            location = location;
+            industry = industry;
+            salary_start = salary_start;
+            salary_end = salary_end;
+            short_description = short_description;
+            job_description = job_description;
+            requirements = requirements;
+            company_id = company_id;
+            reviews = [];
+        };
+
+        jobs.put(id, job);
+        let test = Company.addJob(company_id, id);
+        return job;
     };
 
     public query func updateJob(principal : Principal, job : Job) : async () {
@@ -37,10 +59,14 @@ actor Job {
         jobs.remove(id);
     };
 
+    public query func getJob(id : Principal) : async ?Job {
+        jobs.get(id);
+    };
+
     public shared func addReview(job_id : Principal, review_id : Principal) {
         let job = jobs.get(job_id);
         switch (job) {
-            case (null) {
+            case null {
                 return;
             };
             case (?actualJob) {
