@@ -31,7 +31,7 @@ export default function Landing() {
             }
         };
         fetchPrincipal();
-    }, [clickHandler]);
+    }, []);
 
     return (
         <FrontPageLayout>

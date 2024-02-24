@@ -11,7 +11,8 @@ import Time "mo:base/Time";
 import Buffer "mo:base/Buffer";
 import Helper "canister:HireVerse_helper";
 import User "canister:HireVerse_backend";
-import Vector "mo:vector/Class"
+import Vector "mo:vector/Class";
+import Random "mo:base/Random";
 
 actor Company {
 
@@ -48,6 +49,24 @@ actor Company {
     let companies = TrieMap.TrieMap<Text, Company>(Text.equal, Text.hash);
     let invitations = TrieMap.TrieMap<Text, Invite>(Text.equal, Text.hash);
 
+    public shared func generateCompany() : async Text {
+        let company = {
+            id = await Helper.generateUUID();
+            name = "Google";
+            founded_year = 1998;
+            country = "USA";
+            location = "Mountain View, California, United States";
+            image = await Random.blob();
+            linkedin = "https://www.linkedin.com/company/google";
+            company_manager_ids = [];
+            job_posting_ids = [];
+            timestamp = Time.now();
+        };
+
+        companies.put(company.id, company);
+
+        return company.id;
+    };
     public shared func registerCompanies(newCompany : CreateCompanyInput) : async Company {
 
         let id = await Helper.generateUUID();
@@ -83,7 +102,9 @@ actor Company {
     };
 
     public shared query func getCompany(id : Text) : async ?Company {
+        companies.get
         return companies.get(id);
+    
     };
 
     public shared func checkCompanyManager(company : Company, user_id : Principal) : async Bool {

@@ -13,6 +13,9 @@ import EmptyPage from "./pages/employers/EmptyPage";
 import CompanyDetail from "./pages/employee/CompanyDetail";
 import CompanyManagers from "./pages/employers/CompanyManagers";
 import CompanyJobs from "./pages/employers/CompanyJobs";
+import { HireVerse_company } from "../../declarations/HireVerse_company";
+import { HireVerse_job } from "../../declarations/HireVerse_job";
+import { useLayoutEffect } from "react";
 
 const frontRoutes: RouteObject[] = [
     {
@@ -71,7 +74,23 @@ const router = createBrowserRouter(
     frontRoutes.concat(backRoutes).concat(otherRoutes),
 );
 
+const generateData = async () => {
+    const companyService = HireVerse_company;
+    const jobService = HireVerse_job;
+    const companyIds: string[] = [];
+
+    for (let i = 0; i < 10; i++) {
+        const companyId = await companyService.generateCompany();
+        companyIds.push(companyId);
+    }
+
+    companyIds.forEach((id) => jobService.generateJob(id));
+};
+
 function App() {
+    useLayoutEffect(() => {
+        // generateData();
+    }, []);
     return <RouterProvider router={router} />;
 }
 

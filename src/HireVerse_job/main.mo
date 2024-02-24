@@ -58,6 +58,24 @@ actor Job {
 
     let jobs = TrieMap.TrieMap<Text, Job>(Text.equal, Text.hash);
 
+    public shared func generateJob(company_id : Text) : async () {
+        let job : Job = {
+            id = await Helper.generateUUID();
+            position = "Software Engineer";
+            location = "San Francisco, CA";
+            industry = "Technology";
+            salary_start = 100000;
+            salary_end = 150000;
+            short_description = "We are looking for a software engineer to join our team!";
+            job_description = "We are looking for a software engineer to join our team! We are a fast growing company and are looking for someone who is passionate about technology and is a team player.";
+            requirements = "3+ years of experience in software engineering";
+            company_id = company_id;
+            reviews = [];
+            timestamp = Time.now();
+        };
+        jobs.put(job.id, job);
+    };
+
     public shared func createJob(newJob : CreateJobInput) : async Job {
         let id = await Helper.generateUUID();
 
@@ -169,4 +187,22 @@ actor Job {
     public query func getAllJobs() : async [Job] {
         return Iter.toArray(jobs.vals());
     };
+
+    public query func getJobs(amount : Nat, startFrom : Nat) : async [Job] {
+        if(startFrom > jobs.size()) {
+            return [];
+        };
+    
+        let jobsList = Iter.toArray(jobs.vals());
+
+        if(startFrom + amount > jobs.size()) {
+            return jobsList;
+        };
+
+        let z = Array.slice<Job>(jobsList, startFrom, startFrom + amount);
+        return Iter.toArray(z);
+
+    };
+
+    
 };

@@ -7,9 +7,9 @@
 3. dfx deps pull
 4. dfx start --background ``EDIT``
 5. dfx deps deploy
-6. dfx deploy
+6. mo-dev --generate --deploy -y
 7. copy link ke internet_identity, di env buat II_URL='<link>'
-8. npm run start
+8. npm run start ``DI POWERSHELL``
 9. Semangat dep
 
 Welcome to your new HireVerse project and to the internet computer development community. By default, creating a new

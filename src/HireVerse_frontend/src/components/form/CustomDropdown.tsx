@@ -13,14 +13,23 @@ interface Props {
     states?: DropdownItems[];
     defaultState?: DropdownItems;
     className?: string;
+    onChange?: (value: DropdownItems) => void;
 }
 
 export default function CustomDropdown({
     states,
     defaultState = { value: "", label: "" },
     className,
+    onChange,
 }: Props) {
     const [selected, setSelected] = useState<DropdownItems>(defaultState);
+
+    const handleChange = (value: DropdownItems) => {
+        setSelected(value);
+        if (onChange) {
+            onChange(value);
+        }
+    };
 
     useEffect(() => {
         if (
@@ -28,7 +37,6 @@ export default function CustomDropdown({
             states.length > 0 &&
             (defaultState?.value === "" || defaultState?.label === "")
         ) {
-            console.log(states);
             setSelected(states[0]);
             return;
         }
@@ -39,7 +47,7 @@ export default function CustomDropdown({
             <div className={`top-16 w-40 ${className}`}>
                 <Listbox
                     value={selected}
-                    onChange={setSelected}>
+                    onChange={handleChange}>
                     <div className="relative m-2">
                         <Listbox.Button className="relative flex flex-row items-center w-full cursor-default rounded-lg bg-white hover:bg-signature-hover-gray transition-colors py-2 pl-3 pr-10 ">
                             <span className="block truncate">

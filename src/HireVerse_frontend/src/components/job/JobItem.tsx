@@ -4,11 +4,12 @@ import { Job } from "../../../../../.dfx/local/canisters/HireVerse_job/service.d
 interface Props {
     job: Job;
     companyName: string;
+    onClick?: () => void;
 }
 
-export default function JobItem({ job, companyName }: Props) {
+export default function JobItem({ job, companyName, onClick }: Props) {
     return (
-        <CardLayout className="flex flex-col p-4 transition rounded-xl hover:bg-gray-200">
+        <CardLayout className="flex flex-col p-4 transition rounded-xl cursor-pointer hover:bg-gray-200">
             <div className="flex flex-row items-center">
                 <img
                     width="50rem"
