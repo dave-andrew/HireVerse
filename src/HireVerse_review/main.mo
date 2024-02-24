@@ -7,7 +7,7 @@ import Helper "canister:HireVerse_helper";
 
 actor Review {
     type Review = {
-        id : Principal;
+        id : Text;
         employer_id : Principal;
         employer_name : Text;
         career_opportunities : Nat;
@@ -21,35 +21,37 @@ actor Review {
         timestamp : Time.Time;
     };
 
-    let reviews = TrieMap.TrieMap<Principal, Review>(Principal.equal, Principal.hash);
-    
-    public func addReview(
-        employer_id : Principal,
-        employer_name : Text,
-        career_opportunities : Nat,
-        compensation_benefits_rating : Nat,
-        culture_values_rating : Nat,
-        senior_management_rating : Nat,
-        work_life_balance_rating : Nat,
-        general_comment : Nat,
-        pros : Text,
-        cons : Text
-    ) : async () {
-        let id : Principal = await Helper.generatePrinciple();
+    type CreateReviewInput = {
+        employer_id : Principal;
+        employer_name : Text;
+        career_opportunities : Nat;
+        compensation_benefits_rating : Nat;
+        culture_values_rating : Nat;
+        senior_management_rating : Nat;
+        work_life_balance_rating : Nat;
+        general_comment : Nat;
+        pros : Text;
+        cons : Text;
+    };
+
+    let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
+
+    public func addReview(newReview : CreateReviewInput) : async () {
+        let id = await Helper.generateUUID();
 
         let review = {
             id = id;
-            employer_id = employer_id;
-            employer_name = employer_name;
-            career_opportunities = career_opportunities;
-            compensation_benefits_rating = compensation_benefits_rating;
-            culture_values_rating = culture_values_rating;
-            senior_management_rating = senior_management_rating;
-            work_life_balance_rating = work_life_balance_rating;
-            general_comment = general_comment;
-            pros = pros;
-            cons = cons;
-            timestamp = Time.now()
+            employer_id = newReview.employer_id;
+            employer_name = newReview.employer_name;
+            career_opportunities = newReview.career_opportunities;
+            compensation_benefits_rating = newReview.compensation_benefits_rating;
+            culture_values_rating = newReview.culture_values_rating;
+            senior_management_rating = newReview.senior_management_rating;
+            work_life_balance_rating = newReview.work_life_balance_rating;
+            general_comment = newReview.general_comment;
+            pros = newReview.pros;
+            cons = newReview.cons;
+            timestamp = Time.now();
         };
 
         reviews.put(review.id, review);
@@ -59,11 +61,11 @@ actor Review {
         reviews.put(review.id, review);
     };
 
-    public func deleteReview(id: Principal) : async ?Review {
+    public func deleteReview(id : Text) : async ?Review {
         reviews.remove(id);
     };
 
-    public func getReview(id: Principal) : async ?Review {
+    public func getReview(id : Text) : async ?Review {
         return reviews.get(id);
     };
-}
+};

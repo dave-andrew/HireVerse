@@ -6,7 +6,6 @@ import Blob "mo:base/Blob";
 import Array "mo:base/Array";
 import Time "mo:base/Time";
 import Helper "canister:HireVerse_helper";
-import Company "canister:HireVerse_company";
 
 actor Database {
 
@@ -16,8 +15,8 @@ actor Database {
         last_name : Text;
         email : Text;
         birth_date : Text;
-        company_ids : [Principal];
-        timestamp: Time.Time;
+        company_ids : [Text];
+        timestamp : Time.Time;
     };
 
     let users = TrieMap.TrieMap<Principal, User>(Principal.equal, Principal.hash);
@@ -26,7 +25,7 @@ actor Database {
 
     public func seedUser() : async () {
 
-        let id = await Helper.generatePrinciple();
+        let id = await Helper.generatePrincipal();
 
         let user1 = {
             internet_identity = id;
@@ -38,7 +37,7 @@ actor Database {
             timestamp = Time.now();
         };
 
-        let id2 = await Helper.generatePrinciple();
+        let id2 = await Helper.generatePrincipal();
 
         let user2 = {
             internet_identity = id2;
@@ -50,7 +49,7 @@ actor Database {
             timestamp = Time.now();
         };
 
-        let id3 = await Helper.generatePrinciple();
+        let id3 = await Helper.generatePrincipal();
 
         let user3 = {
             internet_identity = id3;
@@ -87,21 +86,21 @@ actor Database {
         return "Hello, " # Principal.toText(message.caller) # "!";
     };
 
-    public shared func getUserCompanies(user_id : Principal) : async [?Company.Company] {
-        let user : ?User = await getUser(user_id);
-        var companies : [?Company.Company] = [];
+    // public shared func getUserCompanies(user_id : Principal) : async [?Company.Company] {
+    //     let user : ?User = await getUser(user_id);
+    //     var companies : [?Company.Company] = [];
 
-        switch (user) {
-            case (?user) {
-                let company_ids : [Principal] = user.company_ids;
-                for (company_id in company_ids.vals()) {
-                    let fetched_company = await Company.getCompany(company_id);
-                    companies := Array.append(companies, [fetched_company]);
-                };
-            };
-            case null {};
-        };
-        return companies;
-    };
+    //     switch (user) {
+    //         case (?user) {
+    //             let company_ids : [Principal] = user.company_ids;
+    //             for (company_id in company_ids.vals()) {
+    //                 let fetched_company = await Company.getCompany(company_id);
+    //                 companies := Array.append(companies, [fetched_company]);
+    //             };
+    //         };
+    //         case null {};
+    //     };
+    //     return companies;
+    // };
 
 };

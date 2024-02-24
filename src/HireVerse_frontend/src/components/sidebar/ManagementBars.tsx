@@ -21,6 +21,27 @@ interface Props {
     children?: ReactNode;
 }
 
+const defaultMenu: Menu[] = [
+    {
+        name: "Overview",
+        activeUrl: ["/manage-company", "/"],
+        redirectUrl: "/manage-company",
+        icon: RiHome4Line,
+    },
+    {
+        name: "Find Jobs",
+        activeUrl: ["/find-job"],
+        redirectUrl: "/find-job",
+        icon: RiUser3Line,
+    },
+    {
+        name: "Find Company",
+        activeUrl: ["/find-company"],
+        redirectUrl: "/find-company",
+        icon: RiSuitcase2Line,
+    },
+];
+
 export default function ManagementBars({ children }: Props) {
     const [managedCompanies, setManagedCompanies] = useState<DropdownItems[]>(
         [],
@@ -38,26 +59,7 @@ export default function ManagementBars({ children }: Props) {
         ];
         setManagedCompanies(temp);
 
-        setMenus([
-            {
-                name: "Overview",
-                activeUrl: ["/manage-company", "/"],
-                redirectUrl: "/manage-company",
-                icon: RiHome4Line,
-            },
-            {
-                name: "Find Jobs",
-                activeUrl: ["/find-job"],
-                redirectUrl: "/find-job",
-                icon: RiUser3Line,
-            },
-            {
-                name: "Find Company",
-                activeUrl: ["/find-company"],
-                redirectUrl: "/find-company",
-                icon: RiSuitcase2Line,
-            },
-        ]);
+        setMenus(defaultMenu);
     }, []);
 
     const isActive = (menu: string[]) => menu.includes(location.pathname);

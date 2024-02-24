@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { TbFilterCog } from "react-icons/tb";
 import { IoIosSearch } from "react-icons/io";
 import FrontPageLayout from "../../layouts/FrontPageLayout";
@@ -11,26 +11,45 @@ import { IoLocationOutline } from "react-icons/io5";
 import AutocompleteDropdown from "../../components/form/AutocompleteDropdown";
 import JobDetail from "../../components/job/JobDetail";
 import { HireVerse_job } from "../../../../declarations/HireVerse_job";
+import {
+    CreateJobInput,
+    Job,
+} from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import { HireVerse_company } from "../../../../declarations/HireVerse_company";
+import { Principal } from "@dfinity/principal";
+
+const temp = [
+    { label: "Newest", value: "Newest" },
+    { label: "Oldest", value: "Oldest" },
+    { label: "Highest Salary", value: "Highest Salary" },
+    { label: "Lowest Salary", value: "Lowest Salary" },
+];
 
 export default function FindJobs() {
+    const jobService = HireVerse_job;
+    const companyService = HireVerse_company;
     const [sortStates, setSortStates] = useState<DropdownItems[]>();
+    const [jobs, setJobs] = useState<Job[]>();
+    const [companyNames, setCompanyNames] = useState<string[]>([]);
 
-    let job = HireVerse_job;
+    const getJobs = useCallback(async () => {
+        const response = await jobService.getAllJobs();
+
+        const companyIds = response.map((job) => job.company_id);
+        const names = await Promise.all(
+            await companyService.getCompanyNames(companyIds),
+        );
+
+        setJobs(response);
+        setCompanyNames(names);
+    }, []);
 
     useEffect(() => {
-        const temp = [
-            { label: "Newest", value: "Newest" },
-            { label: "Oldest", value: "Oldest" },
-            { label: "Highest Salary", value: "Highest Salary" },
-            { label: "Lowest Salary", value: "Lowest Salary" },
-        ];
         setSortStates(temp);
+    }, []);
 
-        const temp1 = async () => {
-            const response = await job.getAllJobs();
-            console.log(response);
-        };
-        temp1();
+    useLayoutEffect(() => {
+        getJobs();
     }, []);
 
     return (
@@ -60,7 +79,27 @@ export default function FindJobs() {
                 <div className="flex flex-col gap-10 w-3/4 pb-10">
                     <div className="flex flex-row gap-5 w-full">
                         <CardLayout className="p-3 cursor-pointer hover:bg-signature-hover-gray transition-colors">
-                            <TbFilterCog size="1.5rem" />
+                            <TbFilterCog
+                                size="1.5rem"
+                                onClick={async () => {
+                                    // const principle =
+                                    //     await jobService.createTempPrinciple();
+                                    const newJob: CreateJobInput = {
+                                        //@ts-ignore
+                                        company_id: Principal.from("2vxsx-fae"),
+                                        position: "Software Engineer",
+                                        location: "Jakarta",
+                                        salary_start: BigInt(10000000),
+                                        salary_end: BigInt(15000000),
+                                        job_description: "Software Engineer",
+                                        industry: "IT",
+                                        requirements: "Bachelor Degree",
+                                        short_description: "Software Engineer",
+                                    };
+                                    jobService.createJob(newJob);
+                                    // jobService.createJob();
+                                }}
+                            />
                         </CardLayout>
                         <CardLayout className="flex flex-row items-center w-full">
                             <span className="flex flex-1 flex-row gap-2 p-3 has-[:focus]:bg-gray-100 transition-colors rounded-tl-xl rounded-bl-xl">
@@ -84,8 +123,14 @@ export default function FindJobs() {
                                 <CustomDropdown states={sortStates} />
                             </CardLayout>
                             <div className="flex flex-col w-96 overflow-x-hidden overflow-y-auto card-scollr gap-2 pr-1">
-                                {Array.from({ length: 21 }).map((_) => {
-                                    return <JobItem />;
+                                {jobs?.map((job, index) => {
+                                    return (
+                                        <JobItem
+                                            key={index}
+                                            job={job}
+                                            companyName={companyNames[index]}
+                                        />
+                                    );
                                 })}
                             </div>
                         </div>

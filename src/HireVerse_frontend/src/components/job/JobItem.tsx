@@ -1,6 +1,12 @@
 import CardLayout from "../../layouts/CardLayout";
+import { Job } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 
-export default function JobItem() {
+interface Props {
+    job: Job;
+    companyName: string;
+}
+
+export default function JobItem({ job, companyName }: Props) {
     return (
         <CardLayout className="flex flex-col p-4 transition rounded-xl hover:bg-gray-200">
             <div className="flex flex-row items-center">
@@ -10,13 +16,13 @@ export default function JobItem() {
                     className="aspect-square"
                     src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"
                 />
-                <span className="font-bold">BINUS University</span>
+                <span className="font-bold">{companyName}</span>
             </div>
-            <div className="text-xl font-bold">
-                Software Laboratory Assistant
+            <div className="text-xl font-bold">{job.position}</div>
+            <div>{job.location}</div>
+            <div>
+                {job.salary_start.toString()} - {job.salary_end.toString()}
             </div>
-            <div>Jakarta, Indonesia</div>
-            <div>Rp. 5.000.000 - Rp. 10.000.000</div>
         </CardLayout>
     );
 }
