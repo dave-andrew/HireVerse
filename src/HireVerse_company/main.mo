@@ -7,6 +7,7 @@ import Iter "mo:base/Iter";
 import Debug "mo:base/Debug";
 import Array "mo:base/Array";
 import Bool "mo:base/Bool";
+import Time "mo:base/Time";
 import Helper "canister:HireVerse_helper";
 import User "canister:HireVerse_backend";
 
@@ -22,12 +23,15 @@ actor Company {
         linkedin : Text;
         company_manager_ids : [Principal];
         job_posting_ids : [Principal];
+        timestamp : Time.Time;
     };
 
     type Invite = {
         id : Principal;
         company_id : Principal;
         user_id : Principal;
+        inviter_id : Principal;
+        timestamp : Time.Time;
     };
 
     let companies = TrieMap.TrieMap<Principal, Company>(Principal.equal, Principal.hash);
@@ -47,6 +51,7 @@ actor Company {
             linkedin = linkedin;
             company_manager_ids = [];
             job_posting_ids = [];
+            timestamp = Time.now();
         };
         companies.put(company.id, company);
         return company;
@@ -79,7 +84,7 @@ actor Company {
         ) != null;
     };
 
-    public shared func inviteManager(company_id : Principal, user_id : Principal) : async ?Invite {
+    public shared func inviteManager(company_id : Principal, user_id : Principal, inviter_id: Principal) : async ?Invite {
         let company = await getCompany(company_id);
 
         switch (company) {
@@ -98,6 +103,8 @@ actor Company {
                     id = id;
                     company_id = company_id;
                     user_id = user_id;
+                    inviter_id = inviter_id;
+                    timestamp = Time.now();
                 };
 
                 invitations.put(id, invite);
@@ -131,6 +138,7 @@ actor Company {
                     linkedin = company.linkedin;
                     company_manager_ids = company.company_manager_ids;
                     job_posting_ids = updatedJob;
+                    timestamp = company.timestamp;
                 };
                 
                 return companies.put(company_id, updatedCompany);
@@ -142,7 +150,7 @@ actor Company {
         return invitations.remove(id);
     };
 
-    public shared func GetManagersFromCompany(company_id: Principal) : async ?[User.User] {
+    public shared func getManagersFromCompany(company_id: Principal) : async ?[User.User] {
         let companies : ?Company = await getCompany(company_id);
 
         switch (companies) {
@@ -168,4 +176,9 @@ actor Company {
             };
         };
     };
+
+    // TODO: lengkapin yah ntar
+    public shared func getJobPostedByCompany() : async () {
+        return;
+    }
 };

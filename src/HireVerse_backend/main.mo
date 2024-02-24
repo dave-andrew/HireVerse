@@ -4,6 +4,7 @@ import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import Blob "mo:base/Blob";
 import Array "mo:base/Array";
+import Time "mo:base/Time";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
 
@@ -16,6 +17,7 @@ actor Database {
         email : Text;
         birth_date : Text;
         company_ids : [Principal];
+        timestamp: Time.Time;
     };
 
     let users = TrieMap.TrieMap<Principal, User>(Principal.equal, Principal.hash);
@@ -33,6 +35,7 @@ actor Database {
             email = "";
             birth_date = "01/01/1990";
             company_ids = [];
+            timestamp = Time.now();
         };
 
         let id2 = await Helper.generatePrinciple();
@@ -44,6 +47,7 @@ actor Database {
             email = "JaneDoe@gmail.com";
             birth_date = "01/01/1990";
             company_ids = [];
+            timestamp = Time.now();
         };
 
         let id3 = await Helper.generatePrinciple();
@@ -55,6 +59,7 @@ actor Database {
             email = "JohnSmith@gmail.com";
             birth_date = "01/01/1990";
             company_ids = [];
+            timestamp = Time.now();
         };
 
         users.put(id, user1);
