@@ -10,6 +10,7 @@ import Bool "mo:base/Bool";
 import Time "mo:base/Time";
 import Helper "canister:HireVerse_helper";
 import User "canister:HireVerse_backend";
+import Job "canister:HireVerse_job";
 
 actor Company {
 
@@ -84,7 +85,7 @@ actor Company {
         ) != null;
     };
 
-    public shared func inviteManager(company_id : Principal, user_id : Principal, inviter_id: Principal) : async ?Invite {
+    public shared func inviteManager(company_id : Principal, user_id : Principal, inviter_id : Principal) : async ?Invite {
         let company = await getCompany(company_id);
 
         switch (company) {
@@ -140,7 +141,7 @@ actor Company {
                     job_posting_ids = updatedJob;
                     timestamp = company.timestamp;
                 };
-                
+
                 return companies.put(company_id, updatedCompany);
             };
         };
@@ -150,7 +151,7 @@ actor Company {
         return invitations.remove(id);
     };
 
-    public shared func getManagersFromCompany(company_id: Principal) : async ?[User.User] {
+    public shared func getManagersFromCompany(company_id : Principal) : async ?[User.User] {
         let companies : ?Company = await getCompany(company_id);
 
         switch (companies) {
@@ -177,8 +178,65 @@ actor Company {
         };
     };
 
-    // TODO: lengkapin yah ntar
-    public shared func getJobPostedByCompany() : async () {
-        return;
-    }
+    public shared func leaveCompany(company_id : Principal, user_id : Principal) : async () {
+
+        let company : ?Company = await getCompany(company_id);
+
+        switch (company) {
+            case null {
+                return;
+            };
+            case (?c) {
+                let manager_ids = c.company_manager_ids;
+                let updatedManagerIds = Array.filter<Principal>(
+                    manager_ids,
+                    func(p : Principal) : Bool {
+                        p != user_id;
+                    },
+                );
+
+                let updatedCompany = {
+                    id = company_id;
+                    name = c.name;
+                    founded_year = c.founded_year;
+                    country = c.country;
+                    location = c.location;
+                    image = c.image;
+                    linkedin = c.linkedin;
+                    company_manager_ids = updatedManagerIds;
+                    job_posting_ids = c.job_posting_ids;
+                    timestamp = c.timestamp;
+                };
+
+                return companies.put(company_id, updatedCompany);
+            };
+        };
+    };
+
+    public shared func getJobPostedByCompany(company_id : Principal) : async ?[Job.Job] {
+        let company : ?Company = await getCompany(company_id);
+
+        switch (company) {
+            case null {
+                return null;
+            };
+            case (?c) {
+                let job_ids = c.job_posting_ids;
+                var jobPostings : [Job.Job] = [];
+                for (job_id in job_ids.vals()) {
+                    let jobPosting : ?Job.Job = await Job.getJob(job_id);
+                    switch (jobPosting) {
+                        case null {
+                            return null;
+                        };
+                        case (?jp) {
+                            jobPostings := Array.append<Job.Job>(jobPostings, [jp]);
+                        };
+                    };
+                };
+
+                return ?jobPostings;
+            };
+        };
+    };
 };

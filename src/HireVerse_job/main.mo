@@ -9,6 +9,7 @@ import Iter "mo:base/Iter";
 import Time "mo:base/Time";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
+import Review "canister:HireVerse_review";
 
 actor Job {
     type Job = {
@@ -24,6 +25,21 @@ actor Job {
         company_id : Principal;
         reviews : [Principal];
         timestamp : Time.Time;
+    };
+
+    type FullJob = {
+        id : Principal;
+        position : Text;
+        location : Text;
+        industry : Text;
+        salary_start : Nat;
+        salary_end : Nat;
+        short_description : Text;
+        job_description : Text;
+        requirements : Text;
+        timestamp : Time.Time;
+        company : ?Company.Company;
+        reviews : [Review.Review];
     };
 
     let jobs = TrieMap.TrieMap<Principal, Job>(Principal.equal, Principal.hash);
@@ -62,8 +78,50 @@ actor Job {
         jobs.remove(id);
     };
 
-    public query func getJob(id : Principal) : async ?Job {
-        jobs.get(id);
+    public shared func getJob(id : Principal) : async ?Job {
+        return jobs.get(id);
+    };
+
+    public shared func getFullJob(id : Principal) : async ?FullJob {
+        let job : ?Job = await getJob(id);
+        switch (job) {
+            case null {
+                return null;
+            };
+            case (?actualJob) {
+                let company = await Company.getCompany(actualJob.company_id);
+                
+                var reviews : [Review.Review] = [];
+
+                for (review_id in actualJob.reviews.vals()) {
+                    let review = await Review.getReview(review_id);
+                    switch (review) {
+                        case null {
+                            return null;
+                        };
+                        case (?actualReview) {
+                            reviews := Array.append<Review.Review>(reviews, [actualReview]);
+                        };
+                    };
+                };
+
+                let fullJob : FullJob = {
+                    id = actualJob.id;
+                    position = actualJob.position;
+                    location = actualJob.location;
+                    industry = actualJob.industry;
+                    salary_start = actualJob.salary_start;
+                    salary_end = actualJob.salary_end;
+                    short_description = actualJob.short_description;
+                    job_description = actualJob.job_description;
+                    requirements = actualJob.requirements;
+                    timestamp = actualJob.timestamp;
+                    company = company;
+                    reviews = reviews;
+                };
+                return ?fullJob;
+            };
+        };
     };
 
     public shared func addReview(job_id : Principal, review_id : Principal) {
