@@ -5,7 +5,6 @@ import { Principal } from "@dfinity/principal";
 // import { HireVerse_backend } from "../../../declarations/HireVerse_backend";
 
 export const Authenticated = () => {
-
     // const actor = HireVerse_backend;
     const [principal, setPrincipal] = useState<Principal | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<number>(0);
@@ -38,14 +37,10 @@ export const Authenticated = () => {
             //     return;
             // }
 
-
             console.log(principal);
         };
         fetchPrincipal();
-    }, [])
+    }, []);
 
-    return (
-        <Outlet />
-    );
-
-}
+    return <Outlet />;
+};

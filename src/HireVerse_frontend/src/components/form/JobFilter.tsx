@@ -6,9 +6,9 @@ import WrappedDisclosure from "../utils/WrappedDisclosure";
 import WrappedRadioGroup from "../utils/WrappedRadioGroup";
 import { IoMdClose } from "react-icons/io";
 import { useForm } from "react-hook-form";
-import { CONSTANTS } from "../../utils/constants";
 import { suspend } from "suspend-react";
 import { HireVerse_job } from "../../../../declarations/HireVerse_job";
+import { CONSTANTS } from "../../utils/constants";
 
 export interface IFilterForm {
     salaryStart: number;
@@ -46,15 +46,15 @@ export default function JobFilter({ onApplyFilter }: Props) {
             <div className="top-16 text-right">
                 <Menu
                     as="div"
-                    className="relative inline-block text-left z-50">
+                    className="relative z-50 inline-block text-left">
                     {({ close }) => (
                         <>
                             <div>
-                                <CardLayout className="flex flex-col justify-center items-center p-3 cursor-pointer hover:bg-signature-hover-gray transition-colors">
-                                    <Menu.Button className="inline-flex w-full justify-center rounded-md h-full text-sm font-medium ">
+                                <Menu.Button className="inline-flex h-full w-full justify-center rounded-md text-sm font-medium ">
+                                    <CardLayout className="hover:bg-signature-hover-gray flex cursor-pointer flex-col items-center justify-center p-3 transition-colors">
                                         <TbFilterCog size="1.5rem" />
-                                    </Menu.Button>
-                                </CardLayout>
+                                    </CardLayout>
+                                </Menu.Button>
                             </div>
                             <Transition
                                 as={Fragment}
@@ -65,8 +65,8 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                 leaveFrom="transform opacity-100 scale-100"
                                 leaveTo="transform opacity-0 scale-95">
                                 <Menu.Items className="absolute left-0 mt-2 w-96 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-                                    <div className="px-1 py-1 h-fit">
-                                        <div className="flex flex-row justify-between items-center p-4 w-full">
+                                    <div className="h-fit px-1 py-1">
+                                        <div className="flex w-full flex-row items-center justify-between p-4">
                                             <h3 className="text-2xl font-bold">
                                                 Filter Jobs
                                             </h3>
@@ -77,11 +77,11 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                             />
                                         </div>
                                         <WrappedDisclosure
-                                            className="p-3 pl-5 cursor-pointer text-lg transition-colors"
+                                            className="cursor-pointer p-3 pl-5 text-lg transition-colors"
                                             text="Salary Range">
-                                            <div className="flex flex-col w-full text-black justify-center gap-3">
-                                                <label className="flex flex-row font-medium text-lg">
-                                                    <span className="flex flex-col justify-center bg-signature-gray items-center min-w-16 p-2 border-[1px] border-signature-gray rounded-l-lg">
+                                            <div className="flex w-full flex-col justify-center gap-3 text-black">
+                                                <label className="flex flex-row text-lg font-medium">
+                                                    <span className="bg-signature-gray border-signature-gray flex min-w-16 flex-col items-center justify-center rounded-l-lg border-[1px] p-2">
                                                         Start
                                                     </span>
                                                     <input
@@ -93,11 +93,11 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                                             },
                                                         )}
                                                         type="number"
-                                                        className="outline-0 col-span-8 w-full p-2 border-[1px] border-signature-gray rounded-r-lg"
+                                                        className="border-signature-gray col-span-8 w-full rounded-r-lg border-[1px] p-2 outline-0"
                                                     />
                                                 </label>
-                                                <label className="flex flex-row font-medium text-lg">
-                                                    <span className="flex flex-col justify-center bg-signature-gray items-center min-w-16 p-2 border-[1px] border-signature-gray rounded-l-lg">
+                                                <label className="flex flex-row text-lg font-medium">
+                                                    <span className="bg-signature-gray border-signature-gray flex min-w-16 flex-col items-center justify-center rounded-l-lg border-[1px] p-2">
                                                         End
                                                     </span>
                                                     <input
@@ -109,13 +109,13 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                                             },
                                                         )}
                                                         type="number"
-                                                        className="outline-0 col-span-8 w-full p-2 border-[1px] border-signature-gray rounded-r-lg"
+                                                        className="border-signature-gray col-span-8 w-full rounded-r-lg border-[1px] p-2 outline-0"
                                                     />
                                                 </label>
                                             </div>
                                         </WrappedDisclosure>
                                         <WrappedDisclosure
-                                            className="p-3 pl-5 cursor-pointer text-lg transition-colors"
+                                            className="cursor-pointer p-3 pl-5 text-lg transition-colors"
                                             panelClassName="!p-0"
                                             text="Industries">
                                             <Suspense
@@ -131,7 +131,7 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                             </Suspense>
                                         </WrappedDisclosure>
                                         <WrappedDisclosure
-                                            className="p-3 pl-5 cursor-pointer text-lg transition-colors"
+                                            className="cursor-pointer p-3 pl-5 text-lg transition-colors"
                                             panelClassName="!p-0"
                                             text="Experience">
                                             <WrappedRadioGroup
@@ -145,7 +145,7 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                             />
                                         </WrappedDisclosure>
                                         <WrappedDisclosure
-                                            className="p-3 pl-5 cursor-pointer text-lg transition-colors"
+                                            className="cursor-pointer p-3 pl-5 text-lg transition-colors"
                                             panelClassName="!p-0"
                                             text="Date Posted">
                                             <WrappedRadioGroup
@@ -156,13 +156,13 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                             />
                                         </WrappedDisclosure>
                                     </div>
-                                    <div className="flex flex-row justify-end items-center p-4 w-full">
+                                    <div className="flex w-full flex-row items-center justify-end p-4">
                                         <button
                                             onClick={() => {
                                                 close();
                                                 handleSubmit(onSubmit)();
                                             }}
-                                            className="main-button !shadow-none transition-colors !rounded-md">
+                                            className="main-button !rounded-md !shadow-none transition-colors">
                                             Apply Filter
                                         </button>
                                     </div>

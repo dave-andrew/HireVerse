@@ -9,7 +9,7 @@ export default function Profile() {
             <Popover className="relative">
                 {({ open }) => (
                     <>
-                        <Popover.Button className="flex place-items-center hover:bg-signature-hover-gray transition-colors p-1 rounded-lg align-middle justify-center">
+                        <Popover.Button className="hover:bg-signature-hover-gray flex place-items-center justify-center rounded-lg p-1 align-middle transition-colors">
                             <IoPersonCircleOutline size="2rem" />
                         </Popover.Button>
                         <Transition
@@ -20,9 +20,9 @@ export default function Profile() {
                             leave="transition ease-in duration-150"
                             leaveFrom="opacity-100 translate-y-0"
                             leaveTo="opacity-0 translate-y-1">
-                            <Popover.Panel className="absolute right-0 z-10 mt-3 w-screen max-w-[15rem] transform translate-x-[5%] px-4 sm:px-0">
+                            <Popover.Panel className="absolute right-0 z-10 mt-3 w-screen max-w-[15rem] translate-x-[5%] transform px-4 sm:px-0">
                                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5">
-                                    <div className="relative flex flex-col bg-white p-7 gap-5">
+                                    <div className="relative flex flex-col gap-5 bg-white p-7">
                                         <span className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out">
                                             <div>
                                                 <p className="text-sm font-medium text-gray-900">
@@ -35,7 +35,7 @@ export default function Profile() {
                                         </span>
                                     </div>
                                     <div className="bg-gray-50 p-2">
-                                        <span className="flow-root rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-blue-primary hover:text-white cursor-pointer">
+                                        <span className="hover:bg-blue-primary flow-root cursor-pointer rounded-md px-2 py-2 transition duration-150 ease-in-out hover:text-white">
                                             <span className="flex items-center justify-center">
                                                 <span className="w-full text-sm font-medium text-gray-900">
                                                     Sign Out

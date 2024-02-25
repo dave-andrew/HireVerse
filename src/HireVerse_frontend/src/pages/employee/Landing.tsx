@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Principal } from "@dfinity/principal";
 import { AuthClient } from "@dfinity/auth-client";
 import FrontPageLayout from "../../layouts/FrontPageLayout";
-import WorldMap from "../../components/WorldMap";
 
 export default function Landing() {
     const [principal, setPrincipal] = useState<Principal | null>(null);
@@ -19,23 +18,24 @@ export default function Landing() {
             console.error("Login failed:", error);
         }
     };
+
+    const fetchPrincipal = async () => {
+        const authClient = await AuthClient.create();
+        if (await authClient.isAuthenticated()) {
+            const identity = authClient.getIdentity().getPrincipal();
+            console.log("Logged in as", identity);
+            // @ts-ignore
+            setPrincipal(identity);
+        }
+    };
+
     useEffect(() => {
-        // Login button handler
-        const fetchPrincipal = async () => {
-            const authClient = await AuthClient.create();
-            if (await authClient.isAuthenticated()) {
-                const identity = authClient.getIdentity().getPrincipal();
-                console.log("Logged in as", identity);
-                // @ts-ignore
-                setPrincipal(identity);
-            }
-        };
         fetchPrincipal();
     }, []);
 
     return (
         <FrontPageLayout>
-            <WorldMap />
+            {/*<WorldMap />*/}
             {principal ? (
                 <p>Logged in as: {principal.toText()}</p>
             ) : (

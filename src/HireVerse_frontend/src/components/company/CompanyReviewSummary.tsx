@@ -21,7 +21,7 @@ export default function CompanyReviewSummary() {
                     </p>
                 </div>
 
-                <div className="flex flex-col gap-3 items-center">
+                <div className="flex flex-col items-center gap-3">
                     <Pie
                         percentage={50}
                         colour="lightgray"
@@ -31,7 +31,7 @@ export default function CompanyReviewSummary() {
                     </p>
                 </div>
 
-                <div className="flex flex-col gap-3 items-center">
+                <div className="flex flex-col items-center gap-3">
                     <Pie
                         percentage={50}
                         colour="lightgray"
@@ -43,13 +43,13 @@ export default function CompanyReviewSummary() {
             </div>
             <div className="flex flex-row justify-evenly">
                 <div className="w-1/2">
-                    <h3 className="text-3xl font-bold py-5">Positives</h3>
+                    <h3 className="py-5 text-3xl font-bold">Positives</h3>
                     {Array.from({ length: 3 }).map((_, i) => (
                         <p className="text-gray-500">The company has a nobol</p>
                     ))}
                 </div>
                 <div className="w-1/2">
-                    <h3 className="text-3xl font-bold py-5">Negatives</h3>
+                    <h3 className="py-5 text-3xl font-bold">Negatives</h3>
                     {Array.from({ length: 3 }).map((_, i) => (
                         <p className="text-gray-500">
                             The company has a vincent tanjaya

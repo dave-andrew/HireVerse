@@ -67,9 +67,9 @@ export default function ManagementBars({ children }: Props) {
     const isActive = (menu: string[]) => menu.includes(location.pathname);
 
     return (
-        <div className="flex flex-row w-[100vw] h-[100vh]">
-            <div className="z-50 fixed flex flex-row justify-between w-full h-16 bg-white shadow-md">
-                <div className="pl-64 flex flex-row h-full place-items-center">
+        <div className="flex h-[100vh] w-[100vw] flex-row">
+            <div className="fixed z-50 flex h-16 w-full flex-row justify-between bg-white shadow-md">
+                <div className="flex h-full flex-row place-items-center pl-64">
                     <CustomDropdown
                         name="company"
                         states={managedCompanies}
@@ -77,10 +77,10 @@ export default function ManagementBars({ children }: Props) {
                         className="w-52"
                     />
                 </div>
-                <div className="flex flex-row h-full place-items-center">
+                <div className="flex h-full flex-row place-items-center">
                     <a
                         href="/"
-                        className="flex h-full mr-6 justify-center items-center transition-colors border-b-2 border-transparent hover:border-blue-primary cursor-pointer">
+                        className="hover:border-blue-primary mr-6 flex h-full cursor-pointer items-center justify-center border-b-2 border-transparent transition-colors">
                         Employee
                     </a>
                     <div className="border-l-2">
@@ -89,16 +89,16 @@ export default function ManagementBars({ children }: Props) {
                 </div>
             </div>
 
-            <div className="z-50 fixed flex flex-col bg-white h-full w-[16rem] justify-between place-items-center shadow-md px-2 pt-4 pb-6">
-                <div className="flex flex-col gap-8 w-full">
-                    <div className="text-blue-primary text-5xl text-center align-middle font-bebas">
+            <div className="fixed z-50 flex h-full w-[16rem] flex-col place-items-center justify-between bg-white px-2 pb-6 pt-4 shadow-md">
+                <div className="flex w-full flex-col gap-8">
+                    <div className="text-blue-primary text-center align-middle font-bebas text-5xl">
                         HIREVERSE
                     </div>
                     <div className="flex flex-col text-lg text-gray-500">
                         {managedCompanies.length > 0 &&
                             menus.map((menu) => (
                                 <div
-                                    className={`flex flex-row gap-4 p-3 m-1 border-l-2 border-transparent place-items-center hover:bg-signature-hover-gray cursor-pointer ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
+                                    className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
                                     <menu.icon size="1.5rem" />
                                     <span>{menu.name}</span>
                                 </div>
@@ -106,15 +106,15 @@ export default function ManagementBars({ children }: Props) {
                         {managedCompanies?.length > 0 && (
                             <hr className="my-5" />
                         )}
-                        <div className="flex flex-row gap-4 p-3 m-1 border-l-2 border-transparent place-items-center hover:bg-signature-hover-gray cursor-pointer">
+                        <div className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3">
                             <RiMailOpenLine size="1.5rem" />
                             <span>Invite</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="flex min-w-[16rem] h-full" />
-            <div className="flex flex-col flex-grow-1 w-full h-full">
+            <div className="flex h-full min-w-[16rem]" />
+            <div className="flex-grow-1 flex h-full w-full flex-col">
                 <div className="min-h-16 w-full" />
                 {children}
             </div>

@@ -9,13 +9,12 @@ export function CustomCheckBox({ className }: CustomCheckBoxProps) {
                 id="link-checkbox"
                 type="checkbox"
                 value=""
-                className="w-4 h-4 text-red-600 bg-blue-primary border-red-300 rounded "
+                className="bg-blue-primary h-4 w-4 rounded border-red-300 text-red-600 "
             />
             <label
                 htmlFor="link-checkbox"
                 className="ms-2 text-sm font-medium text-gray-900 ">
-                I agree with all{" "}
-                <b className="text-blue-primary">HireVerse</b>
+                I agree with all <b className="text-blue-primary">HireVerse</b>
                 <a
                     href="#"
                     className="text-blue-600 hover:underline">

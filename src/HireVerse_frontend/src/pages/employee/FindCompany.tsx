@@ -87,25 +87,25 @@ export default function FindCompany() {
     return (
         <FrontPageLayout>
             <div className="flex flex-col">
-                <div className="w-full h-fit bg-[url(src/HireVerse_frontend/backgrounds/subtle-prism.svg)] shadow-md place-items-center">
-                    <div className="flex flex-col place-items-center p-8 gap-8">
+                <div className="h-fit w-full place-items-center bg-[url(src/HireVerse_frontend/backgrounds/subtle-prism.svg)] shadow-md">
+                    <div className="flex flex-col place-items-center gap-8 p-8">
                         <div className="flex flex-col items-center justify-center">
-                            <div className="flex flex-col self-start gap-3 w-full">
-                                <h3 className="font-bold text-4xl lg:text-5xl">
+                            <div className="flex w-full flex-col gap-3 self-start">
+                                <h3 className="text-4xl font-bold lg:text-5xl">
                                     Popular Companies
                                 </h3>
-                                <p className="text-lg lg:text-xl leading-6">
+                                <p className="text-lg leading-6 lg:text-xl">
                                     These companies have the largest visitor
                                     count this month.
                                 </p>
                             </div>
-                            <div className="flex flex-row w-full gap-10 items-center">
-                                <div className="grid grid-cols-2 h-fit gap-4">
+                            <div className="flex w-full flex-row items-center gap-10">
+                                <div className="grid h-fit grid-cols-2 gap-4">
                                     {popularCompanies
                                         .slice(0, 4)
                                         .map((company) => {
                                             return (
-                                                <CardLayout className="w-64 xl:w-80 h-32 flex p-4">
+                                                <CardLayout className="flex h-32 w-64 p-4 xl:w-80">
                                                     <div className="flex flex-row place-items-center">
                                                         <img
                                                             width="80rem"
@@ -146,15 +146,15 @@ export default function FindCompany() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col place-items-center p-8 gap-8">
+                <div className="flex flex-col place-items-center gap-8 p-8">
                     <div
                         style={{
                             width: "min(1000px, 100%)",
                         }}>
-                        <div className="flex flex-col gap-8 w-full">
+                        <div className="flex w-full flex-col gap-8">
                             <div className="flex flex-col gap-2">
                                 Find your dream company
-                                <CardLayout className="flex flex-row items-center p-2 w-full gap-2">
+                                <CardLayout className="flex w-full flex-row items-center gap-2 p-2">
                                     <IoIosSearch size="1.5rem" />
                                     <input
                                         type="text"
@@ -164,12 +164,12 @@ export default function FindCompany() {
                                 </CardLayout>
                             </div>
                             <div className="flex flex-row gap-4">
-                                <CardLayout className="flex flex-col gap-2 h-fit w-72 p-4">
-                                    <div className="p-1 font-bold text-lg">
+                                <CardLayout className="flex h-fit w-72 flex-col gap-2 p-4">
+                                    <div className="p-1 text-lg font-bold">
                                         Filter Companies
                                     </div>
                                     <hr />
-                                    <div className="p-4 flex flex-col gap-6">
+                                    <div className="flex flex-col gap-6 p-4">
                                         <CustomTextField
                                             label="Location"
                                             type="Location"
@@ -194,7 +194,7 @@ export default function FindCompany() {
                                                     type="checkbox"
                                                     value=""
                                                     checked={true}
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                                                 />
                                                 <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                     Full-Time
@@ -204,7 +204,7 @@ export default function FindCompany() {
                                                 <input
                                                     type="checkbox"
                                                     value=""
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                                                 />
                                                 <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                     Part-Time
@@ -214,7 +214,7 @@ export default function FindCompany() {
                                                 <input
                                                     type="checkbox"
                                                     value=""
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                                                 />
                                                 <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                     Internship
@@ -224,7 +224,7 @@ export default function FindCompany() {
                                                 <input
                                                     type="checkbox"
                                                     value=""
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                                                 />
                                                 <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                     Volunteer
@@ -233,12 +233,12 @@ export default function FindCompany() {
                                         </div>
                                     </div>
                                 </CardLayout>
-                                <div className="grow grid grid-cols-2 gap-4">
+                                <div className="grid grow grid-cols-2 gap-4">
                                     {resultCompanies.map((cp, index) => {
                                         return (
-                                            <CardLayout className="flex flex-col gap-2 px-6 py-5 rounded-md">
+                                            <CardLayout className="flex flex-col gap-2 rounded-md px-6 py-5">
                                                 <div
-                                                    className="bg-white flex flex-row place-items-center"
+                                                    className="flex flex-row place-items-center bg-white"
                                                     key={index}>
                                                     <img
                                                         width="80rem"
@@ -257,7 +257,7 @@ export default function FindCompany() {
                                                 <div className="flex flex-col gap-4">
                                                     <div className="grid grid-cols-3">
                                                         <div className="flex flex-col">
-                                                            <div className="font-bold text-sm">
+                                                            <div className="text-sm font-bold">
                                                                 Location:
                                                             </div>
                                                             <div>
@@ -265,7 +265,7 @@ export default function FindCompany() {
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col">
-                                                            <div className="font-bold text-sm">
+                                                            <div className="text-sm font-bold">
                                                                 Country:
                                                             </div>
                                                             <div>
@@ -273,7 +273,7 @@ export default function FindCompany() {
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col">
-                                                            <div className="font-bold text-sm">
+                                                            <div className="text-sm font-bold">
                                                                 Industry:
                                                             </div>
                                                             <div>
@@ -282,10 +282,10 @@ export default function FindCompany() {
                                                         </div>
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <div className="font-bold text-sm">
+                                                        <div className="text-sm font-bold">
                                                             Linkedin:
                                                         </div>
-                                                        <div className="flex flex-row gap-2 place-items-center">
+                                                        <div className="flex flex-row place-items-center gap-2">
                                                             <FaLinkedin />
                                                             {cp.linkedin}
                                                         </div>

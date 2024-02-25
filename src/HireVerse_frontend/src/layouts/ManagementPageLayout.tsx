@@ -7,7 +7,7 @@ interface Props {
 
 export default function ManagementPageLayout({ children }: Props) {
     return (
-        <div className="h-full bg-signature-gray flex flex-row">
+        <div className="bg-signature-gray flex h-full flex-row">
             <ManagementBars>{children}</ManagementBars>
         </div>
     );

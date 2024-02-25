@@ -16,6 +16,7 @@ actor Database {
         email : Text;
         birth_date : Text;
         company_ids : [Text];
+        selected_company_id : ?Text;
         timestamp : Time.Time;
     };
 
@@ -61,9 +62,9 @@ actor Database {
             timestamp = Time.now();
         };
 
-        users.put(id, user1);
-        users.put(id2, user2);
-        users.put(id3, user3);
+        // users.put(id, user1);
+        // users.put(id2, user2);
+        // users.put(id3, user3);
     };
 
     public query func register(user : User) : async () {

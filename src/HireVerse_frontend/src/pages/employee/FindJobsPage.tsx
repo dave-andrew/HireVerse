@@ -103,14 +103,14 @@ export default function FindJobs() {
 
     return (
         <FrontPageLayout>
-            <div className="flex flex-col w-full h-full place-items-center gap-20">
-                <div className="w-full h-[60vh] bg-[url(src/HireVerse_frontend/backgrounds/subtle-prism.svg)] shadow-md">
-                    <div className="flex flex-row items-center justify-center w-full h-full gap-20">
-                        <div className="flex flex-col w-2/6 gap-5">
-                            <h3 className="font-bold text-4xl lg:text-5xl">
+            <div className="flex h-full w-full flex-col place-items-center gap-20">
+                <div className="h-[60vh] w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md">
+                    <div className="flex h-full w-full flex-row items-center justify-center gap-20">
+                        <div className="flex w-2/6 flex-col gap-5">
+                            <h3 className="text-4xl font-bold lg:text-5xl">
                                 Find Your Dream Job Now.
                             </h3>
-                            <p className="text-lg lg:text-xl leading-6">
+                            <p className="text-lg leading-6 lg:text-xl">
                                 Find your dream job now! Our platform connects
                                 you with top employers and provides valuable
                                 resources to enhance your job search experience.
@@ -125,21 +125,21 @@ export default function FindJobs() {
                         />
                     </div>
                 </div>
-                <div className="flex flex-col gap-10 w-3/4 pb-10">
-                    <div className="flex flex-row gap-5 w-full">
+                <div className="flex w-3/4 flex-col gap-10 pb-10">
+                    <div className="flex w-full flex-row gap-5">
                         <JobFilter onApplyFilter={(data) => setFilter(data)} />
-                        <CardLayout className="flex flex-row items-center w-full">
-                            <span className="flex flex-1 flex-row gap-2 p-3 has-[:focus]:bg-gray-100 transition-colors rounded-tl-xl rounded-bl-xl">
+                        <CardLayout className="flex w-full flex-row items-center">
+                            <span className="flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3 transition-colors has-[:focus]:bg-gray-100">
                                 <IoIosSearch size="1.5rem" />
                                 <input
                                     {...register("query")}
                                     type="text"
-                                    className="outline-0 w-full bg-transparent"
+                                    className="w-full bg-transparent outline-0"
                                     placeholder="Search Job"
                                     onKeyDown={(e) => handleKeyDown(e.key)}
                                 />
                             </span>
-                            <span className="flex flex-row gap-2 items-center border-signature-gray border-l-[1px] has-[:focus]:bg-gray-100 transition-colors rounded-tr-xl rounded-br-xl p-1 pl-5">
+                            <span className="border-signature-gray flex flex-row items-center gap-2 rounded-br-xl rounded-tr-xl border-l-[1px] p-1 pl-5 transition-colors has-[:focus]:bg-gray-100">
                                 <IoLocationOutline size="1.5rem" />
                                 <CountryDropdown
                                     name="country"
@@ -149,9 +149,9 @@ export default function FindJobs() {
                             </span>
                         </CardLayout>
                     </div>
-                    <div className="flex flex-row w-full h-full gap-3">
-                        <div className="h-auto flex flex-col gap-1">
-                            <CardLayout className="flex flex-row ps-5 pe-2 justify-between items-center mr-2">
+                    <div className="flex h-full w-full flex-row gap-3">
+                        <div className="flex h-auto flex-col gap-1">
+                            <CardLayout className="mr-2 flex flex-row items-center justify-between pe-2 ps-5">
                                 {jobs?.length} Jobs
                                 <CustomDropdown
                                     name="order"
@@ -160,7 +160,7 @@ export default function FindJobs() {
                                     onChange={(_) => getJobs()}
                                 />
                             </CardLayout>
-                            <div className="flex flex-col w-96 overflow-x-hidden overflow-y-auto card-scollr gap-2 pr-1">
+                            <div className="card-scollr flex w-96 flex-col gap-2 overflow-y-auto overflow-x-hidden pr-1">
                                 {jobs?.map((job, index) => {
                                     return (
                                         <JobItem
@@ -175,7 +175,7 @@ export default function FindJobs() {
                                 })}
                             </div>
                         </div>
-                        <div className="flex flex-col w-full gap-2">
+                        <div className="flex w-full flex-col gap-2">
                             <JobDetail jobId={shownJobId} />
                         </div>
                     </div>

@@ -11,7 +11,7 @@ export default function JobItem({ job, companyName, onClick }: Props) {
     return (
         <CardLayout
             onClick={onClick}
-            className="flex flex-col p-4 transition rounded-xl cursor-pointer hover:bg-gray-200">
+            className="flex cursor-pointer flex-col rounded-xl p-4 transition hover:bg-gray-200">
             <div className="flex flex-row items-center">
                 <img
                     alt={companyName}

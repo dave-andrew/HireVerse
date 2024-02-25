@@ -40,15 +40,15 @@ export default function Navbar() {
 
     return (
         <>
-            <div className="z-50 fixed flex flex-row bg-white w-full h-16 justify-between place-items-center ps-12 shadow-md">
-                <div className="text-blue-primary text-5xl text-center align-middle font-bebas pt-1">
+            <div className="fixed z-50 flex h-16 w-full flex-row place-items-center justify-between bg-white ps-12 shadow-md">
+                <div className="text-blue-primary pt-1 text-center align-middle font-bebas text-5xl">
                     HIREVERSE
                 </div>
-                <div className="absolute left-1/2 transform translate-x-[-50%] flex flex-row w-5/12 min-w-96 justify-center h-full place-items-center px-8">
+                <div className="absolute left-1/2 flex h-full w-5/12 min-w-96 translate-x-[-50%] transform flex-row place-items-center justify-center px-8">
                     {menus.map((menu, index) => {
                         return (
                             <Link
-                                className="w-full h-full flex justify-center place-items-center"
+                                className="flex h-full w-full place-items-center justify-center"
                                 to={menu.redirectUrl || ""}
                                 key={index}>
                                 <div
@@ -57,17 +57,17 @@ export default function Navbar() {
                                         isActive(menu.activeUrl)
                                             ? "text-blue-primary border-color-blue-primary font-semibold"
                                             : ""
-                                    } h-full mx-8 flex place-items-center border-b-2 transition-colors border-transparent hover:border-gray-400 justify-center text-s xl:text-base `}>
+                                    } text-s mx-8 flex h-full place-items-center justify-center border-b-2 border-transparent transition-colors hover:border-gray-400 xl:text-base `}>
                                     {menu.name}
                                 </div>
                             </Link>
                         );
                     })}
                 </div>
-                <div className="flex flex-row h-full place-items-center">
+                <div className="flex h-full flex-row place-items-center">
                     <a
                         href="/employer"
-                        className="flex h-full mr-6 justify-center items-center transition-colors border-b-2 border-transparent hover:border-blue-primary cursor-pointer">
+                        className="hover:border-blue-primary mr-6 flex h-full cursor-pointer items-center justify-center border-b-2 border-transparent transition-colors">
                         Employer
                     </a>
                     <div className="border-l-2">
@@ -75,7 +75,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </div>
-            <div className="w-[21rem] flex" />
+            <div className="flex w-[21rem]" />
         </>
     );
 }

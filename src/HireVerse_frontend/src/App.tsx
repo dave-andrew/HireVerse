@@ -20,7 +20,6 @@ import { CreateCompanyInput } from "../../../.dfx/local/canisters/HireVerse_comp
 import { CreateJobInput } from "../../../.dfx/local/canisters/HireVerse_job/service.did";
 import NotFoundPage from "./pages/others/NotFoundPage";
 
-
 const frontRoutes: RouteObject[] = [
     {
         path: "/",
@@ -75,7 +74,7 @@ const otherRoutes: RouteObject[] = [
     {
         path: "*",
         Component: NotFoundPage,
-    }
+    },
 ];
 
 const router = createBrowserRouter(

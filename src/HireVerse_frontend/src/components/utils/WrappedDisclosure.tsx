@@ -21,7 +21,7 @@ export default function WrappedDisclosure({
                 <>
                     <hr />
                     <Disclosure.Button
-                        className={`flex w-full justify-between items-center rounded-lg ${className}`}>
+                        className={`flex w-full items-center justify-between rounded-lg ${className}`}>
                         <span>{text}</span>
                         <IoIosArrowUp
                             className={`${

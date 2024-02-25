@@ -10,7 +10,7 @@ export default function CardLayout({ children, className, onClick }: Props) {
     return (
         <div
             onClick={onClick}
-            className={`bg-white rounded-lg border-[1px] border-gray-200 ${className}`}>
+            className={`rounded-lg border-[1px] border-gray-200 bg-white ${className}`}>
             {children}
         </div>
     );

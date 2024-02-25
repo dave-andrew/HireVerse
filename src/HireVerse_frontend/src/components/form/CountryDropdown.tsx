@@ -64,9 +64,9 @@ export default function CountryDropdown({ control, name, onChange }: Props) {
                             onChange?.(e);
                         }}>
                         <div className="relative mt-1">
-                            <div className="relative w-full cursor-default flow-hidden text-left sm:text-sm">
+                            <div className="flow-hidden relative w-full cursor-default text-left sm:text-sm">
                                 <Combobox.Input
-                                    className="w-full border-none py-2 pl-0 pr-10 text-sm leading-5 bg-transparent text-gray-900 focus:outline-none"
+                                    className="w-full border-none bg-transparent py-2 pl-0 pr-10 text-sm leading-5 text-gray-900 focus:outline-none"
                                     displayValue={(country: string) => country}
                                     onChange={(event) =>
                                         setQuery(event.target.value)
@@ -82,7 +82,7 @@ export default function CountryDropdown({ control, name, onChange }: Props) {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                                 afterLeave={() => setQuery("")}>
-                                <Combobox.Options className="z-50 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 sm:text-sm">
+                                <Combobox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 sm:text-sm">
                                     {filteredCountries.length === 0 &&
                                     query !== "" ? (
                                         <div className="relative cursor-default select-none px-4 py-2 text-gray-700">

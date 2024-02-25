@@ -39,11 +39,11 @@ export default function CustomDropdown({
                                 onChange?.(e);
                             }}>
                             <div className="relative m-2">
-                                <Listbox.Button className="relative flex flex-row items-center w-full cursor-default rounded-lg bg-white hover:bg-signature-hover-gray transition-colors py-2 pl-3 pr-10 ">
+                                <Listbox.Button className="hover:bg-signature-hover-gray relative flex w-full cursor-default flex-row items-center rounded-lg bg-white py-2 pl-3 pr-10 transition-colors ">
                                     <span className="block truncate">
-                                        {field.value.img && (
+                                        {field.value?.img && (
                                             <img
-                                                className="w-8 h-8 rounded-full mr-2"
+                                                className="mr-2 h-8 w-8 rounded-full"
                                                 src={field.value.img}
                                                 alt=""
                                             />
@@ -88,7 +88,7 @@ export default function CustomDropdown({
                                                                     {item}
                                                                 </span>
                                                                 <span
-                                                                    className={`absolute inset-y-0 left-0 flex items-center pl-3 black ${selected ? "" : "hidden"}`}>
+                                                                    className={`black absolute inset-y-0 left-0 flex items-center pl-3 ${selected ? "" : "hidden"}`}>
                                                                     <FaCheck />
                                                                 </span>
                                                             </>
@@ -119,7 +119,7 @@ export default function CustomDropdown({
                                                                 {item.label}
                                                             </span>
                                                             <span
-                                                                className={`absolute inset-y-0 left-0 flex items-center pl-3 black ${selected ? "" : "hidden"}`}>
+                                                                className={`black absolute inset-y-0 left-0 flex items-center pl-3 ${selected ? "" : "hidden"}`}>
                                                                 <FaCheck />
                                                             </span>
                                                         </>

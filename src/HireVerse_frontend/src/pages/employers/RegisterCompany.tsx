@@ -8,14 +8,14 @@ import { CustomCheckBox } from "../../components/form/CustomCheckBox";
 export default function RegisterCompany() {
     return (
         <FrontPageLayout>
-            <div className="flex flex-col h-full pb-6">
-                <div className="flex flex-row-reverse px-5 gap-5 w-full h-full items-start">
-                    <div className="fixed flex flex-col w-96 gap-4 top-[6%]">
-                        <CardLayout className="py-4 px-10">
+            <div className="flex h-full flex-col pb-6">
+                <div className="flex h-full w-full flex-row-reverse items-start gap-5 px-5">
+                    <div className="fixed top-[6%] flex w-96 flex-col gap-4">
+                        <CardLayout className="px-10 py-4">
                             Registering Company might take 4 - 6 business days
                             to validate the legitimacy of the business
                         </CardLayout>
-                        <CardLayout className="py-4 px-10">
+                        <CardLayout className="px-10 py-4">
                             Register Company to unlock features: <br /> - Create
                             Hiring Notice <br /> - Manage Managers <br /> -
                             Receive Reviews & Feedback
@@ -57,10 +57,10 @@ export default function RegisterCompany() {
                     </div>
                     <div className="w-96" />
                     <div className="flex-1">
-                        <div className="flex flex-row justify-between items-center">
+                        <div className="flex flex-row items-center justify-between">
                             <h1 className="main-title">REGISTER COMPANY</h1>
                         </div>
-                        <CardLayout className="flex flex-col flex-1 h-full px-10 py-10 gap-10">
+                        <CardLayout className="flex h-full flex-1 flex-col gap-10 px-10 py-10">
                             <div className="flex flex-row justify-between gap-16">
                                 <CustomTextField
                                     label="Company Name"
@@ -106,7 +106,7 @@ export default function RegisterCompany() {
                             <div className="flex flex-row">
                                 <CustomCheckBox className="w-full" />
                             </div>
-                            <div className="flex flex-row justify-center items-center">
+                            <div className="flex flex-row items-center justify-center">
                                 <button className="main-button">
                                     Register Company
                                 </button>

@@ -35,20 +35,20 @@ export default function JobDetail({ jobId }: Props) {
     }
 
     return (
-        <CardLayout className="h-full relative">
-            <div className="absolute h-32 w-full flex flex-row items-center border-b-[1px] border-signature-gray">
+        <CardLayout className="relative h-full">
+            <div className="border-signature-gray absolute flex h-32 w-full flex-row items-center border-b-[1px]">
                 <img
                     className="w-48"
                     src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"
                     alt="BINUS University"
                 />
                 <div className="flex flex-col">
-                    <h1 className="font-bold text-2xl">{fullJob.position}</h1>
+                    <h1 className="text-2xl font-bold">{fullJob.position}</h1>
                     <p className="text-base">{fullJob.location}</p>
                 </div>
             </div>
             <div className="h-32" />
-            <div className="flex flex-col p-6 [&_h3]:font-bold [&_h3]:text-base gap-8  overflow-auto">
+            <div className="flex flex-col gap-8 overflow-auto p-6 [&_h3]:text-base  [&_h3]:font-bold">
                 <div>
                     <h3>{fullJob.company[0]?.name}</h3>
                     <p>{fullJob.short_description}</p>
@@ -94,12 +94,12 @@ export default function JobDetail({ jobId }: Props) {
 
 function SkeletonLayout() {
     return (
-        <CardLayout className="h-full relative">
-            <div className="absolute h-32 w-full flex flex-row items-center border-b-[1px] border-signature-gray">
-                <div className="space-y-8 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex md:items-center">
-                    <div className="flex items-center justify-center w-full h-32 bg-gray-300 rounded sm:w-72 dark:bg-gray-200">
+        <CardLayout className="relative h-full">
+            <div className="border-signature-gray absolute flex h-32 w-full flex-row items-center border-b-[1px]">
+                <div className="animate-pulse space-y-8 md:flex md:items-center md:space-x-8 md:space-y-0 rtl:space-x-reverse">
+                    <div className="flex h-32 w-full items-center justify-center rounded bg-gray-300 sm:w-72 dark:bg-gray-200">
                         <svg
-                            className="w-10 h-10 text-gray-200 dark:text-gray-600"
+                            className="h-10 w-10 text-gray-200 dark:text-gray-600"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="currentColor"
@@ -108,59 +108,59 @@ function SkeletonLayout() {
                         </svg>
                     </div>
                     <div className="w-full">
-                        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-200 w-48 mb-4"></div>
-                        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[480px] mb-2.5"></div>
-                        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200700 mb-2.5"></div>
-                        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[440px] mb-2.5"></div>
-                        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[460px] mb-2.5"></div>
-                        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px]"></div>
+                        <div className="mb-4 h-2.5 w-48 rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                        <div className="mb-2.5 h-2 max-w-[480px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                        <div className="dark:bg-gray-200700 mb-2.5 h-2 rounded-full bg-gray-200"></div>
+                        <div className="mb-2.5 h-2 max-w-[440px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                        <div className="mb-2.5 h-2 max-w-[460px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                        <div className="h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
                     </div>
                     <span className="sr-only">Loading...</span>
                 </div>
             </div>
             <div className="h-32" />
-            <div className="flex flex-col p-6 [&_h3]:font-bold [&_h3]:text-base gap-8  overflow-auto">
+            <div className="flex flex-col gap-8 overflow-auto p-6 [&_h3]:text-base  [&_h3]:font-bold">
                 <div className="max-w-sm animate-pulse">
-                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-200 w-48 mb-4"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px] mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[330px] mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[300px] mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px]"></div>
+                    <div className="mb-4 h-2.5 w-48 rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 max-w-[330px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 max-w-[300px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
                     <span className="sr-only">Loading...</span>
                 </div>
                 <div className="max-w-sm animate-pulse">
-                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-200 w-48 mb-4"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px] mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[330px] mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[300px] mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px]"></div>
+                    <div className="mb-4 h-2.5 w-48 rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 max-w-[330px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 max-w-[300px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
                     <span className="sr-only">Loading...</span>
                 </div>
                 <div className="max-w-sm animate-pulse">
-                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-200 w-48 mb-4"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px] mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[330px] mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[300px] mb-2.5"></div>
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px]"></div>
+                    <div className="mb-4 h-2.5 w-48 rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 max-w-[330px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="mb-2.5 h-2 max-w-[300px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
+                    <div className="h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200"></div>
                     <span className="sr-only">Loading...</span>
                 </div>
                 <div className="max-w-sm animate-pulse">
-                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-200 w-48 mb-4" />
-                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-200 w-48 mb-4" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px] mb-2.5" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 mb-2.5" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[330px] mb-2.5" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[300px] mb-2.5" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[330px] mb-2.5" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px] mb-2.5" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 mb-2.5" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px] mb-2.5" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 max-w-[360px] mb-2.5" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 mb-2.5" />
-                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-200 mb-2.5" />
+                    <div className="mb-4 h-2.5 w-48 rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-4 h-2.5 w-48 rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 max-w-[330px] rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 max-w-[300px] rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 max-w-[330px] rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 rounded-full bg-gray-200 dark:bg-gray-200" />
+                    <div className="mb-2.5 h-2 rounded-full bg-gray-200 dark:bg-gray-200" />
                     <span className="sr-only">Loading...</span>
                 </div>
             </div>

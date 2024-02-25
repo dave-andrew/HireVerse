@@ -3,8 +3,8 @@ import ManagementPageLayout from "../../layouts/ManagementPageLayout";
 export default function EmptyPage() {
     return (
         <ManagementPageLayout>
-            <div className="flex flex-row h-full place-items-center">
-                <div className="flex flex-col w-full place-items-center">
+            <div className="flex h-full flex-row place-items-center">
+                <div className="flex w-full flex-col place-items-center">
                     <img
                         className="w-1/4"
                         src="/storyset/empty-bro.png"
@@ -14,7 +14,7 @@ export default function EmptyPage() {
                         You are not the manager of any companies. Register a
                         company or be invited to one.
                     </p>
-                    <button className="!px-8 mt-5 main-button text-md">
+                    <button className="main-button text-md mt-5 !px-8">
                         Register Company
                     </button>
                 </div>

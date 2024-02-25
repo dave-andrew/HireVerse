@@ -10,9 +10,9 @@ import CompanyReviewSummary from "../../components/company/CompanyReviewSummary"
 export default function ManageCompany() {
     return (
         <ManagementPageLayout>
-            <div className="flex bg-signature-gray flex-row h-fit w-full justify-center items-center">
-                <div className="flex flex-col w-4/5 place-items-center">
-                    <CardLayout className="flex flex-row rounded-none place-items-center p-6 w-full border-t-0 rounded-tl-none rounded-tr-none">
+            <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
+                <div className="flex w-4/5 flex-col place-items-center">
+                    <CardLayout className="flex w-full flex-row place-items-center rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6">
                         <img
                             className="w-96"
                             src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"
@@ -20,14 +20,14 @@ export default function ManageCompany() {
                         />
                         <div className="flex flex-col gap-8">
                             <div className="flex flex-col gap-3">
-                                <h2 className="font-bold text-5xl">
+                                <h2 className="text-5xl font-bold">
                                     BINUS University
                                 </h2>
                                 <p>https://www.binus.ac.id/</p>
                             </div>
                             <div className="flex flex-row gap-28">
                                 <div className="flex flex-row gap-3">
-                                    <div className="flex place-items-center border-[1px] border-signature-gray aspect-square p-2 rounded-3xl">
+                                    <div className="border-signature-gray flex aspect-square place-items-center rounded-3xl border-[1px] p-2">
                                         <MdOutlineQueryBuilder size="2rem" />
                                     </div>
                                     <div className="flex flex-col">
@@ -38,7 +38,7 @@ export default function ManageCompany() {
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-3">
-                                    <div className="flex place-items-center border-[1px] border-signature-gray aspect-square p-2 rounded-3xl">
+                                    <div className="border-signature-gray flex aspect-square place-items-center rounded-3xl border-[1px] p-2">
                                         <MdOutlineLocationOn size="2rem" />
                                     </div>
                                     <div className="flex flex-col">
@@ -49,7 +49,7 @@ export default function ManageCompany() {
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-3">
-                                    <div className="flex place-items-center border-[1px] border-signature-gray aspect-square p-2 rounded-3xl">
+                                    <div className="border-signature-gray flex aspect-square place-items-center rounded-3xl border-[1px] p-2">
                                         <MdOutlinePeopleAlt size="2rem" />
                                     </div>
                                     <div className="flex flex-col">
@@ -64,10 +64,10 @@ export default function ManageCompany() {
                             </div>
                         </div>
                     </CardLayout>
-                    <div className="flex flex-row w-full">
-                        <div className="flex flex-col w-[70%] h-auto">
-                            <CardLayout className="flex flex-col rounded-none p-10 gap-5 min-h-[25rem]">
-                                <h3 className="font-bold text-4xl">
+                    <div className="flex w-full flex-row">
+                        <div className="flex h-auto w-[70%] flex-col">
+                            <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
+                                <h3 className="text-4xl font-bold">
                                     Company Profile
                                 </h3>
                                 <p>
@@ -93,16 +93,16 @@ export default function ManageCompany() {
                                     nisi posuere.
                                 </p>
                             </CardLayout>
-                            <CardLayout className="flex flex-col p-10 gap-5 min-h-[25rem] rounded-none">
-                                <h3 className="font-bold text-4xl">Reviews</h3>
+                            <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
+                                <h3 className="text-4xl font-bold">Reviews</h3>
                                 <div>
                                     <CompanyReviewSummary />
                                 </div>
                             </CardLayout>
                         </div>
-                        <div className="flex flex-col w-[30%]">
-                            <CardLayout className="flex flex-col rounded-none p-10 gap-5">
-                                <h3 className="font-bold text-4xl">
+                        <div className="flex w-[30%] flex-col">
+                            <CardLayout className="flex flex-col gap-5 rounded-none p-10">
+                                <h3 className="text-4xl font-bold">
                                     Industries
                                 </h3>
                                 <div className="flex flex-row flex-wrap gap-3">
@@ -114,15 +114,15 @@ export default function ManageCompany() {
                                         "Finance",
                                     ].map((industry) => {
                                         return (
-                                            <div className="flex flex-row gap-2 p-2 bg-signature-gray rounded-md">
+                                            <div className="bg-signature-gray flex flex-row gap-2 rounded-md p-2">
                                                 {industry}
                                             </div>
                                         );
                                     })}
                                 </div>
                             </CardLayout>
-                            <CardLayout className="flex flex-col rounded-none p-10 gap-5">
-                                <h3 className="font-bold text-4xl">
+                            <CardLayout className="flex flex-col gap-5 rounded-none p-10">
+                                <h3 className="text-4xl font-bold">
                                     Industries
                                 </h3>
                                 <div className="flex flex-row flex-wrap gap-3">
@@ -134,7 +134,7 @@ export default function ManageCompany() {
                                         "Finance",
                                     ].map((industry) => {
                                         return (
-                                            <div className="flex flex-row gap-2 p-2 bg-signature-gray rounded-md">
+                                            <div className="bg-signature-gray flex flex-row gap-2 rounded-md p-2">
                                                 {industry}
                                             </div>
                                         );
