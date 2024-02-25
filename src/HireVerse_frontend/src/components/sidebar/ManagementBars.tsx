@@ -9,6 +9,7 @@ import {
     RiSuitcase2Line,
     RiUser3Line,
 } from "react-icons/ri";
+import { useForm } from "react-hook-form";
 
 type Menu = {
     name: string;
@@ -43,6 +44,7 @@ const defaultMenu: Menu[] = [
 ];
 
 export default function ManagementBars({ children }: Props) {
+    const { control } = useForm();
     const [managedCompanies, setManagedCompanies] = useState<DropdownItems[]>(
         [],
     );
@@ -69,7 +71,9 @@ export default function ManagementBars({ children }: Props) {
             <div className="z-50 fixed flex flex-row justify-between w-full h-16 bg-white shadow-md">
                 <div className="pl-64 flex flex-row h-full place-items-center">
                     <CustomDropdown
+                        name="company"
                         states={managedCompanies}
+                        control={control}
                         className="w-52"
                     />
                 </div>

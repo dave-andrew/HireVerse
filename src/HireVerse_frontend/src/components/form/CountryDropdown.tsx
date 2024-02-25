@@ -7,6 +7,8 @@ import { Control, Controller } from "react-hook-form";
 
 interface Props {
     control: Control<any>;
+    name: string;
+    onChange?: (value: string) => void;
 }
 
 const people = [
@@ -20,7 +22,7 @@ const people = [
 
 const companyService = HireVerse_company;
 
-export default function CountryDropdown({ control }: Props) {
+export default function CountryDropdown({ control, name, onChange }: Props) {
     const [countries, setCountries] = useState<string[]>([]);
     const [query, setQuery] = useState("");
     const [selected, setSelected] = useState({});
@@ -52,10 +54,15 @@ export default function CountryDropdown({ control }: Props) {
     return (
         <div className="top-16 w-72 border-0">
             <Controller
-                name="country"
+                name={name}
                 control={control}
                 render={({ field }) => (
-                    <Combobox {...field}>
+                    <Combobox
+                        {...field}
+                        onChange={(e) => {
+                            field.onChange(e);
+                            onChange?.(e);
+                        }}>
                         <div className="relative mt-1">
                             <div className="relative w-full cursor-default flow-hidden text-left sm:text-sm">
                                 <Combobox.Input
@@ -75,7 +82,7 @@ export default function CountryDropdown({ control }: Props) {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                                 afterLeave={() => setQuery("")}>
-                                <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 sm:text-sm">
+                                <Combobox.Options className="z-50 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 sm:text-sm">
                                     {filteredCountries.length === 0 &&
                                     query !== "" ? (
                                         <div className="relative cursor-default select-none px-4 py-2 text-gray-700">

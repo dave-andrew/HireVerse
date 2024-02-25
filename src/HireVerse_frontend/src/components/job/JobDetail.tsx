@@ -26,13 +26,14 @@ export default function JobDetail({ jobId }: Props) {
     };
 
     useEffect(() => {
+        setFullJob(null);
         getFullJob();
     }, [jobId]);
 
     if (fullJob === null) {
         return <SkeletonLayout />;
     }
-    
+
     return (
         <CardLayout className="h-full relative">
             <div className="absolute h-32 w-full flex flex-row items-center border-b-[1px] border-signature-gray">

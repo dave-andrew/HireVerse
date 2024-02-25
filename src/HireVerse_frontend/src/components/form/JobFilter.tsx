@@ -1,11 +1,14 @@
 import { TbFilterCog } from "react-icons/tb";
 import CardLayout from "../../layouts/CardLayout";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import WrappedDisclosure from "../utils/WrappedDisclosure";
 import WrappedRadioGroup from "../utils/WrappedRadioGroup";
 import { IoMdClose } from "react-icons/io";
 import { useForm } from "react-hook-form";
+import { CONSTANTS } from "../../utils/constants";
+import { suspend } from "suspend-react";
+import { HireVerse_job } from "../../../../declarations/HireVerse_job";
 
 export interface IFilterForm {
     salaryStart: number;
@@ -19,19 +22,22 @@ interface Props {
     onApplyFilter: (data: IFilterForm) => void;
 }
 
+const jobService = HireVerse_job;
+
 export default function JobFilter({ onApplyFilter }: Props) {
     const { register, control, handleSubmit } = useForm<IFilterForm>({
         defaultValues: {
             salaryStart: 0,
             salaryEnd: 0,
-            industry: "Any Type",
-            experience: "Any Type",
-            datePosted: "Any Type",
+            industry: "",
+            experience: "",
+            datePosted: "",
         },
     });
+    const industries =
+        suspend(async () => await jobService.getAllIndustry(), []) ?? [];
 
     const onSubmit = (data: IFilterForm) => {
-        console.log(data);
         onApplyFilter(data);
     };
 
@@ -112,12 +118,17 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                             className="p-3 pl-5 cursor-pointer text-lg transition-colors"
                                             panelClassName="!p-0"
                                             text="Industries">
-                                            <WrappedRadioGroup
-                                                name="industry"
-                                                control={control}
-                                                selectionClassName="hover:bg-signature-gray rounded-none"
-                                                values={["aaa", "bbb", "ccc"]}
-                                            />
+                                            <Suspense
+                                                fallback={
+                                                    <div>Loading...</div>
+                                                }>
+                                                <WrappedRadioGroup
+                                                    name="industry"
+                                                    control={control}
+                                                    selectionClassName="hover:bg-signature-gray rounded-none"
+                                                    values={industries}
+                                                />
+                                            </Suspense>
                                         </WrappedDisclosure>
                                         <WrappedDisclosure
                                             className="p-3 pl-5 cursor-pointer text-lg transition-colors"
@@ -127,7 +138,10 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                                 name="experience"
                                                 control={control}
                                                 selectionClassName="hover:bg-signature-gray rounded-none"
-                                                values={["aaa", "bbb", "ccc"]}
+                                                values={
+                                                    CONSTANTS.COMPANY
+                                                        .EXPERIENCES
+                                                }
                                             />
                                         </WrappedDisclosure>
                                         <WrappedDisclosure
@@ -138,13 +152,7 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                                 name="datePosted"
                                                 control={control}
                                                 selectionClassName="hover:bg-signature-gray rounded-none"
-                                                values={[
-                                                    "Any Type",
-                                                    "Last Day",
-                                                    "Last Week",
-                                                    "Last Month",
-                                                    "Last Year",
-                                                ]}
+                                                values={CONSTANTS.DATE.RANGE}
                                             />
                                         </WrappedDisclosure>
                                     </div>

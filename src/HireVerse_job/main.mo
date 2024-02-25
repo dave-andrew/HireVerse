@@ -7,6 +7,7 @@ import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
 import Iter "mo:base/Iter";
 import Time "mo:base/Time";
+import Int "mo:base/Int";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
 import Review "canister:HireVerse_review";
@@ -54,6 +55,17 @@ actor Job {
         timestamp : Time.Time;
         company : ?Company.Company;
         reviews : [Text];
+    };
+
+    type JobFilterInput = {
+        position : ?Text;
+        country : ?Text;
+        order: ?Text;
+        salary_start: ?Nat;
+        salary_end: ?Nat;
+        industry: ?Text;
+        experience: ?Text;
+        date_posted: ?Time.Time;
     };
 
     let jobs = TrieMap.TrieMap<Text, Job>(Text.equal, Text.hash);
@@ -188,19 +200,140 @@ actor Job {
         return Iter.toArray(jobs.vals());
     };
 
-    public shared query func getJobs(startFrom : Nat, amount : Nat) : async [Job] {
+    public shared query func getAllIndustry() : async [Text] {
         let jobsList = Iter.toArray(jobs.vals());
+        let industryList = Vector.Vector<Text>();
+
+        for (job in Iter.fromArray(jobsList)) {
+            if (not Vector.contains(industryList, job.industry, Text.equal)) {
+                industryList.add(job.industry);
+            };
+        };
+
+        return Vector.toArray<Text>(industryList);
+    };
+
+
+    public shared composite query func getJobs(startFrom : Nat, amount : Nat, jobFilters : JobFilterInput) : async [Job] {
+        var jobsList = Iter.toArray(jobs.vals());
+
+        switch(jobFilters.position){
+            case null {};
+            case (?position) {
+                jobsList := Array.filter<Job>(jobsList, func(job) {
+                    return Text.contains(job.position, #text position);
+                });
+            };
+        };
+
+        switch(jobFilters.salary_start){
+            case null {};
+            case (?salary_start) {
+                jobsList := Array.filter<Job>(jobsList, func(job) {
+                    return job.salary_start >= salary_start;
+                });
+            };
+        };
+
+        switch(jobFilters.salary_end){
+            case null {};
+            case (?salary_end) {
+                jobsList := Array.filter<Job>(jobsList, func(job) {
+                    return job.salary_end <= salary_end;
+                });
+            };
+        };
+
+        switch(jobFilters.industry){
+            case null {};
+            case (?industry) {
+                jobsList := Array.filter<Job>(jobsList, func(job) {
+                    return Text.contains(job.industry, #text industry);
+                });
+            };
+        };
+
+        switch(jobFilters.experience){
+            case null {};
+            case (?experience) {
+                jobsList := Array.filter<Job>(jobsList, func(job) {
+                    return Text.contains(job.requirements, #text experience);
+                });
+            };
+        };
+
+        switch(jobFilters.date_posted){
+            case null {};
+            case (?date_posted) {
+                jobsList := Array.filter<Job>(jobsList, func(job) {
+                    return job.timestamp >= date_posted;
+                });
+            };
+        };
+
+
+        switch(jobFilters.country){
+            case null {};
+            case (?country) {
+                var newJobList = Vector.Vector<Job>();
+
+                for (job in Iter.fromArray(jobsList)) {
+                    let company = await Company.getCompany(job.company_id);
+
+                    switch (company) {
+                        case null {};
+                        case (?company) {
+                            if (Text.contains(company.country, #text country)) {
+                                newJobList.add(job);
+                            }
+                        };
+                    };
+                };
+
+                jobsList := Vector.toArray(newJobList);
+            };
+        };
+
+        switch(jobFilters.order){
+            case null {};
+            case (?order) {
+
+                if(order == "Newest") {
+                    jobsList := Array.sort<Job>(jobsList, func(a, b) {
+                        return Int.compare(a.timestamp, b.timestamp);
+                    });
+                };
+                
+                if(order == "Oldest") {
+                    jobsList := Array.sort<Job>(jobsList, func(a, b) {
+                        return Int.compare(b.timestamp, a.timestamp);
+                    });
+                };
+
+                if(order == "Highest Salary") {
+                    jobsList := Array.sort<Job>(jobsList, func(a, b) {
+                        return Int.compare(b.salary_start, a.salary_start);
+                    });
+                };
+
+                if(order == "Lowest Salary") {
+                    jobsList := Array.sort<Job>(jobsList, func(a, b) {
+                        return Int.compare(a.salary_start, b.salary_start);
+                    });
+                }
+
+            };
+        };
 
         if(startFrom > jobsList.size()) {
             return [];
         };
 
-        if(startFrom + amount > jobs.size()) {
-            return jobsList;
+        if(startFrom + amount > jobsList.size()) {
+            return Iter.toArray(Array.slice<Job>(jobsList, startFrom, jobsList.size()));
         };
 
-        let z = Array.slice<Job>(jobsList, startFrom, startFrom + amount);
-        return Iter.toArray(z);
+        return Iter.toArray(Array.slice<Job>(jobsList, startFrom, startFrom + amount));
     };
 
     public shared query func searchJobs(position : Text, country : Text) : async [Job] {
