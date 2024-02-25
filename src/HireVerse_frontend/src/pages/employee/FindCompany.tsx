@@ -138,7 +138,7 @@ export default function FindCompany() {
                                 <div>
                                     <img
                                         className="w-[25rem]"
-                                        src="/public/storyset/job-offers-bro.png"
+                                        src="/storyset/job-offers-bro.png"
                                         alt=""
                                     />
                                 </div>

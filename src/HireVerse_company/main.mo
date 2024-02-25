@@ -101,10 +101,21 @@ actor Company {
         return Iter.toArray(companies.vals());
     };
 
+    public shared query func getCompanyCountries() : async [Text] {
+        let companyList: [Company] = Iter.toArray(companies.vals());
+        let countries = Vector.Vector<Text>();
+
+        for (company in companies.vals()) {
+            if(not Vector.contains(countries, company.country, Text.equal)) {
+                countries.add(company.country);
+            };
+        };
+
+        return Vector.toArray(countries);
+    };
+
     public shared query func getCompany(id : Text) : async ?Company {
-        companies.get
         return companies.get(id);
-    
     };
 
     public shared func checkCompanyManager(company : Company, user_id : Principal) : async Bool {

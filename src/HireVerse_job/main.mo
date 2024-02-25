@@ -184,16 +184,16 @@ actor Job {
         };
     };
 
-    public query func getAllJobs() : async [Job] {
+    public shared query func getAllJobs() : async [Job] {
         return Iter.toArray(jobs.vals());
     };
 
-    public query func getJobs(amount : Nat, startFrom : Nat) : async [Job] {
-        if(startFrom > jobs.size()) {
+    public shared query func getJobs(startFrom : Nat, amount : Nat) : async [Job] {
+        let jobsList = Iter.toArray(jobs.vals());
+
+        if(startFrom > jobsList.size()) {
             return [];
         };
-    
-        let jobsList = Iter.toArray(jobs.vals());
 
         if(startFrom + amount > jobs.size()) {
             return jobsList;
@@ -201,8 +201,18 @@ actor Job {
 
         let z = Array.slice<Job>(jobsList, startFrom, startFrom + amount);
         return Iter.toArray(z);
-
     };
 
-    
+    public shared query func searchJobs(position : Text, country : Text) : async [Job] {
+        let jobsList = Iter.toArray(jobs.vals());
+
+        let filteredJobs = Array.filter<Job>(jobsList, func(job) {
+            return Text.contains(job.position, #text position);
+        });
+
+        return Array.filter<Job>(filteredJobs, func(job) {
+            return Text.contains(job.location, #text country);
+        });
+    };
+
 };

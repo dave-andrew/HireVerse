@@ -9,9 +9,12 @@ interface Props {
 
 export default function JobItem({ job, companyName, onClick }: Props) {
     return (
-        <CardLayout className="flex flex-col p-4 transition rounded-xl cursor-pointer hover:bg-gray-200">
+        <CardLayout
+            onClick={onClick}
+            className="flex flex-col p-4 transition rounded-xl cursor-pointer hover:bg-gray-200">
             <div className="flex flex-row items-center">
                 <img
+                    alt={companyName}
                     width="50rem"
                     height="auto"
                     className="aspect-square"

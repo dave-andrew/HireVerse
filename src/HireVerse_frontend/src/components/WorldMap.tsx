@@ -22,7 +22,7 @@ export default function WorldMap() {
 
     return (
         <div>
-            <img src="/public/backgrounds/world-map.svg" />
+            <img src="/backgrounds/world-map.svg" />
         </div>
     );
 }

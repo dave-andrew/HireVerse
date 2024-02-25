@@ -7,7 +7,7 @@ export default function EmptyPage() {
                 <div className="flex flex-col w-full place-items-center">
                     <img
                         className="w-1/4"
-                        src="public/storyset/empty-bro.png"
+                        src="/storyset/empty-bro.png"
                         alt="placeholder"
                     />
                     <p className="w-1/3 text-center text-[1.3rem]">
