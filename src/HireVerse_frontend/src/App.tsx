@@ -16,6 +16,7 @@ import CompanyJobs from "./pages/employers/CompanyJobs";
 import { HireVerse_company } from "../../declarations/HireVerse_company";
 import { HireVerse_job } from "../../declarations/HireVerse_job";
 import { useLayoutEffect } from "react";
+import NotFoundPage from "./pages/others/NotFoundPage";
 
 const frontRoutes: RouteObject[] = [
     {
@@ -68,6 +69,10 @@ const otherRoutes: RouteObject[] = [
         path: "/login",
         Component: Landing,
     },
+    {
+        path: "*",
+        Component: NotFoundPage,
+    }
 ];
 
 const router = createBrowserRouter(
