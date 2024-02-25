@@ -40,7 +40,7 @@ export default function Navbar() {
 
     return (
         <>
-            <div className="fixed z-50 flex h-16 w-full flex-row place-items-center justify-between bg-white ps-12 shadow-md">
+            <div className="fixed z-[100] flex h-16 w-full flex-row place-items-center justify-between bg-white ps-12 shadow-md">
                 <div className="text-blue-primary pt-1 text-center align-middle font-bebas text-5xl">
                     HIREVERSE
                 </div>

@@ -1,47 +1,32 @@
-import { useEffect, useState } from "react";
-import { Principal } from "@dfinity/principal";
-import { AuthClient } from "@dfinity/auth-client";
 import FrontPageLayout from "../../layouts/FrontPageLayout";
+import useAuth, { AuthState } from "../../hooks/useAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Landing() {
-    const [principal, setPrincipal] = useState<Principal | null>(null);
+    const { user, authState, login, logout } = useAuth();
+    const navigate = useNavigate();
 
     const clickHandler = async () => {
-        const authClient = await AuthClient.create();
-        try {
-            await authClient.login({
-                identityProvider:
-                    "http://bnz7o-iuaaa-aaaaa-qaaaa-cai.localhost:4943/",
-            });
-            console.log("Logged in as", authClient.getIdentity());
-        } catch (error) {
-            console.error("Login failed:", error);
-        }
-    };
-
-    const fetchPrincipal = async () => {
-        const authClient = await AuthClient.create();
-        if (await authClient.isAuthenticated()) {
-            const identity = authClient.getIdentity().getPrincipal();
-            console.log("Logged in as", identity);
-            // @ts-ignore
-            setPrincipal(identity);
-        }
+        await login();
     };
 
     useEffect(() => {
-        fetchPrincipal();
-    }, []);
+        if (authState === AuthState.Unregistered) {
+            console.log("Unregistered");
+            navigate("/complete-registration");
+        }
+        console.log(`stateChanged: ${authState}`);
+    }, [authState]);
 
     return (
         <FrontPageLayout>
             {/*<WorldMap />*/}
-            {principal ? (
-                <p>Logged in as: {principal.toText()}</p>
-            ) : (
-                <p>Not logged in</p>
-            )}
-            <button onClick={() => clickHandler()}>Login</button>
+            {user ? <p>Logged in as: {user.email}</p> : <p>Not logged in</p>}
+            <div className="flex flex-col">
+                <button onClick={() => clickHandler()}>Login</button>
+                <button onClick={() => logout()}>Logout</button>
+            </div>
         </FrontPageLayout>
     );
 }

@@ -5,6 +5,7 @@ import Nat "mo:base/Nat";
 import Blob "mo:base/Blob";
 import Array "mo:base/Array";
 import Time "mo:base/Time";
+import Iter "mo:base/Iter";
 import Helper "canister:HireVerse_helper";
 
 actor Database {
@@ -35,6 +36,7 @@ actor Database {
             email = "";
             birth_date = "01/01/1990";
             company_ids = [];
+            selected_company_id = null;
             timestamp = Time.now();
         };
 
@@ -47,6 +49,7 @@ actor Database {
             email = "JaneDoe@gmail.com";
             birth_date = "01/01/1990";
             company_ids = [];
+            selected_company_id = null;
             timestamp = Time.now();
         };
 
@@ -59,16 +62,19 @@ actor Database {
             email = "JohnSmith@gmail.com";
             birth_date = "01/01/1990";
             company_ids = [];
+            selected_company_id = null;
             timestamp = Time.now();
         };
 
-        // users.put(id, user1);
-        // users.put(id2, user2);
-        // users.put(id3, user3);
+        users.put(id, user1);
+        users.put(id2, user2);
+        users.put(id3, user3);
     };
 
-    public query func register(user : User) : async () {
-        users.put(Principal.fromActor(Database), user);
+    public query func register(user : User) : async ?User {
+        users.put(user.internet_identity, user);
+
+        return users.get(user.internet_identity);
     };
 
     public query func getUser(principal : Principal) : async ?User {
@@ -85,6 +91,10 @@ actor Database {
 
     public query (message) func greet() : async Text {
         return "Hello, " # Principal.toText(message.caller) # "!";
+    };
+
+    public query func getAllUsers() : async [User] {
+        return Iter.toArray(users.vals());
     };
 
     // public shared func getUserCompanies(user_id : Principal) : async [?Company.Company] {

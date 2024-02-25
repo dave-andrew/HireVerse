@@ -12,7 +12,7 @@
 8. npm run start ``DI POWERSHELL``
 9. Semangat dep
 
-### Cleanup
+### Tailwind Cleanup
 
 ``npx prettier --write --plugin=prettier-plugin-tailwindcss **/*.tsx``
 

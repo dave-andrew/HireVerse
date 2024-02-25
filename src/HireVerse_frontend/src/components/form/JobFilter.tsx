@@ -1,12 +1,11 @@
 import { TbFilterCog } from "react-icons/tb";
 import CardLayout from "../../layouts/CardLayout";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, Suspense } from "react";
+import { Fragment, useEffect, useState } from "react";
 import WrappedDisclosure from "../utils/WrappedDisclosure";
 import WrappedRadioGroup from "../utils/WrappedRadioGroup";
 import { IoMdClose } from "react-icons/io";
 import { useForm } from "react-hook-form";
-import { suspend } from "suspend-react";
 import { HireVerse_job } from "../../../../declarations/HireVerse_job";
 import { CONSTANTS } from "../../utils/constants";
 
@@ -25,6 +24,7 @@ interface Props {
 const jobService = HireVerse_job;
 
 export default function JobFilter({ onApplyFilter }: Props) {
+    const [industries, setIndustries] = useState<string[]>([]);
     const { register, control, handleSubmit } = useForm<IFilterForm>({
         defaultValues: {
             salaryStart: 0,
@@ -34,12 +34,18 @@ export default function JobFilter({ onApplyFilter }: Props) {
             datePosted: "",
         },
     });
-    const industries =
-        suspend(async () => await jobService.getAllIndustry(), []) ?? [];
 
+    const getIndustries = async () => {
+        const industries = await jobService.getAllIndustry();
+        setIndustries(industries);
+    };
     const onSubmit = (data: IFilterForm) => {
         onApplyFilter(data);
     };
+
+    useEffect(() => {
+        getIndustries();
+    }, []);
 
     return (
         <>
@@ -118,17 +124,16 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                             className="cursor-pointer p-3 pl-5 text-lg transition-colors"
                                             panelClassName="!p-0"
                                             text="Industries">
-                                            <Suspense
-                                                fallback={
-                                                    <div>Loading...</div>
-                                                }>
+                                            {industries.length == 0 ? (
+                                                <label>Loading</label>
+                                            ) : (
                                                 <WrappedRadioGroup
                                                     name="industry"
                                                     control={control}
                                                     selectionClassName="hover:bg-signature-gray rounded-none"
                                                     values={industries}
                                                 />
-                                            </Suspense>
+                                            )}
                                         </WrappedDisclosure>
                                         <WrappedDisclosure
                                             className="cursor-pointer p-3 pl-5 text-lg transition-colors"
