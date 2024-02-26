@@ -152,6 +152,11 @@ actor Company {
   };
 
   public shared func inviteManager(company_id : Text, user_id : Principal, inviter_id : Principal) : async Result.Result<Invite, Text> {
+    
+    if (Principal.isAnonymous(user_id)) {
+      return #err("Not authorized");
+    };
+    
     let company = await getCompany(company_id);
 
     switch (company) {
@@ -181,7 +186,14 @@ actor Company {
     };
   };
 
-  public shared func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+  public shared (msg) func addJob (company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+    
+    let user_id = msg.caller;
+
+    if(Principal.isAnonymous(user_id)) {
+      return #err("Not authorized");
+    };
+    
     let company = await getCompany(company_id);
 
     switch (company) {
@@ -295,6 +307,10 @@ actor Company {
             p != user_id;
           },
         );
+
+        if(updatedManagerIds.size() == manager_ids.size()) {
+          return #err("User is not a manager of the company");
+        };
 
         let updatedCompany = {
           id = company_id;

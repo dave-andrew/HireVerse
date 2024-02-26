@@ -26,32 +26,6 @@ actor Database {
 
     public func seedUser() : async () {
 
-        let id = await Helper.testPrincipal();
-
-        let user1 = {
-            internet_identity = id;
-            first_name = "John";
-            last_name = "Doe";
-            email = "";
-            birth_date = "01/01/1990";
-            company_ids = [];
-            selected_company_id = null;
-            timestamp = Time.now();
-        };
-
-        let id2 = await Helper.testPrincipal();
-
-        let user2 = {
-            internet_identity = id2;
-            first_name = "Jane";
-            last_name = "Doe";
-            email = "JaneDoe@gmail.com";
-            birth_date = "01/01/1990";
-            company_ids = [];
-            selected_company_id = null;
-            timestamp = Time.now();
-        };
-
         let id3 = await Helper.testPrincipal();
 
         let user3 = {
@@ -65,8 +39,6 @@ actor Database {
             timestamp = Time.now();
         };
 
-        users.put(id, user1);
-        users.put(id2, user2);
         users.put(id3, user3);
     };
 
@@ -103,21 +75,21 @@ actor Database {
         return allUsers;
     };
 
-    // public shared func getUserCompanies(user_id : Principal) : async [?Company.Company] {
-    //     let user : ?User = await getUser(user_id);
-    //     var companies : [?Company.Company] = [];
+    public shared func getUserCompanies(user_id : Principal) : async [?Company.Company] {
+        let user : ?User = await getUser(user_id);
+        var companies : [?Company.Company] = [];
 
-    //     switch (user) {
-    //         case (?user) {
-    //             let company_ids : [Principal] = user.company_ids;
-    //             for (company_id in company_ids.vals()) {
-    //                 let fetched_company = await Company.getCompany(company_id);
-    //                 companies := Array.append(companies, [fetched_company]);
-    //             };
-    //         };
-    //         case null {};
-    //     };
-    //     return companies;
-    // };
+        switch (user) {
+            case (?user) {
+                let company_ids : [Principal] = user.company_ids;
+                for (company_id in company_ids.vals()) {
+                    let fetched_company = await Company.getCompany(company_id);
+                    companies := Array.append(companies, [fetched_company]);
+                };
+            };
+            case null {};
+        };
+        return companies;
+    };
 
 };

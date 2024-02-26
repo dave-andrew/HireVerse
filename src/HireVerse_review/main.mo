@@ -3,6 +3,7 @@ import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import Time "mo:base/Time";
+import Result "mo:base/Result";
 import Helper "canister:HireVerse_helper";
 
 actor Review {
@@ -36,7 +37,18 @@ actor Review {
 
     let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
 
-    public func addReview(newReview : CreateReviewInput) : async () {
+    public shared (msg) func addReview(newReview : CreateReviewInput) : async Result.Result<Text, Text>{
+        
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("You must be logged in to add a review");
+        };
+
+        if (user_id == newReview.employer_id) {
+            return #err("You cannot review yourself");
+        };
+        
         let id = await Helper.generateUUID();
 
         let review = {
@@ -55,17 +67,28 @@ actor Review {
         };
 
         reviews.put(review.id, review);
+        #ok(review.id);
     };
 
-    public func updateReview(review : Review) : async () {
+    public func updateReview(review : Review) : async Result.Result<Text, Text>{
         reviews.put(review.id, review);
+        #ok(review.id);
     };
 
-    public func deleteReview(id : Text) : async ?Review {
-        reviews.remove(id);
+    public func deleteReview(id : Text) : async Result.Result<?Review, Text>{
+        #ok(reviews.remove(id));
     };
 
-    public func getReview(id : Text) : async ?Review {
-        return reviews.get(id);
+    public func getReview(id : Text) : async Result.Result<Review, Text>{
+        let data = reviews.get(id);
+
+        switch (data) {
+            case (?review) {
+                #ok(review);
+            };
+            case (null) {
+                #err("Review not found");
+            };
+        };
     };
 };

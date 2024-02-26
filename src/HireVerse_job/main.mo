@@ -72,6 +72,7 @@ actor Job {
   let jobs = TrieMap.TrieMap<Text, Job>(Text.equal, Text.hash);
 
   public shared func generateJob(company_id : Text) : async () {
+
     let job : Job = {
       id = await Helper.generateUUID();
       position = "Software Engineer";
@@ -89,8 +90,28 @@ actor Job {
     jobs.put(job.id, job);
   };
 
-  public shared func createJob(newJob : CreateJobInput) : async Result.Result<Job, Text> {
+  public shared (msg) func createJob(newJob : CreateJobInput) : async Result.Result<Job, Text> {
     let id = await Helper.generateUUID();
+
+    let user_id = msg.caller;
+
+    if (Principal.isAnonymous(user_id)) {
+      return #err("Unauthorized");
+    };
+
+    let company = await Company.getCompany(company_id);
+
+    switch (company) {
+      case null {
+        return #err("Company not found");
+      };
+      case (?actualCompany) {
+        let manager_ids : [Principal] = actualCompany.company_manager_ids;
+        if (not Array.contains(manager_ids, user_id, Principal.equal)) {
+          return #err("Unauthorized");
+        };
+      };
+    };
 
     let job : Job = {
       id = id;
@@ -143,18 +164,23 @@ actor Job {
       case (?actualJob) {
         let company = await Company.getCompany(actualJob.company_id);
 
+        switch (company) {
+          case null {
+            return #err("Company not found");
+          };
+          case (?company) {};
+        };
+
         var reviews = Vector.Vector<Text>();
 
-        label l loop {
-          for (review_id in actualJob.reviews.vals()) {
-            let review = await Review.getReview(review_id);
-            switch (review) {
-              case null {
-                continue l;
-              };
-              case (?actualReview) {
-                reviews.add(actualReview.id);
-              };
+        for (review_id in actualJob.reviews.vals()) {
+          let review = await Review.getReview(review_id);
+          switch (review) {
+            case null {
+              return null;
+            };
+            case (?actualReview) {
+              reviews.add(actualReview.id);
             };
           };
         };
