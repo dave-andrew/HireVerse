@@ -46,11 +46,13 @@ export default function useAuth() {
             // //     await actor.addManager("fdb86206-89e5-4fc6-9161-acd9521b744d"),
             // // );
 
-            console.log("Principal identity: ", identity.getPrincipal());
             const userData = await backendService.getUser(
                 identity.getPrincipal(),
             );
 
+            console.log("User Data: ", userData)
+
+            console.log("All registered users: ", await backendService.getAllUsers());
             if (userData.length > 0) {
                 setUser(userData[0]!);
                 setAuthState(AuthState.Authenticated);
@@ -90,10 +92,9 @@ export default function useAuth() {
     }, [backendService]);
 
     const register = useCallback(async (newUser: User) => {
-        console.log("nyaa", newUser);
-        await backendService.register(newUser);
+        const returnValue = await backendService.register(newUser);
         await fetchUserData();
-        console.log("Registered");
+        console.log("Return value dari register: ", returnValue);
     }, []);
 
     const getPrincipal = useCallback(async () => {
@@ -111,7 +112,7 @@ export default function useAuth() {
         try {
             await authClient.login({
                 identityProvider:
-                    "http://asrmz-lmaaa-aaaaa-qaaeq-cai.localhost:4943/",
+                    "http://ajuq4-ruaaa-aaaaa-qaaga-cai.localhost:4943/",
                 // "https://identity.ic0.app/",
                 onSuccess: () => fetchUserData(),
             });

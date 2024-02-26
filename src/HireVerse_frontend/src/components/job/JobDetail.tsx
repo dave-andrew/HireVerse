@@ -24,6 +24,7 @@ export default function JobDetail({ jobId }: Props) {
                 return;
             }
 
+            // @ts-ignore
             setFullJob(response.ok[0]);
         }
     };
