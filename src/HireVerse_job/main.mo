@@ -13,7 +13,7 @@ import Error "mo:base/Error";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
 import Review "canister:HireVerse_review";
-import Vector "mo:vector/Class"
+import Vector "mo:vector/Class";
 
 actor Job {
   type Job = {
@@ -72,6 +72,7 @@ actor Job {
   let jobs = TrieMap.TrieMap<Text, Job>(Text.equal, Text.hash);
 
   public shared func generateJob(company_id : Text) : async () {
+
     let job : Job = {
       id = await Helper.generateUUID();
       position = "Software Engineer";
@@ -89,8 +90,29 @@ actor Job {
     jobs.put(job.id, job);
   };
 
-  public shared func createJob(newJob : CreateJobInput) : async Result.Result<Job, Text> {
+  public shared (msg) func createJob(newJob : CreateJobInput) : async Result.Result<Job, Text> {
     let id = await Helper.generateUUID();
+
+    let user_id = msg.caller;
+
+    if (Principal.isAnonymous(user_id)) {
+      return #err("Unauthorized");
+    };
+
+    let company = await Company.getCompany(newJob.company_id);
+
+    switch (company) {
+      case null {
+        return #err("Company not found");
+      };
+      case (?actualCompany) {
+        let manager_ids : [Principal] = actualCompany.company_manager_ids;
+
+        if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
+          return #err("Unauthorized");
+        };
+      };
+    };
 
     let job : Job = {
       id = id;
@@ -121,13 +143,21 @@ actor Job {
     #ok(jobs.remove(id));
   };
 
-  public shared query func getJob(id : Text) : async Result.Result<?Job, Text> {
-    #ok(jobs.get(id));
+  public shared query func getJob(id : Text) : async Result.Result<Job, Text> {
+    let job : ?Job = jobs.get(id);
+    switch (job) {
+      case null {
+        return #err("Job not found");
+      };
+      case (?actualJob) {
+        return #ok(actualJob);
+      };
+    };
   };
 
   public shared func getFullJob(id : Text) : async Result.Result<FullJob, Text> {
     let job = jobs.get(id);
-    
+
     switch (job) {
       case null {
         return #err("Job not found");
@@ -135,18 +165,21 @@ actor Job {
       case (?actualJob) {
         let company = await Company.getCompany(actualJob.company_id);
 
+        switch (company) {
+          case null {
+            return #err("Company not found");
+          };
+          case (?company) {};
+        };
+
         var reviews = Vector.Vector<Text>();
 
-        label l loop {
-          for (review_id in actualJob.reviews.vals()) {
-            let review = await Review.getReview(review_id);
-            switch (review) {
-              case null {
-                continue l;
-              };
-              case (?actualReview) {
-                reviews.add(actualReview.id);
-              };
+        for (review_id in actualJob.reviews.vals()) {
+          let review = await Review.getReview(review_id);
+          switch (review) {
+            case (#err(errmsg)) {};
+            case (#ok(actualReview)) {
+              reviews.add(actualReview.id);
             };
           };
         };

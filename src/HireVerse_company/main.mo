@@ -15,6 +15,7 @@ import Vector "mo:vector/Class";
 import Random "mo:base/Random";
 import Result "mo:base/Result";
 import Error "mo:base/Error";
+// import Job "canister:HireVerse_job";
 
 actor Company {
 
@@ -151,6 +152,11 @@ actor Company {
   };
 
   public shared func inviteManager(company_id : Text, user_id : Principal, inviter_id : Principal) : async Result.Result<Invite, Text> {
+
+    if (Principal.isAnonymous(user_id)) {
+      return #err("Not authorized");
+    };
+
     let company = await getCompany(company_id);
 
     switch (company) {
@@ -180,7 +186,14 @@ actor Company {
     };
   };
 
-  public shared func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+  public shared (msg) func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+
+    let user_id = msg.caller;
+
+    if (Principal.isAnonymous(user_id)) {
+      return #err("Not authorized");
+    };
+
     let company = await getCompany(company_id);
 
     switch (company) {
@@ -210,7 +223,7 @@ actor Company {
     };
   };
 
-  public shared func removeInvite(id : Text) : async Result.Result<?Invite, Text>{
+  public shared func removeInvite(id : Text) : async Result.Result<?Invite, Text> {
     #ok(invitations.remove(id));
   };
 
@@ -259,16 +272,14 @@ actor Company {
         let manager_ids = company.company_manager_ids;
         var managers = Vector.Vector<User.User>();
 
-        label l loop {
-          for (manager_id in manager_ids.vals()) {
-            let manager : ?User.User = await User.getUser(manager_id);
-            switch (manager) {
-              case null {
-                continue l;
-              };
-              case (?m) {
-                managers.add(m);
-              };
+        label l for (manager_id in manager_ids.vals()) {
+          let manager : ?User.User = await User.getUser(manager_id);
+          switch (manager) {
+            case null {
+              continue l;
+            };
+            case (?m) {
+              managers.add(m);
             };
           };
         };
@@ -295,6 +306,10 @@ actor Company {
           },
         );
 
+        if (updatedManagerIds.size() == manager_ids.size()) {
+          return #err("User is not a manager of the company");
+        };
+
         let updatedCompany = {
           id = company_id;
           name = c.name;
@@ -313,46 +328,46 @@ actor Company {
     };
   };
 
-  // public shared composite query func getJobPostedByCompany(company_id : Principal) : async ?[Job.Job] {
-  //     let company : ?Company = await getCompany(company_id);
+  // public shared composite query func getJobPostedByCompany(company_id : Principal) : async Result.Result<[Job.Job], Text> {
+  //   let company : ?Company = await getCompany(company_id);
 
-  //     switch (company) {
-  //         case null {
-  //             return null;
-  //         };
-  //         case (?c) {
-  //             let job_ids = c.job_posting_ids;
-  //             var jobPostings : [Job.Job] = [];
-  //             for (job_id in job_ids.vals()) {
-  //                 let jobPosting : ?Job.Job = await Job.getJob(job_id);
-  //                 switch (jobPosting) {
-  //                     case null {
-  //                         return null;
-  //                     };
-  //                     case (?jp) {
-  //                         jobPostings := Array.append<Job.Job>(jobPostings, [jp]);
-  //                     };
-  //                 };
-  //             };
-
-  //             return ?jobPostings;
-  //         };
+  //   switch (company) {
+  //     case null {
+  //       return #err("Company not found");
   //     };
+  //     case (?c) {
+  //       let job_ids = c.job_posting_ids;
+  //       var jobPostings : [Job.Job] = [];
+  //       label l loop {
+  //         for (job_id in job_ids.vals()) {
+  //           let jobPosting = await Job.getJob(job_id);
+  //           switch (jobPosting) {
+  //             case null {
+  //               continue l;
+  //             };
+  //             case (?jp) {
+  //               jobPostings := Array.append<Job.Job>(jobPostings, [jp]);
+  //             };
+  //           };
+  //         };
+  //       };
+
+  //       return jobPostings;
+  //     };
+  //   };
   // };
 
-  public shared composite query func getCompanyNames(comapny_ids : [Text]) : async Result.Result<[Text], Text> {
+  public shared composite query func getCompanyNames(company_ids : [Text]) : async Result.Result<[Text], Text> {
     let companyNames = Vector.Vector<Text>();
 
-    label l loop {
-      for (company_id in comapny_ids.vals()) {
-        let company : ?Company = await getCompany(company_id);
-        switch (company) {
-          case null {
-            continue l;
-          };
-          case (?c) {
-            companyNames.add(c.name);
-          };
+    for (company_id in company_ids.vals()) {
+      let company : ?Company = await getCompany(company_id);
+      switch (company) {
+        case null {
+          return #err("Company with id " # company_id # " not found");
+        };
+        case (?c) {
+          companyNames.add(c.name);
         };
       };
     };

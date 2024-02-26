@@ -27,33 +27,7 @@ actor Database {
 
     public func seedUser() : async () {
 
-        let id = await Helper.generatePrincipal();
-
-        let user1 = {
-            internet_identity = id;
-            first_name = "John";
-            last_name = "Doe";
-            email = "";
-            birth_date = "01/01/1990";
-            company_ids = [];
-            selected_company_id = null;
-            timestamp = Time.now();
-        };
-
-        let id2 = await Helper.generatePrincipal();
-
-        let user2 = {
-            internet_identity = id2;
-            first_name = "Jane";
-            last_name = "Doe";
-            email = "JaneDoe@gmail.com";
-            birth_date = "01/01/1990";
-            company_ids = [];
-            selected_company_id = null;
-            timestamp = Time.now();
-        };
-
-        let id3 = await Helper.generatePrincipal();
+        let id3 = await Helper.testPrincipal();
 
         let user3 = {
             internet_identity = id3;
@@ -66,8 +40,6 @@ actor Database {
             timestamp = Time.now();
         };
 
-        users.put(id, user1);
-        users.put(id2, user2);
         users.put(id3, user3);
     };
 
@@ -94,7 +66,14 @@ actor Database {
     };
 
     public query func getAllUsers() : async [User] {
-        return Iter.toArray(users.vals());
+        
+        var allUsers : [User] = [];
+
+        for (user in users.vals()) {
+            allUsers := Array.append(allUsers, [user]);
+        };
+
+        return allUsers;
     };
 
     // public shared func getUserCompanies(user_id : Principal) : async [?Company.Company] {
