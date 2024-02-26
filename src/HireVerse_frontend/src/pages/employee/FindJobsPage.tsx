@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import FrontPageLayout from "../../layouts/FrontPageLayout";
 import CardLayout from "../../layouts/CardLayout";
-import CustomDropdown from "../../components/form/CustomDropdown";
+import TextDropdown from "../../components/form/TextDropdown";
 import JobItem from "../../components/job/JobItem";
 import { IoLocationOutline } from "react-icons/io5";
 import CountryDropdown from "../../components/form/CountryDropdown";
@@ -152,7 +152,7 @@ export default function FindJobs() {
                         <div className="flex h-auto flex-col gap-1">
                             <CardLayout className="mr-2 flex flex-row items-center justify-between pe-2 ps-5">
                                 {jobs?.length} Jobs
-                                <CustomDropdown
+                                <TextDropdown
                                     name="order"
                                     control={control}
                                     states={temp}

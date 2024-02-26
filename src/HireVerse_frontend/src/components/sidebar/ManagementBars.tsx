@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
 import Profile from "../navbar/Profile";
-import CustomDropdown, { DropdownItems } from "../form/CustomDropdown";
 import { IconType } from "react-icons";
 import { useLocation } from "react-router-dom";
 import {
@@ -10,6 +9,12 @@ import {
     RiUser3Line,
 } from "react-icons/ri";
 import { useForm } from "react-hook-form";
+import useService from "../../hooks/useService";
+import { Result } from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
+import { isOk } from "../../utils/resultGuarder";
+import ImageLabeledDropdown, {
+    DropdownItems,
+} from "../form/ImageLabeledDropdown";
 
 type Menu = {
     name: string;
@@ -43,24 +48,44 @@ const defaultMenu: Menu[] = [
     },
 ];
 
+interface IDropdownForm {
+    label: string;
+    value: string;
+    img: string;
+}
+
 export default function ManagementBars({ children }: Props) {
-    const { control } = useForm();
+    const { control, setValue, getValues } = useForm<IDropdownForm>({
+        defaultValues: {},
+    });
+    const { companyService } = useService();
     const [managedCompanies, setManagedCompanies] = useState<DropdownItems[]>(
         [],
     );
     const [menus, setMenus] = useState<Menu[]>([]);
     const location = useLocation();
 
-    useEffect(() => {
-        const temp = [
-            {
-                label: "Company 1",
-                value: "Company 1",
-                img: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            },
-        ];
-        setManagedCompanies(temp);
+    const getCompanies = async () => {
+        const companies: Result = await companyService.getManagedCompanies();
 
+        if (isOk(companies)) {
+            const temp: DropdownItems[] = companies.ok.map((company) => ({
+                label: company.name,
+                value: company.name,
+                img: "a",
+            }));
+
+            console.log(companies.ok);
+            setManagedCompanies(temp);
+            setValue("label", temp[0].label);
+            setValue("value", temp[0].value);
+            setValue("img", temp[0].img ?? "");
+            console.log(getValues());
+        }
+    };
+
+    useEffect(() => {
+        getCompanies();
         setMenus(defaultMenu);
     }, []);
 
@@ -70,7 +95,7 @@ export default function ManagementBars({ children }: Props) {
         <div className="flex h-[100vh] w-[100vw] flex-row">
             <div className="fixed z-50 flex h-16 w-full flex-row justify-between bg-white shadow-md">
                 <div className="flex h-full flex-row place-items-center pl-64">
-                    <CustomDropdown
+                    <ImageLabeledDropdown
                         name="company"
                         states={managedCompanies}
                         control={control}
