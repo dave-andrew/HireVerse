@@ -227,7 +227,7 @@ function App() {
     }, [backendService, companyService, jobService]);
     return (
         <ServiceContextProvider>
-            <RouterProvider router={router} />;
+            <RouterProvider router={router} />
         </ServiceContextProvider>
     );
 }

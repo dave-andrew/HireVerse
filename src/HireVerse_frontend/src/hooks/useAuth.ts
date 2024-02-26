@@ -14,7 +14,7 @@ export enum AuthState {
     Unregistered = "Unregistered",
 }
 
-export default function guseAuth() {
+export default function useAuth() {
     const { backendService } = useService();
     const [authState, setAuthState] = useLocalStorage<AuthState>(
         "authState",
@@ -29,26 +29,24 @@ export default function guseAuth() {
             (await authClient.isAuthenticated()) &&
             identity.getPrincipal().toText() !== "2vxsx-fae"
         ) {
-            // if (user) {
-            //     return;
-            // }
+            if(!backendService) return;
 
             setAuthState(AuthState.Loading);
 
             // @ts-ignore
             const agent = new HttpAgent({ identity: identity }) as Agent;
 
-            console.log(companyCanisterId);
-            const actor = createActor(
-                companyCanisterId,
-                // @ts-ignore
-                { agent },
-            );
+            // const actor = createActor(
+            //     companyCanisterId,
+            //     // @ts-ignore
+            //     { agent },
+            // );
+            //
+            // // console.log(
+            // //     await actor.addManager("fdb86206-89e5-4fc6-9161-acd9521b744d"),
+            // // );
 
-            console.log(
-                await actor.addManager("fdb86206-89e5-4fc6-9161-acd9521b744d"),
-            );
-
+            console.log("Principal identity: ", identity.getPrincipal());
             const userData = await backendService.getUser(
                 identity.getPrincipal(),
             );
@@ -57,6 +55,13 @@ export default function guseAuth() {
                 setUser(userData[0]!);
                 setAuthState(AuthState.Authenticated);
                 console.log("User found");
+                return;
+            }
+
+            if (identity) {
+                setAuthState(AuthState.Unregistered);
+                console.log("User not registered");
+
                 return;
             }
 
@@ -73,17 +78,16 @@ export default function guseAuth() {
             // };
             // setUser(tempUser);
             setAuthState(AuthState.Authenticated);
-            console.log("Logged Force");
+            console.log(user);
             // setUser(null);
             // setAuthState(AuthState.Unregistered);
             // console.log("User not found");
-
             return;
         }
         setUser(null);
         setAuthState(AuthState.Unauthenticated);
         console.log("User not authenticated");
-    }, []);
+    }, [backendService]);
 
     const register = useCallback(async (newUser: User) => {
         console.log("nyaa", newUser);
