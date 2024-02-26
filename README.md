@@ -2,21 +2,21 @@
 
 # Notes (Temp)
 
-1. npm install
-2. npm i -g ic-mops
-3. # mops install ``NEW``
-4. dfx deps pull
-5. dfx start --background ``EDIT``
-6. dfx deps deploy
-7. mo-dev --generate --deploy -y
+1. ``npm install``
+2. ``npm i -g ic-mops``
+3. ``mops install`` ``NEW``
+4. ``dfx deps pull``
+5. ``dfx start --background`` ``EDIT``
+6. ``dfx deps deploy``
+7. ``mo-dev --generate --deploy -y``
 8. copy link ke internet_identity, di env buat II_URL='<link>'
-9. npm run start ``DI POWERSHELL``
+9. ``npm run start`` ``DI POWERSHELL``
 10. Semangat dep
 
 ### Tailwind Cleanup
 
 ``npx prettier --write --plugin=prettier-plugin-tailwindcss **/*.tsx``
-
+``npx prettier --write --plugin=prettier-plugin-motoko **/*.mo``
 Welcome to your new HireVerse project and to the internet computer development community. By default, creating a new
 project adds this README and some template files to your project directory. You can edit these template files to
 customize your project and to include your own code to speed up the development cycle.

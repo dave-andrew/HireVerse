@@ -74,21 +74,24 @@ export default function FindJobs() {
             filter,
         );
 
+        let companyIds: string[] = [];
         if (isOk(response)) {
-            // @ts-ignore
-            const companyIds = response.ok.map((job) => job.company_id);
-            const names = await companyService.getCompanyNames(companyIds);
+            companyIds = response.ok.map((job) => job.company_id);
 
-            // @ts-ignore
             setJobs(response.ok);
-            // setCompanyNames(names);
 
-            // @ts-ignore
             if (initial && response.ok.length > 0) {
-                // @ts-ignore
                 setShownJobId(response.ok[0].id);
             }
         }
+
+        const reponseName = await companyService.getCompanyNames(companyIds);
+
+        if (isOk(reponseName)) {
+            setCompanyNames(reponseName.ok);
+        }
+
+        console.log(response);
     };
 
     const handleKeyDown = (key: string) => {

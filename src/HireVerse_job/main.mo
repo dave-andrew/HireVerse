@@ -134,6 +134,37 @@ actor Job {
     return #ok(job);
   };
 
+  public shared (msg) func createJobForce(newJob : CreateJobInput) : async Result.Result<Job, Text> {
+    let id = await Helper.generateUUID();
+
+    let user_id = msg.caller;
+
+    if (Principal.isAnonymous(user_id)) {
+      return #err("Unauthorized");
+    };
+
+    let company = await Company.getCompany(newJob.company_id);
+
+    let job : Job = {
+      id = id;
+      position = newJob.position;
+      location = newJob.location;
+      industry = newJob.industry;
+      salary_start = newJob.salary_start;
+      salary_end = newJob.salary_end;
+      short_description = newJob.short_description;
+      job_description = newJob.job_description;
+      requirements = newJob.requirements;
+      company_id = newJob.company_id;
+      reviews = [];
+      timestamp = Time.now();
+    };
+
+    jobs.put(id, job);
+    let test = Company.addJob(newJob.company_id, id);
+    return #ok(job);
+  };
+
   public query func updateJob(id : Text, job : Job) : async Result.Result<(), Text> {
     jobs.put(id, job);
     return #ok();
@@ -177,7 +208,9 @@ actor Job {
         for (review_id in actualJob.reviews.vals()) {
           let review = await Review.getReview(review_id);
           switch (review) {
-            case (#err(errmsg)) {};
+            case (#err(errmsg)) {
+                return #err(errmsg);
+            };
             case (#ok(actualReview)) {
               reviews.add(actualReview.id);
             };
@@ -255,10 +288,9 @@ actor Job {
   public shared composite query func getJobs(startFrom : Nat, amount : Nat, jobFilters : JobFilterInput) : async Result.Result<[Job], Text> {
     var jobsList = Iter.toArray(jobs.vals());
 
+    //jangan diaksih
     switch (jobFilters.position) {
-      case null {
-        return #err("Position is required");
-      };
+      case null {};
       case (?position) {
         jobsList := Array.filter<Job>(
           jobsList,
@@ -446,7 +478,7 @@ actor Job {
           };
         };
 
-        if(jobPostings.size() == 0) {
+        if (jobPostings.size() == 0) {
           return #err("No jobs posted by this company");
         };
 

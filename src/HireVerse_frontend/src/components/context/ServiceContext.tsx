@@ -5,10 +5,10 @@ import { createActor as createActorCompany } from "../../../../declarations/Hire
 import { createActor as createActorBackend } from "../../../../declarations/HireVerse_backend";
 import { createActor as createActorReview } from "../../../../declarations/HireVerse_review";
 import { ActorSubclass, HttpAgent, Identity } from "@dfinity/agent";
-import { _SERVICE as _SERVICE_JOB } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { _SERVICE as _SERVICE_COMPANY } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import { _SERVICE as _SERVICE_BACKEND } from "../../../../declarations/HireVerse_backend/HireVerse_backend.did";
 import { _SERVICE as _SERVICE_REVIEW } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
+import { _SERVICE as _SERVICE_JOB } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { canisterId as jobCanisterId } from "../../../../declarations/HireVerse_job";
 import { canisterId as companyCanisterId } from "../../../../declarations/HireVerse_company";
 import { canisterId as backendCanisterId } from "../../../../declarations/HireVerse_backend";
@@ -81,6 +81,7 @@ export default function ServiceContextProvider({ children }: Props) {
         setCompanyService(companyService);
         setBackendService(backendService);
         setReviewService(reviewService);
+        setLoading(false);
     }, [identity]);
 
     useEffect(() => {
@@ -88,9 +89,9 @@ export default function ServiceContextProvider({ children }: Props) {
     }, []);
 
     useEffect(() => {
-        if (jobService && companyService && backendService && reviewService) {
-            setLoading(false);
-        }
+        setLoading(
+            !!(jobService && companyService && backendService && reviewService),
+        );
     }, [jobService, companyService, backendService, reviewService]);
 
     return (

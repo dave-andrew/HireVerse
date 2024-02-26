@@ -9,11 +9,12 @@ import EmptyPage from "./pages/employers/EmptyPage";
 import CompanyDetail from "./pages/employee/CompanyDetail";
 import CompanyManagers from "./pages/employers/CompanyManagers";
 import CompanyJobs from "./pages/employers/CompanyJobs";
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { CreateJobInput } from "../../../.dfx/local/canisters/HireVerse_job/service.did";
 import NotFoundPage from "./pages/others/NotFoundPage";
-import ServiceContextProvider from "./components/context/ServiceContext";
 import useService from "./hooks/useService";
+import { isOk } from "./utils/resultGuarder";
+import { CreateCompanyInput } from "../../declarations/HireVerse_company/HireVerse_company.did";
 // import "dotenv/config";
 // require("dotenv").config();
 
@@ -79,14 +80,63 @@ const router = createBrowserRouter(
 );
 
 function App() {
-    const { loading, companyService, jobService, backendService } =
-        useService();
+    const {
+        loading,
+        companyService,
+        jobService,
+        backendService,
+        reviewService,
+    } = useService();
 
     const generateData = async () => {
         if (loading) return;
         console.log("Generating data");
 
-        const companyIds: string[] = [];
+        let companyIds: string[] = [];
+
+        for (let i = 0; i < 10; i++) {
+            const newCompanies: CreateCompanyInput[] = [
+                {
+                    name: `Company ${i}`,
+                    country: "Nigeria",
+                    linkedin: "linkedin.com",
+                    location: "Lagos",
+                    image: [1],
+                    founded_year: BigInt(2021),
+                },
+                {
+                    name: `Company ${i}`,
+                    country: "USA",
+                    linkedin: "linkedin.com",
+                    location: "New York",
+                    image: [1],
+                    founded_year: BigInt(2021),
+                },
+                {
+                    name: `Company ${i}`,
+                    country: "UK",
+                    linkedin: "linkedin.com",
+                    location: "London",
+                    image: [1],
+                    founded_year: BigInt(2021),
+                },
+                {
+                    name: `Company ${i}`,
+                    country: "Canada",
+                    linkedin: "linkedin.com",
+                    location: "Toronto",
+                    image: [1],
+                    founded_year: BigInt(2021),
+                },
+            ];
+
+            const promises = newCompanies.map(async (c) =>
+                companyService.registerCompanies(c),
+            );
+
+            const companies = await Promise.all(promises);
+            companyIds = companies.map((c) => c.id);
+        }
 
         for (let i = 0; i < 10; i++) {
             const companyId = await companyService.generateCompany();
@@ -205,11 +255,20 @@ function App() {
             },
         ];
 
-        newJobs.forEach((j) => jobService.createJob(j));
+        const promises = newJobs.map(async (j) => jobService.createJobForce(j));
+
+        const responses = await Promise.all(promises);
+
+        for (const response of responses) {
+            if (isOk(response)) {
+                console.log("Job created");
+            }
+        }
+
         console.log("finished generating data");
     };
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         // companyService.addManager
         // generateData();
         if (loading) return;
@@ -224,12 +283,8 @@ function App() {
         };
 
         temp();
-    }, [backendService, companyService, jobService]);
-    return (
-        <ServiceContextProvider>
-            <RouterProvider router={router} />
-        </ServiceContextProvider>
-    );
+    }, [backendService, companyService, jobService, reviewService, loading]);
+    return <RouterProvider router={router} />;
 }
 
 export default App;

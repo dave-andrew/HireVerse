@@ -345,7 +345,7 @@ actor Company {
     return #ok(Vector.toArray(companyNames));
   };
 
-  public shared func getUserCompanies(user_id : Principal) : async Result.Result<[Company], Text>{
+  public shared func getUserCompanies(user_id : Principal) : async Result.Result<[Company], Text> {
     let user : ?User.User = await User.getUser(user_id);
     var companies = Vector.Vector<Company>();
 

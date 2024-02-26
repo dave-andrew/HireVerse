@@ -7,6 +7,7 @@ import { Control, Controller } from "react-hook-form";
 interface Props {
     states?: string[];
     className?: string;
+    innerClassName?: string;
     control: Control<any>;
     name: string;
     onChange?: (value: string) => void;
@@ -15,6 +16,7 @@ interface Props {
 export default function TextDropdown({
     states,
     className,
+    innerClassName,
     control,
     name,
     onChange,
@@ -33,7 +35,8 @@ export default function TextDropdown({
                                 onChange?.(e);
                             }}>
                             <div className="relative m-2">
-                                <Listbox.Button className="hover:bg-signature-hover-gray relative flex w-full cursor-default flex-row items-center rounded-lg bg-white py-2 pl-3 pr-10 transition-colors ">
+                                <Listbox.Button
+                                    className={`hover:bg-signature-hover-gray relative flex w-full cursor-default flex-row items-center rounded-lg bg-white py-2 pl-3 pr-10 transition-colors ${innerClassName}`}>
                                     <span className="block truncate text-left">
                                         {field.value}
                                     </span>

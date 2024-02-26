@@ -19,13 +19,8 @@ export default function JobDetail({ jobId }: Props) {
 
         const response = await jobService.getFullJob(jobId);
 
-        if(isOk(response)) {
-            if (response.ok !== null) {
-                return;
-            }
-
-            // @ts-ignore
-            setFullJob(response.ok[0]);
+        if (isOk(response)) {
+            setFullJob(response.ok);
         }
     };
 
