@@ -66,22 +66,22 @@ export default function ManagementBars({ children }: Props) {
     const location = useLocation();
 
     const getCompanies = async () => {
-        const companies: Result = await companyService.getManagedCompanies();
+        // const companies: Result = await companyService.getManagedCompanies();
 
-        if (isOk(companies)) {
-            const temp: DropdownItems[] = companies.ok.map((company) => ({
-                label: company.name,
-                value: company.name,
-                img: "a",
-            }));
+        // if (isOk(companies)) {
+        //     const temp: DropdownItems[] = companies.ok.map((company) => ({
+        //         label: company.name,
+        //         value: company.name,
+        //         img: "a",
+        //     }));
 
-            console.log(companies.ok);
-            setManagedCompanies(temp);
-            setValue("label", temp[0].label);
-            setValue("value", temp[0].value);
-            setValue("img", temp[0].img ?? "");
-            console.log(getValues());
-        }
+        //     console.log(companies.ok);
+        //     setManagedCompanies(temp);
+        //     setValue("label", temp[0].label);
+        //     setValue("value", temp[0].value);
+        //     setValue("img", temp[0].img ?? "");
+        //     console.log(getValues());
+        // }
     };
 
     useEffect(() => {

@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 import convertNullFormat from "../../utils/convertNullFormat";
 import useService from "../../hooks/useService";
+import { isOk } from "../../utils/resultGuarder";
 
 interface IQueryFilterSortForm {
     country: string;
@@ -73,14 +74,16 @@ export default function FindJobs() {
             filter,
         );
 
-        const companyIds = response.map((job) => job.company_id);
-        const names = await companyService.getCompanyNames(companyIds);
+        if (isOk(response)) {
+            const companyIds = response.ok.map((job) => job.company_id);
+            const names = await companyService.getCompanyNames(companyIds);
 
-        setJobs(response);
-        setCompanyNames(names);
+            setJobs(response.ok);
+            // setCompanyNames(names);
 
-        if (initial && response.length > 0) {
-            setShownJobId(response[0].id);
+            if (initial && response.ok.length > 0) {
+                setShownJobId(response.ok[0].id);
+            }
         }
     };
 

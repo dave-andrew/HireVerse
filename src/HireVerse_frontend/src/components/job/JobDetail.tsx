@@ -2,6 +2,7 @@ import CardLayout from "../../layouts/CardLayout";
 import { HireVerse_job } from "../../../../declarations/HireVerse_job";
 import { FullJob } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 import { useEffect, useState } from "react";
+import { isOk } from "../../utils/resultGuarder";
 
 interface Props {
     jobId: string;
@@ -18,11 +19,13 @@ export default function JobDetail({ jobId }: Props) {
 
         const response = await jobService.getFullJob(jobId);
 
-        if (response.length === 0) {
-            return;
-        }
+        if(isOk(response)) {
+            if (response.ok !== null) {
+                return;
+            }
 
-        setFullJob(response[0]);
+            setFullJob(response.ok[0]);
+        }
     };
 
     useEffect(() => {
