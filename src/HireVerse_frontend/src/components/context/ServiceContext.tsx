@@ -9,6 +9,10 @@ import { _SERVICE as _SERVICE_JOB } from "../../../../declarations/HireVerse_job
 import { _SERVICE as _SERVICE_COMPANY } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import { _SERVICE as _SERVICE_BACKEND } from "../../../../declarations/HireVerse_backend/HireVerse_backend.did";
 import { _SERVICE as _SERVICE_REVIEW } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
+import { canisterId as jobCanisterId } from "../../declarations/HireVerse_job";
+import { canisterId as companyCanisterId } from "../../declarations/HireVerse_company";
+import { canisterId as backendCanisterId } from "../../declarations/HireVerse_backend";
+import { canisterId as reviewCanisterId } from "../../declarations/HireVerse_review";
 
 interface Props {
     children: ReactNode;
@@ -54,22 +58,22 @@ export default function ServiceContextProvider({ children }: Props) {
 
         const jobService = createActorJob(
             // process.env.CANISTER_ID_HireVerse_job,
-            "aovwi-4maaa-aaaaa-qaagq-cai",
+            jobCanisterId,
             { agent },
         );
         const companyService = createActorCompany(
             // process.env.CANISTER_ID_HireVerse_company,
-            "a4tbr-q4aaa-aaaaa-qaafq-cai",
+            companyCanisterId,
             { agent },
         );
         const backendService = createActorBackend(
             // process.env.CANISTER_ID_HireVerse_backend,
-            "avqkn-guaaa-aaaaa-qaaea-cai",
+            backendCanisterId,
             { agent },
         );
         const reviewService = createActorReview(
             // process.env.CANISTER_ID_HireVerse_review,
-            "ahw5u-keaaa-aaaaa-qaaha-cai",
+            reviewCanisterId,
             { agent },
         );
 

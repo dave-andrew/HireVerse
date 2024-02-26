@@ -5,6 +5,7 @@ import { useCallback, useEffect } from "react";
 import { Agent, HttpAgent } from "@dfinity/agent";
 import { createActor } from "../../../declarations/HireVerse_company";
 import useService from "./useService";
+import { canisterId as companyCanisterId } from "../declarations/HireVerse_company";
 
 export enum AuthState {
     Authenticated = "Authenticated",
@@ -13,7 +14,7 @@ export enum AuthState {
     Unregistered = "Unregistered",
 }
 
-export default function useAuth() {
+export default function guseAuth() {
     const { backendService } = useService();
     const [authState, setAuthState] = useLocalStorage<AuthState>(
         "authState",
@@ -37,9 +38,9 @@ export default function useAuth() {
             // @ts-ignore
             const agent = new HttpAgent({ identity: identity }) as Agent;
 
-            console.log(import.meta.env.CANISTER_ID_HireVerse_company);
+            console.log(companyCanisterId);
             const actor = createActor(
-                "a4tbr-q4aaa-aaaaa-qaafq-cai",
+                companyCanisterId,
                 // @ts-ignore
                 { agent },
             );
@@ -106,7 +107,7 @@ export default function useAuth() {
         try {
             await authClient.login({
                 identityProvider:
-                    "http://bnz7o-iuaaa-aaaaa-qaaaa-cai.localhost:4943/",
+                    "http://asrmz-lmaaa-aaaaa-qaaeq-cai.localhost:4943/",
                 // "https://identity.ic0.app/",
                 onSuccess: () => fetchUserData(),
             });
