@@ -6,6 +6,7 @@ import { Agent, HttpAgent } from "@dfinity/agent";
 import { createActor } from "../../../declarations/HireVerse_company";
 import useService from "./useService";
 import { canisterId as companyCanisterId } from "../../../declarations/HireVerse_company";
+import { canisterId as internetIdentityCanisterId } from "../declarations/internet_identity";
 
 export enum AuthState {
     Authenticated = "Authenticated",
@@ -112,7 +113,7 @@ export default function useAuth() {
         try {
             await authClient.login({
                 identityProvider:
-                    "http://ajuq4-ruaaa-aaaaa-qaaga-cai.localhost:4943/",
+                    `http://${internetIdentityCanisterId}.localhost:4943/`,
                 // "https://identity.ic0.app/",
                 onSuccess: () => fetchUserData(),
             });
