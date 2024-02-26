@@ -6,6 +6,7 @@ import { Agent, HttpAgent } from "@dfinity/agent";
 import { createActor } from "../../../declarations/HireVerse_company";
 import useService from "./useService";
 import { canisterId as companyCanisterId } from "../../../declarations/HireVerse_company";
+import { Principal } from "@dfinity/principal";
 
 export enum AuthState {
     Authenticated = "Authenticated",
@@ -91,8 +92,8 @@ export default function useAuth() {
         console.log("User not authenticated");
     }, [backendService]);
 
-    const register = useCallback(async (newUser: User) => {
-        const returnValue = await backendService.register(newUser);
+    const register = useCallback(async (first_name: string, last_name: string, email: string, date: string) => {
+        const returnValue = await backendService.register(first_name, last_name, email, date);
         await fetchUserData();
         console.log("Return value dari register: ", returnValue);
     }, []);

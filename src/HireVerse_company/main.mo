@@ -15,7 +15,6 @@ import Vector "mo:vector/Class";
 import Random "mo:base/Random";
 import Result "mo:base/Result";
 import Error "mo:base/Error";
-// import Job "canister:HireVerse_job";
 
 actor Company {
 
@@ -328,35 +327,6 @@ actor Company {
     };
   };
 
-  // public shared composite query func getJobPostedByCompany(company_id : Principal) : async Result.Result<[Job.Job], Text> {
-  //   let company : ?Company = await getCompany(company_id);
-
-  //   switch (company) {
-  //     case null {
-  //       return #err("Company not found");
-  //     };
-  //     case (?c) {
-  //       let job_ids = c.job_posting_ids;
-  //       var jobPostings : [Job.Job] = [];
-  //       label l loop {
-  //         for (job_id in job_ids.vals()) {
-  //           let jobPosting = await Job.getJob(job_id);
-  //           switch (jobPosting) {
-  //             case null {
-  //               continue l;
-  //             };
-  //             case (?jp) {
-  //               jobPostings := Array.append<Job.Job>(jobPostings, [jp]);
-  //             };
-  //           };
-  //         };
-  //       };
-
-  //       return jobPostings;
-  //     };
-  //   };
-  // };
-
   public shared composite query func getCompanyNames(company_ids : [Text]) : async Result.Result<[Text], Text> {
     let companyNames = Vector.Vector<Text>();
 
@@ -373,5 +343,29 @@ actor Company {
     };
 
     return #ok(Vector.toArray(companyNames));
+  };
+
+  public shared func getUserCompanies(user_id : Principal) : async Result.Result<[Company], Text>{
+    let user : ?User.User = await User.getUser(user_id);
+    var companies = Vector.Vector<Company>();
+
+    switch (user) {
+      case (?user) {
+        let company_ids : [Text] = user.company_ids;
+        for (company_id in company_ids.vals()) {
+          let fetched_company = await Company.getCompany(company_id);
+          switch (fetched_company) {
+            case null {};
+            case (?c) {
+              companies.add(c);
+            };
+          };
+        };
+      };
+      case null {
+        return #err("User not found");
+      };
+    };
+    return #ok(Vector.toArray(companies));
   };
 };

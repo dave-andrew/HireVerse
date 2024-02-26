@@ -425,4 +425,34 @@ actor Job {
     );
   };
 
+  public shared composite query func getJobPostedByCompany(company_id : Text) : async Result.Result<[Job], Text> {
+    let company : ?Company.Company = await Company.getCompany(company_id);
+
+    switch (company) {
+      case null {
+        return #err("Company not found");
+      };
+      case (?c) {
+        let job_ids = c.job_posting_ids;
+        var jobPostings = Vector.Vector<Job>();
+
+        for (job_id in job_ids.vals()) {
+          let jobPosting = await getJob(job_id);
+          switch (jobPosting) {
+            case (#err(errmsg)) {};
+            case (#ok(jp)) {
+              jobPostings.add(jp);
+            };
+          };
+        };
+
+        if(jobPostings.size() == 0) {
+          return #err("No jobs posted by this company");
+        };
+
+        return #ok(Vector.toArray<Job>(jobPostings));
+      };
+    };
+  };
+
 };
