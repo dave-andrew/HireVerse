@@ -13,7 +13,7 @@ import Error "mo:base/Error";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
 import Review "canister:HireVerse_review";
-import Vector "mo:vector/Class"
+import Vector "mo:vector/Class";
 
 actor Job {
   type Job = {
@@ -121,13 +121,21 @@ actor Job {
     #ok(jobs.remove(id));
   };
 
-  public shared query func getJob(id : Text) : async Result.Result<?Job, Text> {
-    #ok(jobs.get(id));
+  public shared query func getJob(id : Text) : async Result.Result<Job, Text> {
+    let job : ?Job = jobs.get(id);
+    switch (job) {
+      case null {
+        return #err("Job not found");
+      };
+      case (?actualJob) {
+        return #ok(actualJob);
+      };
+    };
   };
 
   public shared func getFullJob(id : Text) : async Result.Result<FullJob, Text> {
     let job = jobs.get(id);
-    
+
     switch (job) {
       case null {
         return #err("Job not found");

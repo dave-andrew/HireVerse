@@ -7,7 +7,6 @@ import Array "mo:base/Array";
 import Time "mo:base/Time";
 import Iter "mo:base/Iter";
 import Helper "canister:HireVerse_helper";
-
 actor Database {
 
     type User = {
@@ -27,7 +26,7 @@ actor Database {
 
     public func seedUser() : async () {
 
-        let id = await Helper.generatePrincipal();
+        let id = await Helper.testPrincipal();
 
         let user1 = {
             internet_identity = id;
@@ -40,7 +39,7 @@ actor Database {
             timestamp = Time.now();
         };
 
-        let id2 = await Helper.generatePrincipal();
+        let id2 = await Helper.testPrincipal();
 
         let user2 = {
             internet_identity = id2;
@@ -53,7 +52,7 @@ actor Database {
             timestamp = Time.now();
         };
 
-        let id3 = await Helper.generatePrincipal();
+        let id3 = await Helper.testPrincipal();
 
         let user3 = {
             internet_identity = id3;
@@ -94,7 +93,14 @@ actor Database {
     };
 
     public query func getAllUsers() : async [User] {
-        return Iter.toArray(users.vals());
+        
+        var allUsers : [User] = [];
+
+        for (user in users.vals()) {
+            allUsers := Array.append(allUsers, [user]);
+        };
+
+        return allUsers;
     };
 
     // public shared func getUserCompanies(user_id : Principal) : async [?Company.Company] {

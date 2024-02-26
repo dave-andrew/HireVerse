@@ -15,6 +15,7 @@ import Vector "mo:vector/Class";
 import Random "mo:base/Random";
 import Result "mo:base/Result";
 import Error "mo:base/Error";
+// import Job "canister:HireVerse_job";
 
 actor Company {
 
@@ -210,7 +211,7 @@ actor Company {
     };
   };
 
-  public shared func removeInvite(id : Text) : async Result.Result<?Invite, Text>{
+  public shared func removeInvite(id : Text) : async Result.Result<?Invite, Text> {
     #ok(invitations.remove(id));
   };
 
@@ -313,31 +314,33 @@ actor Company {
     };
   };
 
-  // public shared composite query func getJobPostedByCompany(company_id : Principal) : async ?[Job.Job] {
-  //     let company : ?Company = await getCompany(company_id);
+  // public shared composite query func getJobPostedByCompany(company_id : Principal) : async Result.Result<[Job.Job], Text> {
+  //   let company : ?Company = await getCompany(company_id);
 
-  //     switch (company) {
-  //         case null {
-  //             return null;
-  //         };
-  //         case (?c) {
-  //             let job_ids = c.job_posting_ids;
-  //             var jobPostings : [Job.Job] = [];
-  //             for (job_id in job_ids.vals()) {
-  //                 let jobPosting : ?Job.Job = await Job.getJob(job_id);
-  //                 switch (jobPosting) {
-  //                     case null {
-  //                         return null;
-  //                     };
-  //                     case (?jp) {
-  //                         jobPostings := Array.append<Job.Job>(jobPostings, [jp]);
-  //                     };
-  //                 };
-  //             };
-
-  //             return ?jobPostings;
-  //         };
+  //   switch (company) {
+  //     case null {
+  //       return #err("Company not found");
   //     };
+  //     case (?c) {
+  //       let job_ids = c.job_posting_ids;
+  //       var jobPostings : [Job.Job] = [];
+  //       label l loop {
+  //         for (job_id in job_ids.vals()) {
+  //           let jobPosting = await Job.getJob(job_id);
+  //           switch (jobPosting) {
+  //             case null {
+  //               continue l;
+  //             };
+  //             case (?jp) {
+  //               jobPostings := Array.append<Job.Job>(jobPostings, [jp]);
+  //             };
+  //           };
+  //         };
+  //       };
+
+  //       return jobPostings;
+  //     };
+  //   };
   // };
 
   public shared composite query func getCompanyNames(comapny_ids : [Text]) : async Result.Result<[Text], Text> {

@@ -5,7 +5,7 @@ import { useCallback, useEffect } from "react";
 import { Agent, HttpAgent } from "@dfinity/agent";
 import { createActor } from "../../../declarations/HireVerse_company";
 import useService from "./useService";
-import { canisterId as companyCanisterId } from "../declarations/HireVerse_company";
+import { canisterId as companyCanisterId } from "../../../declarations/HireVerse_company";
 
 export enum AuthState {
     Authenticated = "Authenticated",
