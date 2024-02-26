@@ -84,10 +84,10 @@ actor Review {
 
         switch (data) {
             case (?review) {
-                #ok(review);
+                return #ok(review);
             };
             case (null) {
-                #err("Review not found");
+                return #err("Review not found");
             };
         };
     };

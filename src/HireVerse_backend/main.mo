@@ -7,6 +7,7 @@ import Array "mo:base/Array";
 import Time "mo:base/Time";
 import Iter "mo:base/Iter";
 import Helper "canister:HireVerse_helper";
+
 actor Database {
 
     type User = {
@@ -75,21 +76,21 @@ actor Database {
         return allUsers;
     };
 
-    public shared func getUserCompanies(user_id : Principal) : async [?Company.Company] {
-        let user : ?User = await getUser(user_id);
-        var companies : [?Company.Company] = [];
+    // public shared func getUserCompanies(user_id : Principal) : async [?Company.Company] {
+    //     let user : ?User = await getUser(user_id);
+    //     var companies : [?Company.Company] = [];
 
-        switch (user) {
-            case (?user) {
-                let company_ids : [Principal] = user.company_ids;
-                for (company_id in company_ids.vals()) {
-                    let fetched_company = await Company.getCompany(company_id);
-                    companies := Array.append(companies, [fetched_company]);
-                };
-            };
-            case null {};
-        };
-        return companies;
-    };
+    //     switch (user) {
+    //         case (?user) {
+    //             let company_ids : [Principal] = user.company_ids;
+    //             for (company_id in company_ids.vals()) {
+    //                 let fetched_company = await Company.getCompany(company_id);
+    //                 companies := Array.append(companies, [fetched_company]);
+    //             };
+    //         };
+    //         case null {};
+    //     };
+    //     return companies;
+    // };
 
 };

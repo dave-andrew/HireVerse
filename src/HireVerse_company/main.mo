@@ -152,11 +152,11 @@ actor Company {
   };
 
   public shared func inviteManager(company_id : Text, user_id : Principal, inviter_id : Principal) : async Result.Result<Invite, Text> {
-    
+
     if (Principal.isAnonymous(user_id)) {
       return #err("Not authorized");
     };
-    
+
     let company = await getCompany(company_id);
 
     switch (company) {
@@ -186,14 +186,14 @@ actor Company {
     };
   };
 
-  public shared (msg) func addJob (company_id : Text, job_id : Text) : async Result.Result<(), Text> {
-    
+  public shared (msg) func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+
     let user_id = msg.caller;
 
-    if(Principal.isAnonymous(user_id)) {
+    if (Principal.isAnonymous(user_id)) {
       return #err("Not authorized");
     };
-    
+
     let company = await getCompany(company_id);
 
     switch (company) {
@@ -272,16 +272,14 @@ actor Company {
         let manager_ids = company.company_manager_ids;
         var managers = Vector.Vector<User.User>();
 
-        label l loop {
-          for (manager_id in manager_ids.vals()) {
-            let manager : ?User.User = await User.getUser(manager_id);
-            switch (manager) {
-              case null {
-                continue l;
-              };
-              case (?m) {
-                managers.add(m);
-              };
+        label l for (manager_id in manager_ids.vals()) {
+          let manager : ?User.User = await User.getUser(manager_id);
+          switch (manager) {
+            case null {
+              continue l;
+            };
+            case (?m) {
+              managers.add(m);
             };
           };
         };
@@ -308,7 +306,7 @@ actor Company {
           },
         );
 
-        if(updatedManagerIds.size() == manager_ids.size()) {
+        if (updatedManagerIds.size() == manager_ids.size()) {
           return #err("User is not a manager of the company");
         };
 
@@ -359,19 +357,17 @@ actor Company {
   //   };
   // };
 
-  public shared composite query func getCompanyNames(comapny_ids : [Text]) : async Result.Result<[Text], Text> {
+  public shared composite query func getCompanyNames(company_ids : [Text]) : async Result.Result<[Text], Text> {
     let companyNames = Vector.Vector<Text>();
 
-    label l loop {
-      for (company_id in comapny_ids.vals()) {
-        let company : ?Company = await getCompany(company_id);
-        switch (company) {
-          case null {
-            continue l;
-          };
-          case (?c) {
-            companyNames.add(c.name);
-          };
+    for (company_id in company_ids.vals()) {
+      let company : ?Company = await getCompany(company_id);
+      switch (company) {
+        case null {
+          return #err("Company with id " # company_id # " not found");
+        };
+        case (?c) {
+          companyNames.add(c.name);
         };
       };
     };

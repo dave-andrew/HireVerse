@@ -99,7 +99,7 @@ actor Job {
       return #err("Unauthorized");
     };
 
-    let company = await Company.getCompany(company_id);
+    let company = await Company.getCompany(newJob.company_id);
 
     switch (company) {
       case null {
@@ -107,7 +107,8 @@ actor Job {
       };
       case (?actualCompany) {
         let manager_ids : [Principal] = actualCompany.company_manager_ids;
-        if (not Array.contains(manager_ids, user_id, Principal.equal)) {
+
+        if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
           return #err("Unauthorized");
         };
       };
@@ -176,10 +177,8 @@ actor Job {
         for (review_id in actualJob.reviews.vals()) {
           let review = await Review.getReview(review_id);
           switch (review) {
-            case null {
-              return null;
-            };
-            case (?actualReview) {
+            case (#err(errmsg)) {};
+            case (#ok(actualReview)) {
               reviews.add(actualReview.id);
             };
           };
