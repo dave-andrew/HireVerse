@@ -1,10 +1,10 @@
 import useLocalStorage from "./useLocalStorage";
 import { User } from "../../../../.dfx/local/canisters/HireVerse_backend/service.did";
 import { AuthClient } from "@dfinity/auth-client";
-import { useCallback, useEffect, useState } from "react";
-import { HireVerse_backend } from "../../../declarations/HireVerse_backend";
-
-const backendService = HireVerse_backend;
+import { useCallback, useEffect } from "react";
+import { Agent, HttpAgent } from "@dfinity/agent";
+import { createActor } from "../../../declarations/HireVerse_company";
+import useService from "./useService";
 
 export enum AuthState {
     Authenticated = "Authenticated",
@@ -14,16 +14,43 @@ export enum AuthState {
 }
 
 export default function useAuth() {
-    const [authState, setAuthState] = useState<AuthState>(AuthState.Loading);
+    const { backendService } = useService();
+    const [authState, setAuthState] = useLocalStorage<AuthState>(
+        "authState",
+        AuthState.Loading,
+    );
     const [user, setUser] = useLocalStorage<User | null>("user", null);
 
     const fetchUserData = useCallback(async () => {
         const authClient = await AuthClient.create();
-        if ((await authClient.isAuthenticated()) && !user) {
-            console.log("Fetching user data");
+        const identity = authClient.getIdentity();
+        if (
+            (await authClient.isAuthenticated()) &&
+            identity.getPrincipal().toText() !== "2vxsx-fae"
+        ) {
+            // if (user) {
+            //     return;
+            // }
+
             setAuthState(AuthState.Loading);
-            const identity = authClient.getIdentity().getPrincipal();
-            const userData = await backendService.getUser(identity);
+
+            // @ts-ignore
+            const agent = new HttpAgent({ identity: identity }) as Agent;
+
+            console.log(import.meta.env.CANISTER_ID_HireVerse_company);
+            const actor = createActor(
+                "a4tbr-q4aaa-aaaaa-qaafq-cai",
+                // @ts-ignore
+                { agent },
+            );
+
+            console.log(
+                await actor.addManager("fdb86206-89e5-4fc6-9161-acd9521b744d"),
+            );
+
+            const userData = await backendService.getUser(
+                identity.getPrincipal(),
+            );
 
             if (userData.length > 0) {
                 setUser(userData[0]!);
@@ -32,9 +59,23 @@ export default function useAuth() {
                 return;
             }
 
-            setUser(null);
-            setAuthState(AuthState.Unregistered);
-            console.log("User not found");
+            // const tempUser: User = {
+            //     internet_identity: identity,
+            //     first_name: "Ronald",
+            //     last_name: "McDonald",
+            //     // @ts-ignore
+            //     timestamp: Date.now(),
+            //     company_ids: [],
+            //     birth_date: "",
+            //     email: "Ronald@gmail.com",
+            //     selected_company_id: [],
+            // };
+            // setUser(tempUser);
+            setAuthState(AuthState.Authenticated);
+            console.log("Logged Force");
+            // setUser(null);
+            // setAuthState(AuthState.Unregistered);
+            // console.log("User not found");
 
             return;
         }
@@ -55,12 +96,18 @@ export default function useAuth() {
         return authClient.getIdentity().getPrincipal();
     }, []);
 
+    const getIdentity = useCallback(async () => {
+        const authClient = await AuthClient.create();
+        return authClient.getIdentity();
+    }, []);
+
     const login = async () => {
         const authClient = await AuthClient.create();
         try {
             await authClient.login({
                 identityProvider:
                     "http://bnz7o-iuaaa-aaaaa-qaaaa-cai.localhost:4943/",
+                // "https://identity.ic0.app/",
                 onSuccess: () => fetchUserData(),
             });
             console.log("Logged in as", authClient.getIdentity());
@@ -84,6 +131,7 @@ export default function useAuth() {
         user,
         authState,
         getPrincipal,
+        getIdentity,
         login,
         logout,
         register,

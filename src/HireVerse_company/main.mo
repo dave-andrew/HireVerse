@@ -13,6 +13,8 @@ import Helper "canister:HireVerse_helper";
 import User "canister:HireVerse_backend";
 import Vector "mo:vector/Class";
 import Random "mo:base/Random";
+import Result "mo:base/Result";
+import Error "mo:base/Error";
 
 actor Company {
 
@@ -99,6 +101,25 @@ actor Company {
 
     public shared query func getCompanies() : async [Company] {
         return Iter.toArray(companies.vals());
+    };
+
+    public shared query (msg) func getManagedCompanies() : async Result.Result<[Company], Text>{
+        let user_id = msg.caller;
+
+        if(Principal.isAnonymous(user_id)){
+            return #err("Not authorized");
+        };
+
+        let companyList: [Company] = Iter.toArray(companies.vals());
+        var managedCompanies = Vector.Vector<Company>();
+
+        for (company in companyList.vals()) {
+            if (Array.find<Principal>(company.company_manager_ids, func(p : Principal) : Bool { p == user_id; }) != null) {
+                managedCompanies.add(company);
+            };
+        };
+
+        return #ok(Vector.toArray(managedCompanies));
     };
 
     public shared query func getCompanyCountries() : async [Text] {
@@ -195,6 +216,40 @@ actor Company {
         return invitations.remove(id);
     };
 
+    public shared (msg) func addManager(company_id : Text) : async Result.Result<(), Text> {
+        let user_id = msg.caller;
+
+        if(Principal.isAnonymous(user_id)){
+            return #err("Not authorized");
+        };
+
+        let company = await getCompany(company_id);
+
+        switch (company) {
+            case null {
+                return #err("Company not found");
+            };
+            case (?company) {
+                let manager_ids = company.company_manager_ids;
+                let updatedManagerIds = Array.append<Principal>(manager_ids, [user_id]);
+
+                let updatedCompany = {
+                    id = company_id;
+                    name = company.name;
+                    founded_year = company.founded_year;
+                    country = company.country;
+                    location = company.location;
+                    image = company.image;
+                    linkedin = company.linkedin;
+                    company_manager_ids = updatedManagerIds;
+                    job_posting_ids = company.job_posting_ids;
+                    timestamp = company.timestamp;
+                };
+
+                return #ok(companies.put(company_id, updatedCompany));
+            };
+        };
+    };
     public shared composite query func getManagersFromCompany(company_id : Text) : async ?[User.User] {
         let companies : ?Company = await getCompany(company_id);
 

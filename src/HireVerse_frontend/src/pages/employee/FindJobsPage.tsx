@@ -7,13 +7,12 @@ import JobItem from "../../components/job/JobItem";
 import { IoLocationOutline } from "react-icons/io5";
 import CountryDropdown from "../../components/form/CountryDropdown";
 import JobDetail from "../../components/job/JobDetail";
-import { HireVerse_job } from "../../../../declarations/HireVerse_job";
 import { Job } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import { HireVerse_company } from "../../../../declarations/HireVerse_company";
 import JobFilter, { IFilterForm } from "../../components/form/JobFilter";
 import { useForm } from "react-hook-form";
 import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 import convertNullFormat from "../../utils/convertNullFormat";
+import useService from "../../hooks/useService";
 
 interface IQueryFilterSortForm {
     country: string;
@@ -23,10 +22,8 @@ interface IQueryFilterSortForm {
 
 const temp = ["Newest", "Oldest", "Highest Salary", "Lowest Salary"];
 
-const jobService = HireVerse_job;
-const companyService = HireVerse_company;
-
 export default function FindJobs() {
+    const { jobService, companyService } = useService();
     const [filter, setFilter] = useState<IFilterForm>({
         salaryStart: 0,
         salaryEnd: 0,
@@ -98,8 +95,10 @@ export default function FindJobs() {
     }, [filter]);
 
     useEffect(() => {
-        getJobs(true);
-    }, []);
+        if (jobService && companyService) {
+            getJobs(true);
+        }
+    }, [jobService, companyService]);
 
     return (
         <FrontPageLayout>

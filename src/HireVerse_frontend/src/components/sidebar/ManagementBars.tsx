@@ -96,8 +96,9 @@ export default function ManagementBars({ children }: Props) {
                     </div>
                     <div className="flex flex-col text-lg text-gray-500">
                         {managedCompanies.length > 0 &&
-                            menus.map((menu) => (
+                            menus.map((menu, index) => (
                                 <div
+                                    key={index}
                                     className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
                                     <menu.icon size="1.5rem" />
                                     <span>{menu.name}</span>

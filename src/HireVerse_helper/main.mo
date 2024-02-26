@@ -17,4 +17,5 @@ actor Helper {
         let principal = Principal.fromBlob(entropyBlob);
         return principal;
     };
+
 };

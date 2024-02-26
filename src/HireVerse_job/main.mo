@@ -8,6 +8,8 @@ import Buffer "mo:base/Buffer";
 import Iter "mo:base/Iter";
 import Time "mo:base/Time";
 import Int "mo:base/Int";
+import Result "mo:base/Result";
+import Error "mo:base/Error";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
 import Review "canister:HireVerse_review";
@@ -88,7 +90,7 @@ actor Job {
         jobs.put(job.id, job);
     };
 
-    public shared func createJob(newJob : CreateJobInput) : async Job {
+    public shared func createJob(newJob : CreateJobInput) : async Result.Result<Job, Text> {
         let id = await Helper.generateUUID();
 
         let job : Job = {
@@ -108,7 +110,7 @@ actor Job {
 
         jobs.put(id, job);
         let test = Company.addJob(newJob.company_id, id);
-        return job;
+        return #ok(job);
     };
 
     public query func updateJob(id : Text, job : Job) : async () {
