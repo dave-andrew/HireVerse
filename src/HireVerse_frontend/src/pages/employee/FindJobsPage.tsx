@@ -77,7 +77,7 @@ export default function FindJobs() {
         const names = await companyService.getCompanyNames(companyIds);
 
         setJobs(response);
-        setCompanyNames(names);
+        // setCompanyNames(names);
 
         if (initial && response.length > 0) {
             setShownJobId(response[0].id);
