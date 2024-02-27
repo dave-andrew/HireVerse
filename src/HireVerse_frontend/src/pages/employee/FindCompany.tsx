@@ -100,7 +100,7 @@ export default function FindCompany() {
                                 </p>
                             </div>
                             <div className="flex w-full flex-row items-center gap-10">
-                                <div className="grid h-fit grid-cols-2 gap-4">
+                                <div className="grid h-fit grid-cols-2 gap-4 py-8">
                                     {popularCompanies
                                         .slice(0, 4)
                                         .map((company) => {
@@ -135,7 +135,7 @@ export default function FindCompany() {
                                             );
                                         })}
                                 </div>
-                                <div>
+                                <div className="xl:block hidden">
                                     <img
                                         className="w-[25rem]"
                                         src="/storyset/job-offers-bro.png"

@@ -40,11 +40,11 @@ export default function Navbar() {
 
     return (
         <>
-            <div className="fixed z-[100] flex h-16 w-full flex-row place-items-center justify-between bg-white ps-12 shadow-md">
+            <div className="fixed z-[100] flex h-16 w-full flex-row place-items-center justify-between bg-white md:ps-12 ps-6 shadow-md">
                 <Link to="/" className="text-blue-primary pt-1 text-center align-middle font-bebas text-5xl">
                     HIREVERSE
                 </Link>
-                <div className="absolute left-1/2 flex h-full w-5/12 min-w-96 translate-x-[-50%] transform flex-row place-items-center justify-center px-8">
+                <div className="absolute left-1/2 flex h-full w-5/12 min-w-96 translate-x-[-50%] transform flex-row place-items-center justify-center">
                     {menus.map((menu, index) => {
                         return (
                             <Link
@@ -57,7 +57,7 @@ export default function Navbar() {
                                         isActive(menu.activeUrl)
                                             ? "text-blue-primary border-color-blue-primary font-semibold"
                                             : ""
-                                    } text-s mx-8 flex h-full place-items-center justify-center border-b-2 border-transparent transition-colors hover:border-gray-400 xl:text-base `}>
+                                    } text-s xl:mx-8 mx-4 flex h-full place-items-center justify-center border-b-2 border-transparent transition-colors hover:border-gray-400 xl:text-base `}>
                                     {menu.name}
                                 </div>
                             </Link>

@@ -24,7 +24,7 @@ export default function RegisterCompany() {
                                 Receive Reviews & Feedback
                             </CardLayout>
                             <CardLayout className="p-6">
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-6">
                                     <div className="flex flex-row items-center gap-5">
                                         <div>
                                             <PiLockKeyOpenBold size="4rem" />
@@ -60,7 +60,7 @@ export default function RegisterCompany() {
                         </div>
                         <div className="h-full justify-center flex flex-col gap-4">
                             <CardLayout className="flex h-fit flex-col gap-10 px-10 py-10 w-[400px]">
-                                <div className="flex flex-row justify-between gap-16">
+                                <div className="flex flex-row justify-between gap-4">
                                     <CustomTextField
                                         label="Company Name"
                                         type="text"
