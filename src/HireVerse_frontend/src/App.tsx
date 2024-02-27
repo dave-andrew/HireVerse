@@ -9,18 +9,21 @@ import EmptyPage from "./pages/employers/EmptyPage";
 import CompanyDetail from "./pages/employee/CompanyDetail";
 import CompanyManagers from "./pages/employers/CompanyManagers";
 import CompanyJobs from "./pages/employers/CompanyJobs";
-import { useEffect } from "react";
 import NotFoundPage from "./pages/others/NotFoundPage";
-import useService from "./hooks/useService";
 import Seeder from "./pages/others/Seeder";
-// import "dotenv/config";
-// require("dotenv").config();
+import UnregisteredProtectedRoutes from "./components/protected/UnregisteredProtectedRoutes";
+import UnauthenticatedProtectedRoutes from "./components/protected/UnauthenticatedProtectedRoutes";
+import EmployerProtectedRoutes from "./components/protected/EmployerProtectedRoutes";
+import AuthorizedProtectedRoutes from "./components/protected/AuthorizedProtectedRoutes";
 
-const frontRoutes: RouteObject[] = [
+const guestRoutes: RouteObject[] = [
     {
         path: "/",
         Component: Landing,
     },
+];
+
+const frontRoutes: RouteObject[] = [
     {
         path: "/find-job",
         Component: FindJobs,
@@ -28,10 +31,6 @@ const frontRoutes: RouteObject[] = [
     {
         path: "/find-company",
         Component: FindCompany,
-    },
-    {
-        path: "/complete-registration",
-        Component: CompleteRegistration,
     },
     {
         path: "/company/detail",
@@ -64,10 +63,6 @@ const backRoutes: RouteObject[] = [
 
 const otherRoutes: RouteObject[] = [
     {
-        path: "/login",
-        Component: Landing,
-    },
-    {
         path: "*",
         Component: NotFoundPage,
     },
@@ -77,36 +72,34 @@ const otherRoutes: RouteObject[] = [
     },
 ];
 
-const router = createBrowserRouter(
-    frontRoutes.concat(backRoutes).concat(otherRoutes),
-);
+const unregisteredProtectedRoutes: RouteObject[] = [
+    {
+        path: "/complete-registration",
+        Component: CompleteRegistration,
+    },
+]
+
+const router = createBrowserRouter([
+    {
+        element: <UnauthenticatedProtectedRoutes />,
+        children: guestRoutes,
+    },
+    {
+        element: <UnregisteredProtectedRoutes />,
+        children: unregisteredProtectedRoutes,
+    },
+    {
+        element: <AuthorizedProtectedRoutes />,
+        children: frontRoutes,
+    },
+    {
+        element: <EmployerProtectedRoutes />,
+        children: backRoutes,
+    },
+    ...otherRoutes,
+]);
 
 function App() {
-    // const {
-    //     loading,
-    //     companyService,
-    //     jobService,
-    //     backendService,
-    //     reviewService,
-    // } = useService();
-    //
-    // useEffect(() => {
-    //     // companyService.addManager
-    //     // generateData();
-    //     if (loading) return;
-    //     const temp = async () => {
-    //         console.log(await backendService.greet());
-    //         console.log(await companyService.getCompanies());
-    //         // console.log(
-    //         //     await companyService.addManager(
-    //         //         "793038bf-7522-407b-8e2c-d401432d2271",
-    //         //     ),
-    //         // );
-    //     };
-    //
-    //     temp();
-    // }, [backendService, companyService, jobService, reviewService, loading]);
-
     return <RouterProvider router={router} />;
 }
 
