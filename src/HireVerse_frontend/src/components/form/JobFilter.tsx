@@ -149,8 +149,7 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                                 control={control}
                                                 selectionClassName="hover:bg-signature-gray rounded-none"
                                                 values={
-                                                    CONSTANTS.COMPANY
-                                                        .EXPERIENCES
+                                                    CONSTANTS.JOB.EXPERIENCES
                                                 }
                                             />
                                         </WrappedDisclosure>
