@@ -21,8 +21,8 @@ export default function WorldMap() {
     }, []);
 
     return (
-        <div>
-            <img src="/backgrounds/world-map.svg" />
+        <div className="w-full h-full absolute z-0">
+            <img src="/backgrounds/world-map.svg"  alt="World Map" />
         </div>
     );
 }
