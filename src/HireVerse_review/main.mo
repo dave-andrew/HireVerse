@@ -37,18 +37,7 @@ actor Review {
 
     let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
 
-    public shared (msg) func addReview(newReview : CreateReviewInput) : async Result.Result<Text, Text>{
-        
-        let user_id = msg.caller;
-
-        if (Principal.isAnonymous(user_id)) {
-            return #err("You must be logged in to add a review");
-        };
-
-        if (user_id == newReview.employer_id) {
-            return #err("You cannot review yourself");
-        };
-        
+    public func addReview(newReview : CreateReviewInput) : async Result.Result<Text, Text> {
         let id = await Helper.generateUUID();
 
         let review = {
@@ -70,16 +59,16 @@ actor Review {
         #ok(review.id);
     };
 
-    public func updateReview(review : Review) : async Result.Result<Text, Text>{
+    public func updateReview(review : Review) : async Result.Result<Text, Text> {
         reviews.put(review.id, review);
         #ok(review.id);
     };
 
-    public func deleteReview(id : Text) : async Result.Result<?Review, Text>{
+    public func deleteReview(id : Text) : async Result.Result<?Review, Text> {
         #ok(reviews.remove(id));
     };
 
-    public func getReview(id : Text) : async Result.Result<Review, Text>{
+    public func getReview(id : Text) : async Result.Result<Review, Text> {
         let data = reviews.get(id);
 
         switch (data) {

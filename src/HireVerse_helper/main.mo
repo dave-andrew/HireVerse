@@ -10,19 +10,24 @@ import Source "mo:uuid/async/SourceV4";
 
 actor Helper {
 
-  public shared func generateUUID() : async Text {
-    let g = Source.Source();
-    return UUID.toText(await g.new());
-  };
+    type Pagination = {
+        start : Nat;
+        amount : Nat;
+    };
 
-  public shared func testPrincipal() : async Principal {
-    let principals = Array.tabulate<Principal>(
-      10,
-      func(i) {
-        Principal.fromBlob(Blob.fromArray([Nat8.fromNat(i)]));
-      },
-    );
-    return principals[0];
-  };
+    public shared func generateUUID() : async Text {
+        let g = Source.Source();
+        return UUID.toText(await g.new());
+    };
+
+    public shared func testPrincipal() : async Principal {
+        let principals = Array.tabulate<Principal>(
+            10,
+            func(i) {
+                Principal.fromBlob(Blob.fromArray([Nat8.fromNat(i)]));
+            },
+        );
+        return principals[0];
+    };
 
 };

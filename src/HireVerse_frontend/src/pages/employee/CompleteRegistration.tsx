@@ -24,9 +24,13 @@ export default function CompleteRegistration() {
 
     const handleFormSubmit = async (data: ICompleteRegisterForm) => {
         const principal = await getPrincipal();
-        if(principal.toString() === "2vxsx-fae") return;
-
-        await registerNewUser(data.firstName, data.lastName, data.email, data.birthDate);
+        if (principal.toString() === "2vxsx-fae") return;
+        await registerNewUser(
+            data.email,
+            data.firstName,
+            data.lastName,
+            data.birthDate,
+        );
     };
 
     return (
@@ -180,5 +184,5 @@ export default function CompleteRegistration() {
                 </div>
             </div>
         </FrontPageLayout>
-    )
+    );
 }

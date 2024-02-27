@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import Profile from "../navbar/Profile";
 import { IconType } from "react-icons";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
     RiHome4Line,
     RiMailOpenLine,
@@ -10,11 +10,10 @@ import {
 } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import useService from "../../hooks/useService";
-import { Result } from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
 import { isOk } from "../../utils/resultGuarder";
-import ImageLabeledDropdown, {
-    DropdownItems,
-} from "../form/ImageLabeledDropdown";
+import ImageLabeledDropdown from "../form/ImageLabeledDropdown";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 
 type Menu = {
     name: string;
@@ -30,21 +29,21 @@ interface Props {
 const defaultMenu: Menu[] = [
     {
         name: "Overview",
-        activeUrl: ["/manage-company", "/"],
-        redirectUrl: "/manage-company",
+        activeUrl: ["/employer", "/"],
+        redirectUrl: "/employer",
         icon: RiHome4Line,
     },
     {
-        name: "Find Jobs",
-        activeUrl: ["/find-job"],
-        redirectUrl: "/find-job",
-        icon: RiUser3Line,
+        name: "Managers",
+        activeUrl: ["/employer/managers"],
+        redirectUrl: "/employer/managers",
+        icon: RiSuitcase2Line,
     },
     {
-        name: "Find Company",
-        activeUrl: ["/find-company"],
-        redirectUrl: "/find-company",
-        icon: RiSuitcase2Line,
+        name: "Jobs",
+        activeUrl: ["/employer/jobs"],
+        redirectUrl: "/employer/jobs",
+        icon: RiUser3Line,
     },
 ];
 
@@ -55,33 +54,52 @@ interface IDropdownForm {
 }
 
 export default function ManagementBars({ children }: Props) {
-    const { control, setValue, getValues } = useForm<IDropdownForm>({
-        defaultValues: {},
-    });
     const { companyService } = useService();
-    const [managedCompanies, setManagedCompanies] = useState<DropdownItems[]>(
-        [],
-    );
+    const [selectedCompany, setSelectedCompany] =
+        useLocalStorage<Company | null>("selectedCompany", null);
+    const { control, setValue } = useForm<IDropdownForm>({
+        defaultValues: {
+            value: "",
+            label: "",
+            img: "",
+        },
+    });
+    const [managedCompanies, setManagedCompanies] = useState<Company[]>([]);
     const [menus, setMenus] = useState<Menu[]>([]);
     const location = useLocation();
 
     const getCompanies = async () => {
-        // const companies: Result = await companyService.getManagedCompanies();
+        const response = await companyService.getManagedCompanies();
 
-        // if (isOk(companies)) {
-        //     const temp: DropdownItems[] = companies.ok.map((company) => ({
-        //         label: company.name,
-        //         value: company.name,
-        //         img: "a",
-        //     }));
+        if (isOk(response)) {
+            const companies = response.ok;
+            setManagedCompanies(companies);
 
-        //     console.log(companies.ok);
-        //     setManagedCompanies(temp);
-        //     setValue("label", temp[0].label);
-        //     setValue("value", temp[0].value);
-        //     setValue("img", temp[0].img ?? "");
-        //     console.log(getValues());
-        // }
+            if (companies.length > 0) {
+                setSelectedCompany(companies[0]);
+                if (selectedCompany) {
+                    setValue("label", companies[0].name);
+                    return;
+                }
+            }
+
+            setValue("label", "No Company");
+        }
+    };
+
+    const getDropdownItems = () => {
+        return managedCompanies.map((company) => ({
+            label: company.name,
+            value: company.name,
+            img: "a",
+        }));
+    };
+
+    const changeCompany = (companyLabel: string) => {
+        const company = managedCompanies.find((c) => c.name === companyLabel);
+        if (company) {
+            setSelectedCompany(company);
+        }
     };
 
     useEffect(() => {
@@ -96,10 +114,11 @@ export default function ManagementBars({ children }: Props) {
             <div className="fixed z-50 flex h-16 w-full flex-row justify-between bg-white shadow-md">
                 <div className="flex h-full flex-row place-items-center pl-64">
                     <ImageLabeledDropdown
-                        name="company"
-                        states={managedCompanies}
+                        name="label"
+                        states={getDropdownItems()}
                         control={control}
                         className="w-52"
+                        onChange={changeCompany}
                     />
                 </div>
                 <div className="flex h-full flex-row place-items-center">
@@ -122,12 +141,16 @@ export default function ManagementBars({ children }: Props) {
                     <div className="flex flex-col text-lg text-gray-500">
                         {managedCompanies.length > 0 &&
                             menus.map((menu, index) => (
-                                <div
-                                    key={index}
-                                    className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
-                                    <menu.icon size="1.5rem" />
-                                    <span>{menu.name}</span>
-                                </div>
+                                <Link
+                                    to={menu.redirectUrl ?? ""}
+                                    key={index}>
+                                    <div
+                                        key={index}
+                                        className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
+                                        <menu.icon size="1.5rem" />
+                                        <span>{menu.name}</span>
+                                    </div>
+                                </Link>
                             ))}
                         {managedCompanies?.length > 0 && (
                             <hr className="my-5" />

@@ -39,7 +39,7 @@ export default function JobFilter({ onApplyFilter }: Props) {
     const getIndustries = async () => {
         const industries = await jobService.getAllIndustry();
 
-        if(isOk(industries)) {
+        if (isOk(industries)) {
             // @ts-ignore
             setIndustries(industries.ok);
         }

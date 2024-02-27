@@ -45,8 +45,8 @@ export default function JobPostingTable() {
     ];
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
-                <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+            <table className="w-full text-left text-sm text-gray-500 rtl:text-right">
+                <thead className="bg-gray-50 text-xs uppercase text-gray-700">
                     <tr>
                         <th
                             scope="col"
@@ -85,7 +85,7 @@ export default function JobPostingTable() {
                         return (
                             <tr
                                 key={index}
-                                className="border-b odd:bg-white even:bg-gray-50 odd:dark:bg-gray-900 even:dark:bg-gray-800">
+                                className="border-b odd:bg-white even:bg-gray-50">
                                 <th className="whitespace-nowrap px-8 py-4 font-medium text-black">
                                     {posting.position}
                                 </th>

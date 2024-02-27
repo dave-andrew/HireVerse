@@ -3,11 +3,7 @@ import { User } from "../../../../.dfx/local/canisters/HireVerse_backend/service
 import { AuthClient } from "@dfinity/auth-client";
 import { useCallback, useEffect } from "react";
 import { Agent, HttpAgent } from "@dfinity/agent";
-import { createActor } from "../../../declarations/HireVerse_company";
 import useService from "./useService";
-import { canisterId as companyCanisterId } from "../../../declarations/HireVerse_company";
-import { canisterId as internetIdentityCanisterId } from "../../../declarations/internet_identity";
-import { Principal } from "@dfinity/principal";
 
 export enum AuthState {
     Authenticated = "Authenticated",
@@ -49,7 +45,10 @@ export default function useAuth() {
             console.log("Identity Principal: ", identity.getPrincipal());
             console.log("User Data: ", userData);
 
-            console.log("All registered users: ", await backendService.getAllUsers());
+            console.log(
+                "All registered users: ",
+                await backendService.getAllUsers(),
+            );
             if (userData.length > 0) {
                 setUser(userData[0]!);
                 setAuthState(AuthState.Authenticated);
@@ -72,10 +71,24 @@ export default function useAuth() {
         console.log("User not authenticated");
     }, [backendService]);
 
-    const register = useCallback(async (first_name: string, last_name: string, email: string, date: string) => {
-        await backendService.register(first_name, last_name, email, date);
-        await fetchUserData();
-    }, []);
+    const register = useCallback(
+        async (
+            first_name: string,
+            last_name: string,
+            email: string,
+            date: string,
+        ) => {
+            const returnValue = await backendService.register(
+                first_name,
+                last_name,
+                email,
+                date,
+            );
+            await fetchUserData();
+            console.log("Return value dari register: ", returnValue);
+        },
+        [],
+    );
 
     const getPrincipal = useCallback(async () => {
         const authClient = await AuthClient.create();
@@ -92,7 +105,8 @@ export default function useAuth() {
         try {
             await authClient.login({
                 identityProvider:
-                    `http://${internetIdentityCanisterId}.localhost:4943/`,
+                    "http://bnz7o-iuaaa-aaaaa-qaaaa-cai.localhost:4943/",
+                // identityProvider: `http://${internetIdentityCanisterId}.localhost:4943/`,
                 // "https://identity.ic0.app/",
                 onSuccess: () => fetchUserData(),
             });

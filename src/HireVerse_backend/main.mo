@@ -19,7 +19,6 @@ actor Database {
         email : Text;
         birth_date : Text;
         company_ids : [Text];
-        selected_company_id : ?Text;
         timestamp : Time.Time;
     };
 
@@ -38,15 +37,14 @@ actor Database {
             email = "JohnSmith@gmail.com";
             birth_date = "01/01/1990";
             company_ids = [];
-            selected_company_id = null;
             timestamp = Time.now();
         };
 
         users.put(user3.internet_identity, user3);
     };
 
-    public shared (msg) func register(first_name: Text, last_name: Text, email: Text, birth_date: Text) : async Result.Result<User, Text>{
-        
+    public shared (msg) func register(first_name : Text, last_name : Text, email : Text, birth_date : Text) : async Result.Result<User, Text> {
+
         let user_id = msg.caller;
 
         if (users.get(user_id) != null) {
@@ -85,8 +83,8 @@ actor Database {
         return "Hello, " # Principal.toText(message.caller) # "!";
     };
 
-    public query func getAllUsers() : async Result.Result<[User], Text>{
-        
+    public query func getAllUsers() : async Result.Result<[User], Text> {
+
         var allUsers = Vector.Vector<User>();
 
         for (user in users.vals()) {

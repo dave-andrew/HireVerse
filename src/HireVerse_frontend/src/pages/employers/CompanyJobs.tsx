@@ -1,50 +1,160 @@
 import ManagementPageLayout from "../../layouts/ManagementPageLayout";
 import { IoIosSearch } from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../../components/modal/Modal";
-import JobPostingTable from "../../components/company/JobPostingTable";
+import { IoAdd } from "react-icons/io5";
+import TextDropdown from "../../components/form/TextDropdown";
+import { useForm } from "react-hook-form";
+import { Job } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
+import useService from "../../hooks/useService";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import { CONSTANTS } from "../../utils/constants";
+import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import convertNullFormat from "../../utils/convertNullFormat";
+import { isOk } from "../../utils/resultGuarder";
+import handleKeyDown from "../../utils/handleKeyDown";
+
+interface IQuerySortForm {
+    query: string;
+    order: string;
+}
 
 export default function CompanyJobs() {
+    const [selectedCompany, setSelectedCompany] =
+        useLocalStorage<Company | null>("selectedCompany", null);
+    const { jobService } = useService();
+    const { register, control, getValues } = useForm({
+        defaultValues: {
+            query: "",
+            order: "Newest",
+        },
+    });
+    const [jobs, setJobs] = useState<Job[]>([]);
     let [isModalShown, setIsModalShown] = useState(false);
 
     const toggleModal = () => {
         setIsModalShown(!isModalShown);
     };
 
+    const getConvertedFilters = () => {
+        const values = getValues();
+        const jobFilter: JobManagerFilterInput = {
+            order: convertNullFormat(values.order, ""),
+            position: convertNullFormat(values.query, ""),
+        };
+        return jobFilter;
+    };
+
+    const getJobs = async () => {
+        if (!selectedCompany) {
+            return;
+        }
+
+        const response = await jobService.getJobPostedByCompany(
+            selectedCompany.id,
+            BigInt(0),
+            BigInt(20),
+            getConvertedFilters(),
+        );
+
+        console.log(response);
+        if (isOk(response)) {
+            setJobs(response.ok);
+        }
+    };
+
+    useEffect(() => {
+        getJobs();
+    }, []);
+
+    useEffect(() => {
+        getJobs();
+    }, [selectedCompany]);
+
     return (
         <>
-            <div className="absolute z-0 h-96 w-full bg-[url(/backgrounds/liquid-cheese.svg)] bg-cover opacity-50"></div>
+            <div className="absolute z-0 h-96 w-full bg-[url(/backgrounds/sun-tornado.svg)] bg-cover opacity-50"></div>
             <ManagementPageLayout>
                 <div className="z-10 flex flex-col gap-16 px-14 py-8 opacity-100">
                     <div className="mt-8 text-4xl font-bold">Jobs</div>
                     <div className="flex flex-col gap-4">
                         <div
                             className={
-                                "flex h-12 flex-row place-items-end justify-end gap-4"
+                                "flex h-12 flex-row place-items-end justify-between gap-4"
                             }>
-                            <CardLayout className="flex h-full w-96 flex-row items-center bg-white">
-                                <span className="flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3 transition-colors has-[:focus]:bg-gray-100">
-                                    <IoIosSearch size="1.5rem" />
-                                    <input
-                                        type="text"
-                                        className="w-full bg-transparent outline-0"
-                                        placeholder="Search Job"
-                                    />
-                                </span>
-                            </CardLayout>
                             <button
                                 className="h-full"
                                 onClick={toggleModal}>
                                 <CardLayout
-                                    className="flex h-full place-items-center
-                                justify-center rounded-xl px-8
-                                py-4 hover:bg-gray-100">
-                                    + Add Job
+                                    className="hover:bg-signature-blue bg-blue-primary flex
+                                h-full items-center justify-center
+                                gap-4 rounded-lg p-4">
+                                    <IoAdd
+                                        size={"1.5rem"}
+                                        className="font-bold text-white"
+                                    />
+                                    <span className="pr-2 text-white">
+                                        Add Job
+                                    </span>
                                 </CardLayout>
                             </button>
+                            <div className="flex flex-row items-center justify-center">
+                                <CardLayout className="flex h-full w-96 flex-row items-center rounded-lg bg-white">
+                                    <span className="flex flex-1 flex-row gap-2 rounded-lg p-3 transition-colors has-[:focus]:bg-gray-100">
+                                        <IoIosSearch size="1.5rem" />
+                                        <input
+                                            {...register("query")}
+                                            type="text"
+                                            className="w-full bg-transparent outline-0"
+                                            placeholder="Search Job"
+                                            onKeyDown={(e) =>
+                                                handleKeyDown(
+                                                    e.key,
+                                                    "Enter",
+                                                    getJobs,
+                                                )
+                                            }
+                                        />
+                                    </span>
+                                </CardLayout>
+                                <TextDropdown
+                                    className="flex !w-36 rounded-lg"
+                                    innerClassName="min-h-12 !pl-4 !pr-16"
+                                    name="order"
+                                    control={control}
+                                    states={CONSTANTS.ORDER}
+                                    onChange={(_) => getJobs()}
+                                />
+                            </div>
                         </div>
-                        <JobPostingTable />
+                        <div className="grid grid-cols-3 gap-4">
+                            {jobs.map((job, index) => (
+                                <CardLayout
+                                    key={index}
+                                    className="flex flex-col p-4">
+                                    <div className="flex flex-row">
+                                        {job.position}
+                                    </div>
+                                    <div className="flex flex-row">
+                                        {job.short_description}
+                                    </div>
+                                    <div className="flex flex-row">
+                                        {job.location}
+                                    </div>
+                                    <div className="flex flex-row">
+                                        {Number(job.salary_start)} -{" "}
+                                        {Number(job.salary_end)}
+                                    </div>
+                                    <div className="flex flex-row">
+                                        {new Date(
+                                            Number(job.timestamp),
+                                        ).toLocaleDateString()}
+                                    </div>
+                                </CardLayout>
+                            ))}
+                        </div>
                     </div>
                 </div>
                 <Modal

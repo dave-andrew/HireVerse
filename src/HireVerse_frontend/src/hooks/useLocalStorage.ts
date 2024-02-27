@@ -49,7 +49,15 @@ export default function useLocalStorage<T>(
                 const newValue =
                     value instanceof Function ? value(storedValue) : value;
 
-                window.localStorage.setItem(key, JSON.stringify(newValue));
+                window.localStorage.setItem(
+                    key,
+                    JSON.stringify(newValue, (key, value) => {
+                        if (typeof value === "bigint") {
+                            return value.toString();
+                        }
+                        return value;
+                    }),
+                );
 
                 setStoredValue(newValue);
 
