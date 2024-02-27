@@ -20,7 +20,7 @@ export default function CustomTextField({
     max,
 }: CustomTextFieldProps) {
     return (
-        <div className={`flex flex-col ${className}`}>
+        <div className={`flex flex-col gap-[5px] ${className}`}>
             <div className="text-xs font-bold">{label}</div>
             <input
                 type={type}
