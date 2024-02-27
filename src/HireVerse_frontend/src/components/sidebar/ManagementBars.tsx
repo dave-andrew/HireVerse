@@ -11,9 +11,7 @@ import {
 import { useForm } from "react-hook-form";
 import useService from "../../hooks/useService";
 import { isOk } from "../../utils/resultGuarder";
-import ImageLabeledDropdown, {
-    DropdownItems,
-} from "../form/ImageLabeledDropdown";
+import ImageLabeledDropdown from "../form/ImageLabeledDropdown";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 
@@ -56,6 +54,7 @@ interface IDropdownForm {
 }
 
 export default function ManagementBars({ children }: Props) {
+    const { companyService } = useService();
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
     const { control, setValue } = useForm<IDropdownForm>({
@@ -65,10 +64,7 @@ export default function ManagementBars({ children }: Props) {
             img: "",
         },
     });
-    const { companyService } = useService();
-    const [managedCompanies, setManagedCompanies] = useState<DropdownItems[]>(
-        [],
-    );
+    const [managedCompanies, setManagedCompanies] = useState<Company[]>([]);
     const [menus, setMenus] = useState<Menu[]>([]);
     const location = useLocation();
 
@@ -76,25 +72,33 @@ export default function ManagementBars({ children }: Props) {
         const response = await companyService.getManagedCompanies();
 
         if (isOk(response)) {
-            const companies: DropdownItems[] = response.ok.map((company) => ({
-                label: company.name,
-                value: company.name,
-                img: "a",
-            }));
-
+            const companies = response.ok;
             setManagedCompanies(companies);
-            setSelectedCompany(response.ok[0]);
-            if (selectedCompany) {
-                setValue("label", selectedCompany.name);
-                return;
-            }
 
             if (companies.length > 0) {
-                setValue("label", companies[0].label);
-                return;
+                setSelectedCompany(companies[0]);
+                if (selectedCompany) {
+                    setValue("label", companies[0].name);
+                    return;
+                }
             }
 
             setValue("label", "No Company");
+        }
+    };
+
+    const getDropdownItems = () => {
+        return managedCompanies.map((company) => ({
+            label: company.name,
+            value: company.name,
+            img: "a",
+        }));
+    };
+
+    const changeCompany = (companyLabel: string) => {
+        const company = managedCompanies.find((c) => c.name === companyLabel);
+        if (company) {
+            setSelectedCompany(company);
         }
     };
 
@@ -111,9 +115,10 @@ export default function ManagementBars({ children }: Props) {
                 <div className="flex h-full flex-row place-items-center pl-64">
                     <ImageLabeledDropdown
                         name="label"
-                        states={managedCompanies}
+                        states={getDropdownItems()}
                         control={control}
                         className="w-52"
+                        onChange={changeCompany}
                     />
                 </div>
                 <div className="flex h-full flex-row place-items-center">

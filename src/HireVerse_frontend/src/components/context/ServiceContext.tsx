@@ -1,24 +1,32 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import { createActor as createActorJob } from "../../../../declarations/HireVerse_job";
-import { createActor as createActorCompany } from "../../../../declarations/HireVerse_company";
-import { createActor as createActorBackend } from "../../../../declarations/HireVerse_backend";
-import { createActor as createActorReview } from "../../../../declarations/HireVerse_review";
+import {
+    canisterId as jobCanisterId,
+    createActor as createActorJob,
+} from "../../../../declarations/HireVerse_job";
+import {
+    canisterId as companyCanisterId,
+    createActor as createActorCompany,
+} from "../../../../declarations/HireVerse_company";
+import {
+    canisterId as backendCanisterId,
+    createActor as createActorBackend,
+} from "../../../../declarations/HireVerse_backend";
+import {
+    canisterId as reviewCanisterId,
+    createActor as createActorReview,
+} from "../../../../declarations/HireVerse_review";
 import { ActorSubclass, HttpAgent, Identity } from "@dfinity/agent";
 import { _SERVICE as _SERVICE_COMPANY } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import { _SERVICE as _SERVICE_BACKEND } from "../../../../declarations/HireVerse_backend/HireVerse_backend.did";
 import { _SERVICE as _SERVICE_REVIEW } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import { _SERVICE as _SERVICE_JOB } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import { canisterId as jobCanisterId } from "../../../../declarations/HireVerse_job";
-import { canisterId as companyCanisterId } from "../../../../declarations/HireVerse_company";
-import { canisterId as backendCanisterId } from "../../../../declarations/HireVerse_backend";
-import { canisterId as reviewCanisterId } from "../../../../declarations/HireVerse_review";
 
 interface Props {
     children: ReactNode;
 }
 
-type ServiceContextType = {
+export type ServiceContextType = {
     jobService: ActorSubclass<_SERVICE_JOB>;
     companyService: ActorSubclass<_SERVICE_COMPANY>;
     backendService: ActorSubclass<_SERVICE_BACKEND>;

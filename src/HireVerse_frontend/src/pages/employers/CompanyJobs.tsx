@@ -1,35 +1,77 @@
 import ManagementPageLayout from "../../layouts/ManagementPageLayout";
 import { IoIosSearch } from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../../components/modal/Modal";
 import { IoAdd } from "react-icons/io5";
 import TextDropdown from "../../components/form/TextDropdown";
 import { useForm } from "react-hook-form";
+import { Job } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
+import useService from "../../hooks/useService";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import { CONSTANTS } from "../../utils/constants";
+import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import convertNullFormat from "../../utils/convertNullFormat";
+import { isOk } from "../../utils/resultGuarder";
+import handleKeyDown from "../../utils/handleKeyDown";
 
 interface IQuerySortForm {
     query: string;
     order: string;
 }
 
-const temp = ["Newest", "Oldest", "Highest Salary", "Lowest Salary"];
-
 export default function CompanyJobs() {
-    const { register, control } = useForm({
+    const [selectedCompany, setSelectedCompany] =
+        useLocalStorage<Company | null>("selectedCompany", null);
+    const { jobService } = useService();
+    const { register, control, getValues } = useForm({
         defaultValues: {
             query: "",
             order: "Newest",
         },
     });
+    const [jobs, setJobs] = useState<Job[]>([]);
     let [isModalShown, setIsModalShown] = useState(false);
 
     const toggleModal = () => {
         setIsModalShown(!isModalShown);
     };
 
-    const getJobs = () => {
-        //
+    const getConvertedFilters = () => {
+        const values = getValues();
+        const jobFilter: JobManagerFilterInput = {
+            order: convertNullFormat(values.order, ""),
+            position: convertNullFormat(values.query, ""),
+        };
+        return jobFilter;
     };
+
+    const getJobs = async () => {
+        if (!selectedCompany) {
+            return;
+        }
+
+        const response = await jobService.getJobPostedByCompany(
+            selectedCompany.id,
+            BigInt(0),
+            BigInt(20),
+            getConvertedFilters(),
+        );
+
+        console.log(response);
+        if (isOk(response)) {
+            setJobs(response.ok);
+        }
+    };
+
+    useEffect(() => {
+        getJobs();
+    }, []);
+
+    useEffect(() => {
+        getJobs();
+    }, [selectedCompany]);
 
     return (
         <>
@@ -67,6 +109,13 @@ export default function CompanyJobs() {
                                             type="text"
                                             className="w-full bg-transparent outline-0"
                                             placeholder="Search Job"
+                                            onKeyDown={(e) =>
+                                                handleKeyDown(
+                                                    e.key,
+                                                    "Enter",
+                                                    getJobs,
+                                                )
+                                            }
                                         />
                                     </span>
                                 </CardLayout>
@@ -75,24 +124,34 @@ export default function CompanyJobs() {
                                     innerClassName="min-h-12 !pl-4 !pr-16"
                                     name="order"
                                     control={control}
-                                    states={temp}
+                                    states={CONSTANTS.ORDER}
                                     onChange={(_) => getJobs()}
                                 />
                             </div>
                         </div>
                         <div className="grid grid-cols-3 gap-4">
-                            {Array.from({ length: 10 }).map((_, index) => (
-                                <CardLayout className="flex flex-col p-4">
+                            {jobs.map((job, index) => (
+                                <CardLayout
+                                    key={index}
+                                    className="flex flex-col p-4">
                                     <div className="flex flex-row">
-                                        position
+                                        {job.position}
                                     </div>
                                     <div className="flex flex-row">
-                                        job-description
+                                        {job.short_description}
                                     </div>
                                     <div className="flex flex-row">
-                                        location
+                                        {job.location}
                                     </div>
-                                    <div className="flex flex-row">date</div>
+                                    <div className="flex flex-row">
+                                        {Number(job.salary_start)} -{" "}
+                                        {Number(job.salary_end)}
+                                    </div>
+                                    <div className="flex flex-row">
+                                        {new Date(
+                                            Number(job.timestamp),
+                                        ).toLocaleDateString()}
+                                    </div>
                                 </CardLayout>
                             ))}
                         </div>

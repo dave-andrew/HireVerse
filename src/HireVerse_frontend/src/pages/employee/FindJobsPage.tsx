@@ -14,14 +14,14 @@ import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_jo
 import convertNullFormat from "../../utils/convertNullFormat";
 import useService from "../../hooks/useService";
 import { isOk } from "../../utils/resultGuarder";
+import { CONSTANTS } from "../../utils/constants";
+import handleKeyDown from "../../utils/handleKeyDown";
 
 interface IQueryFilterSortForm {
     country: string;
     order: string;
     query: string;
 }
-
-const temp = ["Newest", "Oldest", "Highest Salary", "Lowest Salary"];
 
 export default function FindJobs() {
     const { jobService, companyService } = useService();
@@ -85,19 +85,13 @@ export default function FindJobs() {
             }
         }
 
-        const reponseName = await companyService.getCompanyNames(companyIds);
+        const responseName = await companyService.getCompanyNames(companyIds);
 
-        if (isOk(reponseName)) {
-            setCompanyNames(reponseName.ok);
+        if (isOk(responseName)) {
+            setCompanyNames(responseName.ok);
         }
 
         console.log(response);
-    };
-
-    const handleKeyDown = (key: string) => {
-        if (key === "Enter") {
-            getJobs();
-        }
     };
 
     useEffect(() => {
@@ -145,7 +139,9 @@ export default function FindJobs() {
                                     type="text"
                                     className="w-full bg-transparent outline-0"
                                     placeholder="Search Job"
-                                    onKeyDown={(e) => handleKeyDown(e.key)}
+                                    onKeyDown={(e) =>
+                                        handleKeyDown(e.key, "Enter", getJobs)
+                                    }
                                 />
                             </span>
                             <span className="border-signature-gray flex flex-row items-center gap-2 rounded-br-xl rounded-tr-xl border-l-[1px] p-1 pl-5 transition-colors has-[:focus]:bg-gray-100">
@@ -165,7 +161,7 @@ export default function FindJobs() {
                                 <TextDropdown
                                     name="order"
                                     control={control}
-                                    states={temp}
+                                    states={CONSTANTS.ORDER}
                                     onChange={(_) => getJobs()}
                                 />
                             </CardLayout>
