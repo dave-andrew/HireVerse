@@ -4,7 +4,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { useCallback, useEffect } from "react";
 import { Agent, HttpAgent } from "@dfinity/agent";
 import useService from "./useService";
-import { canisterId as internetIdentityCanisterId } from "../declarations/internet_identity";
+import { canisterId as internetIdentityCanisterId } from "../../../declarations/internet_identity";
 
 export enum AuthState {
     Authenticated = "Authenticated",
