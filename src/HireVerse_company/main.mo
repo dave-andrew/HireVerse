@@ -368,4 +368,10 @@ actor Company {
         };
         return #ok(Vector.toArray(companies));
     };
+
+    public shared func deleteAllCompany() : async () {
+        for (company in companies.vals()) {
+            ignore companies.remove(company.id);
+        };
+    };
 };

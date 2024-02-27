@@ -4,6 +4,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { useCallback, useEffect } from "react";
 import { Agent, HttpAgent } from "@dfinity/agent";
 import useService from "./useService";
+import { canisterId as internetIdentityCanisterId } from "../../../declarations/internet_identity";
 
 export enum AuthState {
     Authenticated = "Authenticated",
@@ -34,7 +35,7 @@ export default function useAuth() {
 
             // @ts-ignore
             const agent = new HttpAgent({ identity: identity }) as Agent;
-            await agent.fetchRootKey()
+            await agent.fetchRootKey();
 
             const userData = await backendService.getUser(
                 identity.getPrincipal(),
@@ -104,9 +105,9 @@ export default function useAuth() {
         const authClient = await AuthClient.create();
         try {
             await authClient.login({
-                identityProvider:
-                    "http://bnz7o-iuaaa-aaaaa-qaaaa-cai.localhost:4943/",
-                // identityProvider: `http://${internetIdentityCanisterId}.localhost:4943/`,
+                // identityProvider:
+                // "http://bnz7o-iuaaa-aaaaa-qaaaa-cai.localhost:4943/",
+                identityProvider: `http://${internetIdentityCanisterId}.localhost:4943/`,
                 // "https://identity.ic0.app/",
                 onSuccess: () => fetchUserData(),
             });

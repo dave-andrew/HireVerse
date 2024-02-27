@@ -12,6 +12,21 @@
     font-family: "Lato";
     src: url("./fonts/Lato/Lato-Regular.ttf") format("truetype");
   }
+  @font-face {
+    font-family: "Lato";
+    font-weight: bold;
+    src: url("./fonts/Lato/Lato-Bold.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Lato";
+    font-weight: 300;
+    src: url("./fonts/Lato/Lato-Light.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Lato";
+    font-weight: 400;
+    src: url("./fonts/Lato/Lato-Regular.ttf") format("truetype");
+  }
 }
 
 html {

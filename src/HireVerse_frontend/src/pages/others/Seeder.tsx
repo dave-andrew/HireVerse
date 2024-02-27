@@ -63,6 +63,21 @@ export default function Seeder() {
                     Add Self To Company Manager
                 </button>
             </div>
+            <button
+                className="main-button"
+                onClick={() => service.companyService.deleteAllCompany()}>
+                Remove all companies
+            </button>
+            <button
+                className="main-button"
+                onClick={() => service.jobService.deleteAllJobs()}>
+                Remove all jobs
+            </button>
+            <button
+                className="main-button"
+                onClick={() => service.reviewService.removeAllReviews()}>
+                Remove all reviews
+            </button>
         </div>
     );
 }

@@ -76,15 +76,26 @@ export default function ManagementBars({ children }: Props) {
             setManagedCompanies(companies);
 
             if (companies.length > 0) {
+                if (selectedCompany) {
+                    const company = companies.find(
+                        (c) => c.id === selectedCompany.id,
+                    );
+
+                    if (company) {
+                        setValue("label", company.name);
+                        return;
+                    }
+                }
                 setSelectedCompany(companies[0]);
                 if (selectedCompany) {
                     setValue("label", companies[0].name);
                     return;
                 }
             }
-
-            setValue("label", "No Company");
         }
+
+        setValue("label", "No Company");
+        setSelectedCompany(null);
     };
 
     const getDropdownItems = () => {
