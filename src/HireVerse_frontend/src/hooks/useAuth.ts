@@ -27,32 +27,27 @@ export default function useAuth() {
     const fetchUserData = useCallback(async () => {
         const authClient = await AuthClient.create();
         const identity = authClient.getIdentity();
+
         if (
             (await authClient.isAuthenticated()) &&
             identity.getPrincipal().toText() !== "2vxsx-fae"
         ) {
-            if(!backendService) return;
+            if (!backendService) return;
 
             setAuthState(AuthState.Loading);
 
             // @ts-ignore
             const agent = new HttpAgent({ identity: identity }) as Agent;
-
-            // const actor = createActor(
-            //     companyCanisterId,
-            //     // @ts-ignore
-            //     { agent },
-            // );
-            //
-            // // console.log(
-            // //     await actor.addManager("fdb86206-89e5-4fc6-9161-acd9521b744d"),
-            // // );
+            await agent.fetchRootKey()
 
             const userData = await backendService.getUser(
                 identity.getPrincipal(),
             );
 
-            console.log("User Data: ", userData)
+            console.log("Fetching Data for");
+            console.log("Greet: ", await backendService.greet());
+            console.log("Identity Principal: ", identity.getPrincipal());
+            console.log("User Data: ", userData);
 
             console.log("All registered users: ", await backendService.getAllUsers());
             if (userData.length > 0) {
@@ -69,23 +64,7 @@ export default function useAuth() {
                 return;
             }
 
-            // const tempUser: User = {
-            //     internet_identity: identity,
-            //     first_name: "Ronald",
-            //     last_name: "McDonald",
-            //     // @ts-ignore
-            //     timestamp: Date.now(),
-            //     company_ids: [],
-            //     birth_date: "",
-            //     email: "Ronald@gmail.com",
-            //     selected_company_id: [],
-            // };
-            // setUser(tempUser);
             setAuthState(AuthState.Authenticated);
-            console.log(user);
-            // setUser(null);
-            // setAuthState(AuthState.Unregistered);
-            // console.log("User not found");
             return;
         }
         setUser(null);
@@ -94,9 +73,8 @@ export default function useAuth() {
     }, [backendService]);
 
     const register = useCallback(async (first_name: string, last_name: string, email: string, date: string) => {
-        const returnValue = await backendService.register(first_name, last_name, email, date);
+        await backendService.register(first_name, last_name, email, date);
         await fetchUserData();
-        console.log("Return value dari register: ", returnValue);
     }, []);
 
     const getPrincipal = useCallback(async () => {
@@ -118,7 +96,7 @@ export default function useAuth() {
                 // "https://identity.ic0.app/",
                 onSuccess: () => fetchUserData(),
             });
-            console.log("Logged in as", authClient.getIdentity());
+            console.log("Login successful: ", authClient.getIdentity());
         } catch (error) {
             console.error("Login failed:", error);
         }

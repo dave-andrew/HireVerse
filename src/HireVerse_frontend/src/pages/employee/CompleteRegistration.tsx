@@ -23,12 +23,10 @@ export default function CompleteRegistration() {
     } = useForm<ICompleteRegisterForm>();
 
     const handleFormSubmit = async (data: ICompleteRegisterForm) => {
-
         const principal = await getPrincipal();
-
         if(principal.toString() === "2vxsx-fae") return;
 
-        await registerNewUser(data.email, data.firstName, data.lastName, data.birthDate);
+        await registerNewUser(data.firstName, data.lastName, data.email, data.birthDate);
     };
 
     return (
