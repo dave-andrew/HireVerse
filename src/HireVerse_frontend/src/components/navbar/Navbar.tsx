@@ -41,9 +41,9 @@ export default function Navbar() {
     return (
         <>
             <div className="fixed z-[100] flex h-16 w-full flex-row place-items-center justify-between bg-white ps-12 shadow-md">
-                <div className="text-blue-primary pt-1 text-center align-middle font-bebas text-5xl">
+                <Link to="/" className="text-blue-primary pt-1 text-center align-middle font-bebas text-5xl">
                     HIREVERSE
-                </div>
+                </Link>
                 <div className="absolute left-1/2 flex h-full w-5/12 min-w-96 translate-x-[-50%] transform flex-row place-items-center justify-center px-8">
                     {menus.map((menu, index) => {
                         return (
