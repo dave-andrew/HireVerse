@@ -22,6 +22,7 @@ export default function CompleteRegistration() {
         formState: { errors },
     } = useForm<ICompleteRegisterForm>();
 
+
     const handleFormSubmit = async (data: ICompleteRegisterForm) => {
         const principal = await getPrincipal();
         if (principal.toString() === "2vxsx-fae") return;

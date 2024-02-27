@@ -82,30 +82,31 @@ const router = createBrowserRouter(
 );
 
 function App() {
-    const {
-        loading,
-        companyService,
-        jobService,
-        backendService,
-        reviewService,
-    } = useService();
+    // const {
+    //     loading,
+    //     companyService,
+    //     jobService,
+    //     backendService,
+    //     reviewService,
+    // } = useService();
+    //
+    // useEffect(() => {
+    //     // companyService.addManager
+    //     // generateData();
+    //     if (loading) return;
+    //     const temp = async () => {
+    //         console.log(await backendService.greet());
+    //         console.log(await companyService.getCompanies());
+    //         // console.log(
+    //         //     await companyService.addManager(
+    //         //         "793038bf-7522-407b-8e2c-d401432d2271",
+    //         //     ),
+    //         // );
+    //     };
+    //
+    //     temp();
+    // }, [backendService, companyService, jobService, reviewService, loading]);
 
-    useEffect(() => {
-        // companyService.addManager
-        // generateData();
-        if (loading) return;
-        const temp = async () => {
-            console.log(await backendService.greet());
-            console.log(await companyService.getCompanies());
-            // console.log(
-            //     await companyService.addManager(
-            //         "793038bf-7522-407b-8e2c-d401432d2271",
-            //     ),
-            // );
-        };
-
-        temp();
-    }, [backendService, companyService, jobService, reviewService, loading]);
     return <RouterProvider router={router} />;
 }
 
