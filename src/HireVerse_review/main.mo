@@ -4,6 +4,7 @@ import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import Time "mo:base/Time";
 import Result "mo:base/Result";
+import Iter "mo:base/Iter";
 import Helper "canister:HireVerse_helper";
 
 actor Review {
@@ -78,6 +79,12 @@ actor Review {
             case (null) {
                 return #err("Review not found");
             };
+        };
+    };
+
+    public shared func removeAllReviews() : async () {
+        for (review in reviews.vals()) {
+            ignore reviews.remove(review.id);
         };
     };
 };

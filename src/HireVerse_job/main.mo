@@ -29,6 +29,7 @@ actor Job {
         company_id : Text;
         reviews : [Text];
         timestamp : Time.Time;
+        status : Text;
     };
 
     type CreateJobInput = {
@@ -91,6 +92,7 @@ actor Job {
             company_id = company_id;
             reviews = [];
             timestamp = Time.now();
+            status = "public";
         };
         jobs.put(job.id, job);
     };
@@ -132,6 +134,7 @@ actor Job {
             company_id = newJob.company_id;
             reviews = [];
             timestamp = Time.now();
+            status = "active";
         };
 
         jobs.put(id, job);
@@ -163,6 +166,7 @@ actor Job {
             company_id = newJob.company_id;
             reviews = [];
             timestamp = Time.now();
+            status = "active";
         };
 
         jobs.put(id, job);
@@ -266,6 +270,7 @@ actor Job {
                     company_id = actualJob.company_id;
                     reviews = Vector.toArray<Text>(jobReviews);
                     timestamp = actualJob.timestamp;
+                    status = actualJob.status;
                 };
                 jobs.put(job_id, updated_job);
                 return #ok();
@@ -545,5 +550,69 @@ actor Job {
                 return #ok(Vector.toArray<Job>(jobPostings));
             };
         };
+    };
+    public shared func deleteAllJobs() : async () { 
+        for (job in jobs.vals()) {
+            ignore jobs.remove(job.id);
+        };
+    };
+
+    public shared (msg) func toggleJobVisibility(job_id : Text) : async Result.Result<(), Text> {
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Unauthorized");
+        };
+
+        let job = await getJob(job_id);
+
+        switch(job){
+            case (#err(errmsg)) {
+                return #err(errmsg);
+            };
+            case (#ok(actualJob)) {
+                let company = await Company.getCompany(actualJob.company_id);
+
+                switch (company) {
+                    case null {
+                        return #err("Company not found");
+                    };
+                    case (?actualCompany) {
+                        let manager_ids : [Principal] = actualCompany.company_manager_ids;
+
+                        if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
+                            return #err("Unauthorized");
+                        };
+                    };
+                };
+
+                var newStatus = "active";
+
+                if (actualJob.status == "active") {
+                    newStatus := "hidden";
+                };
+
+                let updated_job = {
+                    id = actualJob.id;
+                    position = actualJob.position;
+                    location = actualJob.location;
+                    industry = actualJob.industry;
+                    salary_start = actualJob.salary_start;
+                    salary_end = actualJob.salary_end;
+                    short_description = actualJob.short_description;
+                    job_description = actualJob.job_description;
+                    requirements = actualJob.requirements;
+                    company_id = actualJob.company_id;
+                    reviews = actualJob.reviews;
+                    timestamp = actualJob.timestamp;
+                    status = newStatus;
+                };
+                
+                jobs.put(job_id, updated_job);
+                return #ok();
+            };
+        };
+
+        return #ok();
     };
 };

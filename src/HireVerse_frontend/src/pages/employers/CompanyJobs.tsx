@@ -15,6 +15,7 @@ import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/Hi
 import convertNullFormat from "../../utils/convertNullFormat";
 import { isOk } from "../../utils/resultGuarder";
 import handleKeyDown from "../../utils/handleKeyDown";
+import JobItemManagement from "../../components/job/JobItemManagement";
 
 interface IQuerySortForm {
     query: string;
@@ -130,29 +131,15 @@ export default function CompanyJobs() {
                             </div>
                         </div>
                         <div className="grid grid-cols-3 gap-4">
-                            {jobs.map((job, index) => (
-                                <CardLayout
-                                    key={index}
-                                    className="flex flex-col p-4">
-                                    <div className="flex flex-row">
-                                        {job.position}
-                                    </div>
-                                    <div className="flex flex-row">
-                                        {job.short_description}
-                                    </div>
-                                    <div className="flex flex-row">
-                                        {job.location}
-                                    </div>
-                                    <div className="flex flex-row">
-                                        {Number(job.salary_start)} -{" "}
-                                        {Number(job.salary_end)}
-                                    </div>
-                                    <div className="flex flex-row">
-                                        {new Date(
-                                            Number(job.timestamp),
-                                        ).toLocaleDateString()}
-                                    </div>
-                                </CardLayout>
+                            {Array.from({ length: 5 }).map((_, index) => (
+                                <>
+                                    {jobs.map((job, index) => (
+                                        <JobItemManagement
+                                            key={index}
+                                            job={job}
+                                        />
+                                    ))}
+                                </>
                             ))}
                         </div>
                     </div>
