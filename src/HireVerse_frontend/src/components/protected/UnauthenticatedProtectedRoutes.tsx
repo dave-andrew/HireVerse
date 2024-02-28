@@ -7,6 +7,7 @@ import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
 
 export default function UnauthenticatedProtectedRoutes({children}: { children?: React.ReactNode }) {
 
+
     const {authState} = useAuth();
     const navigate = useNavigate();
 
