@@ -38,6 +38,7 @@ export default function ManagerTable() {
             status: "Active",
         },
     ];
+    
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">

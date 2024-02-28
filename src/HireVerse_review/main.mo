@@ -38,7 +38,12 @@ actor Review {
 
     let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
 
-    public func addReview(newReview : CreateReviewInput) : async Result.Result<Text, Text> {
+    public shared (msg) func addReview(newReview : CreateReviewInput) : async Result.Result<Text, Text> {
+
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err("You must be logged in to add a review");
+        };
+
         let id = await Helper.generateUUID();
 
         let review = {
@@ -60,12 +65,39 @@ actor Review {
         #ok(review.id);
     };
 
-    public func updateReview(review : Review) : async Result.Result<Text, Text> {
+    public shared (msg) func updateReview(review : Review) : async Result.Result<Text, Text> {
+
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err("You must be logged in to update a review");
+        };
+
+        if (review.employer_id != msg.caller) {
+            return #err("You are not authorized to update this review");
+        };
+
         reviews.put(review.id, review);
         #ok(review.id);
     };
 
-    public func deleteReview(id : Text) : async Result.Result<?Review, Text> {
+    public shared (msg) func deleteReview(id : Text) : async Result.Result<?Review, Text> {
+
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err("You must be logged in to delete a review");
+        };
+
+        let review : ?Review = reviews.get(id);
+
+        switch (review) {
+            case (?r) {
+                if (r.employer_id != msg.caller) {
+                    return #err("You are not authorized to update this review");
+                };
+            };
+            case (null) {
+                return #err("Review not found");
+            };
+        };
+
         #ok(reviews.remove(id));
     };
 
@@ -82,7 +114,12 @@ actor Review {
         };
     };
 
-    public shared func removeAllReviews() : async () {
+    public shared (msg) func removeAllReviews() : async () {
+        
+        if (Principal.isAnonymous(msg.caller)) {
+            return;
+        };
+        
         for (review in reviews.vals()) {
             ignore reviews.remove(review.id);
         };
