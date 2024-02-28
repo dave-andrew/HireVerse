@@ -1,9 +1,9 @@
 import { ReactElement, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Profile from "./Profile";
-import { FaBinoculars, FaHome } from "react-icons/fa";
-import { IconType } from "react-icons";
-import { BsFillBuildingFill } from "react-icons/bs";
+import {FaHome, FaSuitcase} from "react-icons/fa";
+import {IconType} from "react-icons";
+import {BsFillBuildingFill} from "react-icons/bs";
 
 type Menu = {
     name: string;
@@ -28,7 +28,7 @@ export default function Navbar() {
             },
             {
                 name: "Find Jobs",
-                iconElement: <FaBinoculars />,
+                iconElement: <FaSuitcase />,
                 activeUrl: ["/find-job"],
                 redirectUrl: "/find-job",
                 position: "40%",

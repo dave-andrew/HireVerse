@@ -66,7 +66,7 @@ export default function JobItemManagement({
                                 className="!z-[50]"
                                 itemClassName="!w-44"
                                 button={
-                                    <Menu.Button className="hover:bg-signature-gray flex cursor-pointer flex-row rounded-lg p-2 ">
+                                    <Menu.Button className="relative z-0 hover:bg-signature-gray flex cursor-pointer flex-row rounded-lg p-2 ">
                                         <SlOptions size="1rem" />
                                     </Menu.Button>
                                 }>
@@ -104,13 +104,13 @@ export default function JobItemManagement({
                             </WrappedDropdown>
                         </span>
                     </div>
-                    <div className="flex w-full flex-row justify-between text-lg font-normal">
+                    <div className="flex flex-row w-full justify-between text-lg font-normal">
                         <span>{job.location}</span>
                     </div>
                 </div>
             </div>
             <hr />
-            <div className="flex flex-row pt-5 text-lg font-normal text-gray-700">
+            <div className="flex flex-row pt-5 font-normal text-gray-700 text-lg">
                 {job.short_description}
             </div>
             <div className="flex flex-row">{job.location}</div>
