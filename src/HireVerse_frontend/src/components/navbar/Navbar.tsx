@@ -48,7 +48,7 @@ export default function Navbar() {
                     {menus.map((menu, index) => {
                         return (
                             <Link
-                                className="flex h-full w-full place-items-center justify-center lg:text-base md:text-sm"
+                                className="flex h-full w-full place-items-center justify-center lg:text-base md:text-sm text-xs"
                                 to={menu.redirectUrl || ""}
                                 key={index}>
                                 <div
@@ -56,7 +56,7 @@ export default function Navbar() {
                                     className={`${isActive(menu.activeUrl)
                                             ? "text-blue-primary border-color-blue-primary font-semibold"
                                             : ""
-                                    } text-s mx-8 flex h-full place-items-center justify-center border-b-2 border-transparent transition-colors hover:border-gray-400 xl:text-base `}>
+                                    } text-s mx-2 flex h-full place-items-center justify-center border-b-2 border-transparent transition-colors hover:border-gray-400 xl:text-base `}>
                                     {menu.name}
                                 </div>
                             </Link>
