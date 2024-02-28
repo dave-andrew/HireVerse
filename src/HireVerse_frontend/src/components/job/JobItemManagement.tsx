@@ -45,7 +45,7 @@ export default function JobItemManagement({
             <div className="flex flex-row font-bold text-xl items-center justify-between gap-2 pb-5">
                 <div className="flex flex-col w-full">
                     <div className="flex flex-row w-full justify-between text-2xl font-semibold">
-                        <div className="flex flex-row justify-center items-center gap-2">
+                        <div className="flex flex-row justify-center items-center gap-2 relative">
                             <span className="flex flex-wrap">
                                 {job.position}
                             </span>
@@ -66,7 +66,7 @@ export default function JobItemManagement({
                                 className="!z-[50]"
                                 itemClassName="!w-44"
                                 button={
-                                    <Menu.Button className="flex flex-row cursor-pointer hover:bg-signature-gray p-2 rounded-lg ">
+                                    <Menu.Button className="relative z-0 flex flex-row cursor-pointer hover:bg-signature-gray p-2 rounded-lg ">
                                         <SlOptions size="1rem" />
                                     </Menu.Button>
                                 }>

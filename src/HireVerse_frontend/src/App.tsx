@@ -15,6 +15,7 @@ import UnregisteredProtectedRoutes from "./components/protected/UnregisteredProt
 import UnauthenticatedProtectedRoutes from "./components/protected/UnauthenticatedProtectedRoutes";
 import EmployerProtectedRoutes from "./components/protected/EmployerProtectedRoutes";
 import AuthorizedProtectedRoutes from "./components/protected/AuthorizedProtectedRoutes";
+import CompanyInvitation from "./pages/employers/CompanyInvitation";
 
 const guestRoutes: RouteObject[] = [
     {
@@ -59,6 +60,10 @@ const backRoutes: RouteObject[] = [
         path: "/employer/jobs",
         Component: CompanyJobs,
     },
+    {
+        path: "/employer/invitations",
+        Component: CompanyInvitation,
+    }
 ];
 
 const otherRoutes: RouteObject[] = [

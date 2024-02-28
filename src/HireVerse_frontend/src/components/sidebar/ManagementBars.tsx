@@ -192,11 +192,12 @@ export default function ManagementBars({children}: Props) {
                         {managedCompanies?.length > 0 && (
                             <hr className="my-5"/>
                         )}
-                        <div
+                        <Link
+                            to="/employer/invitations"
                             className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3">
                             <RiMailOpenLine size="1.5rem"/>
                             <span className={`${isHovered ? 'block' : "hidden"}`}>Invite</span>
-                        </div>
+                        </Link>
                     </div>
                 </div>
             </div>
