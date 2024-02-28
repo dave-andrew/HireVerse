@@ -28,6 +28,8 @@ actor Job {
         requirements : Text;
         company_id : Text;
         reviews : [Text];
+        contacts : [Text];
+        employType : Text;
         timestamp : Time.Time;
         status : Text;
     };
@@ -42,6 +44,8 @@ actor Job {
         job_description : Text;
         requirements : Text;
         company_id : Text;
+        contacts : [Text];
+        employType : Text;
     };
 
     type FullJob = {
@@ -54,9 +58,12 @@ actor Job {
         short_description : Text;
         job_description : Text;
         requirements : Text;
-        timestamp : Time.Time;
         company : ?Company.Company;
         reviews : [Text];
+        contacts : [Text];
+        employType : Text;
+        timestamp : Time.Time;
+        status : Text;
     };
 
     type JobFilterInput = {
@@ -94,6 +101,8 @@ actor Job {
             reviews = [];
             timestamp = Time.now();
             status = "public";
+            employType = "Full-time";
+            contacts = [];
         };
         jobs.put(job.id, job);
     };
@@ -136,6 +145,8 @@ actor Job {
             reviews = [];
             timestamp = Time.now();
             status = "active";
+            employType = "Full-time";
+            contacts = [];
         };
 
         jobs.put(id, job);
@@ -168,6 +179,8 @@ actor Job {
             reviews = [];
             timestamp = Time.now();
             status = "active";
+            employType = newJob.employType;
+            contacts = newJob.contacts;
         };
 
         jobs.put(id, job);
@@ -240,6 +253,9 @@ actor Job {
                     timestamp = actualJob.timestamp;
                     company = company;
                     reviews = Vector.toArray<Text>(reviews);
+                    contacts = actualJob.contacts;
+                    employType = actualJob.employType;
+                    status = actualJob.status;
                 };
                 return #ok(fullJob);
             };
@@ -272,6 +288,9 @@ actor Job {
                     reviews = Vector.toArray<Text>(jobReviews);
                     timestamp = actualJob.timestamp;
                     status = actualJob.status;
+                    employType = actualJob.employType;
+                    contacts = actualJob.contacts;
+
                 };
                 jobs.put(job_id, updated_job);
                 return #ok();
@@ -622,6 +641,8 @@ actor Job {
                     reviews = actualJob.reviews;
                     timestamp = actualJob.timestamp;
                     status = newStatus;
+                    employType = actualJob.employType;
+                    contacts = actualJob.contacts;
                 };
                 
                 jobs.put(job_id, updated_job);

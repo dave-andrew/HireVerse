@@ -1,8 +1,8 @@
 import CardLayout from "../../layouts/CardLayout";
-import { HireVerse_job } from "../../../../declarations/HireVerse_job";
 import { FullJob } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 import { useEffect, useState } from "react";
 import { isOk } from "../../utils/resultGuarder";
+import useService from "../../hooks/useService";
 
 interface Props {
     jobId: string;
@@ -10,14 +10,14 @@ interface Props {
 
 export default function JobDetail({ jobId }: Props) {
     const [fullJob, setFullJob] = useState<FullJob | null>(null);
-    const jobService = HireVerse_job;
+    const { getJobService } = useService();
 
     const getFullJob = async () => {
         if (jobId.length === 0) {
             return;
         }
 
-        const response = await jobService.getFullJob(jobId);
+        const response = await getJobService().then((s) => s.getFullJob(jobId));
 
         if (isOk(response)) {
             setFullJob(response.ok);

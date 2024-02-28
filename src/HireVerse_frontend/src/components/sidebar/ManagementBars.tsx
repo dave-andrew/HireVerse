@@ -54,7 +54,8 @@ interface IDropdownForm {
 }
 
 export default function ManagementBars({ children }: Props) {
-    const { companyService } = useService();
+    const [managedCompanies, setManagedCompanies] = useState<Company[]>([]);
+    const [menus, setMenus] = useState<Menu[]>([]);
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
     const { control, setValue } = useForm<IDropdownForm>({
@@ -64,15 +65,21 @@ export default function ManagementBars({ children }: Props) {
             img: "",
         },
     });
-    const [managedCompanies, setManagedCompanies] = useState<Company[]>([]);
-    const [menus, setMenus] = useState<Menu[]>([]);
+    const { getCompanyService } = useService();
     const location = useLocation();
 
     const getCompanies = async () => {
-        const response = await companyService.getManagedCompanies();
+        console.log("udah slesai1");
+        const response = await getCompanyService().then((s) => {
+            console.log("udah slesai1.5");
+            return s.getManagedCompanies();
+        });
+
+        console.log("udah slesai2");
 
         if (isOk(response)) {
             const companies = response.ok;
+            console.log(companies);
             setManagedCompanies(companies);
 
             if (companies.length > 0) {

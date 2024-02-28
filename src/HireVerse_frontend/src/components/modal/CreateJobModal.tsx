@@ -53,6 +53,11 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
         name: "applyContacts",
         control,
     });
+
+    const handleSubmit = () => {
+        //
+    };
+
     return (
         <WrappedModal
             panelClassName="!max-w-none !rounded-xl !w-[50vw] !p-10"

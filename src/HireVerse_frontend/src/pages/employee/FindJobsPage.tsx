@@ -24,7 +24,7 @@ interface IQueryFilterSortForm {
 }
 
 export default function FindJobs() {
-    const { jobService, companyService } = useService();
+    const { getJobService, getCompanyService } = useService();
     const [filter, setFilter] = useState<IFilterForm>({
         salaryStart: 0,
         salaryEnd: 0,
@@ -68,10 +68,8 @@ export default function FindJobs() {
     const getJobs = async (initial?: boolean) => {
         const filter = getConvertedFilters();
 
-        const response = await jobService.getJobs(
-            BigInt(0),
-            BigInt(10),
-            filter,
+        const response = await getJobService().then((s) =>
+            s.getJobs(BigInt(0), BigInt(10), filter),
         );
 
         let companyIds: string[] = [];
@@ -84,8 +82,10 @@ export default function FindJobs() {
                 setShownJobId(response.ok[0].id);
             }
         }
-
-        const responseName = await companyService.getCompanyNames(companyIds);
+        
+        const responseName = await getCompanyService().then((s) =>
+            s.getCompanyNames(companyIds),
+        );
 
         if (isOk(responseName)) {
             setCompanyNames(responseName.ok);
@@ -99,10 +99,8 @@ export default function FindJobs() {
     }, [filter]);
 
     useEffect(() => {
-        if (jobService && companyService) {
-            getJobs(true);
-        }
-    }, [jobService, companyService]);
+        getJobs(true);
+    }, []);
 
     return (
         <FrontPageLayout>

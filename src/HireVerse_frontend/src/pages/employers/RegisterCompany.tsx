@@ -7,8 +7,6 @@ import { CustomCheckBox } from "../../components/form/CustomCheckBox";
 import { useForm } from "react-hook-form";
 import useService from "../../hooks/useService";
 import useImageBlob from "../../hooks/useImageBlob";
-import { CreateCompanyInput } from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
-
 
 interface IRegisterCompanyForm {
     companyName: string;
@@ -21,15 +19,14 @@ interface IRegisterCompanyForm {
 }
 
 export default function RegisterCompany() {
-
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<IRegisterCompanyForm>();
 
-    const { companyService } = useService();
-    const { convertImageToBlob } = useImageBlob()
+    const { getCompanyService } = useService();
+    const { convertImageToBlob } = useImageBlob();
 
     const handleFormSubmit = async (data: IRegisterCompanyForm) => {
         console.log(data);
@@ -48,8 +45,7 @@ export default function RegisterCompany() {
 
     return (
         <FrontPageLayout>
-            <div
-                className="flex h-[calc(100vh-4rem)] flex-col pb-6 2xl:px-96 xl:px-48 lg:px-24 md:px-12 gap-8 justify-center">
+            <div className="flex h-[calc(100vh-4rem)] flex-col pb-6 2xl:px-96 xl:px-48 lg:px-24 md:px-12 gap-8 justify-center">
                 <div className="flex flex-row items-center justify-center">
                     <h1 className="main-title">Register Company</h1>
                 </div>
@@ -147,10 +143,13 @@ export default function RegisterCompany() {
                             </div>
                             <div className="flex flex-row">
                                 <div className={`flex flex-col gap-[5px]`}>
-                                    <div className="text-xs font-bold">Company Logo</div>
+                                    <div className="text-xs font-bold">
+                                        Company Logo
+                                    </div>
                                     <input
                                         {...register("companyLogo", {
-                                            required: "Company Logo is required",
+                                            required:
+                                                "Company Logo is required",
                                         })}
                                         type={"file"}
                                         accept="image/png, image/gif, image/jpeg, image/svg+xml, image/svg"
@@ -159,7 +158,9 @@ export default function RegisterCompany() {
                                     />
                                     <div
                                         className={`text-xs hidden ${
-                                            errors.companyLogo ? "text-red-500 !block" : "h-5"
+                                            errors.companyLogo
+                                                ? "text-red-500 !block"
+                                                : "h-5"
                                         }`}>
                                         {errors.companyLogo?.message}
                                     </div>
@@ -171,21 +172,26 @@ export default function RegisterCompany() {
                                     type="text"
                                     className="w-full"
                                     useFormRef={register("linkedInProfile", {
-                                        required: "LinkedIn Profile Link is required",
+                                        required:
+                                            "LinkedIn Profile Link is required",
                                     })}
                                     error={errors.linkedInProfile}
                                 />
                             </div>
                             <div className="flex flex-row">
-                                <CustomCheckBox className="w-full" useFormRef={register("isAgree", {
-                                    required: "You must agree to the terms and conditions",
-                                })}
+                                <CustomCheckBox
+                                    className="w-full"
+                                    useFormRef={register("isAgree", {
+                                        required:
+                                            "You must agree to the terms and conditions",
+                                    })}
                                     error={errors.isAgree}
                                 />
                             </div>
                             <div className="flex flex-row items-center justify-center">
-                                <button className="main-button"
-                                        onClick={handleSubmit(handleFormSubmit)}>
+                                <button
+                                    className="main-button"
+                                    onClick={handleSubmit(handleFormSubmit)}>
                                     Register Company
                                 </button>
                             </div>

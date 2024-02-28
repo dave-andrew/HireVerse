@@ -14,7 +14,7 @@ export enum AuthState {
 }
 
 export default function useAuth() {
-    const { backendService } = useService();
+    const { getBackendService } = useService();
     const [authState, setAuthState] = useLocalStorage<AuthState>(
         "authState",
         AuthState.Loading,
@@ -30,7 +30,7 @@ export default function useAuth() {
             (await authClient.isAuthenticated()) &&
             identity.getPrincipal().toText() !== "2vxsx-fae"
         ) {
-            if (!backendService) return;
+            if (!getBackendService) return;
 
             setAuthState(AuthState.Loading);
 
@@ -38,18 +38,21 @@ export default function useAuth() {
             const agent = new HttpAgent({ identity: identity }) as Agent;
             await agent.fetchRootKey();
 
-            const userData = await backendService.getUser(
-                identity.getPrincipal(),
+            const userData = await getBackendService().then((s) =>
+                s.getUser(identity.getPrincipal()),
             );
 
             console.log("Fetching Data for");
-            console.log("Greet: ", await backendService.greet());
+            console.log(
+                "Greet: ",
+                await getBackendService().then((s) => s.greet()),
+            );
             console.log("Identity Principal: ", identity.getPrincipal());
             console.log("User Data: ", userData);
 
             console.log(
                 "All registered users: ",
-                await backendService.getAllUsers(),
+                await getBackendService().then((s) => s.getAllUsers()),
             );
             if (userData.length > 0) {
                 setUser(userData[0]!);
@@ -71,7 +74,7 @@ export default function useAuth() {
         setUser(null);
         setAuthState(AuthState.Unauthenticated);
         console.log("User not authenticated");
-    }, [backendService]);
+    }, [getBackendService]);
 
     const register = useCallback(
         async (
@@ -80,11 +83,8 @@ export default function useAuth() {
             email: string,
             date: string,
         ) => {
-            const returnValue = await backendService.register(
-                first_name,
-                last_name,
-                email,
-                date,
+            const returnValue = await getBackendService().then((s) =>
+                s.register(first_name, last_name, email, date),
             );
             await fetchUserData();
             console.log("Return value dari register: ", returnValue);

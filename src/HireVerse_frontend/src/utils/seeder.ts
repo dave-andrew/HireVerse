@@ -81,6 +81,9 @@ const jobSeeder = async (
             requirements: "BSc",
             salary_start: BigInt(50000),
             short_description: "Software Developer",
+            contacts: ["sen: 3"],
+            employType:
+                CONSTANTS.JOB.EXPERIENCES[Math.floor(Math.random() * 5)],
         },
         {
             location: "New York",
@@ -93,6 +96,9 @@ const jobSeeder = async (
             requirements: "BSc",
             salary_start: BigInt(50000),
             short_description: "Math Teacher",
+            contacts: ["sen: 3"],
+            employType:
+                CONSTANTS.JOB.EXPERIENCES[Math.floor(Math.random() * 5)],
         }, //generate random jobs not software developer only
         // dont generate software developers
         {
@@ -106,6 +112,9 @@ const jobSeeder = async (
             requirements: "BSc",
             salary_start: BigInt(50000),
             short_description: "Dep's Assistant",
+            contacts: ["sen: 3"],
+            employType:
+                CONSTANTS.JOB.EXPERIENCES[Math.floor(Math.random() * 5)],
         },
         {
             location: "San Francisco",
@@ -118,6 +127,9 @@ const jobSeeder = async (
             requirements: "BSc in Computer Science or related field",
             salary_start: BigInt(80000),
             short_description: "Frontend Developer",
+            contacts: ["sen: 3"],
+            employType:
+                CONSTANTS.JOB.EXPERIENCES[Math.floor(Math.random() * 5)],
         },
         {
             location: "London",
@@ -130,6 +142,9 @@ const jobSeeder = async (
             requirements: "BSc in Finance or related field",
             salary_start: BigInt(60000),
             short_description: "Financial Analyst",
+            contacts: ["sen: 3"],
+            employType:
+                CONSTANTS.JOB.EXPERIENCES[Math.floor(Math.random() * 5)],
         },
         {
             location: "Tokyo",
@@ -142,6 +157,9 @@ const jobSeeder = async (
             requirements: "BSc in Data Science or related field",
             salary_start: BigInt(100000),
             short_description: "Data Scientist",
+            contacts: ["sen: 3"],
+            employType:
+                CONSTANTS.JOB.EXPERIENCES[Math.floor(Math.random() * 5)],
         },
         {
             location: "Berlin",
@@ -154,6 +172,9 @@ const jobSeeder = async (
             requirements: "BSc in Computer Science or related field",
             salary_start: BigInt(70000),
             short_description: "Software Engineer",
+            contacts: ["sen: 3"],
+            employType:
+                CONSTANTS.JOB.EXPERIENCES[Math.floor(Math.random() * 5)],
         },
         {
             location: "Paris",
@@ -166,6 +187,9 @@ const jobSeeder = async (
             requirements: "Degree in Fashion Design or related field",
             salary_start: BigInt(60000),
             short_description: "Fashion Designer",
+            contacts: ["sen: 3"],
+            employType:
+                CONSTANTS.JOB.EXPERIENCES[Math.floor(Math.random() * 5)],
         },
         {
             location: "Sydney",
@@ -178,6 +202,9 @@ const jobSeeder = async (
             requirements: "BSc in Hospitality Management or related field",
             salary_start: BigInt(80000),
             short_description: "Hotel Manager",
+            contacts: ["sen: 3"],
+            employType:
+                CONSTANTS.JOB.EXPERIENCES[Math.floor(Math.random() * 5)],
         },
     ];
 
@@ -195,34 +222,27 @@ const jobSeeder = async (
 };
 
 export default async function seeder({
-    companyService,
-    jobService,
-    reviewService,
-    backendService,
-    loading,
+    getCompanyService,
+    getJobService,
+    getReviewService,
+    getBackendService,
 }: ServiceContextType) {
     // if (loading) {
     //     console.log("Loading");
     //     return;
     // }
-
-    if (!(companyService && jobService && reviewService && backendService)) {
-        console.log("Service not available");
-        return;
-    }
-
-    const greet = await backendService.greet();
+    const greet = await getBackendService().then((s) => s.greet());
 
     if (greet.includes(CONSTANTS.PRINCIPAL.ANONYMOUS)) {
         console.log("Not authorized");
         return;
     }
 
-    const companyId = await companySeeder(companyService);
+    const companyId = await getCompanyService().then((s) => companySeeder(s));
 
     if (!companyId) {
         return;
     }
 
-    await jobSeeder(jobService, companyId);
+    await getJobService().then((s) => jobSeeder(s, companyId));
 }

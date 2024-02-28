@@ -21,10 +21,10 @@ export default function JobItemManagement({
     setConfirmationState,
     onClick,
 }: Props) {
-    const { jobService } = useService();
+    const { getJobService } = useService();
 
     const toggleJobVisibility = async () => {
-        await jobService.toggleJobVisibility(job.id);
+        await getJobService().then((s) => s.toggleJobVisibility(job.id));
         setJobs((prev) =>
             prev.map((j) => {
                 if (j.id === job.id) {
