@@ -38,7 +38,7 @@ export default function Landing() {
                     </div>
                     {/*{user ? <p>Logged in as: {user.email}</p> : <p>Not logged in</p>}*/}
                     {authState === AuthState.Unauthenticated &&
-                        <button className="bg-white py-2 px-6 w-fit rounded-sm" onClick={() => toast.warn("Tes", defaultToastOptions)}>
+                        <button className="bg-white py-2 px-6 w-fit rounded-sm" onClick={() => clickHandler()}>
                             Start Here
                         </button>
                     }

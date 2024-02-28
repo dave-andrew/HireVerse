@@ -14,11 +14,15 @@ export default function UnregisteredProtectedRoutes({ children }: { children?: R
         if (authState === AuthState.Unauthenticated) {
             // console.log("Unauthenticated");
             toast.warn("You must be logged in to use this feature", defaultToastOptions);
-            navigate("/");
+            setTimeout(() => {
+                navigate("/");
+            }, defaultToastOptions.autoClose || 3000);
         } else if (authState === AuthState.Authenticated) {
             // console.log("Authenticated");
             toast.warn("You are already registered as a user", defaultToastOptions);
-            navigate("/find-job");
+            setTimeout(() => {
+                navigate("/find-job");
+            }, defaultToastOptions.autoClose || 3000);
         }
     }, [authState]);
 

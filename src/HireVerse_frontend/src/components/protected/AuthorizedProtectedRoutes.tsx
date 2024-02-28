@@ -15,11 +15,15 @@ export default function AuthorizedProtectedRoutes({children}: { children?: React
         if (authState === AuthState.Unauthenticated) {
             // console.log("Unauthenticated");
             toast.warn("You must be logged in to use this feature", defaultToastOptions);
-            navigate("/");
+            setTimeout(() => {
+                navigate("/");
+            }, defaultToastOptions.autoClose || 3000);
         } else if (authState === AuthState.Unregistered) {
             // console.log("Unregistered");
             toast("You must complete your registration first");
-            navigate("/complete-registration");
+            setTimeout(() => {
+                navigate("/complete-registration");
+            }, defaultToastOptions.autoClose || 3000);
         }
         console.log("Protection for: ", authState);
     }, [authState]);

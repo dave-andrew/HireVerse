@@ -17,7 +17,9 @@ export default function UnauthenticatedProtectedRoutes({children}: { children?: 
         if (authState === AuthState.Unregistered) {
             // console.log("Unregistered");
             toast.warn("You must complete your registration first", defaultToastOptions);
-            navigate("/complete-registration");
+            setTimeout(() => {
+                navigate("/complete-registration");
+            }, defaultToastOptions.autoClose || 3000);
         }
     }, [authState]);
 
