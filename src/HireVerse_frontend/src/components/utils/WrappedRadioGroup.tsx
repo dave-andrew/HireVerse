@@ -1,6 +1,6 @@
 import { RadioGroup } from "@headlessui/react";
 import { FaCheck } from "react-icons/fa";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, RegisterOptions } from "react-hook-form";
 
 interface Props {
     values: string[];
@@ -10,6 +10,7 @@ interface Props {
     className?: string;
     selectionClassName?: string;
     control?: Control<any>;
+    rules?: RegisterOptions<any, any>;
 }
 
 export default function WrappedRadioGroup({
@@ -20,11 +21,13 @@ export default function WrappedRadioGroup({
     selectionClassName,
     name,
     control,
+    rules,
 }: Props) {
     return (
         <Controller
             name={name}
             control={control}
+            rules={rules}
             render={({ field }) => (
                 <RadioGroup
                     className={`${className}`}

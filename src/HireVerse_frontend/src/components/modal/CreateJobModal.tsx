@@ -8,10 +8,18 @@ import { CONSTANTS } from "../../utils/constants";
 import DynamicInputBox from "../form/DynamicInputBox";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { MdAdd } from "react-icons/md";
+import useToaster from "../../hooks/useToaster";
+import {
+    Company,
+    CreateJobInput,
+} from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import useService from "../../hooks/useService";
 
 interface Props {
     openState: boolean;
     setOpenState: Dispatch<SetStateAction<boolean>>;
+    onJobCreated?: () => void;
 }
 
 interface ICreateJobForm {
@@ -32,12 +40,20 @@ interface ICreateJobForm {
     terms: boolean;
 }
 
-export default function CreateJobModal({ openState, setOpenState }: Props) {
+export default function CreateJobModal({
+    openState,
+    setOpenState,
+    onJobCreated,
+}: Props) {
+    const [selectedCompany, setSelectedCompany] =
+        useLocalStorage<Company | null>("selectedCompany", null);
     const {
         control,
         register,
-        getValues,
-        formState: { errors },
+        handleSubmit,
+        setError,
+        reset,
+        formState: { errors, isValid },
     } = useForm<ICreateJobForm, string>({
         defaultValues: {
             position: "",
@@ -58,9 +74,92 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
         name: "applyContacts",
         control,
     });
+    const { getJobService } = useService();
+    const { errorToast } = useToaster();
 
-    const handleSubmit = () => {
-        //
+    const checkError = () => {
+        for (const error in errors) {
+            const errorMessage = errors[error as keyof ICreateJobForm]?.message;
+
+            if (errorMessage) {
+                errorToast({
+                    message: errorMessage ?? "",
+                });
+                break;
+            }
+        }
+    };
+
+    const createJob = async (data: ICreateJobForm) => {
+        if (data.salaryStart > data.salaryEnd) {
+            setError("salaryStart", {
+                type: "manual",
+                message: "Salary start cannot be higher than salary end",
+            });
+            errorToast({
+                message: "Salary start cannot be higher than salary end",
+            });
+            return;
+        }
+        if (data.employmentType === "") {
+            setError("employmentType", {
+                type: "manual",
+                message: "Please select an employment type",
+            });
+            errorToast({
+                message: "Please select an employment type",
+            });
+            return;
+        }
+        if (data.industry === "Please Select an Industry") {
+            setError("industry", {
+                type: "manual",
+                message: "Please select an industry",
+            });
+            errorToast({
+                message: "Please select an industry",
+            });
+            return;
+        }
+        if (data.applyContacts.length === 0) {
+            errorToast({
+                message: "Please input at least one contact",
+            });
+            return;
+        }
+
+        if (!selectedCompany) {
+            errorToast({
+                message: "Error: No company selected",
+            });
+            return;
+        }
+
+        const newJob: CreateJobInput = {
+            industry: data.industry,
+            position: data.position,
+            employType: data.employmentType,
+            short_description: data.shortDescription,
+            requirements: data.requirements,
+            job_description: data.jobDescription,
+            location: data.location,
+            contacts: data.applyContacts.map((contact) => contact.contact),
+            company_id: selectedCompany.id,
+            salary_end: BigInt(data.salaryEnd),
+            salary_start: BigInt(data.salaryStart),
+        };
+
+        await getJobService().then((s) => s.createJob(newJob));
+        if (onJobCreated) {
+            onJobCreated();
+        }
+        reset();
+        setOpenState(false);
+    };
+
+    const handleSubmitForm = () => {
+        checkError();
+        handleSubmit(createJob)();
     };
 
     return (
@@ -90,7 +189,9 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="h-full rounded-md">
                         <input
-                            {...register("position")}
+                            {...register("position", {
+                                required: "Position name is required",
+                            })}
                             type="text"
                             placeholder="e.g. Software Engineer"
                             className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
@@ -111,6 +212,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                             className="grid w-full grid-cols-2 gap-4 !p-0"
                             selectionClassName="!h-full !ps-3 transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0"
                             control={control}
+                            rules={{ required: "Employment type is required" }}
                             name="employmentType"
                         />
                     </div>
@@ -126,14 +228,20 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="flex h-full flex-row items-center gap-2 rounded-md">
                         <input
-                            {...register("salaryStart")}
+                            {...register("salaryStart", {
+                                required: "Salary start is required",
+                                min: 0,
+                            })}
                             type="number"
                             placeholder="e.g. 10.000"
                             className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                         -
                         <input
-                            {...register("salaryEnd")}
+                            {...register("salaryEnd", {
+                                required: "Salary end is required",
+                                min: 0,
+                            })}
                             type="number"
                             placeholder="e.g. 50.000"
                             className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
@@ -168,7 +276,9 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="h-full rounded-md">
                         <textarea
-                            {...register("requirements")}
+                            {...register("requirements", {
+                                required: "Requirements are required",
+                            })}
                             placeholder="e.g. 5 years of experience in software engineering"
                             className="focus:ring-signature-primary h-full min-h-32 w-full rounded-md border-[1px] border-gray-200 p-2 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
@@ -184,7 +294,9 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="h-full rounded-md">
                         <textarea
-                            {...register("shortDescription")}
+                            {...register("shortDescription", {
+                                required: "Short description is required",
+                            })}
                             placeholder="e.g. We are looking for a software engineer to join our team."
                             className="focus:ring-signature-primary h-full min-h-32 w-full rounded-md border-[1px] border-gray-200 p-2 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
@@ -200,7 +312,9 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="h-full rounded-md">
                         <textarea
-                            {...register("jobDescription")}
+                            {...register("jobDescription", {
+                                required: "Job description is required",
+                            })}
                             placeholder="e.g. You will be responsible for developing software applications."
                             className="focus:ring-signature-primary h-full min-h-32 w-full rounded-md border-[1px] border-gray-200 p-2 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
@@ -216,7 +330,9 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="flex h-full flex-row items-center gap-2 rounded-md">
                         <input
-                            {...register("location")}
+                            {...register("location", {
+                                required: "Location is required",
+                            })}
                             type="text"
                             placeholder="e.g. New York, USA"
                             className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
@@ -245,7 +361,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                                         className="hover:input-signature-gray flex flex-row items-center justify-end gap-2 rounded-lg p-2 font-bold"
                                         onClick={() =>
                                             append({
-                                                contact: "aa",
+                                                contact: "",
                                                 placeholder:
                                                     "e.g. shane: sen@gmail.com",
                                             })
@@ -267,7 +383,9 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
 
             <div className="flex w-full items-center justify-center gap-2 pb-10 pt-20">
                 <input
-                    {...register("terms")}
+                    {...register("terms", {
+                        required: "You must accept the terms and requirements",
+                    })}
                     type="checkbox"
                     className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                 />
@@ -276,7 +394,9 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 </label>
             </div>
             <div className="flex w-full items-center justify-center gap-2">
-                <button className=" border-signature-yellow text-signature-yellow w-fit rounded-md border-2 px-12 py-3 font-bold transition-colors hover:bg-yellow-400 hover:text-black">
+                <button
+                    onClick={handleSubmitForm}
+                    className=" border-signature-yellow text-signature-yellow w-fit rounded-md border-2 px-12 py-3 font-bold transition-colors hover:bg-yellow-400 hover:text-black">
                     Post Job
                 </button>
             </div>

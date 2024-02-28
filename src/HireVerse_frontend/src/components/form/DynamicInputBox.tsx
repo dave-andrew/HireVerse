@@ -29,8 +29,8 @@ export default function DynamicInputBox({
             {fields.map((field, index) => (
                 <div className={className}>
                     <input
-                        key={index}
-                        {...register(`dynamicInput.${index}`)}
+                        key={field.id}
+                        {...register(`applyContacts.${index}.contact`)}
                         placeholder={field.placeholder}
                         className={inputClassName}
                     />

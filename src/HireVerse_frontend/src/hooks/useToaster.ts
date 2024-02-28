@@ -26,7 +26,7 @@ export default function useToaster() {
             onCloseActions = () => {},
             onOpenActions = () => {},
         }: IToast) => {
-            onOpenActions;
+            onOpenActions();
             toast.error(message, toastOptions);
 
             if (toastOptions.autoClose) {
@@ -43,6 +43,21 @@ export default function useToaster() {
         }: IToast) => {
             onOpenActions();
             toast.warn(message, toastOptions);
+
+            if (toastOptions.autoClose) {
+                setTimeout(() => {
+                    onCloseActions();
+                }, toastOptions.autoClose);
+            }
+        },
+        successToast: ({
+            message = "",
+            toastOptions = defaultToastOptions,
+            onCloseActions = () => {},
+            onOpenActions = () => {},
+        }: IToast) => {
+            onOpenActions();
+            toast.success(message, toastOptions);
 
             if (toastOptions.autoClose) {
                 setTimeout(() => {

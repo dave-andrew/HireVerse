@@ -17,6 +17,7 @@ import handleKeyDown from "../../utils/handleKeyDown";
 import JobItemManagement from "../../components/job/JobItemManagement";
 import WrappedModal from "../../components/utils/WrappedModal";
 import CreateJobModal from "../../components/modal/CreateJobModal";
+import useToaster from "../../hooks/useToaster";
 
 interface IQuerySortForm {
     query: string;
@@ -32,6 +33,7 @@ export default function CompanyJobs() {
     const [isModalShown, setIsModalShown] = useState(false);
     const [confirmationModal, setConfirmationModal] = useState(false);
     const { getJobService } = useService();
+    const { successToast } = useToaster();
     const { register, control, getValues } = useForm<IQuerySortForm>({
         defaultValues: {
             query: "",
@@ -92,6 +94,13 @@ export default function CompanyJobs() {
         }
         setSelectedJob(null);
         setConfirmationModal(false);
+    };
+
+    const onJobCreated = () => {
+        successToast({
+            message: "Job created successfully",
+        });
+        getJobs();
     };
 
     useEffect(() => {
@@ -218,9 +227,11 @@ export default function CompanyJobs() {
                 {/*    handleClose={toggleModal}*/}
                 {/*    show={isModalShown}*/}
                 {/*    modalTitle="Post Job Hiring"></Modal>*/}
+                {/*TODO CLOSE ANIMATION*/}
                 <CreateJobModal
                     openState={isModalShown}
                     setOpenState={setIsModalShown}
+                    onJobCreated={onJobCreated}
                 />
             </ManagementPageLayout>
         </>
