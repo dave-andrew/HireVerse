@@ -1,6 +1,6 @@
 // For pages that are only accessible to unauthenticated users -> Login page
 import useAuth, { AuthState } from "../../hooks/useAuth";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
 import { toast } from "react-toastify";

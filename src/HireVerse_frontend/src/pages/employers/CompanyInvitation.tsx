@@ -2,10 +2,6 @@ import ManagementPageLayout from "../../layouts/ManagementPageLayout";
 import CardLayout from "../../layouts/CardLayout";
 import {IoAdd} from "react-icons/io5";
 import {IoIosSearch} from "react-icons/io";
-import handleKeyDown from "../../utils/handleKeyDown";
-import TextDropdown from "../../components/form/TextDropdown";
-import {CONSTANTS} from "../../utils/constants";
-import JobItemManagement from "../../components/job/JobItemManagement";
 
 
 export default function CompanyInvitation() {

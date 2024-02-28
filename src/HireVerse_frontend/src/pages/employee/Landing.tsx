@@ -3,8 +3,6 @@ import useAuth, { AuthState } from "../../hooks/useAuth";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import WorldMap from "../../components/WorldMap";
-import { toast } from "react-toastify";
-import { defaultToastOptions } from "../../layouts/ManagementPageLayout";
 
 export default function Landing() {
     const { user, authState, login, logout } = useAuth();

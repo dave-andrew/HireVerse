@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import useAuth, { AuthState } from "../../hooks/useAuth";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
 import { toast } from "react-toastify";
 import { defaultToastOptions } from "../../layouts/ManagementPageLayout";

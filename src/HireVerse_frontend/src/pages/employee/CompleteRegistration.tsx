@@ -4,7 +4,6 @@ import CardLayout from "../../layouts/CardLayout";
 import { BsPersonVcard } from "react-icons/bs";
 import { MdOutlineDateRange, MdOutlineEmail } from "react-icons/md";
 import useAuth from "../../hooks/useAuth";
-import { User } from "../../../../../.dfx/local/canisters/HireVerse_backend/service.did";
 
 interface ICompleteRegisterForm {
     firstName: string;
