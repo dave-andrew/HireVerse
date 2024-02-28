@@ -92,10 +92,6 @@ export default function CompanyJobs() {
 
     useEffect(() => {
         getJobs();
-    }, []);
-
-    useEffect(() => {
-        getJobs();
     }, [selectedCompany]);
 
     return (

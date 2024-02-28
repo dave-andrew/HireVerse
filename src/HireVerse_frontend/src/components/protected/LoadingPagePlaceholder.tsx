@@ -1,6 +1,3 @@
-import {Link} from "react-router-dom";
-import Profile from "../navbar/Profile";
-
 
 export default function LoadingPagePlaceholder() {
     return (
@@ -35,5 +32,5 @@ export default function LoadingPagePlaceholder() {
             <div className={`animate-pulse w-screen h-screen bg-gray-800`}>
             </div>
         </div>
-    )
+    );
 }

@@ -11,9 +11,10 @@ import {
 import { useForm } from "react-hook-form";
 import useService from "../../hooks/useService";
 import { isOk } from "../../utils/resultGuarder";
-import ImageLabeledDropdown from "../form/ImageLabeledDropdown";
+import ImageLabeledDropdown, {DropdownItems} from "../form/ImageLabeledDropdown";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import useImageBlob from "../../hooks/useImageBlob";
 
 type Menu = {
     name: string;
@@ -67,6 +68,7 @@ export default function ManagementBars({ children }: Props) {
     const [managedCompanies, setManagedCompanies] = useState<Company[]>([]);
     const [menus, setMenus] = useState<Menu[]>([]);
     const location = useLocation();
+    const {convertBlobToImage} = useImageBlob()
 
     const getCompanies = async () => {
         const response = await companyService.getManagedCompanies();
@@ -98,12 +100,12 @@ export default function ManagementBars({ children }: Props) {
         setSelectedCompany(null);
     };
 
-    const getDropdownItems = () => {
-        return managedCompanies.map((company) => ({
+    const getDropdownItems = async () => {
+        return await Promise.all(managedCompanies.map(async (company) => ({
             label: company.name,
             value: company.name,
-            img: "a",
-        }));
+            img: convertBlobToImage(company.image),
+        })));
     };
 
     const changeCompany = (companyLabel: string) => {
@@ -118,6 +120,17 @@ export default function ManagementBars({ children }: Props) {
         setMenus(defaultMenu);
     }, []);
 
+    const [dropdownItems, setDropdownItems] = useState<DropdownItems[]>([])
+
+    useEffect(()=>{
+        const fetchDropdownItems = async () => {
+            const items: DropdownItems[] = await getDropdownItems()
+            setDropdownItems(items)
+        }
+
+        fetchDropdownItems()
+    }, [managedCompanies])
+
     const isActive = (menu: string[]) => menu.includes(location.pathname);
 
     return (
@@ -126,7 +139,7 @@ export default function ManagementBars({ children }: Props) {
                 <div className="flex h-full flex-row place-items-center pl-64">
                     <ImageLabeledDropdown
                         name="label"
-                        states={getDropdownItems()}
+                        states={dropdownItems}
                         control={control}
                         className="w-52"
                         onChange={changeCompany}
