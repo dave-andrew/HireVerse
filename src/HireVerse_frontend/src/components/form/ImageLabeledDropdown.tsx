@@ -40,10 +40,10 @@ export default function ImageLabeledDropdown({
                                 onChange?.(e);
                             }}>
                             <div className="relative m-2">
-                                <Listbox.Button className="hover:bg-signature-hover-gray relative flex w-full cursor-default flex-row items-center rounded-lg bg-white py-2 pl-3 pr-10 transition-colors ">
+                                <Listbox.Button className="hover:bg-signature-hover-gray relative flex w-full cursor-default flex-row items-center gap-2 rounded-lg bg-white py-2 pl-3 pr-10 transition-colors ">
                                     <span className="block truncate">
                                         <img
-                                            className={`mr-2 h-8 w-8 rounded-full ${
+                                            className={`mr-2 h-8 w-8 rounded-full object-cover ${
                                                 !states?.filter(
                                                     (s) =>
                                                         s.label === field.value,

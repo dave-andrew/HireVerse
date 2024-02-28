@@ -6,9 +6,9 @@ import WrappedDisclosure from "../utils/WrappedDisclosure";
 import WrappedRadioGroup from "../utils/WrappedRadioGroup";
 import { IoMdClose } from "react-icons/io";
 import { useForm } from "react-hook-form";
-import { HireVerse_job } from "../../../../declarations/HireVerse_job";
 import { CONSTANTS } from "../../utils/constants";
 import { isOk } from "../../utils/resultGuarder";
+import useService from "../../hooks/useService";
 
 export interface IFilterForm {
     salaryStart: number;
@@ -22,10 +22,9 @@ interface Props {
     onApplyFilter: (data: IFilterForm) => void;
 }
 
-const jobService = HireVerse_job;
-
 export default function JobFilter({ onApplyFilter }: Props) {
     const [industries, setIndustries] = useState<string[]>([]);
+    const { getJobService } = useService();
     const { register, control, handleSubmit } = useForm<IFilterForm>({
         defaultValues: {
             salaryStart: 0,
@@ -37,10 +36,11 @@ export default function JobFilter({ onApplyFilter }: Props) {
     });
 
     const getIndustries = async () => {
-        const industries = await jobService.getAllIndustry();
+        const industries = await getJobService().then((s) =>
+            s.getAllIndustry(),
+        );
 
         if (isOk(industries)) {
-            // @ts-ignore
             setIndustries(industries.ok);
         }
     };
@@ -149,8 +149,7 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                                 control={control}
                                                 selectionClassName="hover:bg-signature-gray rounded-none"
                                                 values={
-                                                    CONSTANTS.COMPANY
-                                                        .EXPERIENCES
+                                                    CONSTANTS.JOB.EXPERIENCES
                                                 }
                                             />
                                         </WrappedDisclosure>

@@ -11,9 +11,12 @@ import {
 import { useForm } from "react-hook-form";
 import useService from "../../hooks/useService";
 import { isOk } from "../../utils/resultGuarder";
-import ImageLabeledDropdown from "../form/ImageLabeledDropdown";
+import ImageLabeledDropdown, {
+    DropdownItems,
+} from "../form/ImageLabeledDropdown";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import useImageBlob from "../../hooks/useImageBlob";
 
 type Menu = {
     name: string;
@@ -54,7 +57,8 @@ interface IDropdownForm {
 }
 
 export default function ManagementBars({ children }: Props) {
-    const { companyService } = useService();
+    const [managedCompanies, setManagedCompanies] = useState<Company[]>([]);
+    const [menus, setMenus] = useState<Menu[]>([]);
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
     const { control, setValue } = useForm<IDropdownForm>({
@@ -64,12 +68,18 @@ export default function ManagementBars({ children }: Props) {
             img: "",
         },
     });
-    const [managedCompanies, setManagedCompanies] = useState<Company[]>([]);
-    const [menus, setMenus] = useState<Menu[]>([]);
+    const { getCompanyService } = useService();
     const location = useLocation();
+    const { convertBlobToImage } = useImageBlob();
 
     const getCompanies = async () => {
-        const response = await companyService.getManagedCompanies();
+        console.log("udah slesai1");
+        const response = await getCompanyService().then((s) => {
+            console.log("udah slesai1.5");
+            return s.getManagedCompanies();
+        });
+
+        console.log("udah slesai2");
 
         if (isOk(response)) {
             const companies = response.ok;
@@ -98,12 +108,14 @@ export default function ManagementBars({ children }: Props) {
         setSelectedCompany(null);
     };
 
-    const getDropdownItems = () => {
-        return managedCompanies.map((company) => ({
-            label: company.name,
-            value: company.name,
-            img: "a",
-        }));
+    const getDropdownItems = async () => {
+        return await Promise.all(
+            managedCompanies.map(async (company) => ({
+                label: company.name,
+                value: company.name,
+                img: convertBlobToImage(company.image),
+            })),
+        );
     };
 
     const changeCompany = (companyLabel: string) => {
@@ -118,15 +130,29 @@ export default function ManagementBars({ children }: Props) {
         setMenus(defaultMenu);
     }, []);
 
+    const [dropdownItems, setDropdownItems] = useState<DropdownItems[]>([]);
+
+    useEffect(() => {
+        const fetchDropdownItems = async () => {
+            const items: DropdownItems[] = await getDropdownItems();
+            setDropdownItems(items);
+        };
+
+        fetchDropdownItems();
+    }, [managedCompanies]);
+
     const isActive = (menu: string[]) => menu.includes(location.pathname);
+
+    const [isHovered, setIsHovered] = useState(false);
 
     return (
         <div className="flex h-[100vh] w-[100vw] flex-row">
             <div className="fixed z-50 flex h-16 w-full flex-row justify-between bg-white shadow-md">
-                <div className="flex h-full flex-row place-items-center pl-64">
+                <div
+                    className={`flex h-full flex-row place-items-center ${isHovered ? "pl-80" : "pl-24"}`}>
                     <ImageLabeledDropdown
                         name="label"
-                        states={getDropdownItems()}
+                        states={dropdownItems}
                         control={control}
                         className="w-52"
                         onChange={changeCompany}
@@ -135,8 +161,8 @@ export default function ManagementBars({ children }: Props) {
                 <div className="flex h-full flex-row place-items-center">
                     <a
                         href="/"
-                        className="hover:border-blue-primary mr-6 flex h-full cursor-pointer items-center justify-center border-b-2 border-transparent transition-colors">
-                        Employee
+                        className="hover:border-blue-primary hover:text-blue-primary mr-6 flex h-full cursor-pointer items-center justify-center border-b-2 border-transparent transition-colors">
+                        Employer
                     </a>
                     <div className="border-l-2">
                         <Profile />
@@ -144,10 +170,19 @@ export default function ManagementBars({ children }: Props) {
                 </div>
             </div>
 
-            <div className="fixed z-50 flex h-full w-[16rem] flex-col place-items-center justify-between bg-white px-2 pb-6 pt-4 shadow-md">
+            <div
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className={`fixed z-50 flex h-full flex-col place-items-center justify-between
+                 bg-white px-2 pb-6 pt-4 shadow-md ${isHovered ? "w-[18rem]" : "w-[5rem]"}
+                 transition-all duration-500 ease-in-out
+                 `}>
                 <div className="flex w-full flex-col gap-8">
-                    <div className="text-blue-primary text-center align-middle font-bebas text-5xl">
-                        HIREVERSE
+                    <div className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
+                        H
+                        <span className={`${isHovered ? "block" : "hidden"}`}>
+                            IREVERSE
+                        </span>
                     </div>
                     <div className="flex flex-col text-lg text-gray-500">
                         {managedCompanies.length > 0 &&
@@ -159,7 +194,10 @@ export default function ManagementBars({ children }: Props) {
                                         key={index}
                                         className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
                                         <menu.icon size="1.5rem" />
-                                        <span>{menu.name}</span>
+                                        <span
+                                            className={`${isHovered ? "block" : "hidden"}`}>
+                                            {menu.name}
+                                        </span>
                                     </div>
                                 </Link>
                             ))}
@@ -168,12 +206,17 @@ export default function ManagementBars({ children }: Props) {
                         )}
                         <div className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3">
                             <RiMailOpenLine size="1.5rem" />
-                            <span>Invite</span>
+                            <span
+                                className={`${isHovered ? "block" : "hidden"}`}>
+                                Invite
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="flex h-full min-w-[16rem]" />
+            <div
+                className={`flex h-full ${isHovered ? "min-w-[18rem]" : "min-w-[5rem]"}`}
+            />
             <div className="flex-grow-1 flex h-full w-full flex-col">
                 <div className="min-h-16 w-full" />
                 {children}

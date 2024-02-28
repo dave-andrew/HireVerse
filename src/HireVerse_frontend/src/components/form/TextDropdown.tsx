@@ -34,10 +34,11 @@ export default function TextDropdown({
                                 field.onChange(e);
                                 onChange?.(e);
                             }}>
-                            <div className="relative m-2">
+                            <div className="relative">
                                 <Listbox.Button
                                     className={`hover:bg-signature-hover-gray relative flex w-full cursor-default flex-row items-center rounded-lg bg-white py-2 pl-3 pr-10 transition-colors ${innerClassName}`}>
-                                    <span className="block truncate text-left">
+                                    <span
+                                        className={`block truncate text-left ${states?.includes(field.value) ? "" : "text-gray-400"}`}>
                                         {field.value}
                                     </span>
                                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -49,7 +50,7 @@ export default function TextDropdown({
                                     leave="transition ease-in duration-100"
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0">
-                                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                                    <Listbox.Options className="z-[1] absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                                         {states?.map((item, index) => (
                                             <Listbox.Option
                                                 key={index}

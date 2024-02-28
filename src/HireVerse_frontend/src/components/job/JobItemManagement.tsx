@@ -6,36 +6,67 @@ import { Job } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { BiHide, BiShow, BiTrash } from "react-icons/bi";
 import { JobStatus } from "../../utils/enums";
 import useService from "../../hooks/useService";
+import { Dispatch, SetStateAction } from "react";
 
 interface Props {
     job: Job;
+    setJobs: Dispatch<SetStateAction<Job[]>>;
+    setConfirmationState: Dispatch<SetStateAction<boolean>>;
+    onClick?: () => void;
 }
 
-export default function JobItemManagement({ job }: Props) {
-    const { jobService } = useService();
+export default function JobItemManagement({
+    job,
+    setJobs,
+    setConfirmationState,
+    onClick,
+}: Props) {
+    const { getJobService } = useService();
+
     const toggleJobVisibility = async () => {
-        jobService.toggleJobVisibility(job.id);
+        await getJobService().then((s) => s.toggleJobVisibility(job.id));
+        setJobs((prev) =>
+            prev.map((j) => {
+                if (j.id === job.id) {
+                    if (j.status === JobStatus.Active) {
+                        return { ...j, status: JobStatus.Hidden };
+                    }
+                    return { ...j, status: JobStatus.Active };
+                }
+                return j;
+            }),
+        );
     };
 
     return (
-        <CardLayout className="flex flex-col p-6 shadow-md">
-            <div className="flex flex-row font-bold text-xl items-center justify-between gap-2 pb-5">
-                <div className="flex flex-col w-full">
-                    <div className="flex flex-row w-full justify-between text-2xl font-semibold">
-                        <div className="flex flex-row justify-center items-center gap-2">
+        <CardLayout
+            onClick={onClick}
+            className="flex flex-col p-6 shadow-md">
+            <div className="flex flex-row items-center justify-between gap-2 pb-5 text-xl font-bold">
+                <div className="flex w-full flex-col">
+                    <div className="flex w-full flex-row justify-between text-2xl font-semibold">
+                        <div className="flex flex-row items-center justify-center gap-2">
                             <span className="flex flex-wrap">
                                 {job.position}
                             </span>
-                            <span className="inline-flex items-center bg-green-200 text-green-800 text-xs font-medium px-2.5 py-2 rounded-lg">
-                                <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                                Active
-                            </span>
+                            {job.status === JobStatus.Active ? (
+                                <span className="inline-flex items-center rounded-lg bg-green-200 px-2.5 py-2 text-xs font-medium text-green-800">
+                                    <span className="me-1 h-2 w-2 rounded-full bg-green-500"></span>
+                                    Active
+                                </span>
+                            ) : (
+                                <span className="inline-flex items-center rounded-lg bg-red-200 px-2.5 py-2 text-xs font-medium text-red-800">
+                                    <span className="me-1 h-2 w-2 rounded-full bg-red-500"></span>
+                                    Hidden
+                                </span>
+                            )}
                         </div>
                         <span>
                             <WrappedDropdown
+                                className="!z-[50]"
                                 itemClassName="!w-44"
                                 button={
-                                    <Menu.Button className="flex flex-row cursor-pointer hover:bg-signature-gray p-2 rounded-lg">
+                                    <Menu.Button className="relative z-0 hover:bg-signature-gray flex cursor-pointer flex-row rounded-lg p-2 ">
                                         <SlOptions size="1rem" />
                                     </Menu.Button>
                                 }>
@@ -43,7 +74,7 @@ export default function JobItemManagement({ job }: Props) {
                                     {job.status === JobStatus.Active ? (
                                         <Menu.Item>
                                             <div
-                                                className="flex flex-row items-center gap-2 text-gray-90 font-normal hover:bg-signature-gray p-1 pl-4 text-lg cursor-pointer"
+                                                className="text-gray-90 hover:bg-signature-gray flex cursor-pointer flex-row items-center gap-2 p-1 pl-4 text-lg font-normal"
                                                 onClick={toggleJobVisibility}>
                                                 <BiHide />
                                                 Hide Job
@@ -52,7 +83,7 @@ export default function JobItemManagement({ job }: Props) {
                                     ) : (
                                         <Menu.Item>
                                             <div
-                                                className="flex flex-row items-center gap-2 text-gray-90 font-normal hover:bg-signature-gray p-1 pl-4 text-lg cursor-pointer"
+                                                className="text-gray-90 hover:bg-signature-gray flex cursor-pointer flex-row items-center gap-2 p-1 pl-4 text-lg font-normal"
                                                 onClick={toggleJobVisibility}>
                                                 <BiShow />
                                                 Show Job
@@ -61,8 +92,10 @@ export default function JobItemManagement({ job }: Props) {
                                     )}
                                     <Menu.Item>
                                         <div
-                                            className="flex flex-row items-center gap-2 text-gray-90 font-normal hover:bg-signature-gray p-1 pl-4 text-lg cursor-pointer"
-                                            onClick={() => console.log("Edit")}>
+                                            className="text-gray-90 hover:bg-signature-gray flex cursor-pointer flex-row items-center gap-2 p-1 pl-4 text-lg font-normal"
+                                            onClick={() =>
+                                                setConfirmationState(true)
+                                            }>
                                             <BiTrash />
                                             Delete Job
                                         </div>
