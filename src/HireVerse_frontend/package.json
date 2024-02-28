@@ -14,15 +14,19 @@
     "@dfinity/candid": "^0.15.7",
     "@dfinity/principal": "^0.15.7",
     "@headlessui/react": "^1.7.18",
+    "crypto-js": "^4.2.0",
     "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
-    "react-router-dom": "^6.22.1"
+    "react-router-dom": "^6.22.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
+    "@types/uuid": "^9.0.8",
     "@vitejs/plugin-react": "^4.0.1",
     "autoprefixer": "^10.4.17",
     "dotenv": "^16.3.1",
