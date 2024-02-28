@@ -193,7 +193,7 @@ export default function FindCompany() {
                                                 <input
                                                     type="checkbox"
                                                     value=""
-                                                    checked={true}
+                                                    defaultChecked={true}
                                                     className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                                                 />
                                                 <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -236,10 +236,9 @@ export default function FindCompany() {
                                 <div className="grid grow grid-cols-2 gap-4">
                                     {resultCompanies.map((cp, index) => {
                                         return (
-                                            <CardLayout className="flex flex-col gap-2 rounded-md px-6 py-5">
+                                            <CardLayout className="flex flex-col gap-2 rounded-md px-6 py-5" key={index}>
                                                 <div
-                                                    className="flex flex-row place-items-center bg-white"
-                                                    key={index}>
+                                                    className="flex flex-row place-items-center bg-white" >
                                                     <img
                                                         width="80rem"
                                                         height="auto"

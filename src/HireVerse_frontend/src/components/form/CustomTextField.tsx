@@ -1,8 +1,6 @@
 import {
     ChangeEventHandler,
     HTMLInputTypeAttribute,
-    HTMLProps,
-    Ref,
 } from "react";
 import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 

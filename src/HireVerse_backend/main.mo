@@ -67,15 +67,30 @@ actor Database {
         return #ok(user);
     };
 
-    public query func getUser(principal : Principal) : async ?User {
+    public query (msg) func getUser(principal : Principal) : async ?User {
+        
+        if (principal != msg.caller) {
+            return null;
+        };
+
         return users.get(principal);
     };
 
-    public query func updateUser(principal : Principal, user : User) : async () {
+    public query (msg) func updateUser(principal : Principal, user : User) : async () {
+        
+        if (principal != msg.caller) {
+            return;
+        };
+
         users.put(principal, user);
     };
 
-    public query func deleteUser(principal : Principal) : async ?User {
+    public query (msg) func deleteUser(principal : Principal) : async ?User {
+        
+        if (principal != msg.caller) {
+            return null;
+        };
+        
         return users.remove(principal);
     };
 

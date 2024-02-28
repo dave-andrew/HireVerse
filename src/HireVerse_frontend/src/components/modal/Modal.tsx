@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode} from "react";
 import { IoMdClose } from "react-icons/io";
 export default function Modal({
     handleClose,

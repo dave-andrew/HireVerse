@@ -91,12 +91,56 @@ actor Company {
         return company;
     };
 
-    public shared func updateCompany(id : Text, company : Company) : async () {
-        companies.put(id, company);
+    public shared (msg) func updateCompany(id : Text, company : Company) : async Result.Result<(), Text>{
+        
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err("Not authorized");
+        };
+
+        let beforeCompany = companies.get(id);
+
+        switch (beforeCompany) {
+            case null {
+                return #err("Company not found");
+            };
+            case (?c) {
+
+                let isManager : Bool = await checkCompanyManager(c, msg.caller);
+                
+                if (not isManager) {
+                    return #err("User is not a manager of the company");
+                };
+
+                companies.put(id, company);
+
+                return #ok();
+            };
+        };
     };
 
-    public shared func deleteCompany(id : Text) : async ?Company {
-        companies.remove(id);
+    public shared (msg) func deleteCompany(id : Text) : async Result.Result<?Company, Text>{
+        
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err("Not authorized");
+        };
+
+        let company = companies.get(id);
+
+        switch (company) {
+            case null {
+                return #err("Company not found");
+            };
+            case (?c) {
+
+                let isManager : Bool = await checkCompanyManager(c, msg.caller);
+                
+                if (not isManager) {
+                    return #err("User is not a manager of the company");
+                };
+
+                return #ok(companies.remove(id));
+            };
+        };
     };
 
     public shared query func getCompanies() : async [Company] {
@@ -150,10 +194,14 @@ actor Company {
         ) != null;
     };
 
-    public shared func inviteManager(company_id : Text, user_id : Principal, inviter_id : Principal) : async Result.Result<Invite, Text> {
+    public shared (msg) func inviteManager(company_id : Text, user_id : Principal, inviter_id : Principal) : async Result.Result<Invite, Text> {
 
         if (Principal.isAnonymous(user_id)) {
-            return #err("Not authorized");
+            return #err("Inviter not authorized");
+        };
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Client not authorized");
         };
 
         let company = await getCompany(company_id);
@@ -222,8 +270,27 @@ actor Company {
         };
     };
 
-    public shared func removeInvite(id : Text) : async Result.Result<?Invite, Text> {
-        #ok(invitations.remove(id));
+    public shared (msg) func removeInvite(id : Text) : async Result.Result<?Invite, Text> {
+        
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Not authorized");
+        };
+
+        let invite = invitations.get(id);
+
+        switch (invite) {
+            case null {
+                return #err("Invite not found");
+            };
+            case (?i) {
+                if (i.inviter_id != user_id) {
+                    return #err("Not authorized");
+                };
+                return #ok(invitations.remove(id));
+            };
+        };
     };
 
     public shared (msg) func addManager(company_id : Text) : async Result.Result<(), Text> {
@@ -240,6 +307,13 @@ actor Company {
                 return #err("Company not found");
             };
             case (?company) {
+
+                let isManager : Bool = await checkCompanyManager(company, user_id);
+
+                if (isManager) {
+                    return #err("User is already the manager!");
+                };
+
                 let manager_ids = company.company_manager_ids;
                 let updatedManagerIds = Array.append<Principal>(manager_ids, [user_id]);
 
@@ -288,7 +362,11 @@ actor Company {
         };
     };
 
-    public shared func leaveCompany(company_id : Text, user_id : Principal) : async Result.Result<(), Text> {
+    public shared (msg) func leaveCompany(company_id : Text, user_id : Principal) : async Result.Result<(), Text> {
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Not authorized");
+        };
 
         let company : ?Company = await getCompany(company_id);
 
