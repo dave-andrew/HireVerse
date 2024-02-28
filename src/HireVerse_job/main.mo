@@ -188,16 +188,31 @@ actor Job {
         return #ok(job);
     };
 
-    public query func updateJob(id : Text, job : Job) : async Result.Result<(), Text> {
+    public query (msg) func updateJob(id : Text, job : Job) : async Result.Result<(), Text> {
+        
+        if(Principal.isAnonymous(msg.caller)){
+            return #err("Unauthorized");
+        };
+        
         jobs.put(id, job);
         return #ok();
     };
 
-    public shared func deleteJob(id : Text) : async Result.Result<?Job, Text> {
+    public shared (msg) func deleteJob(id : Text) : async Result.Result<?Job, Text> {
+        
+        if(Principal.isAnonymous(msg.caller)){
+            return #err("Unauthorized");
+        };
+        
         #ok(jobs.remove(id));
     };
 
-    public shared query func getJob(id : Text) : async Result.Result<Job, Text> {
+    public shared query (msg) func getJob(id : Text) : async Result.Result<Job, Text> {
+        
+        if(Principal.isAnonymous(msg.caller)){
+            return #err("Unauthorized");
+        };
+
         let job : ?Job = jobs.get(id);
         switch (job) {
             case null {
@@ -209,7 +224,14 @@ actor Job {
         };
     };
 
-    public shared func getFullJob(id : Text) : async Result.Result<FullJob, Text> {
+    public shared (msg) func getFullJob(id : Text) : async Result.Result<FullJob, Text> {
+        
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Unauthorized");
+        };
+        
         let job = jobs.get(id);
 
         switch (job) {
