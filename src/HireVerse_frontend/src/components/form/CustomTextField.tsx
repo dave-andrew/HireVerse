@@ -1,4 +1,9 @@
-import { ChangeEventHandler, HTMLInputTypeAttribute, HTMLProps, Ref } from "react";
+import {
+    ChangeEventHandler,
+    HTMLInputTypeAttribute,
+    HTMLProps,
+    Ref,
+} from "react";
 import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 interface CustomTextFieldProps {
@@ -9,8 +14,8 @@ interface CustomTextFieldProps {
     onChange?: ChangeEventHandler<HTMLInputElement>;
     min?: number;
     max?: number;
-    useFormRef ?: UseFormRegisterReturn;
-    error ?: FieldError;
+    useFormRef?: UseFormRegisterReturn;
+    error?: FieldError;
 }
 
 export default function CustomTextField({
@@ -22,7 +27,7 @@ export default function CustomTextField({
     min,
     max,
     useFormRef,
-    error
+    error,
 }: CustomTextFieldProps) {
     return (
         <div className={`flex flex-col gap-[5px] ${className}`}>
@@ -37,7 +42,7 @@ export default function CustomTextField({
                 max={max}
             />
             <div
-                className={`text-xs hidden ${error ? "text-red-500 !block" : "h-5"}`}>
+                className={`hidden text-xs ${error ? "!block text-red-500" : "h-5"}`}>
                 {error?.message}
             </div>
         </div>

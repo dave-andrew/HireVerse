@@ -1,8 +1,8 @@
-import {Control, Controller} from "react-hook-form";
-import {Listbox, Transition} from "@headlessui/react";
-import {IoMdArrowDropdown} from "react-icons/io";
-import {Fragment} from "react";
-import {FaCheck} from "react-icons/fa";
+import { Control, Controller } from "react-hook-form";
+import { Listbox, Transition } from "@headlessui/react";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { Fragment } from "react";
+import { FaCheck } from "react-icons/fa";
 
 export interface DropdownItems {
     value: string;
@@ -19,18 +19,18 @@ interface Props {
 }
 
 export default function ImageLabeledDropdown({
-                                                 states,
-                                                 className,
-                                                 control,
-                                                 name,
-                                                 onChange,
-                                             }: Props) {
+    states,
+    className,
+    control,
+    name,
+    onChange,
+}: Props) {
     return (
         <>
             <Controller
                 name={name}
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                     <div className={`top-16 w-40 ${className}`}>
                         <Listbox
                             disabled={!states}
@@ -40,8 +40,7 @@ export default function ImageLabeledDropdown({
                                 onChange?.(e);
                             }}>
                             <div className="relative m-2">
-                                <Listbox.Button
-                                    className="hover:bg-signature-hover-gray relative flex gap-2 w-full cursor-default flex-row items-center rounded-lg bg-white py-2 pl-3 pr-10 transition-colors ">
+                                <Listbox.Button className="hover:bg-signature-hover-gray relative flex w-full cursor-default flex-row items-center gap-2 rounded-lg bg-white py-2 pl-3 pr-10 transition-colors ">
                                     <span className="block truncate">
                                         <img
                                             className={`mr-2 h-8 w-8 rounded-full object-cover ${
@@ -60,14 +59,12 @@ export default function ImageLabeledDropdown({
                                             }
                                             alt=""
                                         />
-
                                     </span>
                                     <span className="block truncate text-left">
                                         {field.value}
                                     </span>
-                                    <span
-                                        className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                        <IoMdArrowDropdown/>
+                                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                        <IoMdArrowDropdown />
                                     </span>
                                 </Listbox.Button>
                                 <Transition
@@ -75,12 +72,11 @@ export default function ImageLabeledDropdown({
                                     leave="transition ease-in duration-100"
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0">
-                                    <Listbox.Options
-                                        className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                                         {states?.map((item, index) => (
                                             <Listbox.Option
                                                 key={index}
-                                                className={({active}) =>
+                                                className={({ active }) =>
                                                     `relative cursor-default select-none py-2 pl-10 pr-4 ${
                                                         active
                                                             ? "bg-blue-primary text-black"
@@ -88,7 +84,7 @@ export default function ImageLabeledDropdown({
                                                     }`
                                                 }
                                                 value={item.value}>
-                                                {({selected}) => (
+                                                {({ selected }) => (
                                                     <>
                                                         <span
                                                             className={`block truncate text-left ${
@@ -100,7 +96,7 @@ export default function ImageLabeledDropdown({
                                                         </span>
                                                         <span
                                                             className={`black absolute inset-y-0 left-0 flex items-center pl-3 ${selected ? "" : "hidden"}`}>
-                                                            <FaCheck/>
+                                                            <FaCheck />
                                                         </span>
                                                     </>
                                                 )}

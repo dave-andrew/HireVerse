@@ -2,8 +2,8 @@ import { Combobox, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FaCheck } from "react-icons/fa";
-import { HireVerse_company } from "../../../../declarations/HireVerse_company";
 import { Control, Controller } from "react-hook-form";
+import useService from "../../hooks/useService";
 
 interface Props {
     control: Control<any>;
@@ -11,12 +11,11 @@ interface Props {
     onChange?: (value: string) => void;
 }
 
-const companyService = HireVerse_company;
-
 export default function CountryDropdown({ control, name, onChange }: Props) {
     const [countries, setCountries] = useState<string[]>([]);
     const [query, setQuery] = useState("");
     const [selected, setSelected] = useState({});
+    const { getCompanyService } = useService();
 
     const filteredCountries = useMemo(() => {
         if (query === "") {
@@ -31,8 +30,9 @@ export default function CountryDropdown({ control, name, onChange }: Props) {
     }, [query, countries]);
 
     const getInitialCountries = async () => {
-        console.log("haio");
-        const response = await companyService.getCompanyCountries();
+        const response = await getCompanyService().then((s) =>
+            s.getCompanyCountries(),
+        );
         setCountries(response);
         setSelected(response[0]);
         console.log(response);

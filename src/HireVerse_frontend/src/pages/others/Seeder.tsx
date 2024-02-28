@@ -20,7 +20,10 @@ export default function Seeder() {
             console.log("Company ID is required");
             return;
         }
-        const response = await service.companyService.addManager(id);
+
+        const response = await service
+            .getCompanyService()
+            .then((s) => s.addManager(id));
 
         if (isOk(response)) {
             console.log(`Added self to company ${id} manager`);
@@ -29,11 +32,13 @@ export default function Seeder() {
 
     const handleGetAllCompany = async () => {
         console.log("Getting all company...");
-        const response = await service.companyService.getCompanies();
+        const response = await service
+            .getCompanyService()
+            .then((s) => s.getCompanies());
         console.log(response);
     };
     return (
-        <div className="flex flex-col w-96 gap-5">
+        <div className="flex w-96 flex-col gap-5">
             <h1>Seeder</h1>
             <button
                 className="main-button"
@@ -66,8 +71,9 @@ export default function Seeder() {
             <button
                 className="main-button"
                 onClick={() =>
-                    service.companyService
-                        .deleteAllCompany()
+                    service
+                        .getCompanyService()
+                        .then((s) => s.deleteAllCompany())
                         .then(() => console.log("All companies deleted"))
                 }>
                 Remove all companies
@@ -75,8 +81,9 @@ export default function Seeder() {
             <button
                 className="main-button"
                 onClick={() =>
-                    service.jobService
-                        .deleteAllJobs()
+                    service
+                        .getJobService()
+                        .then((s) => s.deleteAllJobs())
                         .then(() => console.log("All jobs deleted"))
                 }>
                 Remove all jobs
@@ -84,8 +91,9 @@ export default function Seeder() {
             <button
                 className="main-button"
                 onClick={() =>
-                    service.reviewService
-                        .removeAllReviews()
+                    service
+                        .getReviewService()
+                        .then((s) => s.removeAllReviews())
                         .then(() => console.log("All reviews deleted"))
                 }>
                 Remove all reviews

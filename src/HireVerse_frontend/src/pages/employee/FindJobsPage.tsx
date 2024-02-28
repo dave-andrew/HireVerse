@@ -24,7 +24,7 @@ interface IQueryFilterSortForm {
 }
 
 export default function FindJobs() {
-    const { jobService, companyService } = useService();
+    const { getJobService, getCompanyService } = useService();
     const [filter, setFilter] = useState<IFilterForm>({
         salaryStart: 0,
         salaryEnd: 0,
@@ -68,10 +68,8 @@ export default function FindJobs() {
     const getJobs = async (initial?: boolean) => {
         const filter = getConvertedFilters();
 
-        const response = await jobService.getJobs(
-            BigInt(0),
-            BigInt(10),
-            filter,
+        const response = await getJobService().then((s) =>
+            s.getJobs(BigInt(0), BigInt(10), filter),
         );
 
         let companyIds: string[] = [];
@@ -85,7 +83,9 @@ export default function FindJobs() {
             }
         }
 
-        const responseName = await companyService.getCompanyNames(companyIds);
+        const responseName = await getCompanyService().then((s) =>
+            s.getCompanyNames(companyIds),
+        );
 
         if (isOk(responseName)) {
             setCompanyNames(responseName.ok);
@@ -99,21 +99,19 @@ export default function FindJobs() {
     }, [filter]);
 
     useEffect(() => {
-        if (jobService && companyService) {
-            getJobs(true);
-        }
-    }, [jobService, companyService]);
+        getJobs(true);
+    }, []);
 
     return (
         <FrontPageLayout>
             <div className="flex h-full w-full flex-col place-items-center gap-20">
-                <div className="lg:h-[480px] md:h-[360px] w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md">
+                <div className="w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[480px]">
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
-                        <div className="flex w-full p-8 md:w-2/6 flex-col gap-5">
+                        <div className="flex w-full flex-col gap-5 p-8 md:w-2/6">
                             <h3 className="text-4xl font-bold lg:text-5xl">
                                 Find Your Dream Job Now.
                             </h3>
-                            <p className="text-base leading-6 lg:text-lg md:text-sm text-justify">
+                            <p className="text-justify text-base leading-6 md:text-sm lg:text-lg">
                                 Find your dream job now! Our platform connects
                                 you with top employers and provides valuable
                                 resources to enhance your job search experience.
@@ -122,13 +120,13 @@ export default function FindJobs() {
                             </p>
                         </div>
                         <img
-                            className="lg:w-[320px] lg:h-[320px] md:w-[240px] md:h-[240px] hidden md:block"
+                            className="hidden md:block md:h-[240px] md:w-[240px] lg:h-[320px] lg:w-[320px]"
                             src="/storyset/resume-folder-cuate.png"
                             alt=""
                         />
                     </div>
                 </div>
-                <div className="flex flex-col gap-10 pb-10 lg:min-w-[1000px] md:[800px] m-auto">
+                <div className="md:[800px] m-auto flex flex-col gap-10 pb-10 lg:min-w-[1000px]">
                     <div className="flex w-full flex-row gap-5">
                         <JobFilter onApplyFilter={(data) => setFilter(data)} />
                         <CardLayout className="flex w-full flex-row items-center">

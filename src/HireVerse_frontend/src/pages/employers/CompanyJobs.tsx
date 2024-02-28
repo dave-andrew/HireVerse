@@ -31,7 +31,7 @@ export default function CompanyJobs() {
     const [selectedJob, setSelectedJob] = useState<Job | null>(null);
     const [isModalShown, setIsModalShown] = useState(false);
     const [confirmationModal, setConfirmationModal] = useState(false);
-    const { jobService } = useService();
+    const { getJobService } = useService();
     const { register, control, getValues } = useForm<IQuerySortForm>({
         defaultValues: {
             query: "",
@@ -62,11 +62,13 @@ export default function CompanyJobs() {
             return;
         }
 
-        const response = await jobService.getJobPostedByCompany(
-            selectedCompany.id,
-            BigInt(0),
-            BigInt(20),
-            getConvertedFilters(),
+        const response = await getJobService().then((s) =>
+            s.getJobPostedByCompany(
+                selectedCompany.id,
+                BigInt(0),
+                BigInt(20),
+                getConvertedFilters(),
+            ),
         );
 
         if (isOk(response)) {
@@ -81,7 +83,9 @@ export default function CompanyJobs() {
             return;
         }
 
-        const response = await jobService.deleteJob(selectedJob.id);
+        const response = await getJobService().then((s) =>
+            s.deleteJob(selectedJob.id),
+        );
 
         if (isOk(response)) {
             setJobs(jobs.filter((job) => job.id !== selectedJob.id));
@@ -101,7 +105,7 @@ export default function CompanyJobs() {
                 setIsOpen={setConfirmationModal}
                 title={
                     <>
-                        <div className="text-xl font-bold pb-4">
+                        <div className="pb-4 text-xl font-bold">
                             Delete Confirmation
                         </div>
                         <hr />

@@ -8,6 +8,11 @@ import {
     canisterId as companyCanisterId,
     createActor as createActorCompany,
 } from "../../../../declarations/HireVerse_company";
+import { ActorSubclass, HttpAgent } from "@dfinity/agent";
+import { _SERVICE as _SERVICE_COMPANY } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import { _SERVICE as _SERVICE_BACKEND } from "../../../../declarations/HireVerse_backend/HireVerse_backend.did";
+import { _SERVICE as _SERVICE_REVIEW } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
+import { _SERVICE as _SERVICE_JOB } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import {
     canisterId as backendCanisterId,
     createActor as createActorBackend,
@@ -16,35 +21,27 @@ import {
     canisterId as reviewCanisterId,
     createActor as createActorReview,
 } from "../../../../declarations/HireVerse_review";
-import { ActorSubclass, HttpAgent, Identity } from "@dfinity/agent";
-import { _SERVICE as _SERVICE_COMPANY } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
-import { _SERVICE as _SERVICE_BACKEND } from "../../../../declarations/HireVerse_backend/HireVerse_backend.did";
-import { _SERVICE as _SERVICE_REVIEW } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
-import { _SERVICE as _SERVICE_JOB } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 
 interface Props {
     children: ReactNode;
 }
 
 export type ServiceContextType = {
-    jobService: ActorSubclass<_SERVICE_JOB>;
-    companyService: ActorSubclass<_SERVICE_COMPANY>;
-    backendService: ActorSubclass<_SERVICE_BACKEND>;
-    reviewService: ActorSubclass<_SERVICE_REVIEW>;
-    loading: boolean;
+    getJobService: () => Promise<ActorSubclass<_SERVICE_JOB>>;
+    getCompanyService: () => Promise<ActorSubclass<_SERVICE_COMPANY>>;
+    getBackendService: () => Promise<ActorSubclass<_SERVICE_BACKEND>>;
+    getReviewService: () => Promise<ActorSubclass<_SERVICE_REVIEW>>;
 };
 
 export const ServiceContext = createContext<ServiceContextType>({
-    jobService: null!,
-    companyService: null!,
-    backendService: null!,
-    reviewService: null!,
-    loading: true,
+    getJobService: null!,
+    getCompanyService: null!,
+    getBackendService: null!,
+    getReviewService: null!,
 });
 
 export default function ServiceContextProvider({ children }: Props) {
     const { getIdentity } = useAuth();
-    const [identity, setIdentity] = useState<Identity>();
     const [jobService, setJobService] = useState<ActorSubclass<_SERVICE_JOB>>();
     const [companyService, setCompanyService] =
         useState<ActorSubclass<_SERVICE_COMPANY>>();
@@ -52,70 +49,109 @@ export default function ServiceContextProvider({ children }: Props) {
         useState<ActorSubclass<_SERVICE_BACKEND>>();
     const [reviewService, setReviewService] =
         useState<ActorSubclass<_SERVICE_REVIEW>>();
-    const [loading, setLoading] = useState(true);
+    const [agent, setAgent] = useState<HttpAgent>();
 
-    const handleIdentity = async () => {
+    const getHttpAgent = async () => {
         const identity = await getIdentity();
-        setIdentity(identity);
+        if (!agent) {
+            console.log("creating agent");
+            const agentz = new HttpAgent({ identity });
+            console.log("agent", agentz);
+            setAgent(agentz);
+            return agentz;
+        }
+        return agent;
     };
 
     useEffect(() => {
-        if (!identity) return;
-
-        const agent = new HttpAgent({ identity });
-
-        const jobService = createActorJob(
-            // process.env.CANISTER_ID_HireVerse_job,
-            jobCanisterId,
-            { agent },
-        );
-        const companyService = createActorCompany(
-            // process.env.CANISTER_ID_HireVerse_company,
-            companyCanisterId,
-            { agent },
-        );
-        const backendService = createActorBackend(
-            // process.env.CANISTER_ID_HireVerse_backend,
-            backendCanisterId,
-            { agent },
-        );
-        const reviewService = createActorReview(
-            // process.env.CANISTER_ID_HireVerse_review,
-            reviewCanisterId,
-            { agent },
-        );
-
-        setJobService(jobService);
-        setCompanyService(companyService);
-        setBackendService(backendService);
-        setReviewService(reviewService);
-        setLoading(false);
-    }, [identity]);
-
-    useEffect(() => {
-        handleIdentity();
+        getIdentity();
     }, []);
 
-    useEffect(() => {
-        setLoading(
-            !!(jobService && companyService && backendService && reviewService),
-        );
-    }, [jobService, companyService, backendService, reviewService]);
+    const getJobService = async () => {
+        while (!jobService) {
+            const agent = await getHttpAgent();
+            if (agent) {
+                const jobService = createActorJob(jobCanisterId, {
+                    agent,
+                });
+
+                if (jobService) {
+                    setJobService(jobService);
+                    return jobService;
+                }
+            }
+            await new Promise((r) => setTimeout(r, 100));
+        }
+        return jobService;
+    };
+
+    const getCompanyService = async () => {
+        while (!companyService) {
+            const agent = await getHttpAgent();
+            console.log(agent);
+            if (agent) {
+                const companyService = createActorCompany(companyCanisterId, {
+                    agent,
+                });
+
+                if (companyService) {
+                    setCompanyService(companyService);
+                    return companyService;
+                }
+            }
+
+            await new Promise((r) => setTimeout(r, 100));
+        }
+        return companyService;
+    };
+
+    const getBackendService = async () => {
+        while (!backendService) {
+            const agent = await getHttpAgent();
+            if (agent) {
+                const backendService = createActorBackend(backendCanisterId, {
+                    agent,
+                });
+
+                if (backendService) {
+                    setBackendService(backendService);
+                    return backendService;
+                }
+            }
+
+            await new Promise((r) => setTimeout(r, 100));
+        }
+        return backendService;
+    };
+
+    const getReviewService = async () => {
+        while (!reviewService) {
+            const agent = await getHttpAgent();
+            if (agent) {
+                const reviewService = createActorReview(reviewCanisterId, {
+                    agent,
+                });
+
+                if (reviewService) {
+                    setReviewService(reviewService);
+                    return reviewService;
+                }
+            }
+
+            await new Promise((r) => setTimeout(r, 100));
+        }
+        return reviewService;
+    };
 
     return (
         <ServiceContext.Provider
             value={{
-                jobService: jobService!,
-                companyService: companyService!,
-                backendService: backendService!,
-                reviewService: reviewService!,
-                loading,
+                getJobService: getJobService!,
+                getCompanyService: getCompanyService!,
+                getBackendService: getBackendService!,
+                getReviewService: getReviewService!,
             }}>
-            {jobService &&
-                companyService &&
-                backendService &&
-                reviewService &&
-                children}
+            {children}
         </ServiceContext.Provider>
     );
 }

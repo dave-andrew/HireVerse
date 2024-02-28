@@ -6,7 +6,11 @@ interface CustomCheckBoxProps {
     error?: FieldError;
 }
 
-export function CustomCheckBox({ className, useFormRef, error }: CustomCheckBoxProps) {
+export function CustomCheckBox({
+    className,
+    useFormRef,
+    error,
+}: CustomCheckBoxProps) {
     return (
         <div className={"flex items-center " + className}>
             <input
@@ -19,7 +23,8 @@ export function CustomCheckBox({ className, useFormRef, error }: CustomCheckBoxP
             <label
                 htmlFor="link-checkbox"
                 className="ms-2 text-sm font-medium text-gray-900 ">
-                I agree with all <b className="text-blue-primary"> HireVerse </b>
+                I agree with all{" "}
+                <b className="text-blue-primary"> HireVerse </b>
                 <a
                     href="/terms"
                     target="_blank"
@@ -29,7 +34,7 @@ export function CustomCheckBox({ className, useFormRef, error }: CustomCheckBoxP
                 .
             </label>
             <div
-                className={`text-xs hidden ${error ? "text-red-500 !block" : "h-5"}`}>
+                className={`hidden text-xs ${error ? "!block text-red-500" : "h-5"}`}>
                 {error?.message}
             </div>
         </div>
