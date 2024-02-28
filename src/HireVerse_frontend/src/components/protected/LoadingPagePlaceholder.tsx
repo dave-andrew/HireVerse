@@ -13,7 +13,7 @@ export default function LoadingPagePlaceholder() {
                         className="bg-gray-300 animate-pulse w-32 rounded-md h-8 text-blue-primary pt-1 text-center align-middle font-bebas lg:text-5xl md:text-4xl">
                     </div>
                     <div
-                        className="absolute left-1/2 flex h-full lg:w-5/12 md:w-7/12 min-w-96 translate-x-[-50%] transform flex-row place-items-center justify-center px-8">
+                        className="absolute left-1/2 flex h-full lg:w-5/12 md:w-7/12 w-fit translate-x-[-50%] transform flex-row place-items-center justify-center px-8">
                         {[1, 2, 3].map((menu, index) => {
                             return (
                                 <div
