@@ -1,5 +1,9 @@
 import ManageCompany from "./pages/employers/ManageCompany";
-import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
+import {
+    createBrowserRouter,
+    RouteObject,
+    RouterProvider,
+} from "react-router-dom";
 import FindJobs from "./pages/employee/FindJobsPage";
 import RegisterCompany from "./pages/employers/RegisterCompany";
 import FindCompany from "./pages/employee/FindCompany";
@@ -77,7 +81,7 @@ const unregisteredProtectedRoutes: RouteObject[] = [
         path: "/complete-registration",
         Component: CompleteRegistration,
     },
-]
+];
 
 const router = createBrowserRouter([
     {

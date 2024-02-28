@@ -38,7 +38,7 @@ export default function Seeder() {
         console.log(response);
     };
     return (
-        <div className="flex flex-col w-96 gap-5">
+        <div className="flex w-96 flex-col gap-5">
             <h1>Seeder</h1>
             <button
                 className="main-button"

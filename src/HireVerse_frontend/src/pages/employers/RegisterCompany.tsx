@@ -8,8 +8,8 @@ import { useForm } from "react-hook-form";
 import useService from "../../hooks/useService";
 import useImageBlob from "../../hooks/useImageBlob";
 import { CreateCompanyInput } from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface IRegisterCompanyForm {
     companyName: string;
@@ -22,7 +22,7 @@ interface IRegisterCompanyForm {
 }
 
 export default function RegisterCompany() {
-
+    const [isLoading, setIsLoading] = useState(false);
     const {
         register,
         handleSubmit,
@@ -30,13 +30,11 @@ export default function RegisterCompany() {
     } = useForm<IRegisterCompanyForm>();
 
     const { getCompanyService } = useService();
-    const { convertImageToBlob } = useImageBlob()
-    const [isLoading, setIsLoading] = useState(false)
+    const { convertImageToBlob } = useImageBlob();
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
     const handleFormSubmit = async (data: IRegisterCompanyForm) => {
-        setIsLoading(true)
-        console.log(data);
+        setIsLoading(true);
         const imageBlob = await convertImageToBlob(data.companyLogo[0]);
         const companyData: CreateCompanyInput = {
             name: data.companyName,
@@ -45,21 +43,21 @@ export default function RegisterCompany() {
             location: data.location,
             image: imageBlob,
             linkedin: data.linkedInProfile,
-        }
-        await companyService.registerCompanies(companyData);
+        };
+        await getCompanyService().then((s) => s.registerCompanies(companyData));
 
-        setIsLoading(false)
-        navigate('/employer')
+        setIsLoading(false);
+        navigate("/employer");
     };
 
     return (
         <FrontPageLayout>
-            <div className="flex h-[calc(100vh-4rem)] flex-col pb-6 2xl:px-96 xl:px-48 lg:px-24 md:px-12 gap-8 justify-center">
+            <div className="flex h-[calc(100vh-4rem)] flex-col justify-center gap-8 pb-6 md:px-12 lg:px-24 xl:px-48 2xl:px-96">
                 <div className="flex flex-row items-center justify-center">
                     <h1 className="main-title">Register Company</h1>
                 </div>
                 <div className="flex w-full flex-row-reverse items-start justify-center gap-5 px-5">
-                    <div className="h-full justify-center hidden lg:flex flex-col gap-4">
+                    <div className="hidden h-full flex-col justify-center gap-4 lg:flex">
                         <CardLayout className="px-10 py-4">
                             Registering Company might take 4 - 6 business days
                             to validate the legitimacy of the business
@@ -104,8 +102,8 @@ export default function RegisterCompany() {
                             </div>
                         </CardLayout>
                     </div>
-                    <div className="h-full justify-center flex flex-col gap-4">
-                        <CardLayout className="flex h-fit flex-col gap-10 px-10 py-10 w-[400px]">
+                    <div className="flex h-full flex-col justify-center gap-4">
+                        <CardLayout className="flex h-fit w-[400px] flex-col gap-10 px-10 py-10">
                             <div className="flex flex-row justify-between gap-4">
                                 <CustomTextField
                                     label="Company Name"
@@ -166,9 +164,9 @@ export default function RegisterCompany() {
                                         placeholder="Company Profile Image"
                                     />
                                     <div
-                                        className={`text-xs hidden ${
+                                        className={`hidden text-xs ${
                                             errors.companyLogo
-                                                ? "text-red-500 !block"
+                                                ? "!block text-red-500"
                                                 : "h-5"
                                         }`}>
                                         {errors.companyLogo?.message}
@@ -198,9 +196,10 @@ export default function RegisterCompany() {
                                 />
                             </div>
                             <div className="flex flex-row items-center justify-center">
-                                <button className={`main-button ${isLoading ? "cursor-not-allowed !bg-gray-600" : ""}`}
-                                        disabled={isLoading}
-                                        onClick={handleSubmit(handleFormSubmit)}>
+                                <button
+                                    className={`main-button ${isLoading ? "cursor-not-allowed !bg-gray-600" : ""}`}
+                                    disabled={isLoading}
+                                    onClick={handleSubmit(handleFormSubmit)}>
                                     Register Company
                                 </button>
                             </div>

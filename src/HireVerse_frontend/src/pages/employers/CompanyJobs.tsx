@@ -82,7 +82,7 @@ export default function CompanyJobs() {
         if (!selectedJob) {
             return;
         }
-        
+
         const response = await getJobService().then((s) =>
             s.deleteJob(selectedJob.id),
         );
@@ -105,7 +105,7 @@ export default function CompanyJobs() {
                 setIsOpen={setConfirmationModal}
                 title={
                     <>
-                        <div className="text-xl font-bold pb-4">
+                        <div className="pb-4 text-xl font-bold">
                             Delete Confirmation
                         </div>
                         <hr />

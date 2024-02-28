@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import ManagementBars from "../components/sidebar/ManagementBars";
-import {Bounce, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Props {
     children: ReactNode;

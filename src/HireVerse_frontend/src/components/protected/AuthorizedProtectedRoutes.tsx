@@ -1,20 +1,26 @@
-import useAuth, {AuthState} from "../../hooks/useAuth";
-import {Outlet, useNavigate} from "react-router-dom";
-import {useEffect} from "react";
+import useAuth, { AuthState } from "../../hooks/useAuth";
+import { Outlet, useNavigate } from "react-router-dom";
+import { ReactNode, useEffect } from "react";
 import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
-import {toast} from "react-toastify";
-import {defaultToastOptions} from "../../layouts/ManagementPageLayout";
+import { toast } from "react-toastify";
+import { defaultToastOptions } from "../../layouts/ManagementPageLayout";
 
-
-export default function AuthorizedProtectedRoutes({children}: { children?: React.ReactNode }) {
-    const {authState} = useAuth();
+export default function AuthorizedProtectedRoutes({
+    children,
+}: {
+    children?: ReactNode;
+}) {
+    const { authState } = useAuth();
 
     const navigate = useNavigate();
 
     useEffect(() => {
         if (authState === AuthState.Unauthenticated) {
             // console.log("Unauthenticated");
-            toast.warn("You must be logged in to use this feature", defaultToastOptions);
+            toast.warn(
+                "You must be logged in to use this feature",
+                defaultToastOptions,
+            );
             setTimeout(() => {
                 navigate("/");
             }, defaultToastOptions.autoClose || 3000);
@@ -28,11 +34,10 @@ export default function AuthorizedProtectedRoutes({children}: { children?: React
         console.log("Protection for: ", authState);
     }, [authState]);
 
-    return (
-        authState === AuthState.Loading || authState == AuthState.Authenticated ? (
-            children ?? <Outlet/>
-        ) : (
-            <LoadingPagePlaceholder />
-        )
+    return authState === AuthState.Loading ||
+        authState == AuthState.Authenticated ? (
+        children ?? <Outlet />
+    ) : (
+        <LoadingPagePlaceholder />
     );
 }

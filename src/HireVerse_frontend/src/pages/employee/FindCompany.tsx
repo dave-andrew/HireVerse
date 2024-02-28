@@ -135,7 +135,7 @@ export default function FindCompany() {
                                             );
                                         })}
                                 </div>
-                                <div className="xl:block hidden">
+                                <div className="hidden xl:block">
                                     <img
                                         className="w-[25rem]"
                                         src="/storyset/job-offers-bro.png"

@@ -64,7 +64,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
             isOpen={openState}
             setIsOpen={setOpenState}
             title={
-                <div className="flex flex-row w-full justify-between items-center pb-10">
+                <div className="flex w-full flex-row items-center justify-between pb-10">
                     <div className="text-4xl font-bold">Post a New Job</div>
                     <button
                         className="h-fit w-fit rounded-full text-end text-xl"
@@ -88,7 +88,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                             {...register("position")}
                             type="text"
                             placeholder="e.g. Software Engineer"
-                            className="h-full w-full transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0 px-3"
+                            className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>
@@ -103,7 +103,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                     <div className="h-full">
                         <WrappedRadioGroup
                             values={CONSTANTS.JOB.EXPERIENCES}
-                            className="w-full !p-0 grid grid-cols-2 gap-4"
+                            className="grid w-full grid-cols-2 gap-4 !p-0"
                             selectionClassName="!h-full !ps-3 transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0"
                             control={control}
                             name="employmentType"
@@ -119,19 +119,19 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                     </div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
-                    <div className="flex flex-row items-center gap-2 h-full rounded-md">
+                    <div className="flex h-full flex-row items-center gap-2 rounded-md">
                         <input
                             {...register("salaryStart")}
                             type="number"
                             placeholder="e.g. 10.000"
-                            className="h-full w-full transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0 px-3"
+                            className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                         -
                         <input
                             {...register("salaryEnd")}
                             type="number"
                             placeholder="e.g. 50.000"
-                            className="h-full w-full transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0 px-3"
+                            className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>
@@ -165,7 +165,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                         <textarea
                             {...register("requirements")}
                             placeholder="e.g. 5 years of experience in software engineering"
-                            className="p-2 h-full min-h-32 w-full transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0 px-3"
+                            className="focus:ring-signature-primary h-full min-h-32 w-full rounded-md border-[1px] border-gray-200 p-2 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>
@@ -181,7 +181,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                         <textarea
                             {...register("shortDescription")}
                             placeholder="e.g. We are looking for a software engineer to join our team."
-                            className="p-2 h-full min-h-32 w-full transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0 px-3"
+                            className="focus:ring-signature-primary h-full min-h-32 w-full rounded-md border-[1px] border-gray-200 p-2 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>
@@ -197,7 +197,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                         <textarea
                             {...register("jobDescription")}
                             placeholder="e.g. You will be responsible for developing software applications."
-                            className="p-2 h-full min-h-32 w-full transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0 px-3"
+                            className="focus:ring-signature-primary h-full min-h-32 w-full rounded-md border-[1px] border-gray-200 p-2 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>
@@ -209,12 +209,12 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                     </div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
-                    <div className="flex flex-row items-center gap-2 h-full rounded-md">
+                    <div className="flex h-full flex-row items-center gap-2 rounded-md">
                         <input
                             {...register("location")}
                             type="text"
                             placeholder="e.g. New York, USA"
-                            className="h-full w-full transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0 px-3"
+                            className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>
@@ -227,7 +227,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                     </div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
-                    <div className="flex flex-col h-full rounded-md gap-2">
+                    <div className="flex h-full flex-col gap-2 rounded-md">
                         <DynamicInputBox
                             fields={fields}
                             register={register}
@@ -237,7 +237,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                             addButton={
                                 <div className="flex w-full justify-end">
                                     <button
-                                        className="flex flex-row font-bold items-center justify-end gap-2 hover:input-signature-gray p-2 rounded-lg"
+                                        className="hover:input-signature-gray flex flex-row items-center justify-end gap-2 rounded-lg p-2 font-bold"
                                         onClick={() =>
                                             append({
                                                 contact: "aa",
@@ -245,13 +245,13 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                                                     "e.g. shane: sen@gmail.com",
                                             })
                                         }>
-                                        <MdAdd className="rounded-full bg-blue-primary text-white" />
+                                        <MdAdd className="bg-blue-primary rounded-full text-white" />
                                         <span>Add New Contacts</span>
                                     </button>
                                 </div>
                             }
                             removeButton={
-                                <button className="flex items-center transition-colors hover:bg-red-500 hover:text-white justify-center border-red-500 border-2 text-red-500 p-2 w-full h-full rounded-md">
+                                <button className="flex h-full w-full items-center justify-center rounded-md border-2 border-red-500 p-2 text-red-500 transition-colors hover:bg-red-500 hover:text-white">
                                     <FaRegTrashCan size="1.1rem" />
                                 </button>
                             }
@@ -260,7 +260,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 </div>
             </div>
 
-            <div className="flex w-full items-center justify-center gap-2 pt-20 pb-10">
+            <div className="flex w-full items-center justify-center gap-2 pb-10 pt-20">
                 <input
                     {...register("terms")}
                     type="checkbox"
@@ -271,7 +271,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 </label>
             </div>
             <div className="flex w-full items-center justify-center gap-2">
-                <button className=" border-2 border-signature-yellow text-signature-yellow hover:bg-yellow-400 hover:text-black transition-colors w-fit rounded-md px-12 py-3 font-bold">
+                <button className=" border-signature-yellow text-signature-yellow w-fit rounded-md border-2 px-12 py-3 font-bold transition-colors hover:bg-yellow-400 hover:text-black">
                     Post Job
                 </button>
             </div>
