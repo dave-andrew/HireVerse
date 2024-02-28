@@ -2,8 +2,7 @@ import useAuth, { AuthState } from "../../hooks/useAuth";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ReactNode, useEffect } from "react";
 import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
-import { toast } from "react-toastify";
-import { defaultToastOptions } from "../../layouts/ManagementPageLayout";
+import useToaster from "../../hooks/useToaster";
 
 export default function AuthorizedProtectedRoutes({
     children,
@@ -11,25 +10,21 @@ export default function AuthorizedProtectedRoutes({
     children?: ReactNode;
 }) {
     const { authState } = useAuth();
+    const { warnToast } = useToaster();
 
     const navigate = useNavigate();
 
     useEffect(() => {
         if (authState === AuthState.Unauthenticated) {
-            // console.log("Unauthenticated");
-            toast.warn(
-                "You must be logged in to use this feature",
-                defaultToastOptions,
-            );
-            setTimeout(() => {
-                navigate("/");
-            }, defaultToastOptions.autoClose || 3000);
+            warnToast({
+                message: "You must be logged in to use this feature",
+                onCloseActions: () => navigate("/"),
+            });
         } else if (authState === AuthState.Unregistered) {
-            // console.log("Unregistered");
-            toast("You must complete your registration first");
-            setTimeout(() => {
-                navigate("/complete-registration");
-            }, defaultToastOptions.autoClose || 3000);
+            warnToast({
+                message: "You must complete your registration first",
+                onCloseActions: () => navigate("/complete-registration"),
+            });
         }
         console.log("Protection for: ", authState);
     }, [authState]);

@@ -33,7 +33,12 @@ interface ICreateJobForm {
 }
 
 export default function CreateJobModal({ openState, setOpenState }: Props) {
-    const { control, register, getValues } = useForm<ICreateJobForm, string>({
+    const {
+        control,
+        register,
+        getValues,
+        formState: { errors },
+    } = useForm<ICreateJobForm, string>({
         defaultValues: {
             position: "",
             employmentType: "",
