@@ -9,7 +9,7 @@ export default function Profile() {
     const {login, logout, user, authState} = useAuth();
 
     return (
-        <div className="top-16 w-full max-w-sm px-4">
+        <div className="top-16 w-full max-w-sm md:px-4 px-1">
             <Popover className="relative">
                 {({open}) => (
                     <>

@@ -66,7 +66,7 @@ export default function Navbar() {
                                     className={`${isActive(menu.activeUrl)
                                         ? "text-blue-primary border-color-blue-primary font-semibold"
                                         : ""
-                                    } text-s mx-2 flex min-w-24 flex-row gap-2 h-full text-xl place-items-center justify-center border-b-2 border-transparent transition-colors hover:border-gray-400 xl:text-base group`}>
+                                    } text-s mx-2 flex  md:min-w-24 flex-row gap-2 h-full text-xl place-items-center justify-center border-b-2 border-transparent transition-colors hover:border-gray-400 xl:text-base group`}>
                                     {menu.iconElement}
                                     <div className="lg:text-base md:text-sm text-xs group-hover:block hidden duration-1000 opacity-0 group-hover:opacity-100 group-hover:duration-300">
                                         {menu.name}
@@ -79,8 +79,8 @@ export default function Navbar() {
                 <div className="flex h-full flex-row place-items-center">
                     <a
                         href="/employer"
-                        className="hover:border-blue-primary mr-6 flex h-full cursor-pointer items-center justify-center border-b-2 border-transparent transition-colors">
-                        Employer
+                        className="hover:border-blue-primary hover:text-blue-primary me-2 md:mr-6 flex h-full cursor-pointer items-center justify-center border-b-2 border-transparent transition-colors">
+                        Employee
                     </a>
                     <div className="border-l-2">
                         <Profile/>
