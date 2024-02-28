@@ -113,7 +113,7 @@ export default function FindJobs() {
                             <h3 className="text-4xl font-bold lg:text-5xl">
                                 Find Your Dream Job Now.
                             </h3>
-                            <p className="text-base leading-6 lg:text-lg md:text-sm">
+                            <p className="text-base leading-6 lg:text-lg md:text-sm text-justify">
                                 Find your dream job now! Our platform connects
                                 you with top employers and provides valuable
                                 resources to enhance your job search experience.

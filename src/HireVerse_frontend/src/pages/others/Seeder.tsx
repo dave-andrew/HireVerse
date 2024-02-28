@@ -65,17 +65,29 @@ export default function Seeder() {
             </div>
             <button
                 className="main-button"
-                onClick={() => service.companyService.deleteAllCompany()}>
+                onClick={() =>
+                    service.companyService
+                        .deleteAllCompany()
+                        .then(() => console.log("All companies deleted"))
+                }>
                 Remove all companies
             </button>
             <button
                 className="main-button"
-                onClick={() => service.jobService.deleteAllJobs()}>
+                onClick={() =>
+                    service.jobService
+                        .deleteAllJobs()
+                        .then(() => console.log("All jobs deleted"))
+                }>
                 Remove all jobs
             </button>
             <button
                 className="main-button"
-                onClick={() => service.reviewService.removeAllReviews()}>
+                onClick={() =>
+                    service.reviewService
+                        .removeAllReviews()
+                        .then(() => console.log("All reviews deleted"))
+                }>
                 Remove all reviews
             </button>
         </div>

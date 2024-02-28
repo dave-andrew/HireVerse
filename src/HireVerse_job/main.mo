@@ -73,6 +73,7 @@ actor Job {
     type JobManagerFilterInput = {
         position : ?Text;
         order : ?Text;
+        status : ?Text;
     };
 
     let jobs = TrieMap.TrieMap<Text, Job>(Text.equal, Text.hash);
@@ -495,6 +496,21 @@ actor Job {
 
                         for (job in Iter.fromArray(Vector.toArray(jobPostings))) {
                             if (Text.contains(job.position, #text position)) {
+                                newJobList.add(job);
+                            };
+                        };
+
+                        jobPostings := newJobList;
+                    };
+                };
+
+                switch (filter.status) {
+                    case null {};
+                    case (?status) {
+                        let newJobList = Vector.Vector<Job>();
+
+                        for (job in Iter.fromArray(Vector.toArray(jobPostings))) {
+                            if (Text.contains(job.status, #text status)) {
                                 newJobList.add(job);
                             };
                         };

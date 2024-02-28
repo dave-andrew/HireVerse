@@ -109,9 +109,9 @@ export default function useAuth() {
                 authClient.login({
                     identityProvider: `http://${internetIdentityCanisterId}.localhost:4943/`,
                     onSuccess: () => {
-                        resolve()
-                        window.location.reload()
-                        fetchUserData()
+                        resolve();
+                        window.location.reload();
+                        fetchUserData();
                     },
                     onError: reject,
                 });
@@ -127,7 +127,7 @@ export default function useAuth() {
         await authClient.logout();
         setUser(null);
         setAuthState(AuthState.Unauthenticated);
-        window.location.reload()
+        window.location.reload();
     };
 
     useEffect(() => {

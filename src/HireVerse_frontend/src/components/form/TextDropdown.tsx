@@ -34,10 +34,11 @@ export default function TextDropdown({
                                 field.onChange(e);
                                 onChange?.(e);
                             }}>
-                            <div className="relative m-2">
+                            <div className="relative">
                                 <Listbox.Button
                                     className={`hover:bg-signature-hover-gray relative flex w-full cursor-default flex-row items-center rounded-lg bg-white py-2 pl-3 pr-10 transition-colors ${innerClassName}`}>
-                                    <span className="block truncate text-left">
+                                    <span
+                                        className={`block truncate text-left ${states?.includes(field.value) ? "" : "text-gray-400"}`}>
                                         {field.value}
                                     </span>
                                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
