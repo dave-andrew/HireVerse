@@ -1,7 +1,11 @@
+import {ToastContainer} from "react-toastify";
+import React from "react";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function LoadingPagePlaceholder() {
     return (
         <div className="bg-signature-gray flex h-full w-full flex-col ease-in opacity-10">
+            <ToastContainer />
             <div
                 className="fixed z-[100] flex h-16 w-full flex-row place-items-center justify-between bg-white md:ps-12 ps-6 shadow-md">
                 <div className="bg-gray-300 animate-pulse w-32 rounded-md h-8 text-blue-primary pt-1 text-center align-middle font-bebas lg:text-5xl md:text-4xl">
