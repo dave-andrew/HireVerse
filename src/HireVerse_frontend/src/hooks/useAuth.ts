@@ -3,8 +3,8 @@ import { User } from "../../../../.dfx/local/canisters/HireVerse_backend/service
 import { AuthClient } from "@dfinity/auth-client";
 import { useCallback, useEffect } from "react";
 import { Agent, HttpAgent } from "@dfinity/agent";
-import { createActor } from "../../../declarations/HireVerse_company";
 import useService from "./useService";
+import { canisterId as internetIdentityCanisterId } from "../../../declarations/internet_identity";
 
 export enum AuthState {
     Authenticated = "Authenticated",
@@ -22,36 +22,35 @@ export default function useAuth() {
     const [user, setUser] = useLocalStorage<User | null>("user", null);
 
     const fetchUserData = useCallback(async () => {
+        // window.location.reload()
         const authClient = await AuthClient.create();
         const identity = authClient.getIdentity();
+
         if (
             (await authClient.isAuthenticated()) &&
             identity.getPrincipal().toText() !== "2vxsx-fae"
         ) {
-            // if (user) {
-            //     return;
-            // }
+            if (!backendService) return;
 
             setAuthState(AuthState.Loading);
 
             // @ts-ignore
             const agent = new HttpAgent({ identity: identity }) as Agent;
-
-            console.log(import.meta.env.CANISTER_ID_HireVerse_company);
-            const actor = createActor(
-                "a4tbr-q4aaa-aaaaa-qaafq-cai",
-                // @ts-ignore
-                { agent },
-            );
-
-            console.log(
-                await actor.addManager("fdb86206-89e5-4fc6-9161-acd9521b744d"),
-            );
+            await agent.fetchRootKey();
 
             const userData = await backendService.getUser(
                 identity.getPrincipal(),
             );
 
+            console.log("Fetching Data for");
+            console.log("Greet: ", await backendService.greet());
+            console.log("Identity Principal: ", identity.getPrincipal());
+            console.log("User Data: ", userData);
+
+            console.log(
+                "All registered users: ",
+                await backendService.getAllUsers(),
+            );
             if (userData.length > 0) {
                 setUser(userData[0]!);
                 setAuthState(AuthState.Authenticated);
@@ -59,37 +58,39 @@ export default function useAuth() {
                 return;
             }
 
-            // const tempUser: User = {
-            //     internet_identity: identity,
-            //     first_name: "Ronald",
-            //     last_name: "McDonald",
-            //     // @ts-ignore
-            //     timestamp: Date.now(),
-            //     company_ids: [],
-            //     birth_date: "",
-            //     email: "Ronald@gmail.com",
-            //     selected_company_id: [],
-            // };
-            // setUser(tempUser);
-            setAuthState(AuthState.Authenticated);
-            console.log("Logged Force");
-            // setUser(null);
-            // setAuthState(AuthState.Unregistered);
-            // console.log("User not found");
+            if (identity) {
+                setAuthState(AuthState.Unregistered);
+                console.log("User not registered");
 
+                return;
+            }
+
+            setAuthState(AuthState.Authenticated);
             return;
         }
         setUser(null);
         setAuthState(AuthState.Unauthenticated);
         console.log("User not authenticated");
-    }, []);
+    }, [backendService]);
 
-    const register = useCallback(async (newUser: User) => {
-        console.log("nyaa", newUser);
-        await backendService.register(newUser);
-        await fetchUserData();
-        console.log("Registered");
-    }, []);
+    const register = useCallback(
+        async (
+            first_name: string,
+            last_name: string,
+            email: string,
+            date: string,
+        ) => {
+            const returnValue = await backendService.register(
+                first_name,
+                last_name,
+                email,
+                date,
+            );
+            await fetchUserData();
+            console.log("Return value dari register: ", returnValue);
+        },
+        [],
+    );
 
     const getPrincipal = useCallback(async () => {
         const authClient = await AuthClient.create();
@@ -104,13 +105,18 @@ export default function useAuth() {
     const login = async () => {
         const authClient = await AuthClient.create();
         try {
-            await authClient.login({
-                identityProvider:
-                    "http://bnz7o-iuaaa-aaaaa-qaaaa-cai.localhost:4943/",
-                // "https://identity.ic0.app/",
-                onSuccess: () => fetchUserData(),
+            await new Promise<void>((resolve, reject) => {
+                authClient.login({
+                    identityProvider: `http://${internetIdentityCanisterId}.localhost:4943/`,
+                    onSuccess: () => {
+                        resolve();
+                        window.location.reload();
+                        fetchUserData();
+                    },
+                    onError: reject,
+                });
             });
-            console.log("Logged in as", authClient.getIdentity());
+            console.log("Login successful: ", authClient.getIdentity());
         } catch (error) {
             console.error("Login failed:", error);
         }
@@ -121,6 +127,7 @@ export default function useAuth() {
         await authClient.logout();
         setUser(null);
         setAuthState(AuthState.Unauthenticated);
+        window.location.reload();
     };
 
     useEffect(() => {

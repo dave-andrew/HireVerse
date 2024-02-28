@@ -1,182 +1,227 @@
 import ManagementPageLayout from "../../layouts/ManagementPageLayout";
 import { IoIosSearch } from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
-import { useState } from "react";
-import Modal from "../../components/modal/Modal";
-import JobPostingTable from "../../components/company/JobPostingTable";
+import { useEffect, useState } from "react";
+import { IoAdd } from "react-icons/io5";
+import TextDropdown from "../../components/form/TextDropdown";
+import { useForm } from "react-hook-form";
+import { Job } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
+import useService from "../../hooks/useService";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import { CONSTANTS } from "../../utils/constants";
+import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import convertNullFormat from "../../utils/convertNullFormat";
+import { isOk } from "../../utils/resultGuarder";
+import handleKeyDown from "../../utils/handleKeyDown";
+import JobItemManagement from "../../components/job/JobItemManagement";
+import WrappedModal from "../../components/utils/WrappedModal";
+import CreateJobModal from "../../components/modal/CreateJobModal";
+
+interface IQuerySortForm {
+    query: string;
+    order: string;
+    status: string;
+}
 
 export default function CompanyJobs() {
-    let [isModalShown, setIsModalShown] = useState(false);
+    const [selectedCompany, setSelectedCompany] =
+        useLocalStorage<Company | null>("selectedCompany", null);
+    const [jobs, setJobs] = useState<Job[]>([]);
+    const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+    const [isModalShown, setIsModalShown] = useState(false);
+    const [confirmationModal, setConfirmationModal] = useState(false);
+    const { jobService } = useService();
+    const { register, control, getValues } = useForm<IQuerySortForm>({
+        defaultValues: {
+            query: "",
+            order: "Newest",
+            status: "All",
+        },
+    });
 
     const toggleModal = () => {
         setIsModalShown(!isModalShown);
     };
 
+    const getConvertedFilters = () => {
+        const values = getValues();
+        const jobFilter: JobManagerFilterInput = {
+            order: convertNullFormat(values.order, ""),
+            position: convertNullFormat(values.query, ""),
+            status: convertNullFormat(
+                values.status === "All" ? "" : values.status.toLowerCase(),
+                "",
+            ),
+        };
+        return jobFilter;
+    };
+
+    const getJobs = async () => {
+        if (!selectedCompany) {
+            return;
+        }
+
+        const response = await jobService.getJobPostedByCompany(
+            selectedCompany.id,
+            BigInt(0),
+            BigInt(20),
+            getConvertedFilters(),
+        );
+
+        if (isOk(response)) {
+            setJobs(response.ok);
+            console.log(getConvertedFilters());
+            console.log(response.ok);
+        }
+    };
+
+    const handleDeleteJob = async () => {
+        if (!selectedJob) {
+            return;
+        }
+
+        const response = await jobService.deleteJob(selectedJob.id);
+
+        if (isOk(response)) {
+            setJobs(jobs.filter((job) => job.id !== selectedJob.id));
+        }
+        setSelectedJob(null);
+        setConfirmationModal(false);
+    };
+
+    useEffect(() => {
+        getJobs();
+    }, []);
+
+    useEffect(() => {
+        getJobs();
+    }, [selectedCompany]);
+
     return (
         <>
-            <div className="absolute z-0 h-96 w-full bg-[url(/backgrounds/liquid-cheese.svg)] bg-cover opacity-50"></div>
+            <WrappedModal
+                isOpen={confirmationModal}
+                setIsOpen={setConfirmationModal}
+                title={
+                    <>
+                        <div className="text-xl font-bold pb-4">
+                            Delete Confirmation
+                        </div>
+                        <hr />
+                    </>
+                }>
+                <div className="mt-2 pb-5 pt-4">
+                    <p className="text-sm text-gray-500">
+                        Are you sure you want to delete this job?
+                    </p>
+                </div>
+                <div className="mt-4 flex flex-row justify-end gap-3">
+                    <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-red-400 px-4 py-2 text-sm font-medium text-white hover:bg-red-500"
+                        onClick={() => handleDeleteJob()}>
+                        Confirm
+                    </button>
+                    <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-medium text-white hover:bg-gray-500"
+                        onClick={() => setConfirmationModal(false)}>
+                        Cancel
+                    </button>
+                </div>
+            </WrappedModal>
+            {/*<div className="absolute z-0 h-96 w-full bg-[url(/backgrounds/sun-tornado.svg)] bg-cover opacity-50"></div>*/}
             <ManagementPageLayout>
                 <div className="z-10 flex flex-col gap-16 px-14 py-8 opacity-100">
                     <div className="mt-8 text-4xl font-bold">Jobs</div>
                     <div className="flex flex-col gap-4">
                         <div
                             className={
-                                "flex h-12 flex-row place-items-end justify-end gap-4"
+                                "flex h-12 flex-row place-items-end justify-between gap-4"
                             }>
-                            <CardLayout className="flex h-full w-96 flex-row items-center bg-white">
-                                <span className="flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3 transition-colors has-[:focus]:bg-gray-100">
-                                    <IoIosSearch size="1.5rem" />
-                                    <input
-                                        type="text"
-                                        className="w-full bg-transparent outline-0"
-                                        placeholder="Search Job"
-                                    />
-                                </span>
-                            </CardLayout>
                             <button
                                 className="h-full"
                                 onClick={toggleModal}>
                                 <CardLayout
-                                    className="flex h-full place-items-center
-                                justify-center rounded-xl px-8
-                                py-4 hover:bg-gray-100">
-                                    + Add Job
+                                    className="hover:bg-signature-blue bg-blue-primary flex
+                                h-full items-center justify-center
+                                gap-4 rounded-lg p-4">
+                                    <IoAdd
+                                        size={"1.5rem"}
+                                        className="font-bold text-white"
+                                    />
+                                    <span className="pr-2 text-white">
+                                        Add Job
+                                    </span>
                                 </CardLayout>
                             </button>
+                            <div className="flex flex-row items-center justify-center gap-2">
+                                <CardLayout className="flex h-full w-96 flex-row items-center rounded-lg bg-white">
+                                    <span className="flex flex-1 flex-row gap-2 rounded-lg p-3 transition-colors has-[:focus]:bg-gray-100">
+                                        <IoIosSearch size="1.5rem" />
+                                        <input
+                                            {...register("query")}
+                                            type="text"
+                                            className="w-full bg-transparent outline-0"
+                                            placeholder="Search Job"
+                                            onKeyDown={(e) =>
+                                                handleKeyDown(
+                                                    e.key,
+                                                    "Enter",
+                                                    getJobs,
+                                                )
+                                            }
+                                        />
+                                    </span>
+                                </CardLayout>
+                                <TextDropdown
+                                    key="order"
+                                    className="flex !w-48 rounded-lg "
+                                    innerClassName="min-h-12 !pl-4 !pr-16 border-[1px] !w-48 !max-w-48 border-gray-200"
+                                    name="order"
+                                    control={control}
+                                    states={CONSTANTS.ORDER}
+                                    onChange={(_) => getJobs()}
+                                />
+                                <TextDropdown
+                                    key="status"
+                                    className="flex !w-40 rounded-lg "
+                                    innerClassName="min-h-12 !pl-4 !pr-16 border-[1px] !w-36 !max-w-36 border-gray-200"
+                                    name="status"
+                                    control={control}
+                                    states={["All", ...CONSTANTS.JOB.STATUS]}
+                                    onChange={(_) => getJobs()}
+                                />
+                            </div>
                         </div>
-                        <JobPostingTable />
+                        <div className="grid grid-cols-3 gap-4">
+                            {Array.from({ length: 5 }).map((_, index) => (
+                                <>
+                                    {jobs.map((job, index) => (
+                                        <JobItemManagement
+                                            key={index}
+                                            job={job}
+                                            setJobs={setJobs}
+                                            onClick={() => setSelectedJob(job)}
+                                            setConfirmationState={
+                                                setConfirmationModal
+                                            }
+                                        />
+                                    ))}
+                                </>
+                            ))}
+                        </div>
                     </div>
                 </div>
-                <Modal
-                    handleClose={toggleModal}
-                    show={isModalShown}
-                    modalTitle="Post Job Hiring">
-                    <div className="grid grid-cols-2">
-                        {/* Position Name Field */}
-                        <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
-                            <div className="font-bold">Position Name</div>
-                            <div className="text-sm">
-                                Input the name of your company.
-                            </div>
-                        </div>
-                        <div className="border-b border-gray-400  border-opacity-30 py-5">
-                            <div className="h-full rounded-md border border-gray-900">
-                                <input
-                                    type="text"
-                                    className="h-full w-full rounded-md  px-3"
-                                />
-                            </div>
-                        </div>
-                        {/* Industries Field */}
-                        <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
-                            <div className="font-bold">Industries</div>
-                            <div className="text-sm">
-                                Input the year your company was created.
-                            </div>
-                        </div>
-                        <div className="border-b border-gray-400  border-opacity-30 py-5">
-                            <div className="h-full rounded-md border border-gray-900">
-                                <input
-                                    type="text"
-                                    className="h-full w-full rounded-md  px-3"
-                                />
-                            </div>
-                        </div>
-                        {/* Salary Field */}
-                        <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
-                            <div className="font-bold">Salary</div>
-                            <div className="text-sm">
-                                Input the salary range for this position in your
-                                company.
-                            </div>
-                        </div>
-                        <div className="border-b border-gray-400  border-opacity-30 py-5">
-                            <div className="h-full rounded-md border border-gray-900">
-                                <input
-                                    type="text"
-                                    className="h-full w-full rounded-md  px-3"
-                                />
-                            </div>
-                        </div>
-                        {/* Short Description Field */}
-                        <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
-                            <div className="font-bold">Short Description</div>
-                            <div className="text-sm">
-                                Input the short description of this job.
-                            </div>
-                        </div>
-                        <div className="border-b border-gray-400  border-opacity-30 py-5">
-                            <div className="h-full rounded-md border border-gray-900">
-                                <input
-                                    type="text"
-                                    className="h-full w-full rounded-md  px-3"
-                                />
-                            </div>
-                        </div>
-                        {/* Requirements Field */}
-                        <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
-                            <div className="font-bold">Requirements</div>
-                            <div className="text-sm">
-                                Input the requirements to get this role.
-                            </div>
-                        </div>
-                        <div className="border-b border-gray-400  border-opacity-30 py-5">
-                            <div className="h-full rounded-md border border-gray-900">
-                                <input
-                                    type="text"
-                                    className="h-full w-full rounded-md  px-3"
-                                />
-                            </div>
-                        </div>
-                        {/* Job Description Field */}
-                        <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
-                            <div className="font-bold">Job Description</div>
-                            <div className="text-sm">
-                                Describe what this role does in detail.
-                            </div>
-                        </div>
-                        <div className="border-b border-gray-400  border-opacity-30 py-5">
-                            <div className="h-full rounded-md border border-gray-900">
-                                <input
-                                    type="text"
-                                    className="h-full w-full rounded-md  px-3"
-                                />
-                            </div>
-                        </div>
-                        {/* Apply Website Field */}
-                        <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
-                            <div className="font-bold">Apply Website Link</div>
-                            <div className="text-sm">
-                                Input the website for employee to apply.
-                            </div>
-                        </div>
-                        <div className="border-b border-gray-400  border-opacity-30 py-5">
-                            <div className="h-full rounded-md border border-gray-900">
-                                <input
-                                    type="text"
-                                    className="h-full w-full rounded-md  px-3"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex w-full items-center justify-center gap-2">
-                        <input
-                            type="checkbox"
-                            value=""
-                            checked={true}
-                            className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                        />
-                        <label className="font-medium text-gray-900 dark:text-gray-300">
-                            I accept all the terms and requirements
-                        </label>
-                    </div>
-                    <div className="flex w-full items-center justify-center gap-2">
-                        <button className="bg-signature-yellow w-fit rounded-md px-12 py-3 font-bold shadow-md">
-                            Post Job
-                        </button>
-                    </div>
-                </Modal>
+                {/*<Modal*/}
+                {/*    handleClose={toggleModal}*/}
+                {/*    show={isModalShown}*/}
+                {/*    modalTitle="Post Job Hiring"></Modal>*/}
+                <CreateJobModal
+                    openState={isModalShown}
+                    setOpenState={setIsModalShown}
+                />
             </ManagementPageLayout>
         </>
     );

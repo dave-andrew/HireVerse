@@ -1,4 +1,5 @@
 import ManagementPageLayout from "../../layouts/ManagementPageLayout";
+import { Link } from "react-router-dom";
 
 export default function EmptyPage() {
     return (
@@ -14,9 +15,9 @@ export default function EmptyPage() {
                         You are not the manager of any companies. Register a
                         company or be invited to one.
                     </p>
-                    <button className="main-button text-md mt-5 !px-8">
+                    <Link to="/employer/register" className="main-button text-md mt-5 !px-8">
                         Register Company
-                    </button>
+                    </Link>
                 </div>
             </div>
         </ManagementPageLayout>

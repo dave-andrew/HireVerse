@@ -8,6 +8,7 @@ import { IoMdClose } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { HireVerse_job } from "../../../../declarations/HireVerse_job";
 import { CONSTANTS } from "../../utils/constants";
+import { isOk } from "../../utils/resultGuarder";
 
 export interface IFilterForm {
     salaryStart: number;
@@ -37,7 +38,11 @@ export default function JobFilter({ onApplyFilter }: Props) {
 
     const getIndustries = async () => {
         const industries = await jobService.getAllIndustry();
-        setIndustries(industries);
+
+        if (isOk(industries)) {
+            // @ts-ignore
+            setIndustries(industries.ok);
+        }
     };
     const onSubmit = (data: IFilterForm) => {
         onApplyFilter(data);
@@ -144,8 +149,7 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                                 control={control}
                                                 selectionClassName="hover:bg-signature-gray rounded-none"
                                                 values={
-                                                    CONSTANTS.COMPANY
-                                                        .EXPERIENCES
+                                                    CONSTANTS.JOB.EXPERIENCES
                                                 }
                                             />
                                         </WrappedDisclosure>

@@ -22,38 +22,34 @@ export default function CompleteRegistration() {
         formState: { errors },
     } = useForm<ICompleteRegisterForm>();
 
-    const handleFormSubmit = async (data: ICompleteRegisterForm) => {
-        const newUser: User = {
-            internet_identity: await getPrincipal(),
-            email: data.email,
-            first_name: data.firstName,
-            last_name: data.lastName,
-            birth_date: data.birthDate,
-            company_ids: [],
-            timestamp: BigInt(Date.now()),
-            selected_company_id: [],
-        };
 
-        console.log(newUser);
-        await registerNewUser(newUser);
+    const handleFormSubmit = async (data: ICompleteRegisterForm) => {
+        const principal = await getPrincipal();
+        if (principal.toString() === "2vxsx-fae") return;
+        await registerNewUser(
+            data.email,
+            data.firstName,
+            data.lastName,
+            data.birthDate,
+        );
     };
 
     return (
         <FrontPageLayout>
-            <div className="bg-signature-yellow flex h-screen w-screen place-items-center justify-center">
+            <div className="bg-signature-yellow flex h-[calc(100vh-4rem)] w-full place-items-center justify-center">
                 {/*    TODO: Set the textured background*/}
                 <div className="flex w-[40vw] min-w-[500px] flex-col gap-10 rounded-lg bg-white p-12">
                     <div className="font-bebas text-5xl">
                         Complete Registration
                     </div>
 
-                    <div className="grid grid-cols-2">
+                    <div className="grid grid-cols-2 gap-4">
                         {/* First Name Field */}
-                        <div className="border-signature-gray flex flex-col border-t-[1px] py-5">
+                        <div className="border-signature-gray flex flex-col border-t-[1px] pt-4">
                             <div className="font-bold">First Name</div>
                             <div>Input the first name of your name.</div>
                         </div>
-                        <div className="border-signature-gray border-t-[1px] py-5">
+                        <div className="border-signature-gray border-t-[1px] pt-4">
                             <CardLayout
                                 className={`rounded-md ${errors.firstName ? "border-red-500" : "border-signature-gray"}`}>
                                 <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
@@ -77,11 +73,11 @@ export default function CompleteRegistration() {
                             </div>
                         </div>
                         {/* Last Name Field */}
-                        <div className="border-signature-gray flex flex-col border-t-[1px] py-5">
+                        <div className="border-signature-gray flex flex-col border-t-[1px] pt-4">
                             <div className="font-bold">Last Name</div>
                             <div>Input the last name of your name.</div>
                         </div>
-                        <div className="border-signature-gray border-t-[1px] py-5">
+                        <div className="border-signature-gray border-t-[1px] pt-4">
                             <CardLayout
                                 className={`rounded-md ${errors.lastName ? "border-red-500" : "border-signature-gray"}`}>
                                 <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
@@ -105,11 +101,11 @@ export default function CompleteRegistration() {
                             </div>
                         </div>
                         {/* Email Field */}
-                        <div className="border-signature-gray flex flex-col border-t-[1px] py-5">
+                        <div className="border-signature-gray flex flex-col border-t-[1px] pt-4">
                             <div className="font-bold">Email</div>
                             <div>Provide your personal email.</div>
                         </div>
-                        <div className="border-signature-gray border-t-[1px] py-5">
+                        <div className="border-signature-gray border-t-[1px] pt-4">
                             <CardLayout
                                 className={`rounded-md ${errors.email ? "border-red-500" : "border-signature-gray"}`}>
                                 <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">

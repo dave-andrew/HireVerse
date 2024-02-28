@@ -18,8 +18,6 @@ interface Props {
     onChange?: (value: string) => void;
 }
 
-interface Props {}
-
 export default function ImageLabeledDropdown({
     states,
     className,
@@ -35,6 +33,7 @@ export default function ImageLabeledDropdown({
                 render={({ field }) => (
                     <div className={`top-16 w-40 ${className}`}>
                         <Listbox
+                            disabled={!states}
                             {...field}
                             onChange={(e) => {
                                 field.onChange(e);
@@ -44,13 +43,25 @@ export default function ImageLabeledDropdown({
                                 <Listbox.Button className="hover:bg-signature-hover-gray relative flex w-full cursor-default flex-row items-center rounded-lg bg-white py-2 pl-3 pr-10 transition-colors ">
                                     <span className="block truncate">
                                         <img
-                                            className="mr-2 h-8 w-8 rounded-full"
-                                            src={field.value.img}
+                                            className={`mr-2 h-8 w-8 rounded-full ${
+                                                !states?.filter(
+                                                    (s) =>
+                                                        s.label === field.value,
+                                                )[0]?.img
+                                                    ? "hidden"
+                                                    : ""
+                                            }`}
+                                            src={
+                                                states?.filter(
+                                                    (s) =>
+                                                        s.label === field.value,
+                                                )[0]?.img
+                                            }
                                             alt=""
                                         />
                                     </span>
                                     <span className="block truncate text-left">
-                                        {field.value?.label}
+                                        {field.value}
                                     </span>
                                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                         <IoMdArrowDropdown />

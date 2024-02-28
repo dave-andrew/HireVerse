@@ -13,8 +13,7 @@ import Error "mo:base/Error";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
 import Review "canister:HireVerse_review";
-import Vector "mo:vector/Class"
-
+import Vector "mo:vector/Class";
 
 actor Job {
     type Job = {
@@ -30,6 +29,7 @@ actor Job {
         company_id : Text;
         reviews : [Text];
         timestamp : Time.Time;
+        status : Text;
     };
 
     type CreateJobInput = {
@@ -62,17 +62,24 @@ actor Job {
     type JobFilterInput = {
         position : ?Text;
         country : ?Text;
-        order: ?Text;
-        salary_start: ?Nat;
-        salary_end: ?Nat;
-        industry: ?Text;
-        experience: ?Text;
-        date_posted: ?Time.Time;
+        order : ?Text;
+        salary_start : ?Nat;
+        salary_end : ?Nat;
+        industry : ?Text;
+        experience : ?Text;
+        date_posted : ?Time.Time;
+    };
+
+    type JobManagerFilterInput = {
+        position : ?Text;
+        order : ?Text;
+        status : ?Text;
     };
 
     let jobs = TrieMap.TrieMap<Text, Job>(Text.equal, Text.hash);
 
     public shared func generateJob(company_id : Text) : async () {
+
         let job : Job = {
             id = await Helper.generateUUID();
             position = "Software Engineer";
@@ -86,12 +93,34 @@ actor Job {
             company_id = company_id;
             reviews = [];
             timestamp = Time.now();
+            status = "public";
         };
         jobs.put(job.id, job);
     };
 
-    public shared func createJob(newJob : CreateJobInput) : async Result.Result<Job, Text> {
+    public shared (msg) func createJob(newJob : CreateJobInput) : async Result.Result<Job, Text> {
         let id = await Helper.generateUUID();
+
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Unauthorized");
+        };
+
+        let company = await Company.getCompany(newJob.company_id);
+
+        switch (company) {
+            case null {
+                return #err("Company not found");
+            };
+            case (?actualCompany) {
+                let manager_ids : [Principal] = actualCompany.company_manager_ids;
+
+                if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
+                    return #err("Unauthorized");
+                };
+            };
+        };
 
         let job : Job = {
             id = id;
@@ -106,6 +135,7 @@ actor Job {
             company_id = newJob.company_id;
             reviews = [];
             timestamp = Time.now();
+            status = "active";
         };
 
         jobs.put(id, job);
@@ -113,36 +143,85 @@ actor Job {
         return #ok(job);
     };
 
-    public query func updateJob(id : Text, job : Job) : async () {
+    public shared (msg) func createJobForce(newJob : CreateJobInput) : async Result.Result<Job, Text> {
+        let id = await Helper.generateUUID();
+
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Unauthorized");
+        };
+
+        let company = await Company.getCompany(newJob.company_id);
+
+        let job : Job = {
+            id = id;
+            position = newJob.position;
+            location = newJob.location;
+            industry = newJob.industry;
+            salary_start = newJob.salary_start;
+            salary_end = newJob.salary_end;
+            short_description = newJob.short_description;
+            job_description = newJob.job_description;
+            requirements = newJob.requirements;
+            company_id = newJob.company_id;
+            reviews = [];
+            timestamp = Time.now();
+            status = "active";
+        };
+
         jobs.put(id, job);
+        let test = Company.addJob(newJob.company_id, id);
+        return #ok(job);
     };
 
-    public shared func deleteJob(id : Text) : async ?Job {
-        jobs.remove(id);
+    public query func updateJob(id : Text, job : Job) : async Result.Result<(), Text> {
+        jobs.put(id, job);
+        return #ok();
     };
 
-    public shared query func getJob(id : Text) : async ?Job {
-        return jobs.get(id);
+    public shared func deleteJob(id : Text) : async Result.Result<?Job, Text> {
+        #ok(jobs.remove(id));
     };
 
-    public shared func getFullJob(id : Text) : async ?FullJob {
-        let job : ?Job = await getJob(id);
+    public shared query func getJob(id : Text) : async Result.Result<Job, Text> {
+        let job : ?Job = jobs.get(id);
         switch (job) {
             case null {
-                return null;
+                return #err("Job not found");
+            };
+            case (?actualJob) {
+                return #ok(actualJob);
+            };
+        };
+    };
+
+    public shared func getFullJob(id : Text) : async Result.Result<FullJob, Text> {
+        let job = jobs.get(id);
+
+        switch (job) {
+            case null {
+                return #err("Job not found");
             };
             case (?actualJob) {
                 let company = await Company.getCompany(actualJob.company_id);
+
+                switch (company) {
+                    case null {
+                        return #err("Company not found");
+                    };
+                    case (?company) {};
+                };
 
                 var reviews = Vector.Vector<Text>();
 
                 for (review_id in actualJob.reviews.vals()) {
                     let review = await Review.getReview(review_id);
                     switch (review) {
-                        case null {
-                            return null;
+                        case (#err(errmsg)) {
+                            return #err(errmsg);
                         };
-                        case (?actualReview) {
+                        case (#ok(actualReview)) {
                             reviews.add(actualReview.id);
                         };
                     };
@@ -162,16 +241,16 @@ actor Job {
                     company = company;
                     reviews = Vector.toArray<Text>(reviews);
                 };
-                return ?fullJob;
+                return #ok(fullJob);
             };
         };
     };
 
-    public shared func addReview(job_id : Text, review_id : Text) {
+    public shared func addReview(job_id : Text, review_id : Text) : async Result.Result<(), Text> {
         let job = jobs.get(job_id);
         switch (job) {
             case null {
-                return;
+                return #err("Job not found");
             };
             case (?actualJob) {
 
@@ -192,17 +271,19 @@ actor Job {
                     company_id = actualJob.company_id;
                     reviews = Vector.toArray<Text>(jobReviews);
                     timestamp = actualJob.timestamp;
+                    status = actualJob.status;
                 };
                 jobs.put(job_id, updated_job);
+                return #ok();
             };
         };
     };
 
-    public shared query func getAllJobs() : async [Job] {
-        return Iter.toArray(jobs.vals());
+    public shared query func getAllJobs() : async Result.Result<[Job], Text> {
+        return #ok(Iter.toArray(jobs.vals()));
     };
 
-    public shared query func getAllIndustry() : async [Text] {
+    public shared query func getAllIndustry() : async Result.Result<[Text], Text> {
         let jobsList = Iter.toArray(jobs.vals());
         let industryList = Vector.Vector<Text>();
 
@@ -212,69 +293,86 @@ actor Job {
             };
         };
 
-        return Vector.toArray<Text>(industryList);
+        return #ok(Vector.toArray<Text>(industryList));
     };
 
-
-    public shared composite query func getJobs(startFrom : Nat, amount : Nat, jobFilters : JobFilterInput) : async [Job] {
+    public shared composite query func getJobs(startFrom : Nat, amount : Nat, jobFilters : JobFilterInput) : async Result.Result<[Job], Text> {
         var jobsList = Iter.toArray(jobs.vals());
 
-        switch(jobFilters.position){
+        //jangan diaksih
+        switch (jobFilters.position) {
             case null {};
             case (?position) {
-                jobsList := Array.filter<Job>(jobsList, func(job) {
-                    return Text.contains(job.position, #text position);
-                });
+                jobsList := Array.filter<Job>(
+                    jobsList,
+                    func(job) {
+                        return Text.contains(job.position, #text position);
+                    },
+                );
             };
         };
 
-        switch(jobFilters.salary_start){
+        switch (jobFilters.salary_start) {
             case null {};
             case (?salary_start) {
-                jobsList := Array.filter<Job>(jobsList, func(job) {
-                    return job.salary_start >= salary_start;
-                });
+                jobsList := Array.filter<Job>(
+                    jobsList,
+                    func(job) {
+                        return job.salary_start >= salary_start;
+                    },
+                );
             };
         };
 
-        switch(jobFilters.salary_end){
+        switch (jobFilters.salary_end) {
             case null {};
             case (?salary_end) {
-                jobsList := Array.filter<Job>(jobsList, func(job) {
-                    return job.salary_end <= salary_end;
-                });
+                jobsList := Array.filter<Job>(
+                    jobsList,
+                    func(job) {
+                        return job.salary_end <= salary_end;
+                    },
+                );
             };
         };
 
-        switch(jobFilters.industry){
+        switch (jobFilters.industry) {
             case null {};
             case (?industry) {
-                jobsList := Array.filter<Job>(jobsList, func(job) {
-                    return Text.contains(job.industry, #text industry);
-                });
+                jobsList := Array.filter<Job>(
+                    jobsList,
+                    func(job) {
+                        return Text.contains(job.industry, #text industry);
+                    },
+                );
             };
         };
 
-        switch(jobFilters.experience){
+        switch (jobFilters.experience) {
             case null {};
             case (?experience) {
-                jobsList := Array.filter<Job>(jobsList, func(job) {
-                    return Text.contains(job.requirements, #text experience);
-                });
+                jobsList := Array.filter<Job>(
+                    jobsList,
+                    func(job) {
+                        return Text.contains(job.requirements, #text experience);
+                    },
+                );
             };
         };
 
-        switch(jobFilters.date_posted){
+        switch (jobFilters.date_posted) {
             case null {};
             case (?date_posted) {
-                jobsList := Array.filter<Job>(jobsList, func(job) {
-                    return job.timestamp >= date_posted;
-                });
+                jobsList := Array.filter<Job>(
+                    jobsList,
+                    func(job) {
+                        return job.timestamp >= date_posted;
+                    },
+                );
             };
         };
 
-
-        switch(jobFilters.country){
+        switch (jobFilters.country) {
             case null {};
             case (?country) {
                 var newJobList = Vector.Vector<Job>();
@@ -287,7 +385,7 @@ actor Job {
                         case (?company) {
                             if (Text.contains(company.country, #text country)) {
                                 newJobList.add(job);
-                            }
+                            };
                         };
                     };
                 };
@@ -296,58 +394,241 @@ actor Job {
             };
         };
 
-        switch(jobFilters.order){
+        switch (jobFilters.order) {
             case null {};
             case (?order) {
 
-                if(order == "Newest") {
-                    jobsList := Array.sort<Job>(jobsList, func(a, b) {
-                        return Int.compare(a.timestamp, b.timestamp);
-                    });
-                };
-                
-                if(order == "Oldest") {
-                    jobsList := Array.sort<Job>(jobsList, func(a, b) {
-                        return Int.compare(b.timestamp, a.timestamp);
-                    });
+                if (order == "Newest") {
+                    jobsList := Array.sort<Job>(
+                        jobsList,
+                        func(a, b) {
+                            return Int.compare(a.timestamp, b.timestamp);
+                        },
+                    );
                 };
 
-                if(order == "Highest Salary") {
-                    jobsList := Array.sort<Job>(jobsList, func(a, b) {
-                        return Int.compare(b.salary_start, a.salary_start);
-                    });
+                if (order == "Oldest") {
+                    jobsList := Array.sort<Job>(
+                        jobsList,
+                        func(a, b) {
+                            return Int.compare(b.timestamp, a.timestamp);
+                        },
+                    );
                 };
 
-                if(order == "Lowest Salary") {
-                    jobsList := Array.sort<Job>(jobsList, func(a, b) {
-                        return Int.compare(a.salary_start, b.salary_start);
-                    });
-                }
+                if (order == "Highest Salary") {
+                    jobsList := Array.sort<Job>(
+                        jobsList,
+                        func(a, b) {
+                            return Int.compare(b.salary_start, a.salary_start);
+                        },
+                    );
+                };
+
+                if (order == "Lowest Salary") {
+                    jobsList := Array.sort<Job>(
+                        jobsList,
+                        func(a, b) {
+                            return Int.compare(a.salary_start, b.salary_start);
+                        },
+                    );
+                };
 
             };
         };
 
-        if(startFrom > jobsList.size()) {
-            return [];
+        if (startFrom > jobsList.size()) {
+            return #err("No more jobs");
         };
 
-        if(startFrom + amount > jobsList.size()) {
-            return Iter.toArray(Array.slice<Job>(jobsList, startFrom, jobsList.size()));
+        if (startFrom + amount > jobsList.size()) {
+            return #ok(Iter.toArray(Array.slice<Job>(jobsList, startFrom, jobsList.size())));
         };
 
-        return Iter.toArray(Array.slice<Job>(jobsList, startFrom, startFrom + amount));
+        return #ok(Iter.toArray(Array.slice<Job>(jobsList, startFrom, startFrom + amount)));
     };
 
-    public shared query func searchJobs(position : Text, country : Text) : async [Job] {
+    public shared query func searchJobs(position : Text, country : Text) : async Result.Result<[Job], Text> {
         let jobsList = Iter.toArray(jobs.vals());
 
-        let filteredJobs = Array.filter<Job>(jobsList, func(job) {
-            return Text.contains(job.position, #text position);
-        });
+        let filteredJobs = Array.filter<Job>(
+            jobsList,
+            func(job) {
+                return Text.contains(job.position, #text position);
+            },
+        );
 
-        return Array.filter<Job>(filteredJobs, func(job) {
-            return Text.contains(job.location, #text country);
-        });
+        return #ok(
+            Array.filter<Job>(
+                filteredJobs,
+                func(job) {
+                    return Text.contains(job.location, #text country);
+                },
+            )
+        );
     };
 
+    public shared composite query func getJobPostedByCompany(company_id : Text, startFrom : Nat, amount : Nat, filter : JobManagerFilterInput) : async Result.Result<[Job], Text> {
+        let company : ?Company.Company = await Company.getCompany(company_id);
+
+        switch (company) {
+            case null {
+                return #err("Company not found");
+            };
+            case (?c) {
+                let job_ids = c.job_posting_ids;
+                var jobPostings = Vector.Vector<Job>();
+
+                for (job_id in job_ids.vals()) {
+                    let jobPosting = await getJob(job_id);
+                    switch (jobPosting) {
+                        case (#err(errmsg)) {};
+                        case (#ok(jp)) {
+                            jobPostings.add(jp);
+                        };
+                    };
+                };
+
+                switch (filter.position) {
+                    case null {};
+                    case (?position) {
+                        let newJobList = Vector.Vector<Job>();
+
+                        for (job in Iter.fromArray(Vector.toArray(jobPostings))) {
+                            if (Text.contains(job.position, #text position)) {
+                                newJobList.add(job);
+                            };
+                        };
+
+                        jobPostings := newJobList;
+                    };
+                };
+
+                switch (filter.status) {
+                    case null {};
+                    case (?status) {
+                        let newJobList = Vector.Vector<Job>();
+
+                        for (job in Iter.fromArray(Vector.toArray(jobPostings))) {
+                            if (Text.contains(job.status, #text status)) {
+                                newJobList.add(job);
+                            };
+                        };
+
+                        jobPostings := newJobList;
+                    };
+                };
+
+                switch (filter.order) {
+                    case null {};
+                    case (?order) {
+
+                        var jobsList = Vector.toArray<Job>(jobPostings);
+                        if (order == "Newest") {
+                            jobsList := Array.sort<Job>(
+                                jobsList,
+                                func(a, b) {
+                                    return Int.compare(a.timestamp, b.timestamp);
+                                },
+                            );
+                        };
+
+                        if (order == "Oldest") {
+                            jobsList := Array.sort<Job>(
+                                jobsList,
+                                func(a, b) {
+                                    return Int.compare(b.timestamp, a.timestamp);
+                                },
+                            );
+                        };
+
+                        if (order == "Highest Salary") {
+                            jobsList := Array.sort<Job>(
+                                jobsList,
+                                func(a, b) {
+                                    return Int.compare(b.salary_start, a.salary_start);
+                                },
+                            );
+                        };
+
+                        if (order == "Lowest Salary") {
+                            jobsList := Array.sort<Job>(
+                                jobsList,
+                                func(a, b) {
+                                    return Int.compare(a.salary_start, b.salary_start);
+                                },
+                            );
+                        };
+                        jobPostings := Vector.fromArray(jobsList);
+                    };
+                };
+
+                return #ok(Vector.toArray<Job>(jobPostings));
+            };
+        };
+    };
+    public shared func deleteAllJobs() : async () { 
+        for (job in jobs.vals()) {
+            ignore jobs.remove(job.id);
+        };
+    };
+
+    public shared (msg) func toggleJobVisibility(job_id : Text) : async Result.Result<(), Text> {
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Unauthorized");
+        };
+
+        let job = await getJob(job_id);
+
+        switch(job){
+            case (#err(errmsg)) {
+                return #err(errmsg);
+            };
+            case (#ok(actualJob)) {
+                let company = await Company.getCompany(actualJob.company_id);
+
+                switch (company) {
+                    case null {
+                        return #err("Company not found");
+                    };
+                    case (?actualCompany) {
+                        let manager_ids : [Principal] = actualCompany.company_manager_ids;
+
+                        if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
+                            return #err("Unauthorized");
+                        };
+                    };
+                };
+
+                var newStatus = "active";
+
+                if (actualJob.status == "active") {
+                    newStatus := "hidden";
+                };
+
+                let updated_job = {
+                    id = actualJob.id;
+                    position = actualJob.position;
+                    location = actualJob.location;
+                    industry = actualJob.industry;
+                    salary_start = actualJob.salary_start;
+                    salary_end = actualJob.salary_end;
+                    short_description = actualJob.short_description;
+                    job_description = actualJob.job_description;
+                    requirements = actualJob.requirements;
+                    company_id = actualJob.company_id;
+                    reviews = actualJob.reviews;
+                    timestamp = actualJob.timestamp;
+                    status = newStatus;
+                };
+                
+                jobs.put(job_id, updated_job);
+                return #ok();
+            };
+        };
+
+        return #ok();
+    };
 };

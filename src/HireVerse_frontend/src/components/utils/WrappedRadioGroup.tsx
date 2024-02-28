@@ -34,42 +34,40 @@ export default function WrappedRadioGroup({
                             {label}
                         </RadioGroup.Label>
                     )}
-                    <div className="">
-                        {values.map((value) => (
-                            <RadioGroup.Option
-                                key={value}
-                                value={value}
-                                className={({ checked }) =>
-                                    `${checked ? "bg-signature-gray text-black" : "bg-white"}
+                    {values.map((value) => (
+                        <RadioGroup.Option
+                            key={value}
+                            value={value}
+                            className={({ checked }) =>
+                                `${checked ? "bg-signature-gray text-black" : "bg-white"}
                     relative flex cursor-pointer rounded-lg px-5 py-4 focus:outline-none ${selectionClassName}`
-                                }>
-                                {({ active, checked }) => (
-                                    <>
-                                        <div className="flex w-full items-center justify-between">
-                                            <div className="flex items-center">
-                                                <div className="text-sm text-black">
-                                                    <RadioGroup.Label
-                                                        as="p"
-                                                        className={`font-medium  ${
-                                                            checked
-                                                                ? "text-black"
-                                                                : "text-gray-900"
-                                                        }`}>
-                                                        {value}
-                                                    </RadioGroup.Label>
-                                                </div>
+                            }>
+                            {({ active, checked }) => (
+                                <>
+                                    <div className="flex w-full items-center justify-between">
+                                        <div className="flex items-center">
+                                            <div className="text-sm text-black">
+                                                <RadioGroup.Label
+                                                    as="p"
+                                                    className={`font-medium  ${
+                                                        checked
+                                                            ? "text-black"
+                                                            : "text-gray-900"
+                                                    }`}>
+                                                    {value}
+                                                </RadioGroup.Label>
                                             </div>
-                                            {checked && (
-                                                <div className="shrink-0 text-black">
-                                                    <FaCheck />
-                                                </div>
-                                            )}
                                         </div>
-                                    </>
-                                )}
-                            </RadioGroup.Option>
-                        ))}
-                    </div>
+                                        {checked && (
+                                            <div className="shrink-0 text-black">
+                                                <FaCheck />
+                                            </div>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                        </RadioGroup.Option>
+                    ))}
                 </RadioGroup>
             )}
         />

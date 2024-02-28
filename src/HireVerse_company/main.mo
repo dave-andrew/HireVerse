@@ -103,18 +103,18 @@ actor Company {
         return Iter.toArray(companies.vals());
     };
 
-    public shared query (msg) func getManagedCompanies() : async Result.Result<[Company], Text>{
+    public shared query (msg) func getManagedCompanies() : async Result.Result<[Company], Text> {
         let user_id = msg.caller;
 
-        if(Principal.isAnonymous(user_id)){
+        if (Principal.isAnonymous(user_id)) {
             return #err("Not authorized");
         };
 
-        let companyList: [Company] = Iter.toArray(companies.vals());
+        let companyList : [Company] = Iter.toArray(companies.vals());
         var managedCompanies = Vector.Vector<Company>();
 
         for (company in companyList.vals()) {
-            if (Array.find<Principal>(company.company_manager_ids, func(p : Principal) : Bool { p == user_id; }) != null) {
+            if (Array.find<Principal>(company.company_manager_ids, func(p : Principal) : Bool { p == user_id }) != null) {
                 managedCompanies.add(company);
             };
         };
@@ -123,11 +123,11 @@ actor Company {
     };
 
     public shared query func getCompanyCountries() : async [Text] {
-        let companyList: [Company] = Iter.toArray(companies.vals());
+        let companyList : [Company] = Iter.toArray(companies.vals());
         let countries = Vector.Vector<Text>();
 
         for (company in companies.vals()) {
-            if(not Vector.contains(countries, company.country, Text.equal)) {
+            if (not Vector.contains(countries, company.country, Text.equal)) {
                 countries.add(company.country);
             };
         };
@@ -150,18 +150,23 @@ actor Company {
         ) != null;
     };
 
-    public shared func inviteManager(company_id : Text, user_id : Principal, inviter_id : Principal) : async ?Invite {
+    public shared func inviteManager(company_id : Text, user_id : Principal, inviter_id : Principal) : async Result.Result<Invite, Text> {
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Not authorized");
+        };
+
         let company = await getCompany(company_id);
 
         switch (company) {
             case null {
-                return null;
+                return #err("Company not found");
             };
             case (?company) {
 
                 let isManager : Bool = await checkCompanyManager(company, user_id);
                 if (not isManager) {
-                    return null;
+                    return #err("User is not a manager of the company");
                 };
 
                 let id = await Helper.generateUUID();
@@ -175,26 +180,31 @@ actor Company {
 
                 invitations.put(id, invite);
 
-                return ?invite;
+                return #ok(invite);
             };
         };
-
-        return null;
     };
 
-    public shared func addJob(company_id : Text, job_id : Text) : async () {
+    public shared (msg) func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Not authorized");
+        };
+
         let company = await getCompany(company_id);
 
         switch (company) {
             case null {
-                return;
+                return #err("Company not found");
             };
             case (?company) {
                 let jobIds = Vector.fromArray<Text>(company.job_posting_ids);
 
                 jobIds.add(job_id);
 
-                let updatedCompany: Company = {
+                let updatedCompany : Company = {
                     id = company_id;
                     name = company.name;
                     founded_year = company.founded_year;
@@ -206,20 +216,20 @@ actor Company {
                     job_posting_ids = Vector.toArray<Text>(jobIds);
                     timestamp = company.timestamp;
                 };
-
-                return companies.put(company_id, updatedCompany);
+                companies.put(company_id, updatedCompany);
+                #ok();
             };
         };
     };
 
-    public shared func removeInvite(id : Text) : async ?Invite {
-        return invitations.remove(id);
+    public shared func removeInvite(id : Text) : async Result.Result<?Invite, Text> {
+        #ok(invitations.remove(id));
     };
 
     public shared (msg) func addManager(company_id : Text) : async Result.Result<(), Text> {
         let user_id = msg.caller;
 
-        if(Principal.isAnonymous(user_id)){
+        if (Principal.isAnonymous(user_id)) {
             return #err("Not authorized");
         };
 
@@ -245,27 +255,27 @@ actor Company {
                     job_posting_ids = company.job_posting_ids;
                     timestamp = company.timestamp;
                 };
-
-                return #ok(companies.put(company_id, updatedCompany));
+                companies.put(company_id, updatedCompany);
+                return #ok();
             };
         };
     };
-    public shared composite query func getManagersFromCompany(company_id : Text) : async ?[User.User] {
+    public shared composite query func getManagersFromCompany(company_id : Text) : async Result.Result<[User.User], Text> {
         let companies : ?Company = await getCompany(company_id);
 
         switch (companies) {
             case null {
-                return null;
+                return #err("Company not found");
             };
             case (?company) {
                 let manager_ids = company.company_manager_ids;
-                var managers = Buffer.Buffer<User.User>(0);
+                var managers = Vector.Vector<User.User>();
 
-                for (manager_id in manager_ids.vals()) {
+                label l for (manager_id in manager_ids.vals()) {
                     let manager : ?User.User = await User.getUser(manager_id);
                     switch (manager) {
                         case null {
-                            return null;
+                            continue l;
                         };
                         case (?m) {
                             managers.add(m);
@@ -273,18 +283,18 @@ actor Company {
                     };
                 };
 
-                return ?Buffer.toArray(managers);
+                #ok(Vector.toArray<User.User>(managers));
             };
         };
     };
 
-    public shared func leaveCompany(company_id : Text, user_id : Principal) : async () {
+    public shared func leaveCompany(company_id : Text, user_id : Principal) : async Result.Result<(), Text> {
 
         let company : ?Company = await getCompany(company_id);
 
         switch (company) {
             case null {
-                return;
+                return #err("Company not found");
             };
             case (?c) {
                 let manager_ids = c.company_manager_ids;
@@ -294,6 +304,10 @@ actor Company {
                         p != user_id;
                     },
                 );
+
+                if (updatedManagerIds.size() == manager_ids.size()) {
+                    return #err("User is not a manager of the company");
+                };
 
                 let updatedCompany = {
                     id = company_id;
@@ -307,54 +321,57 @@ actor Company {
                     job_posting_ids = c.job_posting_ids;
                     timestamp = c.timestamp;
                 };
-
-                return companies.put(company_id, updatedCompany);
+                companies.put(company_id, updatedCompany);
+                return #ok();
             };
         };
     };
 
-    // public shared composite query func getJobPostedByCompany(company_id : Principal) : async ?[Job.Job] {
-    //     let company : ?Company = await getCompany(company_id);
-
-    //     switch (company) {
-    //         case null {
-    //             return null;
-    //         };
-    //         case (?c) {
-    //             let job_ids = c.job_posting_ids;
-    //             var jobPostings : [Job.Job] = [];
-    //             for (job_id in job_ids.vals()) {
-    //                 let jobPosting : ?Job.Job = await Job.getJob(job_id);
-    //                 switch (jobPosting) {
-    //                     case null {
-    //                         return null;
-    //                     };
-    //                     case (?jp) {
-    //                         jobPostings := Array.append<Job.Job>(jobPostings, [jp]);
-    //                     };
-    //                 };
-    //             };
-
-    //             return ?jobPostings;
-    //         };
-    //     };
-    // };
-
-    public shared composite query func getCompanyNames(comapny_ids : [Text]) : async [Text] {
+    public shared composite query func getCompanyNames(company_ids : [Text]) : async Result.Result<[Text], Text> {
         let companyNames = Vector.Vector<Text>();
-        for (company_id in comapny_ids.vals()) {
+
+        for (company_id in company_ids.vals()) {
             let company : ?Company = await getCompany(company_id);
             switch (company) {
                 case null {
-                    return [];
+                    return #err("Company with id " # company_id # " not found");
                 };
                 case (?c) {
                     companyNames.add(c.name);
                 };
-
             };
         };
 
-        return Vector.toArray(companyNames);
+        return #ok(Vector.toArray(companyNames));
+    };
+
+    public shared func getUserCompanies(user_id : Principal) : async Result.Result<[Company], Text> {
+        let user : ?User.User = await User.getUser(user_id);
+        var companies = Vector.Vector<Company>();
+
+        switch (user) {
+            case (?user) {
+                let company_ids : [Text] = user.company_ids;
+                for (company_id in company_ids.vals()) {
+                    let fetched_company = await Company.getCompany(company_id);
+                    switch (fetched_company) {
+                        case null {};
+                        case (?c) {
+                            companies.add(c);
+                        };
+                    };
+                };
+            };
+            case null {
+                return #err("User not found");
+            };
+        };
+        return #ok(Vector.toArray(companies));
+    };
+
+    public shared func deleteAllCompany() : async () {
+        for (company in companies.vals()) {
+            ignore companies.remove(company.id);
+        };
     };
 };

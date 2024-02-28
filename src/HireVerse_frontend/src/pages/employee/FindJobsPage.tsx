@@ -13,14 +13,15 @@ import { useForm } from "react-hook-form";
 import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 import convertNullFormat from "../../utils/convertNullFormat";
 import useService from "../../hooks/useService";
+import { isOk } from "../../utils/resultGuarder";
+import { CONSTANTS } from "../../utils/constants";
+import handleKeyDown from "../../utils/handleKeyDown";
 
 interface IQueryFilterSortForm {
     country: string;
     order: string;
     query: string;
 }
-
-const temp = ["Newest", "Oldest", "Highest Salary", "Lowest Salary"];
 
 export default function FindJobs() {
     const { jobService, companyService } = useService();
@@ -73,21 +74,24 @@ export default function FindJobs() {
             filter,
         );
 
-        const companyIds = response.map((job) => job.company_id);
-        const names = await companyService.getCompanyNames(companyIds);
+        let companyIds: string[] = [];
+        if (isOk(response)) {
+            companyIds = response.ok.map((job) => job.company_id);
 
-        setJobs(response);
-        setCompanyNames(names);
+            setJobs(response.ok);
 
-        if (initial && response.length > 0) {
-            setShownJobId(response[0].id);
+            if (initial && response.ok.length > 0) {
+                setShownJobId(response.ok[0].id);
+            }
         }
-    };
 
-    const handleKeyDown = (key: string) => {
-        if (key === "Enter") {
-            getJobs();
+        const responseName = await companyService.getCompanyNames(companyIds);
+
+        if (isOk(responseName)) {
+            setCompanyNames(responseName.ok);
         }
+
+        console.log(response);
     };
 
     useEffect(() => {
@@ -103,13 +107,13 @@ export default function FindJobs() {
     return (
         <FrontPageLayout>
             <div className="flex h-full w-full flex-col place-items-center gap-20">
-                <div className="h-[60vh] w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md">
+                <div className="lg:h-[480px] md:h-[360px] w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md">
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
                         <div className="flex w-2/6 flex-col gap-5">
                             <h3 className="text-4xl font-bold lg:text-5xl">
                                 Find Your Dream Job Now.
                             </h3>
-                            <p className="text-lg leading-6 lg:text-xl">
+                            <p className="text-base leading-6 lg:text-lg md:text-sm text-justify">
                                 Find your dream job now! Our platform connects
                                 you with top employers and provides valuable
                                 resources to enhance your job search experience.
@@ -118,13 +122,13 @@ export default function FindJobs() {
                             </p>
                         </div>
                         <img
-                            className="w-[25vw]"
+                            className="lg:w-[320px] lg:h-[320px] md:w-[240px] md:h-[240px]"
                             src="/storyset/resume-folder-cuate.png"
                             alt=""
                         />
                     </div>
                 </div>
-                <div className="flex w-3/4 flex-col gap-10 pb-10">
+                <div className="flex flex-col gap-10 pb-10 lg:min-w-[1000px] md:[800px] m-auto">
                     <div className="flex w-full flex-row gap-5">
                         <JobFilter onApplyFilter={(data) => setFilter(data)} />
                         <CardLayout className="flex w-full flex-row items-center">
@@ -135,7 +139,9 @@ export default function FindJobs() {
                                     type="text"
                                     className="w-full bg-transparent outline-0"
                                     placeholder="Search Job"
-                                    onKeyDown={(e) => handleKeyDown(e.key)}
+                                    onKeyDown={(e) =>
+                                        handleKeyDown(e.key, "Enter", getJobs)
+                                    }
                                 />
                             </span>
                             <span className="border-signature-gray flex flex-row items-center gap-2 rounded-br-xl rounded-tr-xl border-l-[1px] p-1 pl-5 transition-colors has-[:focus]:bg-gray-100">
@@ -155,7 +161,7 @@ export default function FindJobs() {
                                 <TextDropdown
                                     name="order"
                                     control={control}
-                                    states={temp}
+                                    states={CONSTANTS.ORDER}
                                     onChange={(_) => getJobs()}
                                 />
                             </CardLayout>

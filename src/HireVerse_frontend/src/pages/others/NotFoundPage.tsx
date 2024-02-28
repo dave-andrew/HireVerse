@@ -6,7 +6,6 @@ export default function NotFoundPage() {
                     Oops, 404 NOT FOUND!
                 </div>
                 <div className="text-xl font-bold">
-                    {" "}
                     Seems like you lost your way here!
                 </div>
             </div>
