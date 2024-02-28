@@ -69,7 +69,7 @@ actor Company {
 
         return company.id;
     };
-    public shared func registerCompanies(newCompany : CreateCompanyInput) : async Company {
+    public shared (msg) func registerCompanies(newCompany : CreateCompanyInput) : async Company {
 
         let id = await Helper.generateUUID();
 
@@ -81,7 +81,7 @@ actor Company {
             location = newCompany.location;
             image = newCompany.image;
             linkedin = newCompany.linkedin;
-            company_manager_ids = [];
+            company_manager_ids = [msg.caller];
             job_posting_ids = [];
             timestamp = Time.now();
         };

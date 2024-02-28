@@ -37,7 +37,6 @@ html {
   color: #00b4d8;
 }
 
-
 .bg-signature-yellow {
   background-color: #ffd166;
 }
@@ -84,7 +83,7 @@ html {
 }
 
 .border-color-blue-primary {
-  border-color: #00b4d8;
+  border-color: #00b4d8 !important;
 }
 
 .hover\:bg-signature-blue:hover {
@@ -93,6 +92,10 @@ html {
 
 .hover\:border-blue-primary:hover {
   border-color: #00b4d8;
+}
+
+.hover\:text-blue-primary:hover {
+  color: #00b4d8;
 }
 
 .bg-signature-gray {

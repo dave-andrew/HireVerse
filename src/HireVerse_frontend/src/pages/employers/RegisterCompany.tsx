@@ -7,6 +7,9 @@ import { CustomCheckBox } from "../../components/form/CustomCheckBox";
 import { useForm } from "react-hook-form";
 import useService from "../../hooks/useService";
 import useImageBlob from "../../hooks/useImageBlob";
+import { CreateCompanyInput } from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 interface IRegisterCompanyForm {
     companyName: string;
@@ -19,6 +22,7 @@ interface IRegisterCompanyForm {
 }
 
 export default function RegisterCompany() {
+
     const {
         register,
         handleSubmit,
@@ -26,21 +30,26 @@ export default function RegisterCompany() {
     } = useForm<IRegisterCompanyForm>();
 
     const { getCompanyService } = useService();
-    const { convertImageToBlob } = useImageBlob();
+    const { convertImageToBlob } = useImageBlob()
+    const [isLoading, setIsLoading] = useState(false)
 
+    const navigate = useNavigate()
     const handleFormSubmit = async (data: IRegisterCompanyForm) => {
+        setIsLoading(true)
         console.log(data);
         const imageBlob = await convertImageToBlob(data.companyLogo[0]);
-        // TODO: Do this after the company service is implemented
-        // const companyData: CreateCompanyInput = {
-        //     name: data.companyName,
-        //     founded_year: BigInt(data.foundedYear),
-        //     country: data.country,
-        //     location: data.location,
-        //     image: imageBlob,
-        //     linkedin: data.linkedInProfile,
-        // }
-        // await companyService.registerCompanies(companyData);
+        const companyData: CreateCompanyInput = {
+            name: data.companyName,
+            founded_year: BigInt(data.foundedYear),
+            country: data.country,
+            location: data.location,
+            image: imageBlob,
+            linkedin: data.linkedInProfile,
+        }
+        await companyService.registerCompanies(companyData);
+
+        setIsLoading(false)
+        navigate('/employer')
     };
 
     return (
@@ -189,9 +198,9 @@ export default function RegisterCompany() {
                                 />
                             </div>
                             <div className="flex flex-row items-center justify-center">
-                                <button
-                                    className="main-button"
-                                    onClick={handleSubmit(handleFormSubmit)}>
+                                <button className={`main-button ${isLoading ? "cursor-not-allowed !bg-gray-600" : ""}`}
+                                        disabled={isLoading}
+                                        onClick={handleSubmit(handleFormSubmit)}>
                                     Register Company
                                 </button>
                             </div>

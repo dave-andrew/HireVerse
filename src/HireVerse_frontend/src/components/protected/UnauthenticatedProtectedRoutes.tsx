@@ -3,6 +3,8 @@ import useAuth, {AuthState} from "../../hooks/useAuth";
 import {useEffect} from "react";
 import {Outlet, useNavigate} from "react-router-dom";
 import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
+import {toast} from "react-toastify";
+import {defaultToastOptions} from "../../layouts/ManagementPageLayout";
 
 
 export default function UnauthenticatedProtectedRoutes({children}: { children?: React.ReactNode }) {
@@ -13,8 +15,11 @@ export default function UnauthenticatedProtectedRoutes({children}: { children?: 
 
     useEffect(() => {
         if (authState === AuthState.Unregistered) {
-            console.log("Unregistered");
-            navigate("/complete-registration");
+            // console.log("Unregistered");
+            toast.warn("You must complete your registration first", defaultToastOptions);
+            setTimeout(() => {
+                navigate("/complete-registration");
+            }, defaultToastOptions.autoClose || 3000);
         }
     }, [authState]);
 

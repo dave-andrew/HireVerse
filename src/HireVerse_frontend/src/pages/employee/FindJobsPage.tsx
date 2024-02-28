@@ -107,7 +107,7 @@ export default function FindJobs() {
             <div className="flex h-full w-full flex-col place-items-center gap-20">
                 <div className="lg:h-[480px] md:h-[360px] w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md">
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
-                        <div className="flex w-2/6 flex-col gap-5">
+                        <div className="flex w-full p-8 md:w-2/6 flex-col gap-5">
                             <h3 className="text-4xl font-bold lg:text-5xl">
                                 Find Your Dream Job Now.
                             </h3>
@@ -120,7 +120,7 @@ export default function FindJobs() {
                             </p>
                         </div>
                         <img
-                            className="lg:w-[320px] lg:h-[320px] md:w-[240px] md:h-[240px]"
+                            className="lg:w-[320px] lg:h-[320px] md:w-[240px] md:h-[240px] hidden md:block"
                             src="/storyset/resume-folder-cuate.png"
                             alt=""
                         />

@@ -1,21 +1,21 @@
-import { Popover, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import { IoPersonCircleOutline } from "react-icons/io5";
-import { PiSignOut } from "react-icons/pi";
-import useAuth, { AuthState } from "../../hooks/useAuth";
+import {Popover, Transition} from "@headlessui/react";
+import {Fragment} from "react";
+import {IoPersonCircleOutline} from "react-icons/io5";
+import {PiSignOut} from "react-icons/pi";
+import useAuth, {AuthState} from "../../hooks/useAuth";
 
 export default function Profile() {
 
-    const { login, logout, user, authState } = useAuth();
+    const {login, logout, user, authState} = useAuth();
 
     return (
-        <div className="top-16 w-full max-w-sm px-4">
+        <div className="top-16 w-full max-w-sm md:px-4 px-1">
             <Popover className="relative">
-                {({ open }) => (
+                {({open}) => (
                     <>
                         <Popover.Button
                             className="hover:bg-signature-hover-gray flex place-items-center justify-center rounded-lg p-1 align-middle transition-colors">
-                            <IoPersonCircleOutline size="2rem" />
+                            <IoPersonCircleOutline size="2rem"/>
                         </Popover.Button>
                         <Transition
                             as={Fragment}
@@ -44,7 +44,17 @@ export default function Profile() {
                                         </span>
                                     </div>
                                     <div className="bg-gray-50 p-2 flex flex-col gap-2">
-                                        {authState == AuthState.Authenticated ? "" :
+                                        {authState == AuthState.Authenticated ?
+                                            <span
+                                                className="hover:bg-red-600 flow-root cursor-pointer rounded-md px-2 py-2 transition duration-150 ease-in-out hover:text-white">
+                                                <span className="flex items-center justify-center">
+                                                    <button className="w-full text-sm font-medium" onClick={logout}>
+                                                        Sign Out
+                                                    </button>
+                                                    <PiSignOut size="1.5rem"/>
+                                                </span>
+                                            </span>
+                                            :
                                             <span
                                                 className="hover:bg-blue-primary flow-root cursor-pointer rounded-md px-2 py-2 transition duration-150 ease-in-out hover:text-white">
                                                 <span className="flex items-center justify-center">
@@ -55,15 +65,6 @@ export default function Profile() {
                                                 </span>
                                             </span>
                                         }
-                                        <span
-                                            className="hover:bg-red-600 flow-root cursor-pointer rounded-md px-2 py-2 transition duration-150 ease-in-out hover:text-white">
-                                            <span className="flex items-center justify-center">
-                                                <button className="w-full text-sm font-medium" onClick={logout}>
-                                                    Sign Out
-                                                </button>
-                                                <PiSignOut size="1.5rem" />
-                                            </span>
-                                        </span>
                                     </div>
                                 </div>
                             </Popover.Panel>
