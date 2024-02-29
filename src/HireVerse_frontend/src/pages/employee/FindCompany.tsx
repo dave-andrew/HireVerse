@@ -6,17 +6,13 @@ import { useEffect, useState } from "react";
 import CustomTextField from "../../components/form/CustomTextField";
 import useService from "../../hooks/useService";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import { isErr } from "../../utils/resultGuarder";
-
-type ICompany = {
-
-}
 
 export default function FindCompany() {
 
     const { getCompanyService } = useService();
 
     const [search, setSearch] = useState<string>("");
+    const [searchCompany, setSearchCompany] = useState<Company[] | undefined>([])
 
     const [popularCompanies, setPopularCompanies] = useState([
         {
@@ -100,21 +96,25 @@ export default function FindCompany() {
 
     useEffect(() => {
         const searchJob = async () => {
-
-            if(search === "") {
-                const response = await getCompanyService().then((s) => s.getCompanies());
-                setResultCompanies(response);
-                return;
-            };
-
-            const response = await getCompanyService().then((s) => s.searchCompany(search));
-            if(isErr(response)) {
-                return;
-            }
-            setResultCompanies(response.ok);
-        }
+            const response = await getCompanyService().then((s) => s.getCompanies());
+            setResultCompanies(response);
+            setSearchCompany(response);
+        };
         searchJob();
-    }, [search]);
+    }, []);
+
+    useEffect(() => {
+        if (search.length > 0) {
+            const searched = resultCompanies?.filter((company) => {
+                return company.name.toLowerCase().includes(search.toLowerCase());
+            });
+
+            setSearchCompany(searched);
+        } else {
+            setSearchCompany(resultCompanies);
+        }
+
+    }, [search])
 
     return (
         <FrontPageLayout>
@@ -269,7 +269,7 @@ export default function FindCompany() {
                                     </div>
                                 </CardLayout>
                                 <div className="grid grow grid-cols-2 gap-4">
-                                    {resultCompanies?.map((cp, index) => {
+                                    {searchCompany?.map((cp, index) => {
                                         return (
                                             <CardLayout className="flex flex-col gap-2 rounded-md px-6 py-5" key={index}>
                                                 <div

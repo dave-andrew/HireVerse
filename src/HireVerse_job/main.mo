@@ -58,7 +58,7 @@ actor Job {
         short_description : Text;
         job_description : Text;
         requirements : Text;
-        company : ?Company.Company;
+        company : Company.Company;
         reviews : [Text];
         contacts : [Text];
         employType : Text;
@@ -119,10 +119,10 @@ actor Job {
         let company = await Company.getCompany(newJob.company_id);
 
         switch (company) {
-            case null {
+            case (#err(errmsg)) {
                 return #err("Company not found");
             };
-            case (?actualCompany) {
+            case (#ok(actualCompany)) {
                 let manager_ids : [Principal] = actualCompany.company_manager_ids;
 
                 if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
@@ -165,6 +165,19 @@ actor Job {
 
         let company = await Company.getCompany(newJob.company_id);
 
+        switch company {
+            case (#err(errmsg)) {
+                return #err("Company not found");
+            };
+            case (#ok(actualCompany)) {
+                let manager_ids : [Principal] = actualCompany.company_manager_ids;
+
+                if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
+                    return #err("Unauthorized");
+                };
+            };
+        };
+
         let job : Job = {
             id = id;
             position = newJob.position;
@@ -189,27 +202,27 @@ actor Job {
     };
 
     public query (msg) func updateJob(id : Text, job : Job) : async Result.Result<(), Text> {
-        
-        if(Principal.isAnonymous(msg.caller)){
+
+        if (Principal.isAnonymous(msg.caller)) {
             return #err("Unauthorized");
         };
-        
+
         jobs.put(id, job);
         return #ok();
     };
 
     public shared (msg) func deleteJob(id : Text) : async Result.Result<?Job, Text> {
-        
-        if(Principal.isAnonymous(msg.caller)){
+
+        if (Principal.isAnonymous(msg.caller)) {
             return #err("Unauthorized");
         };
-        
+
         #ok(jobs.remove(id));
     };
 
     public shared query (msg) func getJob(id : Text) : async Result.Result<Job, Text> {
-        
-        if(Principal.isAnonymous(msg.caller)){
+
+        if (Principal.isAnonymous(msg.caller)) {
             return #err("Unauthorized");
         };
 
@@ -225,13 +238,13 @@ actor Job {
     };
 
     public shared (msg) func getFullJob(id : Text) : async Result.Result<FullJob, Text> {
-        
+
         let user_id = msg.caller;
 
         if (Principal.isAnonymous(user_id)) {
             return #err("Unauthorized");
         };
-        
+
         let job = jobs.get(id);
 
         switch (job) {
@@ -242,10 +255,10 @@ actor Job {
                 let company = await Company.getCompany(actualJob.company_id);
 
                 switch (company) {
-                    case null {
+                    case (#err(errmsg)) {
                         return #err("Company not found");
                     };
-                    case (?company) {};
+                    case (#ok(company)) {};
                 };
 
                 var reviews = Vector.Vector<Text>();
@@ -262,24 +275,31 @@ actor Job {
                     };
                 };
 
-                let fullJob : FullJob = {
-                    id = actualJob.id;
-                    position = actualJob.position;
-                    location = actualJob.location;
-                    industry = actualJob.industry;
-                    salary_start = actualJob.salary_start;
-                    salary_end = actualJob.salary_end;
-                    short_description = actualJob.short_description;
-                    job_description = actualJob.job_description;
-                    requirements = actualJob.requirements;
-                    timestamp = actualJob.timestamp;
-                    company = company;
-                    reviews = Vector.toArray<Text>(reviews);
-                    contacts = actualJob.contacts;
-                    employType = actualJob.employType;
-                    status = actualJob.status;
+                switch (company) {
+                    case (#err(errmsg)) {
+                        return #err("Company not found");
+                    };
+                    case (#ok(company)) {
+                        let fullJob : FullJob = {
+                            id = actualJob.id;
+                            position = actualJob.position;
+                            location = actualJob.location;
+                            industry = actualJob.industry;
+                            salary_start = actualJob.salary_start;
+                            salary_end = actualJob.salary_end;
+                            short_description = actualJob.short_description;
+                            job_description = actualJob.job_description;
+                            requirements = actualJob.requirements;
+                            timestamp = actualJob.timestamp;
+                            company = company;
+                            reviews = Vector.toArray<Text>(reviews);
+                            contacts = actualJob.contacts;
+                            employType = actualJob.employType;
+                            status = actualJob.status;
+                        };
+                        return #ok(fullJob);
+                    };
                 };
-                return #ok(fullJob);
             };
         };
     };
@@ -422,8 +442,8 @@ actor Job {
                     let company = await Company.getCompany(job.company_id);
 
                     switch (company) {
-                        case null {};
-                        case (?company) {
+                        case (#err(errmsg)) {};
+                        case (#ok(company)) {
                             if (Text.contains(company.country, #text country)) {
                                 newJobList.add(job);
                             };
@@ -510,13 +530,13 @@ actor Job {
     };
 
     public shared composite query func getJobPostedByCompany(company_id : Text, startFrom : Nat, amount : Nat, filter : JobManagerFilterInput) : async Result.Result<[Job], Text> {
-        let company : ?Company.Company = await Company.getCompany(company_id);
+        let company = await Company.getCompany(company_id);
 
         switch (company) {
-            case null {
+            case (#err(errmsg)) {
                 return #err("Company not found");
             };
-            case (?c) {
+            case (#ok(c)) {
                 let job_ids = c.job_posting_ids;
                 var jobPostings = Vector.Vector<Job>();
 
@@ -608,7 +628,7 @@ actor Job {
             };
         };
     };
-    public shared func deleteAllJobs() : async () { 
+    public shared func deleteAllJobs() : async () {
         for (job in jobs.vals()) {
             ignore jobs.remove(job.id);
         };
@@ -623,7 +643,7 @@ actor Job {
 
         let job = await getJob(job_id);
 
-        switch(job){
+        switch (job) {
             case (#err(errmsg)) {
                 return #err(errmsg);
             };
@@ -631,10 +651,10 @@ actor Job {
                 let company = await Company.getCompany(actualJob.company_id);
 
                 switch (company) {
-                    case null {
+                    case (#err(errmsg)) {
                         return #err("Company not found");
                     };
-                    case (?actualCompany) {
+                    case (#ok(actualCompany)) {
                         let manager_ids : [Principal] = actualCompany.company_manager_ids;
 
                         if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
@@ -666,7 +686,7 @@ actor Job {
                     employType = actualJob.employType;
                     contacts = actualJob.contacts;
                 };
-                
+
                 jobs.put(job_id, updated_job);
                 return #ok();
             };

@@ -29,6 +29,7 @@ actor Company {
         company_manager_ids : [Principal];
         job_posting_ids : [Text];
         timestamp : Time.Time;
+        seen : Nat;
     };
 
     type CreateCompanyInput = {
@@ -63,6 +64,7 @@ actor Company {
             company_manager_ids = [];
             job_posting_ids = [];
             timestamp = Time.now();
+            seen = 0;
         };
 
         companies.put(company.id, company);
@@ -84,6 +86,7 @@ actor Company {
             company_manager_ids = [msg.caller];
             job_posting_ids = [];
             timestamp = Time.now();
+            seen = 0;
         };
 
         companies.put(company.id, company);
@@ -91,8 +94,8 @@ actor Company {
         return company;
     };
 
-    public shared (msg) func updateCompany(id : Text, company : Company) : async Result.Result<(), Text>{
-        
+    public shared (msg) func updateCompany(id : Text, company : Company) : async Result.Result<(), Text> {
+
         if (Principal.isAnonymous(msg.caller)) {
             return #err("Not authorized");
         };
@@ -106,7 +109,7 @@ actor Company {
             case (?c) {
 
                 let isManager : Bool = await checkCompanyManager(c, msg.caller);
-                
+
                 if (not isManager) {
                     return #err("User is not a manager of the company");
                 };
@@ -118,8 +121,8 @@ actor Company {
         };
     };
 
-    public shared (msg) func deleteCompany(id : Text) : async Result.Result<?Company, Text>{
-        
+    public shared (msg) func deleteCompany(id : Text) : async Result.Result<?Company, Text> {
+
         if (Principal.isAnonymous(msg.caller)) {
             return #err("Not authorized");
         };
@@ -133,7 +136,7 @@ actor Company {
             case (?c) {
 
                 let isManager : Bool = await checkCompanyManager(c, msg.caller);
-                
+
                 if (not isManager) {
                     return #err("User is not a manager of the company");
                 };
@@ -144,7 +147,15 @@ actor Company {
     };
 
     public shared query func getCompanies() : async [Company] {
-        return Iter.toArray(companies.vals());
+        let companies_array = Iter.toArray(companies.vals());
+
+        let comparator = func(a : Company, b : Company) : Order.Order {
+            Nat.compare(a.seen, b.seen);
+        };
+
+        let sorted_companies = Array.sort(companies_array, comparator);
+
+        return sorted_companies;
     };
 
     public shared query (msg) func getManagedCompanies() : async Result.Result<[Company], Text> {
@@ -179,8 +190,34 @@ actor Company {
         return Vector.toArray(countries);
     };
 
-    public shared query func getCompany(id : Text) : async ?Company {
-        return companies.get(id);
+    public shared query func getCompany(id : Text) : async Result.Result<Company, Text> {
+        let company = companies.get(id);
+
+        switch (company) {
+            case null {
+                return #err("Company not found");
+            };
+            case (?c) {
+
+                let updatedCompany = {
+                    id = c.id;
+                    name = c.name;
+                    founded_year = c.founded_year;
+                    country = c.country;
+                    location = c.location;
+                    image = c.image;
+                    linkedin = c.linkedin;
+                    company_manager_ids = c.company_manager_ids;
+                    job_posting_ids = c.job_posting_ids;
+                    timestamp = c.timestamp;
+                    seen = c.seen + 1;
+                };
+
+                companies.put(id, updatedCompany);
+
+                return #ok(updatedCompany);
+            };
+        };
     };
 
     public shared func checkCompanyManager(company : Company, user_id : Principal) : async Bool {
@@ -207,10 +244,10 @@ actor Company {
         let company = await getCompany(company_id);
 
         switch (company) {
-            case null {
+            case (#err(msg)) {
                 return #err("Company not found");
             };
-            case (?company) {
+            case (#ok(company)) {
 
                 let isManager : Bool = await checkCompanyManager(company, user_id);
                 if (not isManager) {
@@ -244,10 +281,10 @@ actor Company {
         let company = await getCompany(company_id);
 
         switch (company) {
-            case null {
+            case (#err(msg)) {
                 return #err("Company not found");
             };
-            case (?company) {
+            case (#ok(company)) {
                 let jobIds = Vector.fromArray<Text>(company.job_posting_ids);
 
                 jobIds.add(job_id);
@@ -263,6 +300,7 @@ actor Company {
                     company_manager_ids = company.company_manager_ids;
                     job_posting_ids = Vector.toArray<Text>(jobIds);
                     timestamp = company.timestamp;
+                    seen = company.seen;
                 };
                 companies.put(company_id, updatedCompany);
                 #ok();
@@ -271,7 +309,7 @@ actor Company {
     };
 
     public shared (msg) func removeInvite(id : Text) : async Result.Result<?Invite, Text> {
-        
+
         let user_id = msg.caller;
 
         if (Principal.isAnonymous(user_id)) {
@@ -303,10 +341,10 @@ actor Company {
         let company = await getCompany(company_id);
 
         switch (company) {
-            case null {
+            case (#err(msg)) {
                 return #err("Company not found");
             };
-            case (?company) {
+            case (#ok(company)) {
 
                 let isManager : Bool = await checkCompanyManager(company, user_id);
 
@@ -328,6 +366,7 @@ actor Company {
                     company_manager_ids = updatedManagerIds;
                     job_posting_ids = company.job_posting_ids;
                     timestamp = company.timestamp;
+                    seen = company.seen;
                 };
                 companies.put(company_id, updatedCompany);
                 return #ok();
@@ -335,13 +374,13 @@ actor Company {
         };
     };
     public shared composite query func getManagersFromCompany(company_id : Text) : async Result.Result<[User.User], Text> {
-        let companies : ?Company = await getCompany(company_id);
+        let companies = await getCompany(company_id);
 
         switch (companies) {
-            case null {
+            case (#err(msg)) {
                 return #err("Company not found");
             };
-            case (?company) {
+            case (#ok(company)) {
                 let manager_ids = company.company_manager_ids;
                 var managers = Vector.Vector<User.User>();
 
@@ -381,13 +420,13 @@ actor Company {
             return #err("Not authorized");
         };
 
-        let company : ?Company = await getCompany(company_id);
+        let company = await getCompany(company_id);
 
         switch (company) {
-            case null {
+            case (#err(msg)) {
                 return #err("Company not found");
             };
-            case (?c) {
+            case (#ok(c)) {
                 let manager_ids = c.company_manager_ids;
                 let updatedManagerIds = Array.filter<Principal>(
                     manager_ids,
@@ -411,6 +450,7 @@ actor Company {
                     company_manager_ids = updatedManagerIds;
                     job_posting_ids = c.job_posting_ids;
                     timestamp = c.timestamp;
+                    seen = c.seen;
                 };
                 companies.put(company_id, updatedCompany);
                 return #ok();
@@ -422,12 +462,12 @@ actor Company {
         let companyNames = Vector.Vector<Text>();
 
         for (company_id in company_ids.vals()) {
-            let company : ?Company = await getCompany(company_id);
+            let company = await getCompany(company_id);
             switch (company) {
-                case null {
+                case (#err(msg)) {
                     return #err("Company with id " # company_id # " not found");
                 };
-                case (?c) {
+                case (#ok(c)) {
                     companyNames.add(c.name);
                 };
             };
@@ -446,8 +486,8 @@ actor Company {
                 for (company_id in company_ids.vals()) {
                     let fetched_company = await Company.getCompany(company_id);
                     switch (fetched_company) {
-                        case null {};
-                        case (?c) {
+                        case (#err(msg)) {};
+                        case (#ok(c)) {
                             companies.add(c);
                         };
                     };
