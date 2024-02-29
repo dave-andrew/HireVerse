@@ -49,7 +49,7 @@ export default function JobDetail({ jobId }: Props) {
             <div className="h-32" />
             <div className="flex flex-col gap-8 overflow-auto p-6 [&_h3]:text-base  [&_h3]:font-bold">
                 <div>
-                    <h3>{fullJob.company[0]?.name}</h3>
+                    <h3>{fullJob.company.name}</h3>
                     <p>{fullJob.short_description}</p>
                 </div>
                 <div>

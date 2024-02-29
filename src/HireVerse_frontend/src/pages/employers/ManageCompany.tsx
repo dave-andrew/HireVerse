@@ -53,14 +53,8 @@ export default function ManageCompany() {
             s.getCompany(selectedCompany.id),
         );
 
-        if (response.length !== 0) {
-            const company = response[0];
-            await getCompanyService().then((s) =>
-                s.updateCompany(selectedCompany?.id, {
-                    ...selectedCompany,
-                    image: company.image,
-                }),
-            );
+        if (isOk(response)) {
+            setSelectedCompany(response.ok);
         }
     };
 
