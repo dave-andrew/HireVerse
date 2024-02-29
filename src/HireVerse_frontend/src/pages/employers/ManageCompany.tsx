@@ -89,15 +89,15 @@ export default function ManageCompany() {
         <>
             <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
                 <div className="flex w-4/5 flex-col place-items-center">
-                    <CardLayout className="relative flex w-full flex-row place-items-center rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6 gap-10">
+                    <CardLayout className="relative flex w-full flex-row place-items-center gap-10 rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6">
                         <div className="relative">
                             <img
-                                className="2xl:w-96 xl:w-48 aspect-square object-cover border-signature-gray border-[1px]"
+                                className="border-signature-gray aspect-square border-[1px] object-cover xl:w-48 2xl:w-96"
                                 src={imageHandler(selectedCompany?.image)}
                                 alt=""
                             />
                             <ProfileEditButton
-                                className="2xl:top-10 xl:top-4 2xl:left-10 xl:left-4"
+                                className="xl:left-4 xl:top-4 2xl:left-10 2xl:top-10"
                                 onClick={() => imageRef.current?.click()}
                             />
                             <input
@@ -169,7 +169,7 @@ export default function ManageCompany() {
                             </div>
                         </div>
                         <ProfileEditButton
-                            className="absolute 2xl:top-10 xl:top-4 2xl:right-10 xl:right-4"
+                            className="absolute xl:right-4 xl:top-4 2xl:right-10 2xl:top-10"
                             onClick={() => setIsModalShown(true)}
                         />
                     </CardLayout>
@@ -198,7 +198,7 @@ export default function ManageCompany() {
                                         return (
                                             <div
                                                 key={i}
-                                                className="bg-blue-primary hover:opacity-100 opacity-80 transition-opacity flex flex-row gap-2 rounded-md p-2 text-white font-bold px-3">
+                                                className="bg-blue-primary flex flex-row gap-2 rounded-md p-2 px-3 font-bold text-white opacity-80 transition-opacity hover:opacity-100">
                                                 {industry}
                                             </div>
                                         );

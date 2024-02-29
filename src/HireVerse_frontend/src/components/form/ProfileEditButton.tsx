@@ -27,19 +27,19 @@ export default function ProfileEditButton({
     return (
         <div
             onClick={handleOnClick}
-            className={`absolute flex flex-row gap-3 justify-center items-center ${className}`}>
+            className={`absolute flex flex-row items-center justify-center gap-3 ${className}`}>
             {!editStateProps ? (
-                <button className="bg-white border-[1px] text-blue-primary rounded-lg xl:p-1.5 2xl:p-2 z-50 transition-colors hover:bg-signature-gray">
+                <button className="text-blue-primary hover:bg-signature-gray z-50 rounded-lg border-[1px] bg-white transition-colors xl:p-1.5 2xl:p-2">
                     <FaRegEdit className="xl:text-md 2xl:text-xl" />
                 </button>
             ) : (
                 <>
                     {editStateProps?.editState ? (
-                        <button className="bg-white border-[1px] text-blue-primary rounded-lg p-2 z-50 transition-colors hover:bg-signature-gray">
+                        <button className="text-blue-primary hover:bg-signature-gray z-50 rounded-lg border-[1px] bg-white p-2 transition-colors">
                             <FaRegEdit className="xl:text-md 2xl:text-xl" />
                         </button>
                     ) : (
-                        <button className="bg-white border-[1px] text-green-500 rounded-lg p-2 z-50 transition-colors hover:bg-signature-gray">
+                        <button className="hover:bg-signature-gray z-50 rounded-lg border-[1px] bg-white p-2 text-green-500 transition-colors">
                             <FaCheck className="xl:text-md 2xl:text-xl" />
                         </button>
                     )}

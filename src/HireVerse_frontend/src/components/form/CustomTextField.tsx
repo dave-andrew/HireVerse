@@ -1,7 +1,4 @@
-import {
-    ChangeEventHandler,
-    HTMLInputTypeAttribute,
-} from "react";
+import { ChangeEventHandler, HTMLInputTypeAttribute } from "react";
 import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 interface CustomTextFieldProps {

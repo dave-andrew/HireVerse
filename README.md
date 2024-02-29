@@ -16,6 +16,9 @@
 ### Tailwind Cleanup
 
 ``npx prettier --write --plugin=prettier-plugin-tailwindcss **/*.tsx``
+
+### Motoko Cleanup
+
 ``npx prettier --write --plugin=prettier-plugin-motoko **/*.mo``
 Welcome to your new HireVerse project and to the internet computer development community. By default, creating a new
 project adds this README and some template files to your project directory. You can edit these template files to

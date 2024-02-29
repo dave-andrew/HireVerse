@@ -115,11 +115,11 @@ actor Review {
     };
 
     public shared (msg) func removeAllReviews() : async () {
-        
+
         if (Principal.isAnonymous(msg.caller)) {
             return;
         };
-        
+
         for (review in reviews.vals()) {
             ignore reviews.remove(review.id);
         };

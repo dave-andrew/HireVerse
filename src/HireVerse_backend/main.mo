@@ -68,7 +68,7 @@ actor Database {
     };
 
     public query (msg) func getUser(principal : Principal) : async ?User {
-        
+
         if (principal != msg.caller) {
             return null;
         };
@@ -77,7 +77,7 @@ actor Database {
     };
 
     public query (msg) func updateUser(principal : Principal, user : User) : async () {
-        
+
         if (principal != msg.caller) {
             return;
         };
@@ -86,11 +86,11 @@ actor Database {
     };
 
     public query (msg) func deleteUser(principal : Principal) : async ?User {
-        
+
         if (principal != msg.caller) {
             return null;
         };
-        
+
         return users.remove(principal);
     };
 

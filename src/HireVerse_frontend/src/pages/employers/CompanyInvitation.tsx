@@ -1,8 +1,7 @@
 import ManagementPageLayout from "../../layouts/ManagementPageLayout";
 import CardLayout from "../../layouts/CardLayout";
-import {IoAdd} from "react-icons/io5";
-import {IoIosSearch} from "react-icons/io";
-
+import { IoAdd } from "react-icons/io5";
+import { IoIosSearch } from "react-icons/io";
 
 export default function CompanyInvitation() {
     return (
@@ -15,8 +14,7 @@ export default function CompanyInvitation() {
                             className={
                                 "flex h-12 flex-row place-items-end justify-between gap-4"
                             }>
-                            <button
-                                className="h-full" >
+                            <button className="h-full">
                                 <CardLayout
                                     className="hover:bg-signature-blue bg-blue-primary flex
                                 h-full items-center justify-center
@@ -59,5 +57,5 @@ export default function CompanyInvitation() {
                 </div>
             </ManagementPageLayout>
         </>
-    )
+    );
 }
