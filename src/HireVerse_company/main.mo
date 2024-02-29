@@ -15,6 +15,7 @@ import Vector "mo:vector/Class";
 import Random "mo:base/Random";
 import Result "mo:base/Result";
 import Error "mo:base/Error";
+import Order "mo:base/Order";
 
 actor Company {
 
@@ -190,7 +191,6 @@ actor Company {
         return Vector.toArray(countries);
     };
 
-<<<<<<< HEAD
     public shared query func getCompany(id : Text) : async Result.Result<Company, Text> {
         let company = companies.get(id);
 
@@ -219,12 +219,6 @@ actor Company {
                 return #ok(updatedCompany);
             };
         };
-=======
-   
-
-    public shared query func getCompany(id : Text) : async ?Company {
-        return companies.get(id);
->>>>>>> 6be1828d8ad9b4ce768de1703565088b83561e2d
     };
 
     public shared func checkCompanyManager(company : Company, user_id : Principal) : async Bool {

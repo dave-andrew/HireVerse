@@ -122,13 +122,8 @@ actor Job {
             case (#err(errmsg)) {
                 return #err("Company not found");
             };
-<<<<<<< HEAD
             case (#ok(actualCompany)) {
-                let manager_ids : [Principal] = actualCompany.company_manager_ids;
-=======
-            case (?actualCompany) {
                 let manager_ids : [Text] = actualCompany.company_manager_ids;
->>>>>>> 6be1828d8ad9b4ce768de1703565088b83561e2d
 
                 if (Array.find<Text>(manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) == null) {
                     return #err("Unauthorized");
@@ -175,9 +170,9 @@ actor Job {
                 return #err("Company not found");
             };
             case (#ok(actualCompany)) {
-                let manager_ids : [Principal] = actualCompany.company_manager_ids;
+                let manager_ids : [Text] = actualCompany.company_manager_ids;
 
-                if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
+                if (Array.find<Text>(manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) == null) {
                     return #err("Unauthorized");
                 };
             };
@@ -366,10 +361,10 @@ actor Job {
         let company = await Company.getCompany(company_id);
 
         switch(company) {
-            case(null){
+            case(#err(e)){
                 return #err("Company not found");
             };
-            case(?c){
+            case(#ok(c)){
                 let industries = Vector.Vector<Text>();
                 let jobIds = c.job_posting_ids;
 
@@ -686,13 +681,8 @@ actor Job {
                     case (#err(errmsg)) {
                         return #err("Company not found");
                     };
-<<<<<<< HEAD
                     case (#ok(actualCompany)) {
-                        let manager_ids : [Principal] = actualCompany.company_manager_ids;
-=======
-                    case (?actualCompany) {
                         let manager_ids : [Text] = actualCompany.company_manager_ids;
->>>>>>> 6be1828d8ad9b4ce768de1703565088b83561e2d
 
                         if (Array.find<Text>(manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) == null) {
                             return #err("Unauthorized");
