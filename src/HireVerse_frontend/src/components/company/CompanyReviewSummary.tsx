@@ -45,13 +45,19 @@ export default function CompanyReviewSummary() {
                 <div className="w-1/2">
                     <h3 className="py-5 text-3xl font-bold">Positives</h3>
                     {Array.from({ length: 3 }).map((_, i) => (
-                        <p className="text-gray-500">The company has a nobol</p>
+                        <p
+                            key={i}
+                            className="text-gray-500">
+                            The company has a nobol
+                        </p>
                     ))}
                 </div>
                 <div className="w-1/2">
                     <h3 className="py-5 text-3xl font-bold">Negatives</h3>
                     {Array.from({ length: 3 }).map((_, i) => (
-                        <p className="text-gray-500">
+                        <p
+                            key={i}
+                            className="text-gray-500">
                             The company has a vincent tanjaya
                         </p>
                     ))}

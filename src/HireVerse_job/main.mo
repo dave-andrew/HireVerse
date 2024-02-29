@@ -471,7 +471,7 @@ actor Job {
                     switch (company) {
                         case (#err(errmsg)) {};
                         case (#ok(company)) {
-                            if (Text.contains(company.country, #text country)) {
+                            if (Text.contains(company.founded_country, #text country)) {
                                 newJobList.add(job);
                             };
                         };

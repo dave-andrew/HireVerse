@@ -23,8 +23,10 @@ actor Company {
         id : Text;
         name : Text;
         founded_year : Nat;
-        country : Text;
-        location : Text;
+        profile : Text;
+        founded_country : Text;
+        office_locations : [Text];
+        social_medias : [Text];
         image : Blob;
         linkedin : Text;
         company_manager_ids : [Text];
@@ -36,8 +38,10 @@ actor Company {
     type CreateCompanyInput = {
         name : Text;
         founded_year : Nat;
-        country : Text;
-        location : Text;
+        profile : Text;
+        founded_country : Text;
+        office_locations : [Text];
+        social_medias : [Text];
         image : Blob;
         linkedin : Text;
     };
@@ -58,8 +62,10 @@ actor Company {
             id = await Helper.generateUUID();
             name = "Google";
             founded_year = 1998;
-            country = "USA";
-            location = "Mountain View, California, United States";
+            profile = "Google is an American multinational technology company that specializes in Internet-related services and products, which include online advertising technologies, a search engine, cloud computing, software, and hardware. It is considered one of the Big Five technology companies in the U.S. information technology industry, alongside Amazon, Facebook, Apple, and Microsoft.";
+            founded_country = "USA";
+            office_locations = ["Mountain View, California", "New York City, New York"];
+            social_medias = ["https://www.facebook.com/Google", "https://twitter.com/Google", "https://www.instagram.com/google"];
             image = await Random.blob();
             linkedin = "https://www.linkedin.com/company/google";
             company_manager_ids = [];
@@ -80,8 +86,10 @@ actor Company {
             id = id;
             name = newCompany.name;
             founded_year = newCompany.founded_year;
-            country = newCompany.country;
-            location = newCompany.location;
+            profile = newCompany.profile;
+            founded_country = newCompany.founded_country;
+            office_locations = newCompany.office_locations;
+            social_medias = newCompany.social_medias;
             image = newCompany.image;
             linkedin = newCompany.linkedin;
             company_manager_ids = [Principal.toText(msg.caller)];
@@ -183,8 +191,8 @@ actor Company {
         let countries = Vector.Vector<Text>();
 
         for (company in companies.vals()) {
-            if (not Vector.contains(countries, company.country, Text.equal)) {
-                countries.add(company.country);
+            if (not Vector.contains(countries, company.founded_country, Text.equal)) {
+                countries.add(company.founded_country);
             };
         };
 
@@ -204,8 +212,10 @@ actor Company {
                     id = c.id;
                     name = c.name;
                     founded_year = c.founded_year;
-                    country = c.country;
-                    location = c.location;
+                    profile = c.profile;
+                    founded_country = c.founded_country;
+                    office_locations = c.office_locations;
+                    social_medias = c.social_medias;
                     image = c.image;
                     linkedin = c.linkedin;
                     company_manager_ids = c.company_manager_ids;
@@ -294,8 +304,10 @@ actor Company {
                     id = company_id;
                     name = company.name;
                     founded_year = company.founded_year;
-                    country = company.country;
-                    location = company.location;
+                    profile = company.profile;
+                    founded_country = company.founded_country;
+                    office_locations = company.office_locations;
+                    social_medias = company.social_medias;
                     image = company.image;
                     linkedin = company.linkedin;
                     company_manager_ids = company.company_manager_ids;
@@ -360,8 +372,10 @@ actor Company {
                     id = company_id;
                     name = company.name;
                     founded_year = company.founded_year;
-                    country = company.country;
-                    location = company.location;
+                    profile = company.profile;
+                    founded_country = company.founded_country;
+                    office_locations = company.office_locations;
+                    social_medias = company.social_medias;
                     image = company.image;
                     linkedin = company.linkedin;
                     company_manager_ids = updatedManagerIds;
@@ -444,8 +458,10 @@ actor Company {
                     id = company_id;
                     name = c.name;
                     founded_year = c.founded_year;
-                    country = c.country;
-                    location = c.location;
+                    profile = c.profile;
+                    founded_country = c.founded_country;
+                    office_locations = c.office_locations;
+                    social_medias = c.social_medias;
                     image = c.image;
                     linkedin = c.linkedin;
                     company_manager_ids = updatedManagerIds;

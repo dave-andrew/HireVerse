@@ -19,11 +19,11 @@ import useService from "../../hooks/useService";
 interface Props {
     openState: boolean;
     setOpenState: Dispatch<SetStateAction<boolean>>;
-    onJobCreated?: () => void;
+    onEditFinished?: () => void;
 }
 
-interface ICreateJobForm {
-    position: string;
+interface IEditCompanyForm {
+    name: string;
     employmentType: string;
     salaryStart: number;
     salaryEnd: number;
@@ -43,7 +43,7 @@ interface ICreateJobForm {
 export default function CreateJobModal({
     openState,
     setOpenState,
-    onJobCreated,
+    onEditFinished,
 }: Props) {
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
@@ -54,9 +54,9 @@ export default function CreateJobModal({
         setError,
         reset,
         formState: { errors, isValid },
-    } = useForm<ICreateJobForm, string>({
+    } = useForm<IEditCompanyForm, string>({
         defaultValues: {
-            position: "",
+            name: "",
             employmentType: "",
             industry: "Please Select an Industry",
             salaryStart: 0,
@@ -79,7 +79,8 @@ export default function CreateJobModal({
 
     const checkError = () => {
         for (const error in errors) {
-            const errorMessage = errors[error as keyof ICreateJobForm]?.message;
+            const errorMessage =
+                errors[error as keyof IEditCompanyForm]?.message;
 
             if (errorMessage) {
                 errorToast({
@@ -90,7 +91,7 @@ export default function CreateJobModal({
         }
     };
 
-    const createJob = async (data: ICreateJobForm) => {
+    const createJob = async (data: IEditCompanyForm) => {
         if (data.salaryStart > data.salaryEnd) {
             setError("salaryStart", {
                 type: "manual",
@@ -137,7 +138,7 @@ export default function CreateJobModal({
 
         const newJob: CreateJobInput = {
             industry: data.industry,
-            position: data.position,
+            position: data.name,
             employType: data.employmentType,
             short_description: data.shortDescription,
             requirements: data.requirements,
@@ -150,8 +151,8 @@ export default function CreateJobModal({
         };
 
         await getJobService().then((s) => s.createJob(newJob));
-        if (onJobCreated) {
-            onJobCreated();
+        if (onEditFinished) {
+            onEditFinished();
         }
         reset();
         setOpenState(false);
@@ -189,7 +190,7 @@ export default function CreateJobModal({
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="h-full rounded-md">
                         <input
-                            {...register("position", {
+                            {...register("name", {
                                 required: "Position name is required",
                             })}
                             type="text"
@@ -355,6 +356,8 @@ export default function CreateJobModal({
                             remove={remove}
                             className="flex flex-row items-center justify-center gap-2"
                             inputClassName="w-full h-12 px-4 border border-gray-200 focus:bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-signature-primary "
+                            inputObject="applyContacts"
+                            inputName="contact"
                             addButton={
                                 <div className="flex w-full justify-end">
                                     <button

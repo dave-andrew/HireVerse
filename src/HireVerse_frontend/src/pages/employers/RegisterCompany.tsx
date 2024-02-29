@@ -39,8 +39,11 @@ export default function RegisterCompany() {
         const companyData: CreateCompanyInput = {
             name: data.companyName,
             founded_year: BigInt(data.foundedYear),
-            country: data.country,
-            location: data.location,
+            profile: "", //TODO ADD PROFILE
+            founded_country: data.country,
+            office_locations: [data.location],
+            social_medias: [], //TODO ADD SOCIAL MEDIAS
+
             image: imageBlob,
             linkedin: data.linkedInProfile,
         };

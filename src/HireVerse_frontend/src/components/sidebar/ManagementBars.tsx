@@ -58,9 +58,11 @@ interface IDropdownForm {
 
 export default function ManagementBars({ children }: Props) {
     const [managedCompanies, setManagedCompanies] = useState<Company[]>([]);
-    const [menus, setMenus] = useState<Menu[]>([]);
+    const [menus, setMenus] = useState<Menu[]>(defaultMenu);
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
+    const [dropdownItems, setDropdownItems] = useState<DropdownItems[]>([]);
+    const [isHovered, setIsHovered] = useState(false);
     const { control, setValue } = useForm<IDropdownForm>({
         defaultValues: {
             value: "",
@@ -69,56 +71,51 @@ export default function ManagementBars({ children }: Props) {
         },
     });
     const { getCompanyService } = useService();
-    const location = useLocation();
     const { convertBlobToImage } = useImageBlob();
+    const location = useLocation();
+    const isActive = (menu: string[]) => menu.includes(location.pathname);
 
-    const getCompanies = async () => {
-        console.log("udah slesai1");
-        const response = await getCompanyService().then((s) => {
-            console.log("udah slesai1.5");
-            return s.getManagedCompanies();
-        });
-
-        console.log("udah slesai2");
-
-        if (isOk(response)) {
-            const companies = response.ok;
-            setManagedCompanies(companies);
-
-            if (companies.length > 0) {
-                if (selectedCompany) {
-                    const company = companies.find(
-                        (c) => c.id === selectedCompany.id,
-                    );
-
-                    if (company) {
-                        setValue("label", company.name);
-                        return;
-                    }
-                }
-
-                setSelectedCompany(companies[0]);
-                console.log("hjahahahahahahah");
-                console.log(companies[0]);
-                if (selectedCompany) {
-                    setValue("label", companies[0].name);
-                    return;
-                }
-            }
-        }
-
-        setValue("label", "No Company");
-        setSelectedCompany(null);
-    };
-
-    const getDropdownItems = async () => {
-        return await Promise.all(
-            managedCompanies.map(async (company) => ({
+    const mapDropdownItems = async (managedCompanyList: Company[]) => {
+        const items: DropdownItems[] = await Promise.all(
+            managedCompanyList.map(async (company) => ({
                 label: company.name,
                 value: company.name,
                 img: convertBlobToImage(company.image),
             })),
         );
+        setDropdownItems(items);
+    };
+
+    const getCompanies = async () => {
+        const response = await getCompanyService().then((s) => {
+            return s.getManagedCompanies();
+        });
+
+        if (!isOk(response)) {
+            return;
+        }
+
+        const companies = response.ok;
+        setManagedCompanies(companies);
+
+        if (selectedCompany) {
+            const company = companies.find((c) => c.id === selectedCompany.id);
+
+            if (company) {
+                setValue("label", company.name);
+                return;
+            }
+        }
+
+        if (companies.length === 0) {
+            setValue("label", "No Company");
+            setSelectedCompany(null);
+            return;
+        }
+
+        setSelectedCompany(companies[0]);
+        setValue("label", companies[0].name);
+        return;
     };
 
     const changeCompany = (companyLabel: string) => {
@@ -129,24 +126,23 @@ export default function ManagementBars({ children }: Props) {
     };
 
     useEffect(() => {
-        getCompanies();
-        setMenus(defaultMenu);
-    }, []);
-
-    const [dropdownItems, setDropdownItems] = useState<DropdownItems[]>([]);
+        setManagedCompanies((prev) =>
+            prev.map((c) => {
+                if (c.id === selectedCompany?.id) {
+                    return selectedCompany;
+                }
+                return c;
+            }),
+        );
+    }, [selectedCompany]);
 
     useEffect(() => {
-        const fetchDropdownItems = async () => {
-            const items: DropdownItems[] = await getDropdownItems();
-            setDropdownItems(items);
-        };
-
-        fetchDropdownItems();
+        mapDropdownItems(managedCompanies);
     }, [managedCompanies]);
 
-    const isActive = (menu: string[]) => menu.includes(location.pathname);
-
-    const [isHovered, setIsHovered] = useState(false);
+    useEffect(() => {
+        getCompanies();
+    }, []);
 
     return (
         <div className="flex h-[100vh] w-[100vw] flex-row">

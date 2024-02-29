@@ -9,13 +9,14 @@ import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.di
 import { useNavigate } from "react-router-dom";
 
 export default function FindCompany() {
-
     const nav = useNavigate();
 
     const { getCompanyService } = useService();
 
     const [search, setSearch] = useState<string>("");
-    const [searchCompany, setSearchCompany] = useState<Company[] | undefined>([])
+    const [searchCompany, setSearchCompany] = useState<Company[] | undefined>(
+        [],
+    );
 
     const [popularCompanies, setPopularCompanies] = useState([
         {
@@ -48,62 +49,63 @@ export default function FindCompany() {
         },
     ]);
 
-    const [resultCompanies, setResultCompanies] = useState<Company[]>(
-        // [
-        //     {
-        //         name: "Universitas Tarumanegara",
-        //         location: "Jakarta",
-        //         country: "Indonesia",
-        //         industry: "Education",
-        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        //         linkedin: "in/untar",
-        //     },
-        //     {
-        //         name: "Universitas Airlangga",
-        //         location: "Jakarta",
-        //         country: "Indonesia",
-        //         industry: "Education",
-        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        //         linkedin: "in/untar",
-        //     },
-        //     {
-        //         name: "Universitas 11 Maret",
-        //         location: "Surabaya",
-        //         country: "Indonesia",
-        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        //         industry: "Education",
-        //         linkedin: "in/untar",
-        //     },
-        //     {
-        //         name: "Universitas 11 Maret",
-        //         location: "Surabaya",
-        //         country: "Indonesia",
-        //         industry: "Education",
-        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        //         linkedin: "in/untar",
-        //     },
-        //     {
-        //         name: "Universitas 11 Maret",
-        //         location: "Surabaya",
-        //         country: "Indonesia",
-        //         industry: "Education",
-        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        //         linkedin: "in/untar",
-        //     },
-        //     {
-        //         name: "Universitas 11 Maret",
-        //         location: "Surabaya",
-        //         country: "Indonesia",
-        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        //         industry: "Education",
-        //         linkedin: "in/untar",
-        //     },
-        // ]
-    );
+    const [resultCompanies, setResultCompanies] = useState<Company[]>();
+    // [
+    //     {
+    //         name: "Universitas Tarumanegara",
+    //         location: "Jakarta",
+    //         country: "Indonesia",
+    //         industry: "Education",
+    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+    //         linkedin: "in/untar",
+    //     },
+    //     {
+    //         name: "Universitas Airlangga",
+    //         location: "Jakarta",
+    //         country: "Indonesia",
+    //         industry: "Education",
+    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+    //         linkedin: "in/untar",
+    //     },
+    //     {
+    //         name: "Universitas 11 Maret",
+    //         location: "Surabaya",
+    //         country: "Indonesia",
+    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+    //         industry: "Education",
+    //         linkedin: "in/untar",
+    //     },
+    //     {
+    //         name: "Universitas 11 Maret",
+    //         location: "Surabaya",
+    //         country: "Indonesia",
+    //         industry: "Education",
+    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+    //         linkedin: "in/untar",
+    //     },
+    //     {
+    //         name: "Universitas 11 Maret",
+    //         location: "Surabaya",
+    //         country: "Indonesia",
+    //         industry: "Education",
+    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+    //         linkedin: "in/untar",
+    //     },
+    //     {
+    //         name: "Universitas 11 Maret",
+    //         location: "Surabaya",
+    //         country: "Indonesia",
+    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+    //         industry: "Education",
+    //         linkedin: "in/untar",
+    //     },
+    // ]
 
     useEffect(() => {
         const searchJob = async () => {
-            const response = await getCompanyService().then((s) => s.getCompanies());
+            const response = await getCompanyService().then((s) =>
+                s.getCompanies(),
+            );
             setResultCompanies(response);
             setSearchCompany(response);
         };
@@ -113,15 +115,16 @@ export default function FindCompany() {
     useEffect(() => {
         if (search.length > 0) {
             const searched = resultCompanies?.filter((company) => {
-                return company.name.toLowerCase().includes(search.toLowerCase());
+                return company.name
+                    .toLowerCase()
+                    .includes(search.toLowerCase());
             });
 
             setSearchCompany(searched);
         } else {
             setSearchCompany(resultCompanies);
         }
-
-    }, [search])
+    }, [search]);
 
     return (
         <FrontPageLayout>
@@ -144,9 +147,13 @@ export default function FindCompany() {
                                         .slice(0, 4)
                                         .map((company) => {
                                             return (
-                                                <CardLayout className="flex h-32 w-64 p-4 xl:w-80" onClick={() => {
-                                                    nav(`/company/detail/${company.id}`)
-                                                }}>
+                                                <CardLayout
+                                                    className="flex h-32 w-64 p-4 xl:w-80"
+                                                    onClick={() => {
+                                                        nav(
+                                                            `/company/detail/${company.id}`,
+                                                        );
+                                                    }}>
                                                     <div className="flex flex-row place-items-center">
                                                         <img
                                                             width="80rem"
@@ -280,16 +287,24 @@ export default function FindCompany() {
                                 <div className="grid grow grid-cols-2 gap-4">
                                     {searchCompany?.map((cp, index) => {
                                         return (
-                                            <CardLayout className="flex flex-col gap-2 rounded-md px-6 py-5" key={index} onClick={() => {
-                                                nav(`/company/detail/${cp.id}`)
-                                            }}>
-                                                <div
-                                                    className="flex flex-row place-items-center bg-white" >
+                                            <CardLayout
+                                                className="flex flex-col gap-2 rounded-md px-6 py-5"
+                                                key={index}
+                                                onClick={() => {
+                                                    nav(
+                                                        `/company/detail/${cp.id}`,
+                                                    );
+                                                }}>
+                                                <div className="flex flex-row place-items-center bg-white">
                                                     <img
                                                         width="80rem"
                                                         height="auto"
                                                         className="aspect-square"
-                                                        src={cp.image ? `data:image/png;base64,${cp.image}` : "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"}
+                                                        src={
+                                                            cp.image
+                                                                ? `data:image/png;base64,${cp.image}`
+                                                                : "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"
+                                                        }
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">
@@ -306,7 +321,10 @@ export default function FindCompany() {
                                                                 Location:
                                                             </div>
                                                             <div>
-                                                                {cp.location}
+                                                                {
+                                                                    cp
+                                                                        .office_locations[0]
+                                                                }
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col">
@@ -314,7 +332,9 @@ export default function FindCompany() {
                                                                 Country:
                                                             </div>
                                                             <div>
-                                                                {cp.country}
+                                                                {
+                                                                    cp.founded_country
+                                                                }
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col">

@@ -231,7 +231,7 @@ export default function CompanyJobs() {
                 <CreateJobModal
                     openState={isModalShown}
                     setOpenState={setIsModalShown}
-                    onJobCreated={onJobCreated}
+                    onEditFinished={onJobCreated}
                 />
             </ManagementPageLayout>
         </>

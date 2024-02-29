@@ -6,15 +6,13 @@ import {
     MdOutlineQueryBuilder,
 } from "react-icons/md";
 import CompanyReviewSummary from "../../components/company/CompanyReviewSummary";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useService from "../../hooks/useService";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { isOk } from "../../utils/resultGuarder";
-import { useNavigate } from "react-router-dom";
 
 export default function CompanyDetail() {
-
     const nav = useNavigate();
 
     const { id } = useParams<string>();
@@ -22,7 +20,7 @@ export default function CompanyDetail() {
 
     const [company, setCompany] = useState<Company>();
 
-    if(!id) {
+    if (!id) {
         nav(-1);
         return;
     }
@@ -31,8 +29,8 @@ export default function CompanyDetail() {
         const fetchCompany = async () => {
             const service = await getCompanyService();
             const companyData = await service.getCompany(id);
-            
-            if(isOk(companyData)) {
+
+            if (isOk(companyData)) {
                 setCompany(companyData.ok);
                 console.log(companyData.ok);
             }
@@ -42,7 +40,7 @@ export default function CompanyDetail() {
     }, [id]);
 
     // TODO: jadiin skeleton masukin return ()
-    if(!company) {
+    if (!company) {
         return <div>Loading...</div>;
     }
 
@@ -61,7 +59,9 @@ export default function CompanyDetail() {
                                 <h2 className="text-5xl font-bold">
                                     {company.name}
                                 </h2>
-                                <a href="https://www.binus.ac.id/">https://www.binus.ac.id/</a>
+                                <a href="https://www.binus.ac.id/">
+                                    https://www.binus.ac.id/
+                                </a>
                             </div>
                             <div className="flex flex-row gap-28">
                                 <div className="flex flex-row gap-3">
@@ -81,7 +81,7 @@ export default function CompanyDetail() {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-600">
-                                            {company.location}
+                                            {company.office_locations[0]}
                                         </p>
                                         <p className="font-bold">Jakarta</p>
                                     </div>

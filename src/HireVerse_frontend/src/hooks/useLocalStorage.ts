@@ -111,8 +111,7 @@ const parseJSON = <T>(value: string | null): T | undefined => {
                 return new Uint8Array(arr);
             }
             if (key === "__principal__") {
-                const principal = Principal.fromText(value);
-                return principal;
+                return Principal.fromText(value);
             }
             return value;
         });

@@ -13,6 +13,8 @@ interface Props {
     remove: UseFieldArrayRemove;
     addButton: ReactNode;
     removeButton: ReactNode;
+    inputObject: string;
+    inputName: string;
 }
 
 export default function DynamicInputBox({
@@ -23,6 +25,8 @@ export default function DynamicInputBox({
     addButton,
     removeButton,
     remove,
+    inputObject,
+    inputName,
 }: Props) {
     return (
         <>
@@ -30,7 +34,7 @@ export default function DynamicInputBox({
                 <div className={className}>
                     <input
                         key={field.id}
-                        {...register(`applyContacts.${index}.contact`)}
+                        {...register(`${inputObject}.${index}.${inputName}`)}
                         placeholder={field.placeholder}
                         className={inputClassName}
                     />
