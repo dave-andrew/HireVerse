@@ -364,6 +364,19 @@ actor Company {
         };
     };
 
+    public shared (msg) func searchCompany(name : Text) : async Result.Result<[Company], Text> {
+        let companyList : [Company] = Iter.toArray(companies.vals());
+        var searchResult = Vector.Vector<Company>();
+
+        for (company in companyList.vals()) {
+            if (Text.contains(company.name, #text name)) {
+                searchResult.add(company);
+            };
+        };
+
+        return #ok(Vector.toArray(searchResult));
+    };
+
     public shared (msg) func leaveCompany(company_id : Text, user_id : Principal) : async Result.Result<(), Text> {
 
         if (Principal.isAnonymous(user_id)) {

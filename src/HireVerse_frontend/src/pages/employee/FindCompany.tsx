@@ -2,10 +2,22 @@ import { FaLinkedin } from "react-icons/fa";
 import FrontPageLayout from "../../layouts/FrontPageLayout";
 import { IoIosSearch } from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomTextField from "../../components/form/CustomTextField";
+import useService from "../../hooks/useService";
+import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import { isErr } from "../../utils/resultGuarder";
+
+type ICompany = {
+
+}
 
 export default function FindCompany() {
+
+    const { getCompanyService } = useService();
+
+    const [search, setSearch] = useState<string>("");
+
     const [popularCompanies, setPopularCompanies] = useState([
         {
             name: "BINUS University",
@@ -33,56 +45,76 @@ export default function FindCompany() {
         },
     ]);
 
-    const [resultCompanies, setResultCompanies] = useState([
-        {
-            name: "Universitas Tarumanegara",
-            location: "Jakarta",
-            country: "Indonesia",
-            industry: "Education",
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            linkedin: "in/untar",
-        },
-        {
-            name: "Universitas Airlangga",
-            location: "Jakarta",
-            country: "Indonesia",
-            industry: "Education",
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            linkedin: "in/untar",
-        },
-        {
-            name: "Universitas 11 Maret",
-            location: "Surabaya",
-            country: "Indonesia",
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            industry: "Education",
-            linkedin: "in/untar",
-        },
-        {
-            name: "Universitas 11 Maret",
-            location: "Surabaya",
-            country: "Indonesia",
-            industry: "Education",
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            linkedin: "in/untar",
-        },
-        {
-            name: "Universitas 11 Maret",
-            location: "Surabaya",
-            country: "Indonesia",
-            industry: "Education",
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            linkedin: "in/untar",
-        },
-        {
-            name: "Universitas 11 Maret",
-            location: "Surabaya",
-            country: "Indonesia",
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-            industry: "Education",
-            linkedin: "in/untar",
-        },
-    ]);
+    const [resultCompanies, setResultCompanies] = useState<Company[]>(
+        // [
+        //     {
+        //         name: "Universitas Tarumanegara",
+        //         location: "Jakarta",
+        //         country: "Indonesia",
+        //         industry: "Education",
+        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+        //         linkedin: "in/untar",
+        //     },
+        //     {
+        //         name: "Universitas Airlangga",
+        //         location: "Jakarta",
+        //         country: "Indonesia",
+        //         industry: "Education",
+        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+        //         linkedin: "in/untar",
+        //     },
+        //     {
+        //         name: "Universitas 11 Maret",
+        //         location: "Surabaya",
+        //         country: "Indonesia",
+        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+        //         industry: "Education",
+        //         linkedin: "in/untar",
+        //     },
+        //     {
+        //         name: "Universitas 11 Maret",
+        //         location: "Surabaya",
+        //         country: "Indonesia",
+        //         industry: "Education",
+        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+        //         linkedin: "in/untar",
+        //     },
+        //     {
+        //         name: "Universitas 11 Maret",
+        //         location: "Surabaya",
+        //         country: "Indonesia",
+        //         industry: "Education",
+        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+        //         linkedin: "in/untar",
+        //     },
+        //     {
+        //         name: "Universitas 11 Maret",
+        //         location: "Surabaya",
+        //         country: "Indonesia",
+        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+        //         industry: "Education",
+        //         linkedin: "in/untar",
+        //     },
+        // ]
+    );
+
+    useEffect(() => {
+        const searchJob = async () => {
+
+            if(search === "") {
+                const response = await getCompanyService().then((s) => s.getCompanies());
+                setResultCompanies(response);
+                return;
+            };
+
+            const response = await getCompanyService().then((s) => s.searchCompany(search));
+            if(isErr(response)) {
+                return;
+            }
+            setResultCompanies(response.ok);
+        }
+        searchJob();
+    }, [search]);
 
     return (
         <FrontPageLayout>
@@ -159,7 +191,10 @@ export default function FindCompany() {
                                     <input
                                         type="text"
                                         className="outline-0"
-                                        placeholder="Search Job"
+                                        placeholder="Search Company"
+                                        onChange={(e) => {
+                                            setSearch(e.target.value);
+                                        }}
                                     />
                                 </CardLayout>
                             </div>
@@ -234,7 +269,7 @@ export default function FindCompany() {
                                     </div>
                                 </CardLayout>
                                 <div className="grid grow grid-cols-2 gap-4">
-                                    {resultCompanies.map((cp, index) => {
+                                    {resultCompanies?.map((cp, index) => {
                                         return (
                                             <CardLayout className="flex flex-col gap-2 rounded-md px-6 py-5" key={index}>
                                                 <div
@@ -243,7 +278,7 @@ export default function FindCompany() {
                                                         width="80rem"
                                                         height="auto"
                                                         className="aspect-square"
-                                                        src={cp.logo}
+                                                        src={cp.image ? `data:image/png;base64,${cp.image}` : "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"}
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">
@@ -276,7 +311,7 @@ export default function FindCompany() {
                                                                 Industry:
                                                             </div>
                                                             <div>
-                                                                {cp.industry}
+                                                                {cp.founded_year.toString()}
                                                             </div>
                                                         </div>
                                                     </div>
