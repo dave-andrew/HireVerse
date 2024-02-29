@@ -214,9 +214,9 @@ actor Company {
                     seen = c.seen + 1;
                 };
 
-                companies.put(id, updatedCompany);
+                companies.put(c.id, updatedCompany);
 
-                return #ok(updatedCompany);
+                return #ok(c);
             };
         };
     };

@@ -6,8 +6,46 @@ import {
     MdOutlineQueryBuilder,
 } from "react-icons/md";
 import CompanyReviewSummary from "../../components/company/CompanyReviewSummary";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import useService from "../../hooks/useService";
+import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import { isOk } from "../../utils/resultGuarder";
+import { useNavigate } from "react-router-dom";
 
 export default function CompanyDetail() {
+
+    const nav = useNavigate();
+
+    const { id } = useParams<string>();
+    const { getCompanyService } = useService();
+
+    const [company, setCompany] = useState<Company>();
+
+    if(!id) {
+        nav(-1);
+        return;
+    }
+
+    useEffect(() => {
+        const fetchCompany = async () => {
+            const service = await getCompanyService();
+            const companyData = await service.getCompany(id);
+            
+            if(isOk(companyData)) {
+                setCompany(companyData.ok);
+                console.log(companyData.ok);
+            }
+        };
+
+        fetchCompany();
+    }, [id]);
+
+    // TODO: jadiin skeleton masukin return ()
+    if(!company) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <FrontPageLayout className="h-full">
             <div className="flex h-full w-full flex-row items-center justify-center">
@@ -21,9 +59,9 @@ export default function CompanyDetail() {
                         <div className="flex flex-col gap-8">
                             <div className="flex flex-col gap-3">
                                 <h2 className="text-5xl font-bold">
-                                    BINUS University
+                                    {company.name}
                                 </h2>
-                                <p>https://www.binus.ac.id/</p>
+                                <a href="https://www.binus.ac.id/">https://www.binus.ac.id/</a>
                             </div>
                             <div className="flex flex-row gap-28">
                                 <div className="flex flex-row gap-3">
@@ -33,7 +71,7 @@ export default function CompanyDetail() {
                                     <div className="flex flex-col">
                                         <p className="text-gray-600">Founded</p>
                                         <p className="font-bold">
-                                            19 June 1999
+                                            {company.founded_year.toString()}
                                         </p>
                                     </div>
                                 </div>
@@ -43,7 +81,7 @@ export default function CompanyDetail() {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-600">
-                                            Location
+                                            {company.location}
                                         </p>
                                         <p className="font-bold">Jakarta</p>
                                     </div>
