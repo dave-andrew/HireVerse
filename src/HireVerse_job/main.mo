@@ -123,9 +123,9 @@ actor Job {
                 return #err("Company not found");
             };
             case (?actualCompany) {
-                let manager_ids : [Principal] = actualCompany.company_manager_ids;
+                let manager_ids : [Text] = actualCompany.company_manager_ids;
 
-                if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
+                if (Array.find<Text>(manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) == null) {
                     return #err("Unauthorized");
                 };
             };
@@ -662,9 +662,9 @@ actor Job {
                         return #err("Company not found");
                     };
                     case (?actualCompany) {
-                        let manager_ids : [Principal] = actualCompany.company_manager_ids;
+                        let manager_ids : [Text] = actualCompany.company_manager_ids;
 
-                        if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
+                        if (Array.find<Text>(manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) == null) {
                             return #err("Unauthorized");
                         };
                     };

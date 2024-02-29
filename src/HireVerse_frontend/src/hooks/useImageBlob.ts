@@ -1,5 +1,5 @@
 export default function useImageBlob() {
-    const convertImageToBlob = (file: File) => {
+    const convertImageToBlob = (file: File | Uint8Array) => {
         return new Promise<number[]>((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => {
@@ -38,7 +38,11 @@ export default function useImageBlob() {
                 };
                 img.src = blob as string;
             };
-            reader.readAsDataURL(file);
+            if (file instanceof File) {
+                reader.readAsDataURL(file);
+                return;
+            }
+            reader.readAsDataURL(new Blob([file], { type: "image/png" }));
         });
     };
 

@@ -26,7 +26,7 @@ actor Company {
         location : Text;
         image : Blob;
         linkedin : Text;
-        company_manager_ids : [Principal];
+        company_manager_ids : [Text];
         job_posting_ids : [Text];
         timestamp : Time.Time;
     };
@@ -81,7 +81,7 @@ actor Company {
             location = newCompany.location;
             image = newCompany.image;
             linkedin = newCompany.linkedin;
-            company_manager_ids = [msg.caller];
+            company_manager_ids = [Principal.toText(msg.caller)];
             job_posting_ids = [];
             timestamp = Time.now();
         };
@@ -158,7 +158,7 @@ actor Company {
         var managedCompanies = Vector.Vector<Company>();
 
         for (company in companyList.vals()) {
-            if (Array.find<Principal>(company.company_manager_ids, func(p : Principal) : Bool { p == user_id }) != null) {
+            if (Array.find<Text>(company.company_manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) != null) {
                 managedCompanies.add(company);
             };
         };
@@ -186,12 +186,12 @@ actor Company {
     };
 
     public shared func checkCompanyManager(company : Company, user_id : Principal) : async Bool {
-        let company_manager_ids : [Principal] = company.company_manager_ids;
+        let company_manager_ids : [Text] = company.company_manager_ids;
 
-        Array.find<Principal>(
+        Array.find<Text>(
             company_manager_ids,
-            func(p : Principal) : Bool {
-                p == user_id;
+            func(p : Text) : Bool {
+                p == Principal.toText(user_id);
             },
         ) != null;
     };
@@ -317,7 +317,7 @@ actor Company {
                 };
 
                 let manager_ids = company.company_manager_ids;
-                let updatedManagerIds = Array.append<Principal>(manager_ids, [user_id]);
+                let updatedManagerIds = Array.append<Text>(manager_ids, [Principal.toText(user_id)]);
 
                 let updatedCompany = {
                     id = company_id;
@@ -348,7 +348,7 @@ actor Company {
                 var managers = Vector.Vector<User.User>();
 
                 label l for (manager_id in manager_ids.vals()) {
-                    let manager : ?User.User = await User.getUser(manager_id);
+                    let manager : ?User.User = await User.getUser(Principal.fromText(manager_id));
                     switch (manager) {
                         case null {
                             continue l;
@@ -378,10 +378,10 @@ actor Company {
             };
             case (?c) {
                 let manager_ids = c.company_manager_ids;
-                let updatedManagerIds = Array.filter<Principal>(
+                let updatedManagerIds = Array.filter<Text>(
                     manager_ids,
-                    func(p : Principal) : Bool {
-                        p != user_id;
+                    func(p : Text) : Bool {
+                        p != Principal.toText(user_id);
                     },
                 );
 

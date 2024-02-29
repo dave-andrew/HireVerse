@@ -27,7 +27,7 @@ export default function ManageCompany() {
     const { register, getValues } = useForm();
     let imageRef = useRef<HTMLInputElement>(null);
     const { getJobService, getCompanyService } = useService();
-    const { convertImageToBlob, convertBlobToImage } = useImageBlob();
+    const { convertImageToBlob } = useImageBlob();
 
     const getCompanyData = async () => {
         if (!selectedCompany) {
@@ -49,27 +49,19 @@ export default function ManageCompany() {
             return;
         }
 
-        const result = await getCompanyService().then((s) =>
-            s.getCompany(selectedCompany?.id),
+        const response = await getCompanyService().then((s) =>
+            s.getCompany(selectedCompany.id),
         );
 
-        if (result.length == 0) {
-            return;
+        if (response.length !== 0) {
+            const company = response[0];
+            await getCompanyService().then((s) =>
+                s.updateCompany(selectedCompany?.id, {
+                    ...selectedCompany,
+                    image: company.image,
+                }),
+            );
         }
-
-        const company = result[0];
-
-        let updateCompany = {
-            ...selectedCompany,
-            company_manager_ids: company.company_manager_ids,
-            founded_year: company.founded_year,
-            timestamp: company.timestamp,
-        };
-
-        await getCompanyService().then((s) =>
-            s.updateCompany(selectedCompany?.id, updateCompany),
-        );
-        console.log("updated");
     };
 
     const handleImageEdit = async () => {
@@ -77,9 +69,9 @@ export default function ManageCompany() {
         if (!files) return;
 
         const file = files[0];
-        console.log(files);
+
         const blob = await convertImageToBlob(file);
-        console.log("hihihiha");
+
         setSelectedCompany((prev) => {
             if (prev) {
                 return { ...prev, image: blob };
@@ -94,20 +86,19 @@ export default function ManageCompany() {
 
     useEffect(() => {
         getCompanyData();
-        console.log(selectedCompany);
     }, []);
     return (
         <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
             <div className="flex w-4/5 flex-col place-items-center">
-                <CardLayout className="flex w-full flex-row place-items-center rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6">
+                <CardLayout className="flex w-full flex-row place-items-center rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6 gap-10">
                     <div className="relative">
                         <img
-                            className="w-96"
+                            className="2xl:w-96 xl:w-48 aspect-square object-cover border-signature-gray border-[1px]"
                             src={imageHandler(selectedCompany?.image)}
                             alt=""
                         />
                         <ProfileEditButton
-                            className="top-10 left-10"
+                            className="2xl:top-10 xl:top-4 2xl:left-10 xl:left-4"
                             onClick={() => imageRef.current?.click()}
                         />
                         <input

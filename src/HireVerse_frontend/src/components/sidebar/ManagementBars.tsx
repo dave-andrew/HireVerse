@@ -96,7 +96,10 @@ export default function ManagementBars({ children }: Props) {
                         return;
                     }
                 }
+
                 setSelectedCompany(companies[0]);
+                console.log("hjahahahahahahah");
+                console.log(companies[0]);
                 if (selectedCompany) {
                     setValue("label", companies[0].name);
                     return;
