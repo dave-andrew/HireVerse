@@ -6,8 +6,11 @@ import { useEffect, useState } from "react";
 import CustomTextField from "../../components/form/CustomTextField";
 import useService from "../../hooks/useService";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import { useNavigate } from "react-router-dom";
 
 export default function FindCompany() {
+
+    const nav = useNavigate();
 
     const { getCompanyService } = useService();
 
@@ -16,24 +19,28 @@ export default function FindCompany() {
 
     const [popularCompanies, setPopularCompanies] = useState([
         {
+            id: "1",
             name: "BINUS University",
             rating: 4.05,
             reviewCount: 12,
             logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
         },
         {
+            id: "2",
             name: "BINUS University",
             rating: 4.05,
             reviewCount: 12,
             logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
         },
         {
+            id: "3",
             name: "BINUS University",
             rating: 4.05,
             reviewCount: 12,
             logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
         },
         {
+            id: "4",
             name: "BINUS University",
             rating: 4.05,
             reviewCount: 12,
@@ -137,7 +144,9 @@ export default function FindCompany() {
                                         .slice(0, 4)
                                         .map((company) => {
                                             return (
-                                                <CardLayout className="flex h-32 w-64 p-4 xl:w-80">
+                                                <CardLayout className="flex h-32 w-64 p-4 xl:w-80" onClick={() => {
+                                                    nav(`/company/detail/${company.id}`)
+                                                }}>
                                                     <div className="flex flex-row place-items-center">
                                                         <img
                                                             width="80rem"
@@ -271,7 +280,9 @@ export default function FindCompany() {
                                 <div className="grid grow grid-cols-2 gap-4">
                                     {searchCompany?.map((cp, index) => {
                                         return (
-                                            <CardLayout className="flex flex-col gap-2 rounded-md px-6 py-5" key={index}>
+                                            <CardLayout className="flex flex-col gap-2 rounded-md px-6 py-5" key={index} onClick={() => {
+                                                nav(`/company/detail/${cp.id}`)
+                                            }}>
                                                 <div
                                                     className="flex flex-row place-items-center bg-white" >
                                                     <img

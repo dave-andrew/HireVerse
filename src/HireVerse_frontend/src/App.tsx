@@ -37,7 +37,7 @@ const frontRoutes: RouteObject[] = [
         Component: FindCompany,
     },
     {
-        path: "/company/detail",
+        path: "/company/detail/:id",
         Component: CompanyDetail,
     },
 ];
