@@ -122,10 +122,15 @@ actor Job {
             case (#err(errmsg)) {
                 return #err("Company not found");
             };
+<<<<<<< HEAD
             case (#ok(actualCompany)) {
                 let manager_ids : [Principal] = actualCompany.company_manager_ids;
+=======
+            case (?actualCompany) {
+                let manager_ids : [Text] = actualCompany.company_manager_ids;
+>>>>>>> 6be1828d8ad9b4ce768de1703565088b83561e2d
 
-                if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
+                if (Array.find<Text>(manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) == null) {
                     return #err("Unauthorized");
                 };
             };
@@ -355,6 +360,33 @@ actor Job {
         };
 
         return #ok(Vector.toArray<Text>(industryList));
+    };
+
+     public shared composite query func getCompanyJobIndustries(company_id : Text) : async Result.Result<[Text], Text> {
+        let company = await Company.getCompany(company_id);
+
+        switch(company) {
+            case(null){
+                return #err("Company not found");
+            };
+            case(?c){
+                let industries = Vector.Vector<Text>();
+                let jobIds = c.job_posting_ids;
+
+                for (jobId in jobIds.vals()) {
+                    let job = await Job.getJob(jobId);
+                    switch(job) {
+                        case(#err(e)){};
+                        case(#ok(j)){
+                            if (not Vector.contains(industries, j.industry, Text.equal)) {
+                                industries.add(j.industry);
+                            };
+                        };
+                    };
+                };
+                return #ok(Vector.toArray(industries));
+            }
+        }
     };
 
     public shared composite query func getJobs(startFrom : Nat, amount : Nat, jobFilters : JobFilterInput) : async Result.Result<[Job], Text> {
@@ -654,10 +686,15 @@ actor Job {
                     case (#err(errmsg)) {
                         return #err("Company not found");
                     };
+<<<<<<< HEAD
                     case (#ok(actualCompany)) {
                         let manager_ids : [Principal] = actualCompany.company_manager_ids;
+=======
+                    case (?actualCompany) {
+                        let manager_ids : [Text] = actualCompany.company_manager_ids;
+>>>>>>> 6be1828d8ad9b4ce768de1703565088b83561e2d
 
-                        if (Array.find<Principal>(manager_ids, func(p : Principal) : Bool { p == user_id }) == null) {
+                        if (Array.find<Text>(manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) == null) {
                             return #err("Unauthorized");
                         };
                     };

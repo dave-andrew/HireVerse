@@ -8,6 +8,7 @@ import {
 
 // See: https://usehooks-ts.com/react-hook/use-event-listener
 import useEventListener from "./useEventListener";
+import { Principal } from "@dfinity/principal";
 
 declare global {
     interface WindowEventMap {
@@ -49,15 +50,7 @@ export default function useLocalStorage<T>(
                 const newValue =
                     value instanceof Function ? value(storedValue) : value;
 
-                window.localStorage.setItem(
-                    key,
-                    JSON.stringify(newValue, (key, value) => {
-                        if (typeof value === "bigint") {
-                            return value.toString();
-                        }
-                        return value;
-                    }),
-                );
+                window.localStorage.setItem(key, stringifyJSON(newValue));
 
                 setStoredValue(newValue);
 
@@ -83,12 +76,48 @@ export default function useLocalStorage<T>(
 
     return [storedValue, setValue];
 }
-
-function parseJSON<T>(value: string | null): T | undefined {
+const stringifyJSON = <T>(value: T): string => {
     try {
-        return value === "undefined" ? undefined : JSON.parse(value ?? "");
+        return JSON.stringify(value, (key, value) => {
+            if (typeof value === "bigint") {
+                return `bigint|${value}`;
+            }
+            if (typeof value === "object" && value instanceof Uint8Array) {
+                const arr = Array.from(value);
+                return `blob|${JSON.stringify(arr)}`;
+            }
+
+            return value;
+        });
+    } catch (e) {
+        console.log(e);
+        console.log("stringify error on", { value });
+        return "";
+    }
+};
+
+const parseJSON = <T>(value: string | null): T | undefined => {
+    try {
+        if (value === "undefined") {
+            return undefined;
+        }
+
+        return JSON.parse(value ?? "", (key, value) => {
+            if (typeof value === "string" && value.startsWith("bigint|")) {
+                return BigInt(value.slice(7));
+            }
+            if (typeof value === "string" && value.startsWith("blob|")) {
+                const arr = JSON.parse(value.slice(5));
+                return new Uint8Array(arr);
+            }
+            if (key === "__principal__") {
+                const principal = Principal.fromText(value);
+                return principal;
+            }
+            return value;
+        });
     } catch {
         console.log("parsing error on", { value });
         return undefined;
     }
-}
+};
