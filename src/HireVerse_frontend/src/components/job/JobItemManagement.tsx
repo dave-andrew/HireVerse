@@ -118,7 +118,7 @@ export default function JobItemManagement({
                 {Number(job.salary_start)} - {Number(job.salary_end)}
             </div>
             <div className="flex flex-row">
-                {new Date(Number(job.timestamp)).toLocaleDateString()}
+                {new Date(Number(job.timestamp) / 1000000).toLocaleDateString()}
             </div>
         </CardLayout>
     );

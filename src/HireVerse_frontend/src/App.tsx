@@ -1,4 +1,3 @@
-import ManageCompany from "./pages/employers/ManageCompany";
 import {
     createBrowserRouter,
     RouteObject,
@@ -9,7 +8,6 @@ import RegisterCompany from "./pages/employers/RegisterCompany";
 import FindCompany from "./pages/employee/FindCompany";
 import Landing from "./pages/employee/Landing";
 import CompleteRegistration from "./pages/employee/CompleteRegistration";
-import EmptyPage from "./pages/employers/EmptyPage";
 import CompanyDetail from "./pages/employee/CompanyDetail";
 import CompanyManagers from "./pages/employers/CompanyManagers";
 import CompanyJobs from "./pages/employers/CompanyJobs";
@@ -20,6 +18,7 @@ import UnauthenticatedProtectedRoutes from "./components/protected/Unauthenticat
 import EmployerProtectedRoutes from "./components/protected/EmployerProtectedRoutes";
 import AuthorizedProtectedRoutes from "./components/protected/AuthorizedProtectedRoutes";
 import CompanyInvitation from "./pages/employers/CompanyInvitation";
+import EmployerHome from "./pages/employers/EmployerHome";
 
 const guestRoutes: RouteObject[] = [
     {
@@ -46,11 +45,7 @@ const frontRoutes: RouteObject[] = [
 const backRoutes: RouteObject[] = [
     {
         path: "/employer",
-        Component: EmptyPage,
-    },
-    {
-        path: "/employer/manage",
-        Component: ManageCompany,
+        Component: EmployerHome,
     },
     {
         path: "/employer/managers",
@@ -67,7 +62,7 @@ const backRoutes: RouteObject[] = [
     {
         path: "/employer/invitations",
         Component: CompanyInvitation,
-    }
+    },
 ];
 
 const otherRoutes: RouteObject[] = [

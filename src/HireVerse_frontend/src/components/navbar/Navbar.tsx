@@ -1,9 +1,10 @@
 import { ReactElement, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Profile from "./Profile";
-import {FaHome, FaSuitcase} from "react-icons/fa";
-import {IconType} from "react-icons";
-import {BsFillBuildingFill} from "react-icons/bs";
+import { FaHome, FaSuitcase } from "react-icons/fa";
+import { IconType } from "react-icons";
+import { BsFillBuildingFill } from "react-icons/bs";
+import useAuth, { AuthState } from "../../hooks/useAuth";
 
 type Menu = {
     name: string;
@@ -15,6 +16,7 @@ type Menu = {
 
 export default function Navbar() {
     const [menus, setMenus] = useState<Menu[]>([]);
+    const { authState } = useAuth();
     const location = useLocation();
 
     useEffect(() => {
@@ -55,6 +57,9 @@ export default function Navbar() {
                 </Link>
                 <div className="absolute left-1/2 flex h-full translate-x-[-50%] transform flex-row place-items-center justify-center px-8 md:w-7/12 lg:w-5/12">
                     {menus.map((menu, index) => {
+                        if (authState !== AuthState.Authenticated) {
+                            return;
+                        }
                         return (
                             <Link
                                 className="flex h-full w-full place-items-center justify-center "

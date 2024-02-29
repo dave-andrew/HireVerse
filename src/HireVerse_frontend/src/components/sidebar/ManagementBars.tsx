@@ -185,8 +185,11 @@ export default function ManagementBars({ children }: Props) {
                         </span>
                     </div>
                     <div className="flex flex-col text-lg text-gray-500">
-                        {managedCompanies.length > 0 &&
-                            menus.map((menu, index) => (
+                        {menus.map((menu, index) => {
+                            if (selectedCompany === null && index > 0) {
+                                return;
+                            }
+                            return (
                                 <Link
                                     to={menu.redirectUrl ?? ""}
                                     key={index}>
@@ -200,10 +203,9 @@ export default function ManagementBars({ children }: Props) {
                                         </span>
                                     </div>
                                 </Link>
-                            ))}
-                        {managedCompanies?.length > 0 && (
-                            <hr className="my-5" />
-                        )}
+                            );
+                        })}
+                        <hr className="my-5" />
                         <div className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3">
                             <RiMailOpenLine size="1.5rem" />
                             <span

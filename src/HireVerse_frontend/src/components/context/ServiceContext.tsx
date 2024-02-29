@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import {
     canisterId as jobCanisterId,
@@ -21,6 +21,7 @@ import {
     canisterId as reviewCanisterId,
     createActor as createActorReview,
 } from "../../../../declarations/HireVerse_review";
+import { useThrottleCallback } from "../../hooks/useThrottleCallback";
 
 interface Props {
     children: ReactNode;
@@ -51,21 +52,24 @@ export default function ServiceContextProvider({ children }: Props) {
         useState<ActorSubclass<_SERVICE_REVIEW>>();
     const [agent, setAgent] = useState<HttpAgent>();
 
-    const getHttpAgent = async () => {
-        const identity = await getIdentity();
+    const createHttpAgent = useThrottleCallback(() => {
+        const identity = getIdentity();
         if (!agent) {
-            console.log("creating agent");
-            const agentz = new HttpAgent({ identity });
-            console.log("agent", agentz);
-            setAgent(agentz);
-            return agentz;
+            const agent = new HttpAgent({ identity });
+            setAgent(agent);
+            return agent;
+        }
+        return agent;
+    }, 1000);
+
+    const getHttpAgent = async () => {
+        if (!agent) {
+            const newAgent = createHttpAgent();
+            setAgent(newAgent);
+            return newAgent;
         }
         return agent;
     };
-
-    useEffect(() => {
-        getIdentity();
-    }, []);
 
     const getJobService = async () => {
         while (!jobService) {
@@ -80,7 +84,7 @@ export default function ServiceContextProvider({ children }: Props) {
                     return jobService;
                 }
             }
-            await new Promise((r) => setTimeout(r, 100));
+            await new Promise((r) => setTimeout(r, 1000));
         }
         return jobService;
     };
@@ -100,7 +104,7 @@ export default function ServiceContextProvider({ children }: Props) {
                 }
             }
 
-            await new Promise((r) => setTimeout(r, 100));
+            await new Promise((r) => setTimeout(r, 1000));
         }
         return companyService;
     };
@@ -119,7 +123,7 @@ export default function ServiceContextProvider({ children }: Props) {
                 }
             }
 
-            await new Promise((r) => setTimeout(r, 100));
+            await new Promise((r) => setTimeout(r, 1000));
         }
         return backendService;
     };
@@ -140,6 +144,7 @@ export default function ServiceContextProvider({ children }: Props) {
 
             await new Promise((r) => setTimeout(r, 100));
         }
+        0;
         return reviewService;
     };
 

@@ -337,6 +337,33 @@ actor Job {
         return #ok(Vector.toArray<Text>(industryList));
     };
 
+     public shared composite query func getCompanyJobIndustries(company_id : Text) : async Result.Result<[Text], Text> {
+        let company = await Company.getCompany(company_id);
+
+        switch(company) {
+            case(null){
+                return #err("Company not found");
+            };
+            case(?c){
+                let industries = Vector.Vector<Text>();
+                let jobIds = c.job_posting_ids;
+
+                for (jobId in jobIds.vals()) {
+                    let job = await Job.getJob(jobId);
+                    switch(job) {
+                        case(#err(e)){};
+                        case(#ok(j)){
+                            if (not Vector.contains(industries, j.industry, Text.equal)) {
+                                industries.add(j.industry);
+                            };
+                        };
+                    };
+                };
+                return #ok(Vector.toArray(industries));
+            }
+        }
+    };
+
     public shared composite query func getJobs(startFrom : Nat, amount : Nat, jobFilters : JobFilterInput) : async Result.Result<[Job], Text> {
         var jobsList = Iter.toArray(jobs.vals());
 

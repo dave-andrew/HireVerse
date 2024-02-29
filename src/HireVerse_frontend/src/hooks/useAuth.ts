@@ -42,28 +42,28 @@ export default function useAuth() {
                 s.getUser(identity.getPrincipal()),
             );
 
-            console.log("Fetching Data for");
-            console.log(
-                "Greet: ",
-                await getBackendService().then((s) => s.greet()),
-            );
-            console.log("Identity Principal: ", identity.getPrincipal());
-            console.log("User Data: ", userData);
-
-            console.log(
-                "All registered users: ",
-                await getBackendService().then((s) => s.getAllUsers()),
-            );
+            // console.log("Fetching Data for");
+            // console.log(
+            //     "Greet: ",
+            //     await getBackendService().then((s) => s.greet()),
+            // );
+            // console.log("Identity Principal: ", identity.getPrincipal());
+            // console.log("User Data: ", userData);
+            //
+            // console.log(
+            //     "All registered users: ",
+            //     await getBackendService().then((s) => s.getAllUsers()),
+            // );
             if (userData.length > 0) {
                 setUser(userData[0]!);
                 setAuthState(AuthState.Authenticated);
-                console.log("User found");
+                // console.log("User found");
                 return;
             }
 
             if (identity) {
                 setAuthState(AuthState.Unregistered);
-                console.log("User not registered");
+                // console.log("User not registered");
 
                 return;
             }
@@ -73,7 +73,7 @@ export default function useAuth() {
         }
         setUser(null);
         setAuthState(AuthState.Unauthenticated);
-        console.log("User not authenticated");
+        // console.log("User not authenticated");
     }, [getBackendService]);
 
     const register = useCallback(
@@ -87,7 +87,7 @@ export default function useAuth() {
                 s.register(first_name, last_name, email, date),
             );
             await fetchUserData();
-            console.log("Return value dari register: ", returnValue);
+            // console.log("Return value dari register: ", returnValue);
         },
         [],
     );

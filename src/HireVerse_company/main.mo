@@ -179,6 +179,8 @@ actor Company {
         return Vector.toArray(countries);
     };
 
+   
+
     public shared query func getCompany(id : Text) : async ?Company {
         return companies.get(id);
     };
@@ -196,7 +198,7 @@ actor Company {
 
     public shared (msg) func inviteManager(company_id : Text, user_id : Principal, inviter_id : Principal) : async Result.Result<Invite, Text> {
 
-        if (Principal.isAnonymous(user_id)) {
+        if (Principal.isAnonymous(inviter_id)) {
             return #err("Inviter not authorized");
         };
 
