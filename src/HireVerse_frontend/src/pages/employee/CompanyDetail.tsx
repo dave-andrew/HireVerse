@@ -80,9 +80,15 @@ export default function CompanyDetail() {
                                         <MdOutlineLocationOn size="2rem" />
                                     </div>
                                     <div className="flex flex-col">
-                                        <p className="text-gray-600">
-                                            {company.office_locations[0]}
-                                        </p>
+                                        {
+                                            company.office_locations.map((location) => {
+                                                return (
+                                                    <p className="text-gray-600">
+                                                        {location}
+                                                    </p>
+                                                );
+                                            })
+                                        }
                                         <p className="font-bold">Jakarta</p>
                                     </div>
                                 </div>
@@ -95,7 +101,7 @@ export default function CompanyDetail() {
                                             Visitors
                                         </p>
                                         <p className="font-bold">
-                                            20k Visitors
+                                            {company.seen.toString() + " Visitors"}
                                         </p>
                                     </div>
                                 </div>
@@ -109,26 +115,7 @@ export default function CompanyDetail() {
                                     Company Profile
                                 </h3>
                                 <p>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit. Nunc laoreet blandit
-                                    tristique. Nunc ultrices, mi sed tristique
-                                    ullamcorper, felis mauris fermentum sem, vel
-                                    pharetra dui eros ut lacus. Morbi pulvinar,
-                                    nulla ut pharetra porttitor, magna arcu
-                                    dignissim neque, id scelerisque eros sapien
-                                    id magna. Pellentesque scelerisque a nisi
-                                    eget varius. Nullam eu lacus placerat quam
-                                    tempor congue pretium vel massa. Nulla
-                                    luctus tristique augue non ullamcorper.
-                                    Suspendisse a iaculis lacus, at finibus
-                                    nisl. Donec accumsan vehicula viverra. Cras
-                                    rhoncus lectus id ex malesuada hendrerit.
-                                    Curabitur non dui massa. Sed aliquet quam
-                                    velit, quis feugiat tellus accumsan sed.
-                                    Phasellus arcu velit, molestie quis augue
-                                    sit amet, fringilla feugiat felis. Morbi
-                                    lacinia felis eu lorem egestas, eu vehicula
-                                    nisi posuere.
+                                    {company.profile}
                                 </p>
                             </CardLayout>
                             <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">

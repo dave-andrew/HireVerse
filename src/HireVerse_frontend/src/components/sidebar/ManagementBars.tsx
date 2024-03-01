@@ -148,7 +148,7 @@ export default function ManagementBars({ children }: Props) {
         <div className="flex h-[100vh] w-[100vw] flex-row">
             <div className="fixed z-50 flex h-16 w-full flex-row justify-between bg-white shadow-md">
                 <div
-                    className={`flex h-full flex-row place-items-center ${isHovered ? "pl-80" : "pl-24"}`}>
+                    className={`flex h-full flex-row place-items-center transition-all duration-500 ease-in-out ${isHovered ? "pl-80" : "pl-24"}`}>
                     <ImageLabeledDropdown
                         name="label"
                         states={dropdownItems}
@@ -195,9 +195,9 @@ export default function ManagementBars({ children }: Props) {
                                     <div
                                         key={index}
                                         className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
-                                        <menu.icon size="1.5rem" />
+                                        <menu.icon className="min-w-[1.5rem]" />
                                         <span
-                                            className={`${isHovered ? "block" : "hidden"}`}>
+                                            className={`overflow-hidden`}>
                                             {menu.name}
                                         </span>
                                     </div>
@@ -206,9 +206,9 @@ export default function ManagementBars({ children }: Props) {
                         })}
                         <hr className="my-5" />
                         <div className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3">
-                            <RiMailOpenLine size="1.5rem" />
+                            <RiMailOpenLine className="min-w-[1.5rem]" />
                             <span
-                                className={`${isHovered ? "block" : "hidden"}`}>
+                                className={`overflow-hidden`}>
                                 Invite
                             </span>
                         </div>
@@ -216,7 +216,7 @@ export default function ManagementBars({ children }: Props) {
                 </div>
             </div>
             <div
-                className={`flex h-full ${isHovered ? "min-w-[18rem]" : "min-w-[5rem]"}`}
+                className={`flex h-full ${isHovered ? "min-w-[18rem]" : "min-w-[5rem]"} transition-all duration-500 ease-in-out`}
             />
             <div className="flex-grow-1 flex h-full w-full flex-col">
                 <div className="min-h-16 w-full" />

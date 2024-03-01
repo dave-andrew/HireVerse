@@ -332,7 +332,6 @@ actor Job {
                     status = actualJob.status;
                     employType = actualJob.employType;
                     contacts = actualJob.contacts;
-
                 };
                 jobs.put(job_id, updated_job);
                 return #ok();
