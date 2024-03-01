@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import useImageBlob from "../../hooks/useImageBlob";
 import imageHandler from "../../utils/imageHandler";
 import EditCompanyModal from "../../components/modal/EditCompanyModal";
+import SocialMediaItem from "../../components/company/SocialMediaItem";
 
 interface IManageCompanyForm {
     image: FileList;
@@ -88,7 +89,7 @@ export default function ManageCompany() {
     return (
         <>
             <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
-                <div className="flex w-4/5 flex-col place-items-center">
+                <div className="flex xl:w-[calc(100%-1rem)] 2xl:w-4/5 flex-col place-items-center">
                     <CardLayout className="relative flex w-full flex-row place-items-center gap-10 rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6">
                         <div className="relative">
                             <img
@@ -209,14 +210,30 @@ export default function ManageCompany() {
                                 <h3 className="text-4xl font-bold">
                                     Social Medias
                                 </h3>
-                                <div className="flex flex-row flex-wrap gap-3">
+                                <div className="flex flex-col flex-wrap gap-3">
                                     {selectedCompany?.social_medias.map(
                                         (contact, i) => {
                                             return (
+                                                <SocialMediaItem
+                                                    url={contact}
+                                                />
+                                            );
+                                        },
+                                    )}
+                                </div>
+                            </CardLayout>
+                            <CardLayout className="flex flex-col gap-5 rounded-none p-10">
+                                <h3 className="text-4xl font-bold">
+                                    Locations
+                                </h3>
+                                <div className="flex flex-col flex-wrap gap-3">
+                                    {selectedCompany?.office_locations.map(
+                                        (location, i) => {
+                                            return (
                                                 <div
                                                     key={i}
-                                                    className="bg-signature-gray flex flex-row gap-2 rounded-md p-2">
-                                                    {contact}
+                                                    className="bg-white text-black flex flex-row gap-2 rounded-md p-2 px-3 font-bold opacity-80 transition-opacity hover:opacity-100">
+                                                    {location}
                                                 </div>
                                             );
                                         },
