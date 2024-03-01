@@ -15,7 +15,7 @@ import convertNullFormat from "../../utils/convertNullFormat";
 import { isOk } from "../../utils/resultGuarder";
 import handleKeyDown from "../../utils/handleKeyDown";
 import JobItemManagement from "../../components/job/JobItemManagement";
-import WrappedModal from "../../components/utils/WrappedModal";
+import WrappedModal from "../../components/form/WrappedModal";
 import CreateJobModal from "../../components/modal/CreateJobModal";
 import useToaster from "../../hooks/useToaster";
 

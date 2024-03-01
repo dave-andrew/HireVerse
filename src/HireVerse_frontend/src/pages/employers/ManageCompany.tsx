@@ -17,6 +17,7 @@ import useImageBlob from "../../hooks/useImageBlob";
 import imageHandler from "../../utils/imageHandler";
 import EditCompanyModal from "../../components/modal/EditCompanyModal";
 import SocialMediaItem from "../../components/company/SocialMediaItem";
+import purifyDOM from "../../utils/purifyDOM";
 
 interface IManageCompanyForm {
     image: FileList;
@@ -89,7 +90,7 @@ export default function ManageCompany() {
     return (
         <>
             <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
-                <div className="flex xl:w-[calc(100%-1rem)] 2xl:w-4/5 flex-col place-items-center">
+                <div className="flex flex-col place-items-center xl:w-[calc(100%-1rem)] 2xl:w-4/5">
                     <CardLayout className="relative flex w-full flex-row place-items-center gap-10 rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6">
                         <div className="relative">
                             <img
@@ -180,7 +181,13 @@ export default function ManageCompany() {
                                 <h3 className="text-4xl font-bold">
                                     Company Profile
                                 </h3>
-                                <p>{selectedCompany?.profile}</p>
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: purifyDOM(
+                                            selectedCompany?.profile,
+                                        ),
+                                    }}
+                                />
                             </CardLayout>
                             <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
                                 <h3 className="text-4xl font-bold">Reviews</h3>
@@ -232,7 +239,7 @@ export default function ManageCompany() {
                                             return (
                                                 <div
                                                     key={i}
-                                                    className="bg-white text-black flex flex-row gap-2 rounded-md p-2 px-3 font-bold opacity-80 transition-opacity hover:opacity-100">
+                                                    className="flex flex-row gap-2 rounded-md bg-white p-2 px-3 font-bold text-black opacity-80 transition-opacity hover:opacity-100">
                                                     {location}
                                                 </div>
                                             );

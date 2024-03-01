@@ -56,7 +56,7 @@ export default function CompanyDetail() {
     return (
         <FrontPageLayout className="h-full">
             <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
-                <div className="flex xl:w-[calc(100%-1rem)] 2xl:w-4/5 flex-col place-items-center">
+                <div className="flex flex-col place-items-center xl:w-[calc(100%-1rem)] 2xl:w-4/5">
                     <CardLayout className="relative flex w-full flex-row place-items-center gap-10 rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6">
                         <div className="relative">
                             <img
@@ -87,9 +87,7 @@ export default function CompanyDetail() {
                                         <p className="text-gray-600">Founded</p>
                                         <p className="font-bold">
                                             {convertToDate(
-                                                Number(
-                                                    company?.timestamp,
-                                                ),
+                                                Number(company?.timestamp),
                                             ).toLocaleDateString()}
                                         </p>
                                     </div>
@@ -103,10 +101,7 @@ export default function CompanyDetail() {
                                             Location
                                         </p>
                                         <p className="font-bold">
-                                            {
-                                                company
-                                                    ?.office_locations?.[0]
-                                            }
+                                            {company?.office_locations?.[0]}
                                         </p>
                                     </div>
                                 </div>
@@ -186,7 +181,7 @@ export default function CompanyDetail() {
                                             return (
                                                 <div
                                                     key={i}
-                                                    className="bg-white text-black flex flex-row gap-2 rounded-md p-2 px-3 font-bold opacity-80 transition-opacity hover:opacity-100">
+                                                    className="flex flex-row gap-2 rounded-md bg-white p-2 px-3 font-bold text-black opacity-80 transition-opacity hover:opacity-100">
                                                     {location}
                                                 </div>
                                             );

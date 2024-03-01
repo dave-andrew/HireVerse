@@ -148,7 +148,9 @@ export default function ManagementBars({ children }: Props) {
         <div className="flex h-[100vh] w-[100vw] flex-row">
             <div className="fixed z-50 flex h-16 w-full flex-row justify-between bg-white shadow-md">
                 <div
-                    className={`flex h-full flex-row place-items-center transition-all duration-500 ease-in-out ${isHovered ? "pl-80" : "pl-24"}`}>
+                    className={`flex h-full flex-row place-items-center transition-all duration-500 ease-in-out ${
+                        isHovered ? "pl-80" : "pl-24"
+                    }`}>
                     <ImageLabeledDropdown
                         name="label"
                         states={dropdownItems}
@@ -173,7 +175,9 @@ export default function ManagementBars({ children }: Props) {
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className={`fixed z-50 flex h-full flex-col place-items-center justify-between
-                 bg-white px-2 pb-6 pt-4 shadow-md ${isHovered ? "w-[18rem]" : "w-[5rem]"}
+                 bg-white px-2 pb-6 pt-4 shadow-md ${
+                     isHovered ? "w-[18rem]" : "w-[5rem]"
+                 }
                  transition-all duration-500 ease-in-out
                  `}>
                 <div className="flex w-full flex-col gap-8">
@@ -194,10 +198,13 @@ export default function ManagementBars({ children }: Props) {
                                     key={index}>
                                     <div
                                         key={index}
-                                        className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
+                                        className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${
+                                            isActive(menu.activeUrl)
+                                                ? "text-blue-primary bg-signature-gray border-color-blue-primary"
+                                                : ""
+                                        }`}>
                                         <menu.icon className="min-w-[1.5rem]" />
-                                        <span
-                                            className={`overflow-hidden`}>
+                                        <span className={`overflow-hidden`}>
                                             {menu.name}
                                         </span>
                                     </div>
@@ -207,16 +214,15 @@ export default function ManagementBars({ children }: Props) {
                         <hr className="my-5" />
                         <div className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3">
                             <RiMailOpenLine className="min-w-[1.5rem]" />
-                            <span
-                                className={`overflow-hidden`}>
-                                Invite
-                            </span>
+                            <span className={`overflow-hidden`}>Invite</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div
-                className={`flex h-full ${isHovered ? "min-w-[18rem]" : "min-w-[5rem]"} transition-all duration-500 ease-in-out`}
+                className={`flex h-full ${
+                    isHovered ? "min-w-[18rem]" : "min-w-[5rem]"
+                } transition-all duration-500 ease-in-out`}
             />
             <div className="flex-grow-1 flex h-full w-full flex-col">
                 <div className="min-h-16 w-full" />

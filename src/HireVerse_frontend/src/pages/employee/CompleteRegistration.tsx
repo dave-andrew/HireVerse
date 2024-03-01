@@ -49,10 +49,18 @@ export default function CompleteRegistration() {
                         </div>
                         <div className="border-signature-gray border-t-[1px] pt-4">
                             <CardLayout
-                                className={`rounded-md ${errors.firstName ? "border-red-500" : "border-signature-gray"}`}>
+                                className={`rounded-md ${
+                                    errors.firstName
+                                        ? "border-red-500"
+                                        : "border-signature-gray"
+                                }`}>
                                 <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                     <span
-                                        className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${errors.firstName ? "border-red-500" : "border-signature-gray"}`}>
+                                        className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
+                                            errors.firstName
+                                                ? "border-red-500"
+                                                : "border-signature-gray"
+                                        }`}>
                                         <BsPersonVcard size="1.5rem" />
                                     </span>
                                     <input
@@ -66,7 +74,9 @@ export default function CompleteRegistration() {
                                 </div>
                             </CardLayout>
                             <div
-                                className={`text-sm ${errors.firstName ? "text-red-500" : "h-5"}`}>
+                                className={`text-sm ${
+                                    errors.firstName ? "text-red-500" : "h-5"
+                                }`}>
                                 {errors.firstName?.message}
                             </div>
                         </div>
@@ -77,10 +87,18 @@ export default function CompleteRegistration() {
                         </div>
                         <div className="border-signature-gray border-t-[1px] pt-4">
                             <CardLayout
-                                className={`rounded-md ${errors.lastName ? "border-red-500" : "border-signature-gray"}`}>
+                                className={`rounded-md ${
+                                    errors.lastName
+                                        ? "border-red-500"
+                                        : "border-signature-gray"
+                                }`}>
                                 <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                     <span
-                                        className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${errors.lastName ? "border-red-500" : "border-signature-gray"}`}>
+                                        className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
+                                            errors.lastName
+                                                ? "border-red-500"
+                                                : "border-signature-gray"
+                                        }`}>
                                         <BsPersonVcard size="1.5rem" />
                                     </span>
                                     <input
@@ -94,7 +112,9 @@ export default function CompleteRegistration() {
                                 </div>
                             </CardLayout>
                             <div
-                                className={`text-sm ${errors.lastName ? "text-red-500" : "h-5"}`}>
+                                className={`text-sm ${
+                                    errors.lastName ? "text-red-500" : "h-5"
+                                }`}>
                                 {errors.lastName?.message}
                             </div>
                         </div>
@@ -105,10 +125,18 @@ export default function CompleteRegistration() {
                         </div>
                         <div className="border-signature-gray border-t-[1px] pt-4">
                             <CardLayout
-                                className={`rounded-md ${errors.email ? "border-red-500" : "border-signature-gray"}`}>
+                                className={`rounded-md ${
+                                    errors.email
+                                        ? "border-red-500"
+                                        : "border-signature-gray"
+                                }`}>
                                 <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                     <span
-                                        className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${errors.email ? "border-red-500" : "border-signature-gray"}`}>
+                                        className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
+                                            errors.email
+                                                ? "border-red-500"
+                                                : "border-signature-gray"
+                                        }`}>
                                         <MdOutlineEmail size="1.5rem" />
                                     </span>
                                     <input
@@ -127,7 +155,9 @@ export default function CompleteRegistration() {
                                 </div>
                             </CardLayout>
                             <div
-                                className={`text-sm ${errors.email ? "text-red-500" : "h-5"}`}>
+                                className={`text-sm ${
+                                    errors.email ? "text-red-500" : "h-5"
+                                }`}>
                                 {errors.email?.message}
                             </div>
                         </div>
@@ -138,10 +168,18 @@ export default function CompleteRegistration() {
                         </div>
                         <div className="border-signature-gray border-y-[1px] py-5">
                             <CardLayout
-                                className={`rounded-md ${errors.birthDate ? "border-red-500" : "border-signature-gray"}`}>
+                                className={`rounded-md ${
+                                    errors.birthDate
+                                        ? "border-red-500"
+                                        : "border-signature-gray"
+                                }`}>
                                 <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                     <span
-                                        className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${errors.birthDate ? "border-red-500" : "border-signature-gray"}`}>
+                                        className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
+                                            errors.birthDate
+                                                ? "border-red-500"
+                                                : "border-signature-gray"
+                                        }`}>
                                         <MdOutlineDateRange size="1.5rem" />
                                     </span>
                                     <input
@@ -155,7 +193,9 @@ export default function CompleteRegistration() {
                                 </div>
                             </CardLayout>
                             <div
-                                className={`text-sm ${errors.birthDate ? "text-red-500" : "h-5"}`}>
+                                className={`text-sm ${
+                                    errors.birthDate ? "text-red-500" : "h-5"
+                                }`}>
                                 {errors.birthDate?.message}
                             </div>
                         </div>
