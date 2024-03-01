@@ -1,10 +1,10 @@
 import useLocalStorage from "./useLocalStorage";
-import { User } from "../../../../.dfx/local/canisters/HireVerse_backend/service.did";
-import { AuthClient } from "@dfinity/auth-client";
-import { useCallback, useEffect } from "react";
-import { Agent, HttpAgent } from "@dfinity/agent";
+import {User} from "../../../../.dfx/local/canisters/HireVerse_backend/service.did";
+import {AuthClient} from "@dfinity/auth-client";
+import {useCallback, useEffect} from "react";
+import {Agent, HttpAgent} from "@dfinity/agent";
 import useService from "./useService";
-import { canisterId as internetIdentityCanisterId } from "../../../declarations/internet_identity";
+import {canisterId as internetIdentityCanisterId} from "../../../declarations/internet_identity";
 
 export enum AuthState {
     Authenticated = "Authenticated",
@@ -14,7 +14,7 @@ export enum AuthState {
 }
 
 export default function useAuth() {
-    const { getBackendService } = useService();
+    const {getBackendService} = useService();
     const [authState, setAuthState] = useLocalStorage<AuthState>(
         "authState",
         AuthState.Loading,
@@ -35,7 +35,7 @@ export default function useAuth() {
             setAuthState(AuthState.Loading);
 
             // @ts-ignore
-            const agent = new HttpAgent({ identity: identity }) as Agent;
+            const agent = new HttpAgent({identity: identity}) as Agent;
             await agent.fetchRootKey();
 
             const userData = await getBackendService().then((s) =>
@@ -68,12 +68,12 @@ export default function useAuth() {
                 return;
             }
 
-            setAuthState(AuthState.Authenticated);
             return;
+        } else {
+            setUser(null);
+            setAuthState(AuthState.Unauthenticated);
+            // console.log("User not authenticated");
         }
-        setUser(null);
-        setAuthState(AuthState.Unauthenticated);
-        // console.log("User not authenticated");
     }, [getBackendService]);
 
     const register = useCallback(

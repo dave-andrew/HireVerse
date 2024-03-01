@@ -191,7 +191,7 @@ export default function EditCompanyModal({
 
     return (
         <WrappedModal
-            panelClassName="!max-w-none !rounded-xl !w-[50vw] !p-10"
+            panelClassName="!max-w-none !rounded-xl !w-[50vw] !min-w-[800px] !p-10"
             isOpen={openState}
             setIsOpen={setOpenState}
             title={
