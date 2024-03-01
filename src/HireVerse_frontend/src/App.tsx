@@ -104,6 +104,8 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+    // TODO: Disabling all console logs for production
+    // console.log = () => {};
     return <RouterProvider router={router} />;
 }
 

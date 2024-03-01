@@ -7,6 +7,7 @@ import CustomTextField from "../../components/form/CustomTextField";
 import useService from "../../hooks/useService";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { useNavigate } from "react-router-dom";
+import imageHandler from "../../utils/imageHandler";
 
 export default function FindCompany() {
     const nav = useNavigate();
@@ -18,36 +19,38 @@ export default function FindCompany() {
         [],
     );
 
-    const [popularCompanies, setPopularCompanies] = useState([
-        {
-            id: "1",
-            name: "BINUS University",
-            rating: 4.05,
-            reviewCount: 12,
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        },
-        {
-            id: "2",
-            name: "BINUS University",
-            rating: 4.05,
-            reviewCount: 12,
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        },
-        {
-            id: "3",
-            name: "BINUS University",
-            rating: 4.05,
-            reviewCount: 12,
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        },
-        {
-            id: "4",
-            name: "BINUS University",
-            rating: 4.05,
-            reviewCount: 12,
-            logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        },
-    ]);
+    const [popularCompanies, setPopularCompanies] = useState<Company[]>(
+        // [
+        //     {
+        //         id: "1",
+        //         name: "BINUS University",
+
+        //         image: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+                
+        //     },
+        //     {
+        //         id: "2",
+        //         name: "BINUS University",
+        //         rating: 4.05,
+        //         reviewCount: 12,
+        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+        //     },
+        //     {
+        //         id: "3",
+        //         name: "BINUS University",
+        //         rating: 4.05,
+        //         reviewCount: 12,
+        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+        //     },
+        //     {
+        //         id: "4",
+        //         name: "BINUS University",
+        //         rating: 4.05,
+        //         reviewCount: 12,
+        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+        //     },
+        // ]
+    );
 
     const [resultCompanies, setResultCompanies] = useState<Company[]>();
     // [
@@ -143,12 +146,12 @@ export default function FindCompany() {
                             </div>
                             <div className="flex w-full flex-row items-center gap-10">
                                 <div className="grid h-fit grid-cols-2 gap-4 py-8">
-                                    {popularCompanies
-                                        .slice(0, 4)
-                                        .map((company) => {
+                                    {resultCompanies?.slice(0, 4)
+                                        .map((company : Company) => {
                                             return (
                                                 <CardLayout
                                                     className="flex h-32 w-64 p-4 xl:w-80"
+                                                    key={company.id}
                                                     onClick={() => {
                                                         nav(
                                                             `/company/detail/${company.id}`,
@@ -159,7 +162,7 @@ export default function FindCompany() {
                                                             width="80rem"
                                                             height="auto"
                                                             className="aspect-square"
-                                                            src={company.logo}
+                                                            src={imageHandler(company.image)}
                                                             alt="Company Image"
                                                         />
                                                         <div className="flex flex-col">
@@ -169,12 +172,14 @@ export default function FindCompany() {
                                                             <div>
                                                                 TODO: Taroh star
                                                                 disini{" "}
-                                                                {company.rating}
+                                                                TODO: Taroh jumlah
+                                                                {/* {company.rating} */}
                                                             </div>
                                                             <div className="text-xs">
-                                                                {
+                                                                TODO: review count
+                                                                {/* {
                                                                     company.reviewCount
-                                                                }{" "}
+                                                                }{" "} */}
                                                                 Reviews
                                                             </div>
                                                         </div>
@@ -301,9 +306,7 @@ export default function FindCompany() {
                                                         height="auto"
                                                         className="aspect-square"
                                                         src={
-                                                            cp.image
-                                                                ? `data:image/png;base64,${cp.image}`
-                                                                : "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"
+                                                            imageHandler(cp.image)
                                                         }
                                                         alt="Company Image"
                                                     />
