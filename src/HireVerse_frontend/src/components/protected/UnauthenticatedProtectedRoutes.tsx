@@ -5,6 +5,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
 import { toast } from "react-toastify";
 import { defaultToastOptions } from "../../layouts/ManagementPageLayout";
+import useToaster from "../../hooks/useToaster";
 
 export default function UnauthenticatedProtectedRoutes({
     children,
@@ -13,17 +14,15 @@ export default function UnauthenticatedProtectedRoutes({
 }) {
     const { authState } = useAuth();
     const navigate = useNavigate();
+    const { warnToast } = useToaster();
 
     useEffect(() => {
         if (authState === AuthState.Unregistered) {
-            // console.log("Unregistered");
-            toast.warn(
-                "You must complete your registration first",
-                defaultToastOptions,
-            );
-            setTimeout(() => {
-                navigate("/complete-registration");
-            }, defaultToastOptions.autoClose || 3000);
+
+            warnToast({
+                message: "You must complete your registration first",
+                onCloseActions: () => navigate("/complete-registration"),
+            });
         }
     }, [authState]);
 
@@ -34,5 +33,4 @@ export default function UnauthenticatedProtectedRoutes({
     ) : (
         <LoadingPagePlaceholder />
     );
-    return <></>;
 }

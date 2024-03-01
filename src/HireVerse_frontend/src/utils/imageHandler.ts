@@ -5,7 +5,7 @@ export default function imageHandler(
 ) {
     const { convertBlobToImage } = useImageBlob();
 
-    console.log("imageHandler", image);
+    // console.log("imageHandler", image);
     if (!image) return undefined;
     if (image instanceof File) return URL.createObjectURL(image);
     if (image instanceof Uint8Array) return convertBlobToImage(image);
