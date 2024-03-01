@@ -105,6 +105,11 @@ html {
 
 .card-scollbar::-webkit-scrollbar {
   width: 5px;
+  height: 1px;
+}
+
+::-webkit-scrollbar {
+  width: 2px; /* Width of the entire scrollbar */
 }
 
 .card-scollbar::-webkit-scrollbar-thumb {
