@@ -19,9 +19,10 @@ export default function CompanyDetail() {
     const nav = useNavigate();
 
     const { id } = useParams<string>();
-    const { getCompanyService } = useService();
+    const { getCompanyService, getJobService } = useService();
 
     const [company, setCompany] = useState<Company>();
+    const [industries, setIndustries] = useState<string[]>();
 
     if (!id) {
         nav(-1);
@@ -31,11 +32,16 @@ export default function CompanyDetail() {
     useEffect(() => {
         const fetchCompany = async () => {
             const service = await getCompanyService();
+            const jobService = await getJobService();
             const companyData = await service.getCompany(id);
 
             if (isOk(companyData)) {
                 setCompany(companyData.ok);
-                console.log(companyData.ok);
+
+                const job = await jobService.getCompanyJobIndustries(id);
+                if (isOk(job)) {
+                    setIndustries(job.ok);
+                }
             }
         };
 
@@ -143,7 +149,7 @@ export default function CompanyDetail() {
                                 </h3>
                                 <div className="flex flex-row flex-wrap gap-3">
                                     {/* TODO: ini gtw mau digimanain */}
-                                    {/* {company.industries.map((industry, i) => {
+                                    {industries?.map((industry, i) => {
                                         return (
                                             <div
                                                 key={i}
@@ -151,7 +157,7 @@ export default function CompanyDetail() {
                                                 {industry}
                                             </div>
                                         );
-                                    })} */}
+                                    })}
                                 </div>
                             </CardLayout>
                             <CardLayout className="flex flex-col gap-5 rounded-none p-10">

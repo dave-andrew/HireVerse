@@ -24,7 +24,7 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
     const newCompanies: CreateCompanyInput[] = [
         {
             name: `Company 1`,
-            linkedin: "linkedin.com",
+            linkedin: "https://www.linkedin.com",
             image: [1],
             office_locations: ["Lagos", "Abuja"],
             social_medias: ["facebook.com", "twitter.com"],
@@ -34,7 +34,7 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         },
         {
             name: `Company 2`,
-            linkedin: "linkedin.com",
+            linkedin: "https://www.linkedin.com",
             image: [1],
             founded_country: "USA",
             social_medias: ["facebook.com", "twitter.com"],
@@ -44,7 +44,7 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         },
         {
             name: `Company 3`,
-            linkedin: "linkedin.com",
+            linkedin: "https://www.linkedin.com",
             image: [1],
             founded_country: "UK",
             office_locations: ["London", "Manchester"],
@@ -54,7 +54,7 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         },
         {
             name: `Company 4`,
-            linkedin: "linkedin.com",
+            linkedin: "https://www.linkedin.com",
             image: [1],
             founded_country: "Canada",
             social_medias: ["facebook.com", "twitter.com"],
