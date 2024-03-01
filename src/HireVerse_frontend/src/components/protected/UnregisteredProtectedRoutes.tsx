@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { ReactNode, useEffect } from "react";
 import useAuth, { AuthState } from "../../hooks/useAuth";
 import useToaster from "../../hooks/useToaster";
+import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
 
 export default function UnregisteredProtectedRoutes({
     children,
@@ -22,10 +23,14 @@ export default function UnregisteredProtectedRoutes({
         } else if (authState === AuthState.Authenticated) {
             warnToast({
                 message: "You are already registered as a user",
-                onCloseActions: () => navigate("/find-jobs"),
+                onCloseActions: () => navigate("/find-job"),
             });
         }
     }, [authState]);
 
-    return children ?? <Outlet />;
+    return authState == AuthState.Unregistered ? (
+        children ?? <Outlet />
+    ) : (
+        <LoadingPagePlaceholder />
+    );
 }

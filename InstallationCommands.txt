@@ -1,4 +1,14 @@
 DFX_VERSION=0.17.0 sh -ci "$(curl -fsSL https://raw.githubusercontent.com/dfinity/sdk/dfxvm-install-script/install.sh)"
 
+reload
+
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-nvm install 10
+nvm install 20
+
+reload
+
+npm i -g ic-mops
+
+mops install
+
+dfx deploy

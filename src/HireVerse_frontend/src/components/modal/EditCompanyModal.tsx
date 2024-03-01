@@ -68,12 +68,12 @@ export default function EditCompanyModal({
             foundedYear: Number(selectedCompany?.founded_year),
             foundedCountry:
                 selectedCompany?.founded_country ?? "Select a Country",
-            locations: selectedCompany?.office_locations.map((l) => ({
+            locations: selectedCompany?.office_locations?.map((l) => ({
                 name: l,
                 placeholder: l,
             })),
             profile: selectedCompany?.profile,
-            socialMedias: selectedCompany?.social_medias.map((s) => ({
+            socialMedias: selectedCompany?.social_medias?.map((s) => ({
                 url: s,
                 placeholder: s,
             })),

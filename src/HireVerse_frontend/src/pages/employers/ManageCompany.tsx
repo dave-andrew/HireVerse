@@ -195,7 +195,7 @@ export default function ManageCompany() {
                                     Industries
                                 </h3>
                                 <div className="flex flex-row flex-wrap gap-3">
-                                    {industries.map((industry, i) => {
+                                    {industries?.map((industry, i) => {
                                         return (
                                             <div
                                                 key={i}
@@ -211,7 +211,7 @@ export default function ManageCompany() {
                                     Social Medias
                                 </h3>
                                 <div className="flex flex-col flex-wrap gap-3">
-                                    {selectedCompany?.social_medias.map(
+                                    {selectedCompany?.social_medias?.map(
                                         (contact, i) => {
                                             return (
                                                 <SocialMediaItem
@@ -227,7 +227,7 @@ export default function ManageCompany() {
                                     Locations
                                 </h3>
                                 <div className="flex flex-col flex-wrap gap-3">
-                                    {selectedCompany?.office_locations.map(
+                                    {selectedCompany?.office_locations?.map(
                                         (location, i) => {
                                             return (
                                                 <div
