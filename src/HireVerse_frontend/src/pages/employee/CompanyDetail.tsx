@@ -11,6 +11,9 @@ import { useEffect, useState } from "react";
 import useService from "../../hooks/useService";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { isOk } from "../../utils/resultGuarder";
+import imageHandler from "../../utils/imageHandler";
+import convertToDate from "../../utils/convertToDate";
+import SocialMediaItem from "../../components/company/SocialMediaItem";
 
 export default function CompanyDetail() {
     const nav = useNavigate();
@@ -46,21 +49,27 @@ export default function CompanyDetail() {
 
     return (
         <FrontPageLayout className="h-full">
-            <div className="flex h-full w-full flex-row items-center justify-center">
-                <div className="flex w-4/5 flex-col place-items-center">
-                    <CardLayout className="flex w-full flex-row place-items-center rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6">
-                        <img
-                            className="w-96"
-                            src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"
-                            alt=""
-                        />
+            <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
+                <div className="flex xl:w-[calc(100%-1rem)] 2xl:w-4/5 flex-col place-items-center">
+                    <CardLayout className="relative flex w-full flex-row place-items-center gap-10 rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6">
+                        <div className="relative">
+                            <img
+                                className="border-signature-gray aspect-square border-[1px] object-cover xl:w-48 2xl:w-96"
+                                src={imageHandler(company?.image)}
+                                alt=""
+                            />
+                        </div>
                         <div className="flex flex-col gap-8">
-                            <div className="flex flex-col gap-3">
-                                <h2 className="text-5xl font-bold">
-                                    {company.name}
+                            <div className="flex flex-col gap-3 px-2">
+                                <h2 className="relative text-5xl font-bold">
+                                    <span className="relative">
+                                        {company?.name}
+                                    </span>
                                 </h2>
-                                <a href="https://www.binus.ac.id/">
-                                    https://www.binus.ac.id/
+                                <a
+                                    className="px-1 text-lg"
+                                    href={company?.linkedin}>
+                                    {company?.linkedin}
                                 </a>
                             </div>
                             <div className="flex flex-row gap-28">
@@ -71,7 +80,11 @@ export default function CompanyDetail() {
                                     <div className="flex flex-col">
                                         <p className="text-gray-600">Founded</p>
                                         <p className="font-bold">
-                                            {company.founded_year.toString()}
+                                            {convertToDate(
+                                                Number(
+                                                    company?.timestamp,
+                                                ),
+                                            ).toLocaleDateString()}
                                         </p>
                                     </div>
                                 </div>
@@ -80,16 +93,15 @@ export default function CompanyDetail() {
                                         <MdOutlineLocationOn size="2rem" />
                                     </div>
                                     <div className="flex flex-col">
-                                        {
-                                            company.office_locations.map((location) => {
-                                                return (
-                                                    <p className="text-gray-600">
-                                                        {location}
-                                                    </p>
-                                                );
-                                            })
-                                        }
-                                        <p className="font-bold">Jakarta</p>
+                                        <p className="text-gray-600">
+                                            Location
+                                        </p>
+                                        <p className="font-bold">
+                                            {
+                                                company
+                                                    ?.office_locations?.[0]
+                                            }
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-3">
@@ -100,8 +112,9 @@ export default function CompanyDetail() {
                                         <p className="text-gray-600">
                                             Visitors
                                         </p>
+                                        {/*//TODO ADD VISITORS*/}
                                         <p className="font-bold">
-                                            {company.seen.toString() + " Visitors"}
+                                            {Number(company?.seen)}
                                         </p>
                                     </div>
                                 </div>
@@ -114,9 +127,7 @@ export default function CompanyDetail() {
                                 <h3 className="text-4xl font-bold">
                                     Company Profile
                                 </h3>
-                                <p>
-                                    {company.profile}
-                                </p>
+                                <p>{company?.profile}</p>
                             </CardLayout>
                             <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
                                 <h3 className="text-4xl font-bold">Reviews</h3>
@@ -131,39 +142,50 @@ export default function CompanyDetail() {
                                     Industries
                                 </h3>
                                 <div className="flex flex-row flex-wrap gap-3">
-                                    {[
-                                        "Engineering",
-                                        "Technology",
-                                        "Education",
-                                        "Healthcare",
-                                        "Finance",
-                                    ].map((industry) => {
+                                    {/* TODO: ini gtw mau digimanain */}
+                                    {/* {company.industries.map((industry, i) => {
                                         return (
-                                            <div className="bg-signature-gray flex flex-row gap-2 rounded-md p-2">
+                                            <div
+                                                key={i}
+                                                className="bg-blue-primary flex flex-row gap-2 rounded-md p-2 px-3 font-bold text-white opacity-80 transition-opacity hover:opacity-100">
                                                 {industry}
                                             </div>
                                         );
-                                    })}
+                                    })} */}
                                 </div>
                             </CardLayout>
                             <CardLayout className="flex flex-col gap-5 rounded-none p-10">
                                 <h3 className="text-4xl font-bold">
-                                    Industries
+                                    Social Medias
                                 </h3>
-                                <div className="flex flex-row flex-wrap gap-3">
-                                    {[
-                                        "Engineering",
-                                        "Technology",
-                                        "Education",
-                                        "Healthcare",
-                                        "Finance",
-                                    ].map((industry) => {
-                                        return (
-                                            <div className="bg-signature-gray flex flex-row gap-2 rounded-md p-2">
-                                                {industry}
-                                            </div>
-                                        );
-                                    })}
+                                <div className="flex flex-col flex-wrap gap-3">
+                                    {company?.social_medias.map(
+                                        (contact, i) => {
+                                            return (
+                                                <SocialMediaItem
+                                                    url={contact}
+                                                />
+                                            );
+                                        },
+                                    )}
+                                </div>
+                            </CardLayout>
+                            <CardLayout className="flex flex-col gap-5 rounded-none p-10">
+                                <h3 className="text-4xl font-bold">
+                                    Locations
+                                </h3>
+                                <div className="flex flex-col flex-wrap gap-3">
+                                    {company?.office_locations.map(
+                                        (location, i) => {
+                                            return (
+                                                <div
+                                                    key={i}
+                                                    className="bg-white text-black flex flex-row gap-2 rounded-md p-2 px-3 font-bold opacity-80 transition-opacity hover:opacity-100">
+                                                    {location}
+                                                </div>
+                                            );
+                                        },
+                                    )}
                                 </div>
                             </CardLayout>
                         </div>
