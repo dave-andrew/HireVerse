@@ -161,15 +161,8 @@ export default function FindCompany() {
                                                         <img
                                                             width="80rem"
                                                             height="auto"
-<<<<<<< HEAD
                                                             className="aspect-square object-cover mr-4 rounded-xl"
                                                             src={imageHandler(company.image)}
-=======
-                                                            className="aspect-square"
-                                                            src={imageHandler(
-                                                                company.image,
-                                                            )}
->>>>>>> a543dbbf656a571afe6236b59c533440dc0d6f0c
                                                             alt="Company Image"
                                                         />
                                                         <div className="flex flex-col">
@@ -310,19 +303,10 @@ export default function FindCompany() {
                                                 }}>
                                                 <div className="flex flex-row place-items-center bg-white">
                                                     <img
-<<<<<<< HEAD
                                                         className="w-24 aspect-square object-cover mr-4 rounded-xl"
                                                         src={
                                                             imageHandler(cp.image)
                                                         }
-=======
-                                                        width="80rem"
-                                                        height="auto"
-                                                        className="aspect-square"
-                                                        src={imageHandler(
-                                                            cp.image,
-                                                        )}
->>>>>>> a543dbbf656a571afe6236b59c533440dc0d6f0c
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">

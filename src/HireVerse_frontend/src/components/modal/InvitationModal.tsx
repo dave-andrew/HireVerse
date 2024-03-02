@@ -1,7 +1,8 @@
 import {IoCloseSharp} from "react-icons/io5";
-import WrappedModal from "../utils/WrappedModal";
+
 import {Dispatch, SetStateAction} from "react";
 import InvitationItem from "../form/InvitationItem";
+import WrappedModal from "../form/WrappedModal";
 
 interface Props {
     openState: boolean;

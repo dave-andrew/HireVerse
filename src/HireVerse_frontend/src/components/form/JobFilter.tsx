@@ -13,6 +13,7 @@ import useService from "../../hooks/useService";
 export interface IFilterForm {
     salaryStart: number;
     salaryEnd: number;
+    currency: string;
     industry: string;
     experience: string;
     datePosted: string;
@@ -29,6 +30,7 @@ export default function JobFilter({ onApplyFilter }: Props) {
         defaultValues: {
             salaryStart: 0,
             salaryEnd: 0,
+            currency: "Rp",
             industry: "",
             experience: "",
             datePosted: "",

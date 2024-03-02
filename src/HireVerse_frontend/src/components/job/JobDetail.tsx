@@ -55,8 +55,8 @@ export default function JobDetail({ jobId }: Props) {
                 <div>
                     <h3>Salary</h3>
                     <p>
-                        {fullJob.salary_start.toString()} -{" "}
-                        {fullJob.salary_end.toString()}
+                        {fullJob.currency}{fullJob.salary_start.toString()} -{" "}
+                        {fullJob.currency}{fullJob.salary_end.toString()}
                     </p>
                 </div>
                 <div>

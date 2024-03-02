@@ -32,11 +32,10 @@ actor Company {
         image : Blob;
         linkedin : Text;
         company_manager_ids : [Text];
-        job_posting_ids : [Text];
         reviews_ids : [Text];
+        job_posting_ids : [Text];
         timestamp : Time.Time;
         seen : Nat;
-        
     };
 
     type CreateCompanyInput = {
@@ -165,12 +164,8 @@ actor Company {
     public shared query func getCompanies() : async [Company] {
         let companies_array : [Company] = Iter.toArray(companies.vals());
 
-        for (company in companies_array.vals()) {
-            Debug.print(company.reviews_ids[0]);
-        };
-
         let comparator = func(a : Company, b : Company) : Order.Order {
-            Int.compare(a.seen, b.seen);
+            Int.compare(b.seen, a.seen);
         };
 
         let sorted_companies = Array.sort(companies_array, comparator);
@@ -210,7 +205,7 @@ actor Company {
         return Vector.toArray(countries);
     };
 
-    public shared query func getCompany(id : Text) : async Result.Result<Company, Text> {
+    public query func getCompany(id : Text) : async Result.Result<Company, Text> {
         let company = companies.get(id);
 
         switch (company) {
@@ -219,24 +214,25 @@ actor Company {
             };
             case (?c) {
 
-                let updatedCompany = {
-                    id = c.id;
-                    name = c.name;
-                    founded_year = c.founded_year;
-                    profile = c.profile;
-                    founded_country = c.founded_country;
-                    office_locations = c.office_locations;
-                    social_medias = c.social_medias;
-                    image = c.image;
-                    linkedin = c.linkedin;
-                    company_manager_ids = c.company_manager_ids;
-                    job_posting_ids = c.job_posting_ids;
-                    reviews_ids = c.reviews_ids;
-                    timestamp = c.timestamp;
-                    seen = c.seen + 1;
-                };
+                // TODO: Pindahin ke fungsi lain aja
+                // let updatedCompany = {
+                //     id = c.id;
+                //     name = c.name;
+                //     founded_year = c.founded_year;
+                //     profile = c.profile;
+                //     founded_country = c.founded_country;
+                //     office_locations = c.office_locations;
+                //     social_medias = c.social_medias;
+                //     image = c.image;
+                //     linkedin = c.linkedin;
+                //     company_manager_ids = c.company_manager_ids;
+                //     job_posting_ids = c.job_posting_ids;
+                //     reviews_ids = c.reviews_ids;
+                //     timestamp = c.timestamp;
+                //     seen = c.seen + 1;
+                // };
 
-                companies.put(c.id, updatedCompany);
+                // companies.put(c.id, updatedCompany);
 
                 return #ok(c);
             };
@@ -552,7 +548,7 @@ actor Company {
                 return #err("Company not found");
             };
             case (#ok(company)) {
-                let reviews_ids = Iter.toArray(company.reviews_ids.vals());
+                let reviews_ids = company.reviews_ids;
 
                 let newReview = await Review.addReview(review);
 

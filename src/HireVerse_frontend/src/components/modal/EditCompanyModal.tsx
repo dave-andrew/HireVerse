@@ -170,6 +170,7 @@ export default function EditCompanyModal({
             image: selectedCompany?.image,
             company_manager_ids: selectedCompany?.company_manager_ids,
             seen: selectedCompany?.seen,
+            reviews_ids: selectedCompany?.reviews_ids,
             timestamp: selectedCompany?.timestamp,
             job_posting_ids: selectedCompany?.job_posting_ids,
         };

@@ -22,6 +22,7 @@ actor Job {
         industry : Text;
         salary_start : Nat;
         salary_end : Nat;
+        currency : Text;
         short_description : Text;
         job_description : Text;
         requirements : Text;
@@ -38,6 +39,7 @@ actor Job {
         industry : Text;
         salary_start : Nat;
         salary_end : Nat;
+        currency : Text;
         short_description : Text;
         job_description : Text;
         requirements : Text;
@@ -53,6 +55,7 @@ actor Job {
         industry : Text;
         salary_start : Nat;
         salary_end : Nat;
+        currency : Text;
         short_description : Text;
         job_description : Text;
         requirements : Text;
@@ -69,6 +72,7 @@ actor Job {
         order : ?Text;
         salary_start : ?Nat;
         salary_end : ?Nat;
+        currency : ?Text;
         industry : ?Text;
         experience : ?Text;
         date_posted : ?Time.Time;
@@ -91,6 +95,7 @@ actor Job {
             industry = "Technology";
             salary_start = 100000;
             salary_end = 150000;
+            currency = "Rp";
             short_description = "We are looking for a software engineer to join our team!";
             job_description = "We are looking for a software engineer to join our team! We are a fast growing company and are looking for someone who is passionate about technology and is a team player.";
             requirements = "3+ years of experience in software engineering";
@@ -134,6 +139,7 @@ actor Job {
             industry = newJob.industry;
             salary_start = newJob.salary_start;
             salary_end = newJob.salary_end;
+            currency = newJob.currency;
             short_description = newJob.short_description;
             job_description = newJob.job_description;
             requirements = newJob.requirements;
@@ -180,6 +186,7 @@ actor Job {
             industry = newJob.industry;
             salary_start = newJob.salary_start;
             salary_end = newJob.salary_end;
+            currency = newJob.currency;
             short_description = newJob.short_description;
             job_description = newJob.job_description;
             requirements = newJob.requirements;
@@ -267,6 +274,7 @@ actor Job {
                             industry = actualJob.industry;
                             salary_start = actualJob.salary_start;
                             salary_end = actualJob.salary_end;
+                            currency = actualJob.currency;
                             short_description = actualJob.short_description;
                             job_description = actualJob.job_description;
                             requirements = actualJob.requirements;
@@ -646,6 +654,7 @@ actor Job {
                     industry = actualJob.industry;
                     salary_start = actualJob.salary_start;
                     salary_end = actualJob.salary_end;
+                    currency = actualJob.currency;
                     short_description = actualJob.short_description;
                     job_description = actualJob.job_description;
                     requirements = actualJob.requirements;
