@@ -161,8 +161,10 @@ export default function FindCompany() {
                                                         <img
                                                             width="80rem"
                                                             height="auto"
-                                                            className="aspect-square object-cover mr-4 rounded-xl"
-                                                            src={imageHandler(company.image)}
+                                                            className="mr-4 aspect-square rounded-xl object-cover"
+                                                            src={imageHandler(
+                                                                company.image,
+                                                            )}
                                                             alt="Company Image"
                                                         />
                                                         <div className="flex flex-col">
@@ -303,10 +305,10 @@ export default function FindCompany() {
                                                 }}>
                                                 <div className="flex flex-row place-items-center bg-white">
                                                     <img
-                                                        className="w-24 aspect-square object-cover mr-4 rounded-xl"
-                                                        src={
-                                                            imageHandler(cp.image)
-                                                        }
+                                                        className="mr-4 aspect-square w-24 rounded-xl object-cover"
+                                                        src={imageHandler(
+                                                            cp.image,
+                                                        )}
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">

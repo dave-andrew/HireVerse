@@ -7,49 +7,29 @@ import {
 } from "react-icons/md";
 import CompanyReviewSummary from "../../components/company/CompanyReviewSummary";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import useService from "../../hooks/useService";
-import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import { isOk } from "../../utils/resultGuarder";
 import imageHandler from "../../utils/imageHandler";
 import convertToDate from "../../utils/convertToDate";
 import SocialMediaItem from "../../components/company/SocialMediaItem";
+import {
+    useGetCompany,
+    useGetCompanyIndustries,
+} from "../../datas/queries/companyQueries";
 
 export default function CompanyDetail() {
     const nav = useNavigate();
 
     const { id } = useParams<string>();
-    const { getCompanyService, getJobService } = useService();
-
-    const [company, setCompany] = useState<Company>();
-    const [industries, setIndustries] = useState<string[]>();
+    const { data: company, isLoading: companyLoading } = useGetCompany(id);
+    const { data: industries, isLoading: industriesLoading } =
+        useGetCompanyIndustries(id);
 
     if (!id) {
         nav(-1);
         return;
     }
 
-    useEffect(() => {
-        const fetchCompany = async () => {
-            const service = await getCompanyService();
-            const jobService = await getJobService();
-            const companyData = await service.getCompany(id);
-
-            if (isOk(companyData)) {
-                setCompany(companyData.ok);
-
-                const job = await jobService.getCompanyJobIndustries(id);
-                if (isOk(job)) {
-                    setIndustries(job.ok);
-                }
-            }
-        };
-
-        fetchCompany();
-    }, [id]);
-
     // TODO: jadiin skeleton masukin return ()
-    if (!company) {
+    if (companyLoading && industriesLoading) {
         return <div>Loading...</div>;
     }
 

@@ -39,7 +39,22 @@
     font-size: revert;
     font-weight: revert;
   }
+
+  pre {
+    white-space: revert;
+    font-family: revert;
+    background-color: #f5f5f5;
+    padding: revert;
+    font-size: revert;
+    line-height: revert;
+    border-radius: revert;
+  }
+
+  circle:hover {
+    fill: red;
+  }
 }
+
 
 html {
   font-family: "Lato", sans-serif;

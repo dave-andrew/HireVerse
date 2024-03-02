@@ -20,19 +20,6 @@ interface Props {
     onJobCreated?: () => void;
 }
 
-// id : Text;
-// name : Text;
-// founded_year : Nat;
-// profile : Text;
-// country : Text;
-// location : Text;
-// image : Blob;
-// linkedin : Text;
-// company_manager_ids : [Text];
-// job_posting_ids : [Text];
-// timestamp : Time.Time;
-// seen : Nat;
-
 interface IEditCompanyForm {
     name: string;
     linkedin: string;
@@ -95,10 +82,9 @@ export default function EditCompanyModal({
         name: "socialMedias",
         control,
     });
-    const editor = useRichTextEditor(selectedCompany?.profile ?? "");
-
     const { getCompanyService } = useService();
     const { errorToast } = useToaster();
+    const editor = useRichTextEditor(selectedCompany?.profile ?? "");
 
     const checkError = () => {
         for (const error in errors) {
@@ -169,8 +155,8 @@ export default function EditCompanyModal({
             id: selectedCompany?.id,
             image: selectedCompany?.image,
             company_manager_ids: selectedCompany?.company_manager_ids,
-            seen: selectedCompany?.seen,
             reviews_ids: selectedCompany?.reviews_ids,
+            seen: selectedCompany?.seen,
             timestamp: selectedCompany?.timestamp,
             job_posting_ids: selectedCompany?.job_posting_ids,
         };

@@ -2,7 +2,6 @@ import FrontPageLayout from "../../layouts/FrontPageLayout";
 import useAuth, { AuthState } from "../../hooks/useAuth";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import WorldMap from "../../components/WorldMap";
 
 export default function Landing() {
     const { user, authState, login, logout } = useAuth();
@@ -22,7 +21,7 @@ export default function Landing() {
 
     return (
         <FrontPageLayout>
-            <WorldMap />
+            {/*<WorldMap />*/}
             <div className="absolute z-[1] h-full w-full bg-black bg-opacity-60"></div>
             <div className="relative z-10 flex flex-col">
                 <div className="flex h-screen flex-col place-items-center justify-center gap-16">

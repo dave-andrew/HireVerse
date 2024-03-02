@@ -25,7 +25,9 @@ export default function JobItem({ job, companyName, onClick }: Props) {
             <div className="text-xl font-bold">{job.position}</div>
             <div>{job.location}</div>
             <div>
-                {job.currency}{job.salary_start.toString()} - {job.currency}{job.salary_end.toString()}
+                {job.currency}
+                {job.salary_start.toString()} - {job.currency}
+                {job.salary_end.toString()}
             </div>
         </CardLayout>
     );

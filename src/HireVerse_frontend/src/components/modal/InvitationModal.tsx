@@ -1,6 +1,6 @@
-import {IoCloseSharp} from "react-icons/io5";
+import { IoCloseSharp } from "react-icons/io5";
 
-import {Dispatch, SetStateAction} from "react";
+import { Dispatch, SetStateAction } from "react";
 import InvitationItem from "../form/InvitationItem";
 import WrappedModal from "../form/WrappedModal";
 
@@ -11,11 +11,10 @@ interface Props {
 }
 
 export default function InvitationModal({
-                                            openState,
-                                            setOpenState,
-                                            onJobCreated,
-                                        }: Props) {
-
+    openState,
+    setOpenState,
+    onJobCreated,
+}: Props) {
     // const isOverflowing = 90
 
     return (
@@ -34,17 +33,14 @@ export default function InvitationModal({
                     </button>
                 </div>
             }>
-            <div className="flex flex-row overflow-scroll gap-6 pb-4 border-r-2 relative">
+            <div className="relative flex flex-row gap-6 overflow-scroll border-r-2 pb-4">
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
-                <div>
-
-                </div>
+                <div></div>
             </div>
         </WrappedModal>
-    )
-
+    );
 }

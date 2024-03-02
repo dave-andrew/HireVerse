@@ -24,6 +24,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.20.1",
     "@types/lodash.debounce": "^4.0.9",
     "@types/lodash.throttle": "^4.1.9",
     "@types/node": "^20.11.22",

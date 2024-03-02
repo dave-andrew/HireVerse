@@ -144,6 +144,7 @@ export default function CreateJobModal({
             requirements: data.requirements,
             job_description: data.jobDescription,
             location: data.location,
+            currency: "IDR", //TODO change this to be dynamic
             contacts: data.applyContacts.map((contact) => contact.contact),
             company_id: selectedCompany.id,
             salary_end: BigInt(data.salaryEnd),

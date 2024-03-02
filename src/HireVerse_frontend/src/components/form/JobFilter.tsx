@@ -1,14 +1,13 @@
 import { TbFilterCog } from "react-icons/tb";
 import CardLayout from "../../layouts/CardLayout";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import WrappedDisclosure from "./WrappedDisclosure";
 import WrappedRadioGroup from "./WrappedRadioGroup";
 import { IoMdClose } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { CONSTANTS } from "../../utils/constants";
-import { isOk } from "../../utils/resultGuarder";
-import useService from "../../hooks/useService";
+import { useGetJobIndustries } from "../../datas/queries/jobQueries";
 
 export interface IFilterForm {
     salaryStart: number;
@@ -24,8 +23,7 @@ interface Props {
 }
 
 export default function JobFilter({ onApplyFilter }: Props) {
-    const [industries, setIndustries] = useState<string[]>([]);
-    const { getJobService } = useService();
+    const { data: industries, refetch: getIndustries } = useGetJobIndustries();
     const { register, control, handleSubmit } = useForm<IFilterForm>({
         defaultValues: {
             salaryStart: 0,
@@ -37,15 +35,6 @@ export default function JobFilter({ onApplyFilter }: Props) {
         },
     });
 
-    const getIndustries = async () => {
-        const industries = await getJobService().then((s) =>
-            s.getAllIndustry(),
-        );
-
-        if (isOk(industries)) {
-            setIndustries(industries.ok);
-        }
-    };
     const onSubmit = (data: IFilterForm) => {
         onApplyFilter(data);
     };
@@ -131,14 +120,14 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                             className="cursor-pointer p-3 pl-5 text-lg transition-colors"
                                             panelClassName="!p-0"
                                             text="Industries">
-                                            {industries.length == 0 ? (
+                                            {industries?.length == 0 ? (
                                                 <label>Loading</label>
                                             ) : (
                                                 <WrappedRadioGroup
                                                     name="industry"
                                                     control={control}
                                                     selectionClassName="hover:bg-signature-gray rounded-none"
-                                                    values={industries}
+                                                    values={industries ?? []}
                                                 />
                                             )}
                                         </WrappedDisclosure>

@@ -9,7 +9,6 @@ import useService from "../../hooks/useService";
 import { useEffect, useRef, useState } from "react";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { isOk } from "../../utils/resultGuarder";
 import convertToDate from "../../utils/convertToDate";
 import ProfileEditButton from "../../components/form/ProfileEditButton";
 import { useForm } from "react-hook-form";
@@ -18,35 +17,23 @@ import imageHandler from "../../utils/imageHandler";
 import EditCompanyModal from "../../components/modal/EditCompanyModal";
 import SocialMediaItem from "../../components/company/SocialMediaItem";
 import purifyDOM from "../../utils/purifyDOM";
+import { useGetCompanyIndustries } from "../../datas/queries/companyQueries";
 
 interface IManageCompanyForm {
     image: FileList;
 }
 
 export default function ManageCompany() {
+    const { getJobService, getCompanyService } = useService();
+    const { convertImageToBlob } = useImageBlob();
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
-    const [industries, setIndustries] = useState<string[]>([]);
+    const { data: companyIndustries } = useGetCompanyIndustries(
+        selectedCompany?.id,
+    );
     const [isModalShown, setIsModalShown] = useState(false);
     const { register, getValues } = useForm();
     let imageRef = useRef<HTMLInputElement>(null);
-    const { getJobService, getCompanyService } = useService();
-    const { convertImageToBlob } = useImageBlob();
-
-    const getCompanyData = async () => {
-        if (!selectedCompany) {
-            return;
-        }
-
-        const companyId = selectedCompany?.id;
-        const result = await getJobService().then((s) =>
-            s.getCompanyJobIndustries(companyId),
-        );
-
-        if (isOk(result)) {
-            setIndustries(result.ok);
-        }
-    };
 
     const updateCompanyData = async () => {
         if (!selectedCompany) {
@@ -75,18 +62,10 @@ export default function ManageCompany() {
         });
     };
 
-    const onJobCreated = () => {
-        //
-    };
-
     useEffect(() => {
         updateCompanyData();
     }, [selectedCompany]);
 
-    useEffect(() => {
-        console.log(selectedCompany);
-        getCompanyData();
-    }, []);
     return (
         <>
             <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
@@ -111,7 +90,7 @@ export default function ManageCompany() {
                         </div>
                         <div className="flex flex-col gap-8">
                             <div className="flex flex-col gap-3 px-2">
-                                <h2 className="relative text-5xl font-bold">
+                                <h2 className="relative m-0 p-0 text-5xl font-bold">
                                     <span className="relative">
                                         {selectedCompany?.name}
                                     </span>
@@ -178,7 +157,7 @@ export default function ManageCompany() {
                     <div className="flex w-full flex-row">
                         <div className="flex h-auto w-[70%] flex-col">
                             <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
-                                <h3 className="text-4xl font-bold">
+                                <h3 className="h-0 p-0 text-4xl font-bold">
                                     Company Profile
                                 </h3>
                                 <div
@@ -190,7 +169,9 @@ export default function ManageCompany() {
                                 />
                             </CardLayout>
                             <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
-                                <h3 className="text-4xl font-bold">Reviews</h3>
+                                <h3 className="h-0 p-0 text-4xl font-bold">
+                                    Reviews
+                                </h3>
                                 <div>
                                     <CompanyReviewSummary />
                                 </div>
@@ -198,11 +179,11 @@ export default function ManageCompany() {
                         </div>
                         <div className="flex w-[30%] flex-col">
                             <CardLayout className="flex flex-col gap-5 rounded-none p-10">
-                                <h3 className="text-4xl font-bold">
+                                <h3 className="h-0 p-0 text-4xl font-bold">
                                     Industries
                                 </h3>
                                 <div className="flex flex-row flex-wrap gap-3">
-                                    {industries?.map((industry, i) => {
+                                    {companyIndustries?.map((industry, i) => {
                                         return (
                                             <div
                                                 key={i}
@@ -214,7 +195,7 @@ export default function ManageCompany() {
                                 </div>
                             </CardLayout>
                             <CardLayout className="flex flex-col gap-5 rounded-none p-10">
-                                <h3 className="text-4xl font-bold">
+                                <h3 className="h-0 p-0 text-4xl font-bold">
                                     Social Medias
                                 </h3>
                                 <div className="flex flex-col flex-wrap gap-3">
@@ -230,7 +211,7 @@ export default function ManageCompany() {
                                 </div>
                             </CardLayout>
                             <CardLayout className="flex flex-col gap-5 rounded-none p-10">
-                                <h3 className="text-4xl font-bold">
+                                <h3 className="h-0 p-0 text-4xl font-bold">
                                     Locations
                                 </h3>
                                 <div className="flex flex-col flex-wrap gap-3">

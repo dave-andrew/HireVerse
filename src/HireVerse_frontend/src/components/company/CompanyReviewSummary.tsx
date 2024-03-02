@@ -1,6 +1,7 @@
 import React from "react";
 import { Rating } from "@smastrom/react-rating";
-import Pie from "../form/CircularRating";
+import CircularRating from "../rating/CircularRating";
+import RatingBar from "../rating/RatingBar";
 
 export default function CompanyReviewSummary() {
     const [rating, setRating] = React.useState(3);
@@ -8,7 +9,7 @@ export default function CompanyReviewSummary() {
     return (
         <div className="flex flex-col gap-10">
             <div className="flex flex-row items-center justify-between">
-                <div className="flex flex-col items-center gap-3">
+                <div className="flex flex-1 flex-col items-center gap-3 p-5">
                     <h3 className="text-5xl font-bold">{rating.toFixed(1)}</h3>
                     <Rating
                         value={rating}
@@ -20,19 +21,13 @@ export default function CompanyReviewSummary() {
                         <b>23</b> ratings in total
                     </p>
                 </div>
-
-                <div className="flex flex-col items-center gap-3">
-                    <Pie
-                        percentage={50}
-                        colour="lightgray"
-                    />
-                    <p className="w-4/5 text-center">
-                        Rate salary as high or average
-                    </p>
+                <div className="flex min-w-[50%] flex-1 flex-col gap-2 p-5">
+                    <RatingBar />
+                    <RatingBar />
+                    <RatingBar />
                 </div>
-
-                <div className="flex flex-col items-center gap-3">
-                    <Pie
+                <div className="flex flex-1 flex-col items-center gap-3 p-5">
+                    <CircularRating
                         percentage={50}
                         colour="lightgray"
                     />
@@ -41,7 +36,8 @@ export default function CompanyReviewSummary() {
                     </p>
                 </div>
             </div>
-            <div className="flex flex-row justify-evenly">
+
+            <div className="flex flex-1 flex-row justify-evenly">
                 <div className="w-1/2">
                     <h3 className="py-5 text-3xl font-bold">Positives</h3>
                     {Array.from({ length: 3 }).map((_, i) => (
