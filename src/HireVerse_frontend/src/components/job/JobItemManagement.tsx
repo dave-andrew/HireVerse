@@ -1,4 +1,4 @@
-import WrappedDropdown from "../utils/WrappedDropdown";
+import WrappedDropdown from "../form/WrappedDropdown";
 import { Menu } from "@headlessui/react";
 import { SlOptions } from "react-icons/sl";
 import CardLayout from "../../layouts/CardLayout";

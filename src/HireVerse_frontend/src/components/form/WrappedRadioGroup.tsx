@@ -42,7 +42,11 @@ export default function WrappedRadioGroup({
                             key={value}
                             value={value}
                             className={({ checked }) =>
-                                `${checked ? "bg-signature-gray text-black" : "bg-white"}
+                                `${
+                                    checked
+                                        ? "bg-signature-gray text-black"
+                                        : "bg-white"
+                                }
                     relative flex cursor-pointer rounded-lg px-5 py-4 focus:outline-none ${selectionClassName}`
                             }>
                             {({ active, checked }) => (

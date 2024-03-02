@@ -95,7 +95,11 @@ export default function ImageLabeledDropdown({
                                                             {item.label}
                                                         </span>
                                                         <span
-                                                            className={`black absolute inset-y-0 left-0 flex items-center pl-3 ${selected ? "" : "hidden"}`}>
+                                                            className={`black absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                                                selected
+                                                                    ? ""
+                                                                    : "hidden"
+                                                            }`}>
                                                             <FaCheck />
                                                         </span>
                                                     </>

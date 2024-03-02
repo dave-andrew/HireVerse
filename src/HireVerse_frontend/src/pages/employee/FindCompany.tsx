@@ -19,38 +19,37 @@ export default function FindCompany() {
         [],
     );
 
-    const [popularCompanies, setPopularCompanies] = useState<Company[]>(
-        // [
-        //     {
-        //         id: "1",
-        //         name: "BINUS University",
+    const [popularCompanies, setPopularCompanies] = useState<Company[]>();
+    // [
+    //     {
+    //         id: "1",
+    //         name: "BINUS University",
 
-        //         image: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-                
-        //     },
-        //     {
-        //         id: "2",
-        //         name: "BINUS University",
-        //         rating: 4.05,
-        //         reviewCount: 12,
-        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        //     },
-        //     {
-        //         id: "3",
-        //         name: "BINUS University",
-        //         rating: 4.05,
-        //         reviewCount: 12,
-        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        //     },
-        //     {
-        //         id: "4",
-        //         name: "BINUS University",
-        //         rating: 4.05,
-        //         reviewCount: 12,
-        //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-        //     },
-        // ]
-    );
+    //         image: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+
+    //     },
+    //     {
+    //         id: "2",
+    //         name: "BINUS University",
+    //         rating: 4.05,
+    //         reviewCount: 12,
+    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+    //     },
+    //     {
+    //         id: "3",
+    //         name: "BINUS University",
+    //         rating: 4.05,
+    //         reviewCount: 12,
+    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+    //     },
+    //     {
+    //         id: "4",
+    //         name: "BINUS University",
+    //         rating: 4.05,
+    //         reviewCount: 12,
+    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
+    //     },
+    // ]
 
     const [resultCompanies, setResultCompanies] = useState<Company[]>();
     // [
@@ -146,8 +145,9 @@ export default function FindCompany() {
                             </div>
                             <div className="flex w-full flex-row items-center gap-10">
                                 <div className="grid h-fit grid-cols-2 gap-4 py-8">
-                                    {resultCompanies?.slice(0, 4)
-                                        .map((company : Company) => {
+                                    {resultCompanies
+                                        ?.slice(0, 4)
+                                        .map((company: Company) => {
                                             return (
                                                 <CardLayout
                                                     className="flex h-32 w-64 p-4 xl:w-80"
@@ -161,8 +161,15 @@ export default function FindCompany() {
                                                         <img
                                                             width="80rem"
                                                             height="auto"
+<<<<<<< HEAD
                                                             className="aspect-square object-cover mr-4 rounded-xl"
                                                             src={imageHandler(company.image)}
+=======
+                                                            className="aspect-square"
+                                                            src={imageHandler(
+                                                                company.image,
+                                                            )}
+>>>>>>> a543dbbf656a571afe6236b59c533440dc0d6f0c
                                                             alt="Company Image"
                                                         />
                                                         <div className="flex flex-col">
@@ -171,12 +178,13 @@ export default function FindCompany() {
                                                             </div>
                                                             <div>
                                                                 TODO: Taroh star
-                                                                disini{" "}
-                                                                TODO: Taroh jumlah
+                                                                disini TODO:
+                                                                Taroh jumlah
                                                                 {/* {company.rating} */}
                                                             </div>
                                                             <div className="text-xs">
-                                                                TODO: review count
+                                                                TODO: review
+                                                                count
                                                                 {/* {
                                                                     company.reviewCount
                                                                 }{" "} */}
@@ -302,10 +310,19 @@ export default function FindCompany() {
                                                 }}>
                                                 <div className="flex flex-row place-items-center bg-white">
                                                     <img
+<<<<<<< HEAD
                                                         className="w-24 aspect-square object-cover mr-4 rounded-xl"
                                                         src={
                                                             imageHandler(cp.image)
                                                         }
+=======
+                                                        width="80rem"
+                                                        height="auto"
+                                                        className="aspect-square"
+                                                        src={imageHandler(
+                                                            cp.image,
+                                                        )}
+>>>>>>> a543dbbf656a571afe6236b59c533440dc0d6f0c
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">

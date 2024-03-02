@@ -34,7 +34,9 @@ export function CustomCheckBox({
                 .
             </label>
             <div
-                className={`hidden text-xs ${error ? "!block text-red-500" : "h-5"}`}>
+                className={`hidden text-xs ${
+                    error ? "!block text-red-500" : "h-5"
+                }`}>
                 {error?.message}
             </div>
         </div>
