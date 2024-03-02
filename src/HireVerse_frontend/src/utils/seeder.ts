@@ -13,6 +13,8 @@ import { _SERVICE as _SERVICE_JOB } from "../../../declarations/HireVerse_job/Hi
 import { ActorSubclass } from "@dfinity/agent";
 
 async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
+    console.log("test");
+    
     const response = await companyService.getCompanies();
 
     console.log("Seeding companies...");

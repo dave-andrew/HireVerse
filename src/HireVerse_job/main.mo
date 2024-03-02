@@ -12,7 +12,6 @@ import Result "mo:base/Result";
 import Error "mo:base/Error";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
-import Review "canister:HireVerse_review";
 import Vector "mo:vector/Class";
 
 actor Job {
@@ -27,7 +26,6 @@ actor Job {
         job_description : Text;
         requirements : Text;
         company_id : Text;
-        reviews : [Text];
         contacts : [Text];
         employType : Text;
         timestamp : Time.Time;
@@ -59,7 +57,6 @@ actor Job {
         job_description : Text;
         requirements : Text;
         company : Company.Company;
-        reviews : [Text];
         contacts : [Text];
         employType : Text;
         timestamp : Time.Time;
@@ -98,7 +95,6 @@ actor Job {
             job_description = "We are looking for a software engineer to join our team! We are a fast growing company and are looking for someone who is passionate about technology and is a team player.";
             requirements = "3+ years of experience in software engineering";
             company_id = company_id;
-            reviews = [];
             timestamp = Time.now();
             status = "public";
             employType = "Full-time";
@@ -142,7 +138,6 @@ actor Job {
             job_description = newJob.job_description;
             requirements = newJob.requirements;
             company_id = newJob.company_id;
-            reviews = [];
             timestamp = Time.now();
             status = "active";
             employType = "Full-time";
@@ -189,7 +184,6 @@ actor Job {
             job_description = newJob.job_description;
             requirements = newJob.requirements;
             company_id = newJob.company_id;
-            reviews = [];
             timestamp = Time.now();
             status = "active";
             employType = newJob.employType;
@@ -261,20 +255,6 @@ actor Job {
                     case (#ok(company)) {};
                 };
 
-                var reviews = Vector.Vector<Text>();
-
-                for (review_id in actualJob.reviews.vals()) {
-                    let review = await Review.getReview(review_id);
-                    switch (review) {
-                        case (#err(errmsg)) {
-                            return #err(errmsg);
-                        };
-                        case (#ok(actualReview)) {
-                            reviews.add(actualReview.id);
-                        };
-                    };
-                };
-
                 switch (company) {
                     case (#err(errmsg)) {
                         return #err("Company not found");
@@ -292,7 +272,6 @@ actor Job {
                             requirements = actualJob.requirements;
                             timestamp = actualJob.timestamp;
                             company = company;
-                            reviews = Vector.toArray<Text>(reviews);
                             contacts = actualJob.contacts;
                             employType = actualJob.employType;
                             status = actualJob.status;
@@ -300,41 +279,6 @@ actor Job {
                         return #ok(fullJob);
                     };
                 };
-            };
-        };
-    };
-
-    public shared func addReview(job_id : Text, review_id : Text) : async Result.Result<(), Text> {
-        let job = jobs.get(job_id);
-        switch (job) {
-            case null {
-                return #err("Job not found");
-            };
-            case (?actualJob) {
-
-                let jobReviews = Vector.fromArray<Text>(actualJob.reviews);
-
-                jobReviews.add(review_id);
-
-                let updated_job = {
-                    id = actualJob.id;
-                    position = actualJob.position;
-                    location = actualJob.location;
-                    industry = actualJob.industry;
-                    salary_start = actualJob.salary_start;
-                    salary_end = actualJob.salary_end;
-                    short_description = actualJob.short_description;
-                    job_description = actualJob.job_description;
-                    requirements = actualJob.requirements;
-                    company_id = actualJob.company_id;
-                    reviews = Vector.toArray<Text>(jobReviews);
-                    timestamp = actualJob.timestamp;
-                    status = actualJob.status;
-                    employType = actualJob.employType;
-                    contacts = actualJob.contacts;
-                };
-                jobs.put(job_id, updated_job);
-                return #ok();
             };
         };
     };
@@ -706,7 +650,6 @@ actor Job {
                     job_description = actualJob.job_description;
                     requirements = actualJob.requirements;
                     company_id = actualJob.company_id;
-                    reviews = actualJob.reviews;
                     timestamp = actualJob.timestamp;
                     status = newStatus;
                     employType = actualJob.employType;

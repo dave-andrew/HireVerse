@@ -20,6 +20,7 @@ actor Review {
         general_comment : Nat;
         pros : Text;
         cons : Text;
+        company_id : Text;
         timestamp : Time.Time;
     };
 
@@ -34,6 +35,7 @@ actor Review {
         general_comment : Nat;
         pros : Text;
         cons : Text;
+        company_id : Text;
     };
 
     let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
@@ -58,6 +60,7 @@ actor Review {
             general_comment = newReview.general_comment;
             pros = newReview.pros;
             cons = newReview.cons;
+            company_id = newReview.company_id;
             timestamp = Time.now();
         };
 

@@ -148,7 +148,6 @@ export default function CompanyDetail() {
                                     Industries
                                 </h3>
                                 <div className="flex flex-row flex-wrap gap-3">
-                                    {/* TODO: ini gtw mau digimanain */}
                                     {industries?.map((industry, i) => {
                                         return (
                                             <div
@@ -165,7 +164,7 @@ export default function CompanyDetail() {
                                     Social Medias
                                 </h3>
                                 <div className="flex flex-col flex-wrap gap-3">
-                                    {company?.social_medias.map(
+                                    {company?.social_medias?.map(
                                         (contact, i) => {
                                             return (
                                                 <SocialMediaItem

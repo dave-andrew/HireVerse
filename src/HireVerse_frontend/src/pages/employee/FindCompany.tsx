@@ -161,7 +161,7 @@ export default function FindCompany() {
                                                         <img
                                                             width="80rem"
                                                             height="auto"
-                                                            className="aspect-square"
+                                                            className="aspect-square object-cover mr-4 rounded-xl"
                                                             src={imageHandler(company.image)}
                                                             alt="Company Image"
                                                         />
@@ -302,9 +302,7 @@ export default function FindCompany() {
                                                 }}>
                                                 <div className="flex flex-row place-items-center bg-white">
                                                     <img
-                                                        width="80rem"
-                                                        height="auto"
-                                                        className="aspect-square"
+                                                        className="w-24 aspect-square object-cover mr-4 rounded-xl"
                                                         src={
                                                             imageHandler(cp.image)
                                                         }
