@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Rating } from "@smastrom/react-rating";
 import CircularRating from "../rating/CircularRating";
 import RatingBar from "../rating/RatingBar";
-import CompanyReviewItem from "../review/CompanyReviewItem";
 
 interface Props {
     companyId: string;
@@ -39,15 +38,6 @@ export default function CompanyReviewSummary({ companyId }: Props) {
                     <p className="w-4/5 text-center">
                         Employee recommends the company to friends
                     </p>
-                </div>
-            </div>
-
-            <div className="flex flex-1 flex-row">
-                <div className="flex flex-col w-full gap-5">
-                    <h3 className="py-5 text-3xl font-bold">Positives</h3>
-                    {Array.from({ length: 4 }).map((_, i) => (
-                        <CompanyReviewItem />
-                    ))}
                 </div>
             </div>
         </div>

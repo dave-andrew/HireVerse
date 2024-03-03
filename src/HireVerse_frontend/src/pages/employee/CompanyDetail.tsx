@@ -15,10 +15,14 @@ import {
     useGetCompanyIndustries,
 } from "../../datas/queries/companyQueries";
 import CreateReviewModal from "../../components/modal/CreateReviewModal";
+import CompanyReviewItem from "../../components/review/CompanyReviewItem";
+import React from "react";
+import TextDropdown from "../../components/form/TextDropdown";
+import { useForm } from "react-hook-form";
 
 export default function CompanyDetail() {
     const nav = useNavigate();
-
+    const { control } = useForm();
     const { id } = useParams<string>();
     const { data: company, isLoading: companyLoading } = useGetCompany(id);
     const { data: industries, isLoading: industriesLoading } =
@@ -115,13 +119,47 @@ export default function CompanyDetail() {
                                     <p>{company?.profile}</p>
                                 </CardLayout>
                                 <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
-                                    <h3 className="text-4xl font-bold">
-                                        Reviews
-                                    </h3>
+                                    <div className="flex flex-row w-full justify-between">
+                                        <h3 className="flex flex-row justify-between p-0 m-0 text-4xl font-bold">
+                                            Reviews
+                                        </h3>
+                                        <button>Create Review</button>
+                                    </div>
+
                                     <div>
                                         <CompanyReviewSummary companyId={""} />
                                     </div>
                                 </CardLayout>
+                                <CardLayout className="flex flex-row justify-between items-center gap-5 rounded-none p-4 mt-2">
+                                    <div>
+                                        <span className="text-xl font-bold">
+                                            Review Selections
+                                        </span>
+                                        <p>Showing 10 reviews</p>
+                                    </div>
+                                    <span className="flex flex-row items-center gap-3">
+                                        Order By
+                                        <TextDropdown
+                                            states={[
+                                                "Newest",
+                                                "Oldest",
+                                                "Highest Rating",
+                                                "Lowest Rating",
+                                            ]}
+                                            control={control}
+                                            name="orderBy"
+                                        />
+                                    </span>
+                                </CardLayout>
+                                <div className="flex flex-1 flex-row">
+                                    <div className="flex flex-col w-full gap-2 pt-2">
+                                        {Array.from({ length: 4 }).map(
+                                            (_, i) => (
+                                                <CompanyReviewItem />
+                                            ),
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                             <div className="flex w-[30%] flex-col">
                                 <CardLayout className="flex flex-col gap-5 rounded-none p-10">
