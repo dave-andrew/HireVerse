@@ -11,18 +11,10 @@ interface Props {
 }
 
 export default function InvitationModal({
-<<<<<<< HEAD
                                             openState,
                                             setOpenState,
                                             onJobCreated,
                                         }: Props) {
-=======
-    openState,
-    setOpenState,
-    onJobCreated,
-}: Props) {
-    // const isOverflowing = 90
->>>>>>> c98af8a8c6d98a963d79da821e5752488bc922f4
 
     return (
         <WrappedModal
@@ -40,21 +32,12 @@ export default function InvitationModal({
                     </button>
                 </div>
             }>
-<<<<<<< HEAD
-            <div className="flex flex-row justify-evenly flex-wrap overflow-scroll gap-6 pb-2 relative scroll-box">
-                <InvitationItem />
-=======
             <div className="relative flex flex-row gap-6 overflow-scroll border-r-2 pb-4">
->>>>>>> c98af8a8c6d98a963d79da821e5752488bc922f4
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
-<<<<<<< HEAD
-=======
-                <div></div>
->>>>>>> c98af8a8c6d98a963d79da821e5752488bc922f4
             </div>
         </WrappedModal>
     );
