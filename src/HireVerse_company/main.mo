@@ -396,6 +396,13 @@ actor Company {
 
                 let result = addManager(i.company_id);
 
+                switch (result) {
+                    case (#err(msg)) {
+                        return #err(msg);
+                    };
+                    case (#ok()) {}
+                };
+
                 let removedInvitation = invitations.remove(invitation_id);
                 return #ok();
             };
@@ -447,7 +454,7 @@ actor Company {
             };
         };
     };
-    
+
     public shared composite query func getManagersFromCompany(company_id : Text) : async Result.Result<[User.User], Text> {
         let companies = await getCompany(company_id);
         Debug.print(company_id);
