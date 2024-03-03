@@ -4,8 +4,19 @@ import { IoMdClose } from "react-icons/io";
 
 export default function InvitationItem() {
     return (
-        <div className="flex flex-col gap-2 rounded-md border border-gray-200 w-64 h-80 relative shadow-md">
-            <div className="flex flex-col gap-6 mt-36 p-4">
+        <div className="flex flex-col gap-2 rounded-md border border-gray-200 w-64 h-80 relative shadow-md justify-center">
+            <div className="absolute bg-[url(public/backgrounds/subtle-prism.svg)] h-24 top-0 w-full z-[-10]"> </div>
+            <div className="text-center w-full flex justify-center place-items-center pt-6">
+                {/* Company Profile Image */}
+                <img
+                    alt="Company Logo"
+                    width="120rem"
+                    height="auto"
+                    className="aspect-square shadow-md rounded-full overflow-hidden border border-gray-200 bg-white"
+                    src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"
+                />
+            </div>
+            <div className="flex flex-col gap-6 p-4">
                 <div className="flex flex-col gap-2">
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap text-center text-xl font-bold">
                         NVIDIA Corporation asdfjsadhfg
@@ -24,14 +35,14 @@ export default function InvitationItem() {
                 </div>
 
                 <div className="flex flex-row justify-center gap-2">
-                    <div className="flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-green-700 hover:bg-green-200 hover:text-green-900">
+                    <button className="flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-green-700 hover:bg-green-100 hover:text-green-900">
                         <BiCheck />
                         Accept
-                    </div>
-                    <div className="flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-red-700 hover:bg-red-200 hover:text-red-900">
+                    </button>
+                    <button className="flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-red-700 hover:bg-red-100 hover:text-red-900">
                         <IoMdClose />
                         Decline
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>

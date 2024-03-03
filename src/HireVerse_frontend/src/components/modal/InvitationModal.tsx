@@ -18,7 +18,7 @@ export default function InvitationModal({
 
     return (
         <WrappedModal
-            panelClassName="!max-w-none !rounded-xl !w-[92vw] !p-10"
+            panelClassName="!max-w-none !rounded-xl !w-[910px] !p-10"
             isOpen={openState}
             setIsOpen={setOpenState}
             title={
@@ -32,7 +32,10 @@ export default function InvitationModal({
                     </button>
                 </div>
             }>
-            <div className="relative flex flex-row gap-6 overflow-scroll border-r-2 pb-4">
+            <div className="relative flex flex-row gap-6 overflow-scroll pb-4 flex-wrap">
+                <InvitationItem />
+                <InvitationItem />
+                <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
