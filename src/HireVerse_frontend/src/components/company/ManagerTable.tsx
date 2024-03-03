@@ -68,7 +68,7 @@ export default function ManagerTable() {
                             <th className="whitespace-nowrap px-2 font-medium py-4 text-black text-center">
                                 {index + 1}
                             </th>
-                            <th className="whitespace-nowrap px-2 font-medium text-black w-fit">
+                            <th className="whitespace-nowrap px-2 font-medium text-black w-fit text-nowrap overflow-hidden">
                                 {manager.internet_identity.toText()}
                             </th>
                             <td className="font-bold text-black lg:pr-12">{manager.first_name} {manager.last_name}</td>
