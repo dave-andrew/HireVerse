@@ -15,11 +15,9 @@ export default function InvitationModal({
                                             onJobCreated,
                                         }: Props) {
 
-    // const isOverflowing = 90
-
     return (
         <WrappedModal
-            panelClassName="!max-w-none !rounded-xl !w-[40vw] !min-w-[600px] !p-10"
+            panelClassName="!max-w-none !rounded-xl !w-[92vw] !p-10"
             isOpen={openState}
             setIsOpen={setOpenState}
             title={
@@ -33,15 +31,13 @@ export default function InvitationModal({
                     </button>
                 </div>
             }>
-            <div className="flex flex-row overflow-scroll gap-6 pb-4 border-r-2 relative">
+            <div className="flex flex-row justify-evenly flex-wrap overflow-scroll gap-6 pb-2 relative scroll-box">
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
-                <div>
-
-                </div>
+                <InvitationItem />
             </div>
         </WrappedModal>
     )
