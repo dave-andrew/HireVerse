@@ -119,7 +119,7 @@ export default function CompanyDetail() {
                                         Reviews
                                     </h3>
                                     <div>
-                                        <CompanyReviewSummary />
+                                        <CompanyReviewSummary companyId={""} />
                                     </div>
                                 </CardLayout>
                             </div>

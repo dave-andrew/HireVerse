@@ -4,10 +4,10 @@ import CircularRating from "../rating/CircularRating";
 import RatingBar from "../rating/RatingBar";
 
 interface Props {
-    reviewId: string;
+    companyId: string;
 }
 
-export default function CompanyReviewSummary({ reviewId }: Props) {
+export default function CompanyReviewSummary({ companyId }: Props) {
     const [rating, setRating] = useState(3);
 
     return (
