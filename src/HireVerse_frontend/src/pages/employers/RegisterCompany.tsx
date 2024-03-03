@@ -200,7 +200,11 @@ export default function RegisterCompany() {
                             </div>
                             <div className="flex flex-row items-center justify-center">
                                 <button
-                                    className={`main-button ${isLoading ? "cursor-not-allowed !bg-gray-600" : ""}`}
+                                    className={`main-button ${
+                                        isLoading
+                                            ? "cursor-not-allowed !bg-gray-600"
+                                            : ""
+                                    }`}
                                     disabled={isLoading}
                                     onClick={handleSubmit(handleFormSubmit)}>
                                     Register Company

@@ -7,31 +7,23 @@ import JobItem from "../../components/job/JobItem";
 import { IoLocationOutline } from "react-icons/io5";
 import CountryDropdown from "../../components/form/CountryDropdown";
 import JobDetail from "../../components/job/JobDetail";
-import { Job } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import JobFilter, { IFilterForm } from "../../components/form/JobFilter";
 import { useForm } from "react-hook-form";
-import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
-import convertNullFormat from "../../utils/convertNullFormat";
-import useService from "../../hooks/useService";
-import { isOk } from "../../utils/resultGuarder";
 import { CONSTANTS } from "../../utils/constants";
 import handleKeyDown from "../../utils/handleKeyDown";
+import JobItemSkeleton from "../../components/job/JobItemSkeleton";
+import {
+    useGetCompanyNames,
+    useGetFilteredJobs,
+} from "../../datas/queries/jobQueries";
 
-interface IQueryFilterSortForm {
+export interface IQueryFilterSortForm {
     country: string;
     order: string;
     query: string;
 }
 
 export default function FindJobs() {
-    const { getJobService, getCompanyService } = useService();
-    const [filter, setFilter] = useState<IFilterForm>({
-        salaryStart: 0,
-        salaryEnd: 0,
-        industry: "",
-        experience: "",
-        datePosted: "",
-    });
     const { register, control, getValues, formState } =
         useForm<IQueryFilterSortForm>({
             defaultValues: {
@@ -40,67 +32,34 @@ export default function FindJobs() {
                 query: "",
             },
         });
-    const [jobs, setJobs] = useState<Job[]>();
-    const [companyNames, setCompanyNames] = useState<string[]>([]);
+    const [filter, setFilter] = useState<IFilterForm>({
+        salaryStart: 0,
+        salaryEnd: 0,
+        industry: "",
+        experience: "",
+        datePosted: "",
+        currency: "",
+    });
+    const { data: jobs, refetch: getFilteredJobs } = useGetFilteredJobs(
+        filter,
+        getValues,
+    );
+    const { data: companyNames, refetch: getCompanyNames } = useGetCompanyNames(
+        jobs?.map((job) => job.company_id) ?? [],
+        false,
+    );
     const [shownJobId, setShownJobId] = useState<string>("");
 
-    const getConvertedFilters = () => {
-        const values = getValues();
-        const jobFilter: JobFilterInput = {
-            country: convertNullFormat(values.country, ""),
-            order: convertNullFormat(values.order, ""),
-            experience: convertNullFormat(filter.experience, ""),
-            industry: convertNullFormat(filter.industry, ""),
-            position: convertNullFormat(values.query, ""),
-            date_posted: convertNullFormat(
-                BigInt(filter.datePosted),
-                BigInt(0),
-            ),
-            salary_end: convertNullFormat(BigInt(filter.salaryEnd), BigInt(0)),
-            salary_start: convertNullFormat(
-                BigInt(filter.salaryStart),
-                BigInt(0),
-            ),
-        };
-
-        return jobFilter;
-    };
-    const getJobs = async (initial?: boolean) => {
-        const filter = getConvertedFilters();
-
-        const response = await getJobService().then((s) =>
-            s.getJobs(BigInt(0), BigInt(10), filter),
-        );
-
-        let companyIds: string[] = [];
-        if (isOk(response)) {
-            companyIds = response.ok.map((job) => job.company_id);
-
-            setJobs(response.ok);
-
-            if (initial && response.ok.length > 0) {
-                setShownJobId(response.ok[0].id);
-            }
+    useEffect(() => {
+        if (jobs) {
+            getCompanyNames();
+            setShownJobId(jobs[0]?.id);
         }
-
-        const responseName = await getCompanyService().then((s) =>
-            s.getCompanyNames(companyIds),
-        );
-
-        if (isOk(responseName)) {
-            setCompanyNames(responseName.ok);
-        }
-
-        console.log(response);
-    };
+    }, [jobs]);
 
     useEffect(() => {
-        getJobs();
+        getFilteredJobs();
     }, [filter]);
-
-    useEffect(() => {
-        getJobs(true);
-    }, []);
 
     return (
         <FrontPageLayout>
@@ -138,7 +97,11 @@ export default function FindJobs() {
                                     className="w-full bg-transparent outline-0"
                                     placeholder="Search Job"
                                     onKeyDown={(e) =>
-                                        handleKeyDown(e.key, "Enter", getJobs)
+                                        handleKeyDown(
+                                            e.key,
+                                            "Enter",
+                                            getFilteredJobs,
+                                        )
                                     }
                                 />
                             </span>
@@ -147,7 +110,7 @@ export default function FindJobs() {
                                 <CountryDropdown
                                     name="country"
                                     control={control}
-                                    onChange={(_) => getJobs()}
+                                    onChange={(_) => getFilteredJobs()}
                                 />
                             </span>
                         </CardLayout>
@@ -160,11 +123,13 @@ export default function FindJobs() {
                                     name="order"
                                     control={control}
                                     states={CONSTANTS.ORDER}
-                                    onChange={(_) => getJobs()}
+                                    onChange={(_) => getFilteredJobs()}
                                 />
                             </CardLayout>
                             <div className="card-scollr flex w-96 flex-col gap-2 overflow-y-auto overflow-x-hidden pr-1">
                                 {jobs?.map((job, index) => {
+                                    if (!companyNames) return null;
+
                                     return (
                                         <JobItem
                                             key={index}
@@ -172,10 +137,14 @@ export default function FindJobs() {
                                             onClick={() =>
                                                 setShownJobId(job.id)
                                             }
-                                            companyName={companyNames[index]}
+                                            companyName={companyNames?.[index]}
                                         />
                                     );
                                 })}
+                                {!jobs &&
+                                    Array.from({ length: 10 }).map((_, i) => {
+                                        return <JobItemSkeleton key={i} />;
+                                    })}
                             </div>
                         </div>
                         <div className="flex w-full flex-col gap-2">

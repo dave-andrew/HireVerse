@@ -1,4 +1,4 @@
-import WrappedDropdown from "../utils/WrappedDropdown";
+import WrappedDropdown from "../form/WrappedDropdown";
 import { Menu } from "@headlessui/react";
 import { SlOptions } from "react-icons/sl";
 import CardLayout from "../../layouts/CardLayout";
@@ -10,14 +10,12 @@ import { Dispatch, SetStateAction } from "react";
 
 interface Props {
     job: Job;
-    setJobs: Dispatch<SetStateAction<Job[]>>;
     setConfirmationState: Dispatch<SetStateAction<boolean>>;
     onClick?: () => void;
 }
 
 export default function JobItemManagement({
     job,
-    setJobs,
     setConfirmationState,
     onClick,
 }: Props) {
@@ -25,17 +23,6 @@ export default function JobItemManagement({
 
     const toggleJobVisibility = async () => {
         await getJobService().then((s) => s.toggleJobVisibility(job.id));
-        setJobs((prev) =>
-            prev.map((j) => {
-                if (j.id === job.id) {
-                    if (j.status === JobStatus.Active) {
-                        return { ...j, status: JobStatus.Hidden };
-                    }
-                    return { ...j, status: JobStatus.Active };
-                }
-                return j;
-            }),
-        );
     };
 
     return (

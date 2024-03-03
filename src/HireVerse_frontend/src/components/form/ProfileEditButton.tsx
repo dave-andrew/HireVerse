@@ -27,7 +27,7 @@ export default function ProfileEditButton({
     return (
         <div
             onClick={handleOnClick}
-            className={`absolute flex flex-row items-center justify-center gap-3 ${className}`}>
+            className={`absolute z-10 flex flex-row items-center justify-center gap-3 ${className}`}>
             {!editStateProps ? (
                 <button className="text-blue-primary hover:bg-signature-gray z-50 rounded-lg border-[1px] bg-white transition-colors xl:p-1.5 2xl:p-2">
                     <FaRegEdit className="xl:text-md 2xl:text-xl" />

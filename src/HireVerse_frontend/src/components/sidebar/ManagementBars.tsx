@@ -1,24 +1,22 @@
-import {ReactNode, useEffect, useState} from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Profile from "../navbar/Profile";
-import {IconType} from "react-icons";
-import {Link, useLocation} from "react-router-dom";
+import { IconType } from "react-icons";
+import { Link, useLocation } from "react-router-dom";
 import {
     RiHome4Line,
     RiMailOpenLine,
     RiSuitcase2Line,
     RiUser3Line,
 } from "react-icons/ri";
-import {useForm} from "react-hook-form";
-import useService from "../../hooks/useService";
-import {isOk} from "../../utils/resultGuarder";
+import { useForm } from "react-hook-form";
 import ImageLabeledDropdown, {
     DropdownItems,
 } from "../form/ImageLabeledDropdown";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import {Company} from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import useImageBlob from "../../hooks/useImageBlob";
-import {IoCloseSharp} from "react-icons/io5";
 import InvitationModal from "../modal/InvitationModal";
+import { useGetManagedCompanies } from "../../datas/queries/companyQueries";
 
 type Menu = {
     name: string;
@@ -58,52 +56,42 @@ interface IDropdownForm {
     img: string;
 }
 
-export default function ManagementBars({children}: Props) {
-    const [managedCompanies, setManagedCompanies] = useState<Company[]>([]);
+export default function ManagementBars({ children }: Props) {
+    const { data: managedCompanies, refetch } = useGetManagedCompanies();
     const [menus, setMenus] = useState<Menu[]>(defaultMenu);
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
     const [dropdownItems, setDropdownItems] = useState<DropdownItems[]>([]);
     const [isHovered, setIsHovered] = useState(false);
     const [isModalShown, setIsModalShown] = useState(false);
-
-    const {control, setValue} = useForm<IDropdownForm>({
+    const { control, setValue } = useForm<IDropdownForm>({
         defaultValues: {
             value: "",
             label: "",
             img: "",
         },
     });
-    const {getCompanyService} = useService();
-    const {convertBlobToImage} = useImageBlob();
+    const { convertBlobToImage } = useImageBlob();
     const location = useLocation();
-    const isActive = (menu: string[]) => menu.includes(location.pathname);
 
-    const mapDropdownItems = async (managedCompanyList: Company[]) => {
+    const manageDropdownItems = async () => {
+        if (!managedCompanies) {
+            return;
+        }
+
         const items: DropdownItems[] = await Promise.all(
-            managedCompanyList.map(async (company) => ({
+            managedCompanies.map(async (company) => ({
                 label: company.name,
                 value: company.name,
                 img: convertBlobToImage(company.image),
             })),
         );
         setDropdownItems(items);
-    };
-
-    const getCompanies = async () => {
-        const response = await getCompanyService().then((s) => {
-            return s.getManagedCompanies();
-        });
-
-        if (!isOk(response)) {
-            return;
-        }
-
-        const companies = response.ok;
-        setManagedCompanies(companies);
 
         if (selectedCompany) {
-            const company = companies.find((c) => c.id === selectedCompany.id);
+            const company = managedCompanies.find(
+                (c) => c.id === selectedCompany.id,
+            );
 
             if (company) {
                 setValue("label", company.name);
@@ -111,19 +99,15 @@ export default function ManagementBars({children}: Props) {
             }
         }
 
-        if (companies.length === 0) {
+        if (managedCompanies.length === 0) {
             setValue("label", "No Company");
             setSelectedCompany(null);
             return;
         }
-
-        setSelectedCompany(companies[0]);
-        setValue("label", companies[0].name);
-        return;
     };
 
     const changeCompany = (companyLabel: string) => {
-        const company = managedCompanies.find((c) => c.name === companyLabel);
+        const company = managedCompanies?.find((c) => c.name === companyLabel);
         if (company) {
             setSelectedCompany(company);
         }
@@ -133,24 +117,11 @@ export default function ManagementBars({children}: Props) {
         setIsModalShown(!isModalShown);
     };
 
-    useEffect(() => {
-        setManagedCompanies((prev) =>
-            prev.map((c) => {
-                if (c.id === selectedCompany?.id) {
-                    return selectedCompany;
-                }
-                return c;
-            }),
-        );
-    }, [selectedCompany]);
+    const isActive = (menu: string[]) => menu.includes(location.pathname);
 
     useEffect(() => {
-        mapDropdownItems(managedCompanies);
+        manageDropdownItems();
     }, [managedCompanies]);
-
-    useEffect(() => {
-        getCompanies();
-    }, []);
 
     return (
         <>
@@ -165,11 +136,11 @@ export default function ManagementBars({children}: Props) {
                             className="w-52"
                             onChange={changeCompany}
                         />
-                        <button onClick={toggleModal}
-                            className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 border-l-2 border-transparent p-3 rounded-md">
-                            <RiMailOpenLine className="min-w-[1.5rem]"/>
-                            <span
-                                className={`overflow-hidden`}>
+                        <button
+                            onClick={toggleModal}
+                            className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 rounded-md border-l-2 border-transparent p-3">
+                            <RiMailOpenLine className="min-w-[1.5rem]" />
+                            <span className={`overflow-hidden`}>
                                 Invitations
                             </span>
                         </button>
@@ -181,7 +152,7 @@ export default function ManagementBars({children}: Props) {
                             Employer
                         </a>
                         <div className="border-l-2">
-                            <Profile/>
+                            <Profile />
                         </div>
                     </div>
                 </div>
@@ -194,12 +165,12 @@ export default function ManagementBars({children}: Props) {
                  transition-all duration-500 ease-in-out
                  `}>
                     <div className="flex w-full flex-col gap-8">
-                        <div
-                            className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
+                        <div className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
                             H
-                            <span className={`${isHovered ? "block" : "hidden"}`}>
-                            IREVERSE
-                        </span>
+                            <span
+                                className={`${isHovered ? "block" : "hidden"}`}>
+                                IREVERSE
+                            </span>
                         </div>
                         <div className="flex flex-col text-lg text-gray-500">
                             {menus.map((menu, index) => {
@@ -213,11 +184,10 @@ export default function ManagementBars({children}: Props) {
                                         <div
                                             key={index}
                                             className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
-                                            <menu.icon className="min-w-[1.5rem]"/>
-                                            <span
-                                                className={`overflow-hidden`}>
-                                            {menu.name}
-                                        </span>
+                                            <menu.icon className="min-w-[1.5rem]" />
+                                            <span className={`overflow-hidden`}>
+                                                {menu.name}
+                                            </span>
                                         </div>
                                     </Link>
                                 );
@@ -226,15 +196,17 @@ export default function ManagementBars({children}: Props) {
                     </div>
                 </div>
                 <div
-                    className={`flex h-full ${isHovered ? "min-w-[18rem]" : "min-w-[5rem]"} transition-all duration-500 ease-in-out`}/>
+                    className={`flex h-full ${isHovered ? "min-w-[18rem]" : "min-w-[5rem]"} transition-all duration-500 ease-in-out`}
+                />
                 <div className="flex-grow-1 flex h-full w-full flex-col">
-                    <div className="min-h-16 w-full"/>
+                    <div className="min-h-16 w-full" />
                     {children}
                 </div>
             </div>
             <InvitationModal
                 openState={isModalShown}
-                setOpenState={setIsModalShown} />
+                setOpenState={setIsModalShown}
+            />
         </>
     );
 }

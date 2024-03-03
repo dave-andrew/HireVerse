@@ -13,6 +13,8 @@ import { _SERVICE as _SERVICE_JOB } from "../../../declarations/HireVerse_job/Hi
 import { ActorSubclass } from "@dfinity/agent";
 
 async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
+    console.log("test");
+    
     const response = await companyService.getCompanies();
 
     console.log("Seeding companies...");
@@ -86,6 +88,7 @@ const jobSeeder = async (
             company_id:
                 companyIds[Math.floor(Math.random() * companyIds.length)],
             salary_end: BigInt(100000),
+            currency: "$",
             requirements: "BSc",
             salary_start: BigInt(50000),
             short_description: "Software Developer",
@@ -101,6 +104,7 @@ const jobSeeder = async (
             company_id:
                 companyIds[Math.floor(Math.random() * companyIds.length)],
             salary_end: BigInt(100000),
+            currency: "€",
             requirements: "BSc",
             salary_start: BigInt(50000),
             short_description: "Math Teacher",
@@ -111,12 +115,13 @@ const jobSeeder = async (
         // dont generate software developers
         {
             location: "Indonesia",
-            industry: "Porn",
+            industry: "Real Estate",
             job_description: "Dep's Assistant",
             position: "Dep's Assistant",
             company_id:
                 companyIds[Math.floor(Math.random() * companyIds.length)],
             salary_end: BigInt(200000),
+            currency: "£",
             requirements: "BSc",
             salary_start: BigInt(50000),
             short_description: "Dep's Assistant",
@@ -134,6 +139,7 @@ const jobSeeder = async (
             salary_end: BigInt(120000),
             requirements: "BSc in Computer Science or related field",
             salary_start: BigInt(80000),
+            currency: "¥",
             short_description: "Frontend Developer",
             contacts: ["sen: 3"],
             employType:
@@ -149,6 +155,7 @@ const jobSeeder = async (
             salary_end: BigInt(90000),
             requirements: "BSc in Finance or related field",
             salary_start: BigInt(60000),
+            currency: "₹",
             short_description: "Financial Analyst",
             contacts: ["sen: 3"],
             employType:
@@ -164,6 +171,7 @@ const jobSeeder = async (
             salary_end: BigInt(150000),
             requirements: "BSc in Data Science or related field",
             salary_start: BigInt(100000),
+            currency: "₩",
             short_description: "Data Scientist",
             contacts: ["sen: 3"],
             employType:
@@ -179,6 +187,7 @@ const jobSeeder = async (
             salary_end: BigInt(110000),
             requirements: "BSc in Computer Science or related field",
             salary_start: BigInt(70000),
+            currency: "₩",
             short_description: "Software Engineer",
             contacts: ["sen: 3"],
             employType:
@@ -194,6 +203,7 @@ const jobSeeder = async (
             salary_end: BigInt(90000),
             requirements: "Degree in Fashion Design or related field",
             salary_start: BigInt(60000),
+            currency: "₩",
             short_description: "Fashion Designer",
             contacts: ["sen: 3"],
             employType:
@@ -209,6 +219,7 @@ const jobSeeder = async (
             salary_end: BigInt(120000),
             requirements: "BSc in Hospitality Management or related field",
             salary_start: BigInt(80000),
+            currency: "₩",
             short_description: "Hotel Manager",
             contacts: ["sen: 3"],
             employType:

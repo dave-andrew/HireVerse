@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
-import WrappedModal from "../utils/WrappedModal";
+import WrappedModal from "../form/WrappedModal";
 import { IoCloseSharp } from "react-icons/io5";
 import TextDropdown from "../form/TextDropdown";
 import { useFieldArray, useForm } from "react-hook-form";
-import WrappedRadioGroup from "../utils/WrappedRadioGroup";
+import WrappedRadioGroup from "../form/WrappedRadioGroup";
 import { CONSTANTS } from "../../utils/constants";
 import DynamicInputBox from "../form/DynamicInputBox";
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -144,6 +144,7 @@ export default function CreateJobModal({
             requirements: data.requirements,
             job_description: data.jobDescription,
             location: data.location,
+            currency: "IDR", //TODO change this to be dynamic
             contacts: data.applyContacts.map((contact) => contact.contact),
             company_id: selectedCompany.id,
             salary_end: BigInt(data.salaryEnd),

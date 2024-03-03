@@ -4,11 +4,22 @@ import App from "./App.js";
 import "./index.scss";
 import "@smastrom/react-rating/style.css";
 import ServiceContextProvider from "./components/context/ServiceContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 1000 * 60 * 5,
+        },
+    },
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
-        <ServiceContextProvider>
-            <App />
-        </ServiceContextProvider>
+        <QueryClientProvider client={queryClient}>
+            <ServiceContextProvider>
+                <App />
+            </ServiceContextProvider>
+        </QueryClientProvider>
     </React.StrictMode>,
 );

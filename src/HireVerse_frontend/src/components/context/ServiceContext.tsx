@@ -42,7 +42,6 @@ export const ServiceContext = createContext<ServiceContextType>({
 });
 
 export default function ServiceContextProvider({ children }: Props) {
-    const { getIdentity } = useAuth();
     const [jobService, setJobService] = useState<ActorSubclass<_SERVICE_JOB>>();
     const [companyService, setCompanyService] =
         useState<ActorSubclass<_SERVICE_COMPANY>>();
@@ -51,6 +50,7 @@ export default function ServiceContextProvider({ children }: Props) {
     const [reviewService, setReviewService] =
         useState<ActorSubclass<_SERVICE_REVIEW>>();
     const [agent, setAgent] = useState<HttpAgent>();
+    const { getIdentity } = useAuth();
 
     const createHttpAgent = useThrottleCallback(() => {
         const identity = getIdentity();

@@ -18,7 +18,6 @@ export default function UnauthenticatedProtectedRoutes({
 
     useEffect(() => {
         if (authState === AuthState.Unregistered) {
-
             warnToast({
                 message: "You must complete your registration first",
                 onCloseActions: () => navigate("/complete-registration"),

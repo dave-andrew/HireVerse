@@ -3,7 +3,7 @@ interface PieProps {
     colour: string;
 }
 
-export default function Pie({ percentage, colour }: PieProps) {
+export default function CircularRating({ percentage, colour }: PieProps) {
     const pct = cleanPercentage(percentage);
     return (
         <svg

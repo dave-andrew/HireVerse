@@ -10,7 +10,7 @@ interface ISeederForm {
 export default function Seeder() {
     const { register, handleSubmit } = useForm<ISeederForm>();
     const service = useService();
-    const handleSeedCompanyJobs = async () => {
+    const handleSeedCompanyJobs: any = async () => {
         seeder(service);
     };
 

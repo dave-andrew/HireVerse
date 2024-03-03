@@ -1,7 +1,7 @@
 import ManagementPageLayout from "../../layouts/ManagementPageLayout";
 import { IoIosSearch } from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoAdd } from "react-icons/io5";
 import TextDropdown from "../../components/form/TextDropdown";
 import { useForm } from "react-hook-form";
@@ -10,16 +10,15 @@ import useService from "../../hooks/useService";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import { CONSTANTS } from "../../utils/constants";
-import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import convertNullFormat from "../../utils/convertNullFormat";
 import { isOk } from "../../utils/resultGuarder";
 import handleKeyDown from "../../utils/handleKeyDown";
 import JobItemManagement from "../../components/job/JobItemManagement";
-import WrappedModal from "../../components/utils/WrappedModal";
+import WrappedModal from "../../components/form/WrappedModal";
 import CreateJobModal from "../../components/modal/CreateJobModal";
 import useToaster from "../../hooks/useToaster";
+import { useGetJobPostedByCompany } from "../../datas/queries/jobQueries";
 
-interface IQuerySortForm {
+export interface IQuerySortForm {
     query: string;
     order: string;
     status: string;
@@ -28,7 +27,7 @@ interface IQuerySortForm {
 export default function CompanyJobs() {
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
-    const [jobs, setJobs] = useState<Job[]>([]);
+
     const [selectedJob, setSelectedJob] = useState<Job | null>(null);
     const [isModalShown, setIsModalShown] = useState(false);
     const [confirmationModal, setConfirmationModal] = useState(false);
@@ -41,43 +40,13 @@ export default function CompanyJobs() {
             status: "All",
         },
     });
+    const { data: jobs, refetch: getJobs } = useGetJobPostedByCompany(
+        selectedCompany?.id,
+        getValues,
+    );
 
     const toggleModal = () => {
         setIsModalShown(!isModalShown);
-    };
-
-    const getConvertedFilters = () => {
-        const values = getValues();
-        const jobFilter: JobManagerFilterInput = {
-            order: convertNullFormat(values.order, ""),
-            position: convertNullFormat(values.query, ""),
-            status: convertNullFormat(
-                values.status === "All" ? "" : values.status.toLowerCase(),
-                "",
-            ),
-        };
-        return jobFilter;
-    };
-
-    const getJobs = async () => {
-        if (!selectedCompany) {
-            return;
-        }
-
-        const response = await getJobService().then((s) =>
-            s.getJobPostedByCompany(
-                selectedCompany.id,
-                BigInt(0),
-                BigInt(20),
-                getConvertedFilters(),
-            ),
-        );
-
-        if (isOk(response)) {
-            setJobs(response.ok);
-            console.log(getConvertedFilters());
-            console.log(response.ok);
-        }
     };
 
     const handleDeleteJob = async () => {
@@ -90,7 +59,8 @@ export default function CompanyJobs() {
         );
 
         if (isOk(response)) {
-            setJobs(jobs.filter((job) => job.id !== selectedJob.id));
+            // getJobs();
+            // TODO INVALIDATE CACHE
         }
         setSelectedJob(null);
         setConfirmationModal(false);
@@ -102,10 +72,6 @@ export default function CompanyJobs() {
         });
         getJobs();
     };
-
-    useEffect(() => {
-        getJobs();
-    }, [selectedCompany]);
 
     return (
         <>
@@ -207,11 +173,10 @@ export default function CompanyJobs() {
                         <div className="grid grid-cols-3 gap-4">
                             {Array.from({ length: 5 }).map((_, index) => (
                                 <>
-                                    {jobs.map((job, index) => (
+                                    {jobs?.map((job, index) => (
                                         <JobItemManagement
                                             key={index}
                                             job={job}
-                                            setJobs={setJobs}
                                             onClick={() => setSelectedJob(job)}
                                             setConfirmationState={
                                                 setConfirmationModal

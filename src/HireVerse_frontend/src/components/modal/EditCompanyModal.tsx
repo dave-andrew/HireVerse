@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import WrappedModal from "../utils/WrappedModal";
+import WrappedModal from "../form/WrappedModal";
 import { IoCloseSharp } from "react-icons/io5";
 import TextDropdown from "../form/TextDropdown";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -11,25 +11,14 @@ import useService from "../../hooks/useService";
 import DynamicInputBox from "../form/DynamicInputBox";
 import { MdAdd } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
+import WrappedRichText from "../form/WrappedRichText";
+import useRichTextEditor from "../../hooks/useRichTextEditor";
 
 interface Props {
     openState: boolean;
     setOpenState: Dispatch<SetStateAction<boolean>>;
     onJobCreated?: () => void;
 }
-
-// id : Text;
-// name : Text;
-// founded_year : Nat;
-// profile : Text;
-// country : Text;
-// location : Text;
-// image : Blob;
-// linkedin : Text;
-// company_manager_ids : [Text];
-// job_posting_ids : [Text];
-// timestamp : Time.Time;
-// seen : Nat;
 
 interface IEditCompanyForm {
     name: string;
@@ -40,7 +29,6 @@ interface IEditCompanyForm {
         name: string;
         placeholder: string;
     }[];
-    profile: string;
     socialMedias: {
         url: string;
         placeholder: string;
@@ -58,7 +46,7 @@ export default function EditCompanyModal({
         control,
         register,
         handleSubmit,
-        setError,
+
         reset,
         formState: { errors, isValid },
     } = useForm<IEditCompanyForm, string>({
@@ -72,7 +60,6 @@ export default function EditCompanyModal({
                 name: l,
                 placeholder: l,
             })),
-            profile: selectedCompany?.profile,
             socialMedias: selectedCompany?.social_medias?.map((s) => ({
                 url: s,
                 placeholder: s,
@@ -95,9 +82,9 @@ export default function EditCompanyModal({
         name: "socialMedias",
         control,
     });
-
     const { getCompanyService } = useService();
     const { errorToast } = useToaster();
+    const editor = useRichTextEditor(selectedCompany?.profile ?? "");
 
     const checkError = () => {
         for (const error in errors) {
@@ -137,12 +124,28 @@ export default function EditCompanyModal({
             }
         }
 
+        if (!editor) {
+            errorToast({
+                message:
+                    "An error occurred while updating the company profile. Please try again.",
+            });
+            return;
+        }
+
+        const html = editor.getHTML();
+        if (html === "<p></p>") {
+            errorToast({
+                message: "Company profile cannot be empty",
+            });
+            return;
+        }
+
         if (!selectedCompany) {
             return;
         }
 
         const updatedCompany: Company = {
-            profile: data.profile,
+            profile: html,
             name: data.name,
             linkedin: data.linkedin,
             founded_year: BigInt(data.foundedYear),
@@ -152,6 +155,7 @@ export default function EditCompanyModal({
             id: selectedCompany?.id,
             image: selectedCompany?.image,
             company_manager_ids: selectedCompany?.company_manager_ids,
+            reviews_ids: selectedCompany?.reviews_ids,
             seen: selectedCompany?.seen,
             timestamp: selectedCompany?.timestamp,
             job_posting_ids: selectedCompany?.job_posting_ids,
@@ -253,7 +257,7 @@ export default function EditCompanyModal({
                         Input the country where the company is founded.
                     </div>
                 </div>
-                <div className="border-b border-gray-400  border-opacity-30 py-5">
+                <div className="border-b border-gray-400 border-opacity-30 py-5">
                     <div className="h-full">
                         <TextDropdown
                             states={CONSTANTS.COMPANY.COUNTRIES}
@@ -270,14 +274,11 @@ export default function EditCompanyModal({
                         Input the profile description of the company.
                     </div>
                 </div>
-                <div className="border-b border-gray-400  border-opacity-30 py-5">
-                    <div className="h-full rounded-md">
-                        <textarea
-                            {...register("profile", {
-                                required: "Profile is required",
-                            })}
-                            placeholder="e.g. Google is an American multinational technology company that specializes in Internet-related services and products."
-                            className="focus:ring-signature-primary h-full min-h-32 w-full rounded-md border-[1px] border-gray-200 p-2 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
+                <div className="border-b border-gray-400 border-opacity-30 py-5 ">
+                    <div className="has-[:focus]:ring-signature-primary relative h-full rounded-md has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
+                        <WrappedRichText
+                            editor={editor}
+                            className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] p-2 px-3 transition-all *:min-h-32 *:outline-0 focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>

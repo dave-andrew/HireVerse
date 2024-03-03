@@ -4,7 +4,7 @@ import Nat "mo:base/Nat";
 import Text "mo:base/Text";
 import Blob "mo:base/Blob";
 import Iter "mo:base/Iter";
-import Debug "mo:base/Debug";
+import Debug "mo:base/Debug"; 
 import Array "mo:base/Array";
 import Bool "mo:base/Bool";
 import Time "mo:base/Time";
@@ -16,6 +16,8 @@ import Random "mo:base/Random";
 import Result "mo:base/Result";
 import Error "mo:base/Error";
 import Order "mo:base/Order";
+import Int "mo:base/Int";
+import Review "canister:HireVerse_review";
 
 actor Company {
 
@@ -30,6 +32,7 @@ actor Company {
         image : Blob;
         linkedin : Text;
         company_manager_ids : [Text];
+        reviews_ids : [Text];
         job_posting_ids : [Text];
         timestamp : Time.Time;
         seen : Nat;
@@ -70,6 +73,7 @@ actor Company {
             linkedin = "https://www.linkedin.com/company/google";
             company_manager_ids = [];
             job_posting_ids = [];
+            reviews_ids = [];
             timestamp = Time.now();
             seen = 0;
         };
@@ -78,6 +82,7 @@ actor Company {
 
         return company.id;
     };
+
     public shared (msg) func registerCompanies(newCompany : CreateCompanyInput) : async Company {
 
         let id = await Helper.generateUUID();
@@ -94,6 +99,7 @@ actor Company {
             linkedin = newCompany.linkedin;
             company_manager_ids = [Principal.toText(msg.caller)];
             job_posting_ids = [];
+            reviews_ids = [];
             timestamp = Time.now();
             seen = 0;
         };
@@ -156,10 +162,10 @@ actor Company {
     };
 
     public shared query func getCompanies() : async [Company] {
-        let companies_array = Iter.toArray(companies.vals());
+        let companies_array : [Company] = Iter.toArray(companies.vals());
 
         let comparator = func(a : Company, b : Company) : Order.Order {
-            Nat.compare(a.seen, b.seen);
+            Int.compare(b.seen, a.seen);
         };
 
         let sorted_companies = Array.sort(companies_array, comparator);
@@ -199,7 +205,7 @@ actor Company {
         return Vector.toArray(countries);
     };
 
-    public shared query func getCompany(id : Text) : async Result.Result<Company, Text> {
+    public query func getCompany(id : Text) : async Result.Result<Company, Text> {
         let company = companies.get(id);
 
         switch (company) {
@@ -208,23 +214,25 @@ actor Company {
             };
             case (?c) {
 
-                let updatedCompany = {
-                    id = c.id;
-                    name = c.name;
-                    founded_year = c.founded_year;
-                    profile = c.profile;
-                    founded_country = c.founded_country;
-                    office_locations = c.office_locations;
-                    social_medias = c.social_medias;
-                    image = c.image;
-                    linkedin = c.linkedin;
-                    company_manager_ids = c.company_manager_ids;
-                    job_posting_ids = c.job_posting_ids;
-                    timestamp = c.timestamp;
-                    seen = c.seen + 1;
-                };
+                // TODO: Pindahin ke fungsi lain aja
+                // let updatedCompany = {
+                //     id = c.id;
+                //     name = c.name;
+                //     founded_year = c.founded_year;
+                //     profile = c.profile;
+                //     founded_country = c.founded_country;
+                //     office_locations = c.office_locations;
+                //     social_medias = c.social_medias;
+                //     image = c.image;
+                //     linkedin = c.linkedin;
+                //     company_manager_ids = c.company_manager_ids;
+                //     job_posting_ids = c.job_posting_ids;
+                //     reviews_ids = c.reviews_ids;
+                //     timestamp = c.timestamp;
+                //     seen = c.seen + 1;
+                // };
 
-                companies.put(c.id, updatedCompany);
+                // companies.put(c.id, updatedCompany);
 
                 return #ok(c);
             };
@@ -312,6 +320,7 @@ actor Company {
                     linkedin = company.linkedin;
                     company_manager_ids = company.company_manager_ids;
                     job_posting_ids = Vector.toArray<Text>(jobIds);
+                    reviews_ids = company.reviews_ids;
                     timestamp = company.timestamp;
                     seen = company.seen;
                 };
@@ -380,6 +389,7 @@ actor Company {
                     linkedin = company.linkedin;
                     company_manager_ids = updatedManagerIds;
                     job_posting_ids = company.job_posting_ids;
+                    reviews_ids = company.reviews_ids;
                     timestamp = company.timestamp;
                     seen = company.seen;
                 };
@@ -466,6 +476,7 @@ actor Company {
                     linkedin = c.linkedin;
                     company_manager_ids = updatedManagerIds;
                     job_posting_ids = c.job_posting_ids;
+                    reviews_ids = c.reviews_ids;
                     timestamp = c.timestamp;
                     seen = c.seen;
                 };
@@ -522,4 +533,53 @@ actor Company {
             ignore companies.remove(company.id);
         };
     };
+
+    public shared (msg) func addReview(review: Review.CreateReviewInput) : async Result.Result<(), Text> {
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Not authorized");
+        };
+
+        let company = await getCompany(review.companyId);
+
+        switch (company) {
+            case (#err(msg)) {
+                return #err("Company not found");
+            };
+            case (#ok(company)) {
+                let reviews_ids = company.reviews_ids;
+
+                let newReview = await Review.addReview(review);
+
+                switch (newReview) {
+                    case (#err(msg)) {
+                        return #err(msg);
+                    };
+                    case (#ok(review)) {
+                        let updatedReviews = Array.append(reviews_ids, [review]);
+
+                        let updatedCompany = {
+                            id = company.id;
+                            name = company.name;
+                            founded_year = company.founded_year;
+                            profile = company.profile;
+                            founded_country = company.founded_country;
+                            office_locations = company.office_locations;
+                            social_medias = company.social_medias;
+                            image = company.image;
+                            linkedin = company.linkedin;
+                            company_manager_ids = company.company_manager_ids;
+                            job_posting_ids = company.job_posting_ids;
+                            reviews_ids = updatedReviews;
+                            timestamp = company.timestamp;
+                            seen = company.seen;
+                        };
+                        companies.put(company.id, updatedCompany);
+                        return #ok();
+                    };
+                };
+            };
+        };
+    }
 };

@@ -1,10 +1,10 @@
 import useLocalStorage from "./useLocalStorage";
-import {User} from "../../../../.dfx/local/canisters/HireVerse_backend/service.did";
-import {AuthClient} from "@dfinity/auth-client";
-import {useCallback, useEffect} from "react";
-import {Agent, HttpAgent} from "@dfinity/agent";
+import { User } from "../../../../.dfx/local/canisters/HireVerse_backend/service.did";
+import { AuthClient } from "@dfinity/auth-client";
+import { useCallback, useEffect } from "react";
 import useService from "./useService";
-import {canisterId as internetIdentityCanisterId} from "../../../declarations/internet_identity";
+import { canisterId as internetIdentityCanisterId } from "../../../declarations/internet_identity";
+import { useQueryClient } from "@tanstack/react-query";
 
 export enum AuthState {
     Authenticated = "Authenticated",
@@ -14,7 +14,8 @@ export enum AuthState {
 }
 
 export default function useAuth() {
-    const {getBackendService} = useService();
+    const queryClient = useQueryClient();
+    const { getBackendService } = useService();
     const [authState, setAuthState] = useLocalStorage<AuthState>(
         "authState",
         AuthState.Loading,
@@ -35,25 +36,19 @@ export default function useAuth() {
             setAuthState(AuthState.Loading);
 
             // @ts-ignore
-            const agent = new HttpAgent({identity: identity}) as Agent;
-            await agent.fetchRootKey();
+            // const agent = new HttpAgent({ identity: identity }) as Agent;
+            // await agent.fetchRootKey();
 
-            const userData = await getBackendService().then((s) =>
-                s.getUser(identity.getPrincipal()),
-            );
+            const getUserFunc = async () =>
+                await getBackendService().then((s) =>
+                    s.getUser(identity.getPrincipal()),
+                );
 
-            // console.log("Fetching Data for");
-            // console.log(
-            //     "Greet: ",
-            //     await getBackendService().then((s) => s.greet()),
-            // );
-            // console.log("Identity Principal: ", identity.getPrincipal());
-            // console.log("User Data: ", userData);
-            //
-            // console.log(
-            //     "All registered users: ",
-            //     await getBackendService().then((s) => s.getAllUsers()),
-            // );
+            const userData = await queryClient.fetchQuery({
+                queryKey: ["user", identity.getPrincipal()],
+                queryFn: getUserFunc,
+            });
+
             if (userData.length > 0) {
                 setUser(userData[0]!);
                 setAuthState(AuthState.Authenticated);
@@ -86,6 +81,8 @@ export default function useAuth() {
             const returnValue = await getBackendService().then((s) =>
                 s.register(first_name, last_name, email, date),
             );
+
+            //TODO ADD VALIDATION
             await fetchUserData();
             // console.log("Return value dari register: ", returnValue);
         },

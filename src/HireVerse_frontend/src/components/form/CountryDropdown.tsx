@@ -3,7 +3,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FaCheck } from "react-icons/fa";
 import { Control, Controller } from "react-hook-form";
-import useService from "../../hooks/useService";
+import { useGetCompanyCountries } from "../../datas/queries/companyQueries";
 
 interface Props {
     control: Control<any>;
@@ -12,15 +12,19 @@ interface Props {
 }
 
 export default function CountryDropdown({ control, name, onChange }: Props) {
-    const [countries, setCountries] = useState<string[]>([]);
+    const { data: countries } = useGetCompanyCountries();
     const [query, setQuery] = useState("");
     const [selected, setSelected] = useState({});
-    const { getCompanyService } = useService();
 
     const filteredCountries = useMemo(() => {
+        if (!countries) {
+            return [];
+        }
+
         if (query === "") {
             return countries;
         }
+
         return countries.filter((country) =>
             country
                 .toLowerCase()
@@ -29,18 +33,11 @@ export default function CountryDropdown({ control, name, onChange }: Props) {
         );
     }, [query, countries]);
 
-    const getInitialCountries = async () => {
-        const response = await getCompanyService().then((s) =>
-            s.getCompanyCountries(),
-        );
-        setCountries(response);
-        setSelected(response[0]);
-        console.log(response);
-    };
-
     useEffect(() => {
-        getInitialCountries();
-    }, []);
+        if (countries) {
+            setSelected(countries[0]);
+        }
+    }, [countries]);
 
     return (
         <div className="top-16 w-72 border-0">
