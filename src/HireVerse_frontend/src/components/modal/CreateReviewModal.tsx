@@ -7,7 +7,7 @@ import useRichTextEditor from "../../hooks/useRichTextEditor";
 import DynamicInputBox from "../form/DynamicInputBox";
 import { MdAdd } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
-import WrappedStarReview from "../form/WrappedStarReview";
+import WrappedControlledStarReview from "../form/WrappedControlledStarReview";
 import { CONSTANTS } from "../../utils/constants";
 import WrappedRadioGroup from "../form/WrappedRadioGroup";
 import { useAddReview } from "../../datas/mutations/reviewMutations";
@@ -106,7 +106,7 @@ export default function CreateReviewModal() {
             });
             return;
         }
-        console.log(data.pros, data.cons);
+
         for (const pro of data.pros) {
             if (pro.message === "") {
                 errorToast({
@@ -235,6 +235,7 @@ export default function CreateReviewModal() {
                     <div className="flex h-full flex-col rounded-md">
                         <div className="font-bold pb-2">Pros</div>
                         <DynamicInputBox
+                            key="pros"
                             fields={fieldsPros}
                             register={register}
                             remove={removePros}
@@ -268,6 +269,7 @@ export default function CreateReviewModal() {
                     <div className="flex h-full flex-col rounded-md">
                         <div className="font-bold pb-2">Cons</div>
                         <DynamicInputBox
+                            key="cons"
                             fields={fieldsCons}
                             register={register}
                             remove={removeCons}
@@ -304,11 +306,11 @@ export default function CreateReviewModal() {
                         Rate the company culture
                     </div>
                     <div className="flex flex-row h-full items-center gap-3 rounded-md">
-                        <WrappedStarReview
+                        <WrappedControlledStarReview
+                            control={control}
                             name="cultureRating"
                             textValues={CONSTANTS.REVIEWS.CULTURE}
                             className="has-[svg]:w-72 [&_div]:border-[1px] [&_div]:border-gray-200 [&_div]:rounded-md [&_div]:p-1.5 [&_div:hover]:bg-gray-200 [&_div]:transition-colors gap-2"
-                            control={control}
                         />
                     </div>
                 </div>
@@ -317,11 +319,11 @@ export default function CreateReviewModal() {
                         Rate the company work-life balance
                     </div>
                     <div className="flex flex-row h-full items-center gap-3 rounded-md">
-                        <WrappedStarReview
+                        <WrappedControlledStarReview
+                            control={control}
                             name="workLifeBalanceRating"
                             textValues={CONSTANTS.REVIEWS.WORKLIFE_BALANCE}
                             className="has-[svg]:w-72 [&_div]:border-[1px] [&_div]:border-gray-200 [&_div]:rounded-md [&_div]:p-1.5 [&_div:hover]:bg-gray-200 [&_div]:transition-colors gap-2"
-                            control={control}
                         />
                     </div>
                 </div>
@@ -330,11 +332,11 @@ export default function CreateReviewModal() {
                         Rate the company senior management
                     </div>
                     <div className="flex flex-row h-full items-center gap-3 rounded-md">
-                        <WrappedStarReview
+                        <WrappedControlledStarReview
+                            control={control}
                             name="seniorManagementRating"
                             textValues={CONSTANTS.REVIEWS.SENIOR_MANAGEMENT}
                             className="has-[svg]:w-72 [&_div]:border-[1px] [&_div]:border-gray-200 [&_div]:rounded-md [&_div]:p-1.5 [&_div:hover]:bg-gray-200 [&_div]:transition-colors gap-2"
-                            control={control}
                         />
                     </div>
                 </div>

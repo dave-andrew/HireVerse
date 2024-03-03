@@ -149,6 +149,7 @@ export default function CompanyDetail() {
                                             (contact, i) => {
                                                 return (
                                                     <SocialMediaItem
+                                                        key={i}
                                                         url={contact}
                                                     />
                                                 );

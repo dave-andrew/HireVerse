@@ -8,7 +8,7 @@ export function useGetCompanyIndustries(companyId: string | undefined) {
         queryKey: ["companyIndustries", companyId],
         queryFn: async () => {
             if (!companyId) {
-                return;
+                return null;
             }
 
             const result = await getJobService().then((s) =>
@@ -18,6 +18,8 @@ export function useGetCompanyIndustries(companyId: string | undefined) {
             if (isOk(result)) {
                 return result.ok;
             }
+
+            return null;
         },
         enabled: !!companyId,
     });

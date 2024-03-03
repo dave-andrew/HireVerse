@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Rating } from "@smastrom/react-rating";
 import CircularRating from "../rating/CircularRating";
 import RatingBar from "../rating/RatingBar";
+import CompanyReviewItem from "../review/CompanyReviewItem";
 
 interface Props {
     companyId: string;
@@ -41,25 +42,11 @@ export default function CompanyReviewSummary({ companyId }: Props) {
                 </div>
             </div>
 
-            <div className="flex flex-1 flex-row justify-evenly">
-                <div className="w-1/2">
+            <div className="flex flex-1 flex-row">
+                <div className="flex flex-col w-full gap-5">
                     <h3 className="py-5 text-3xl font-bold">Positives</h3>
-                    {Array.from({ length: 3 }).map((_, i) => (
-                        <p
-                            key={i}
-                            className="text-gray-500">
-                            The company has a nobol
-                        </p>
-                    ))}
-                </div>
-                <div className="w-1/2">
-                    <h3 className="py-5 text-3xl font-bold">Negatives</h3>
-                    {Array.from({ length: 3 }).map((_, i) => (
-                        <p
-                            key={i}
-                            className="text-gray-500">
-                            The company has a vincent tanjaya
-                        </p>
+                    {Array.from({ length: 4 }).map((_, i) => (
+                        <CompanyReviewItem />
                     ))}
                 </div>
             </div>

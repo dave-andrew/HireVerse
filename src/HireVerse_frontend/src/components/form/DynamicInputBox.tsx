@@ -3,7 +3,7 @@ import {
     UseFieldArrayRemove,
     UseFormRegister,
 } from "react-hook-form";
-import { ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 
 interface Props {
     className?: string;
@@ -29,7 +29,7 @@ export default function DynamicInputBox({
     inputName,
 }: Props) {
     return (
-        <>
+        <Fragment key="t">
             {fields.map((field, index) => (
                 <div className={className}>
                     <input
@@ -42,6 +42,6 @@ export default function DynamicInputBox({
                 </div>
             ))}
             {addButton}
-        </>
+        </Fragment>
     );
 }
