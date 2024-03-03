@@ -250,14 +250,11 @@ actor Company {
         ) != null;
     };
 
-    public shared (msg) func inviteManager(company_id : Text, user_id : Principal, inviter_id : Principal) : async Result.Result<Invite, Text> {
+    public shared (msg) func createInvitation(user_id : Principal, company_id : Text) : async Result.Result<Invite, Text> {
+        let inviter_id = msg.caller;
 
         if (Principal.isAnonymous(inviter_id)) {
-            return #err("Inviter not authorized");
-        };
-
-        if (Principal.isAnonymous(user_id)) {
-            return #err("Client not authorized");
+            return #err("Not authorized");
         };
 
         let company = await getCompany(company_id);
@@ -266,25 +263,51 @@ actor Company {
             case (#err(msg)) {
                 return #err("Company not found");
             };
-            case (#ok(company)) {
+            case (#ok(c)) {
+                let isManager : Bool = await checkCompanyManager(c, inviter_id);
 
-                let isManager : Bool = await checkCompanyManager(company, user_id);
                 if (not isManager) {
                     return #err("User is not a manager of the company");
                 };
 
-                let id = await Helper.generateUUID();
                 let invite = {
-                    id = id;
+                    id = await Helper.generateUUID();
                     company_id = company_id;
                     user_id = user_id;
                     inviter_id = inviter_id;
                     timestamp = Time.now();
                 };
 
-                invitations.put(id, invite);
+                invitations.put(invite.id, invite);
 
                 return #ok(invite);
+            };
+        };
+    };
+
+    public shared (msg) func inviteManager(user_email : Text, company_id : Text) : async Result.Result<Invite, Text> {
+
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err("You are not authorized");
+        };
+
+        let user_id = await User.getUserByEmail(user_email);
+
+        switch (user_id) {
+            case (#err(msg)) {
+                return #err("User not found");
+            };
+            case (#ok(u)) {
+                let inviter_id = msg.caller;
+                let invite = await createInvitation(u, company_id);
+                switch (invite) {
+                    case (#err(msg)) {
+                        return #err(msg);
+                    };
+                    case (#ok(i)) {
+                        return #ok(i);
+                    };
+                };
             };
         };
     };
@@ -353,6 +376,32 @@ actor Company {
         };
     };
 
+    public shared (msg) func acceptInvitation(invitation_id : Text) : async Result.Result<(), Text> {
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Not authorized");
+        };
+
+        let invite = invitations.get(invitation_id);
+
+        switch (invite) {
+            case null {
+                return #err("Invite not found");
+            };
+            case (?i) {
+                if (i.user_id != user_id) {
+                    return #err("Not authorized");
+                };
+
+                let result = addManager(i.company_id);
+
+                let removedInvitation = invitations.remove(invitation_id);
+                return #ok();
+            };
+        };
+    };
+
     public shared (msg) func addManager(company_id : Text) : async Result.Result<(), Text> {
         let user_id = msg.caller;
 
@@ -398,6 +447,7 @@ actor Company {
             };
         };
     };
+    
     public shared composite query func getManagersFromCompany(company_id : Text) : async Result.Result<[User.User], Text> {
         let companies = await getCompany(company_id);
         Debug.print(company_id);

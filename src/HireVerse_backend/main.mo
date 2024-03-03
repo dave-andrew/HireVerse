@@ -51,6 +51,12 @@ actor Database {
             return #err("User already exists");
         };
 
+        for (user in users.vals()) {
+            if (user.email == email) {
+                return #err("Email already exists");
+            };
+        };
+
         let user = {
             internet_identity = user_id;
             first_name = first_name;
@@ -103,5 +109,15 @@ actor Database {
         };
 
         return #ok(Vector.toArray(allUsers));
+    };
+
+    public query func getUserByEmail(user_email: Text) : async Result.Result<Principal, Text> {
+        for (user in users.vals()) {
+            if (user.email == user_email) {
+                return #ok(user.internet_identity);
+            };
+        };
+
+        return #err("User not found");
     };
 };
