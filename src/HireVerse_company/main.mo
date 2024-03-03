@@ -4,7 +4,7 @@ import Nat "mo:base/Nat";
 import Text "mo:base/Text";
 import Blob "mo:base/Blob";
 import Iter "mo:base/Iter";
-import Debug "mo:base/Debug"; 
+import Debug "mo:base/Debug";
 import Array "mo:base/Array";
 import Bool "mo:base/Bool";
 import Time "mo:base/Time";
@@ -400,7 +400,7 @@ actor Company {
     };
     public shared composite query func getManagersFromCompany(company_id : Text) : async Result.Result<[User.User], Text> {
         let companies = await getCompany(company_id);
-
+        Debug.print(company_id);
         switch (companies) {
             case (#err(msg)) {
                 return #err("Company not found");
@@ -409,11 +409,11 @@ actor Company {
                 let manager_ids = company.company_manager_ids;
                 var managers = Vector.Vector<User.User>();
 
-                label l for (manager_id in manager_ids.vals()) {
+                for (manager_id in manager_ids.vals()) {
                     let manager : ?User.User = await User.getUser(Principal.fromText(manager_id));
                     switch (manager) {
                         case null {
-                            continue l;
+                            return #err("Manager not found");
                         };
                         case (?m) {
                             managers.add(m);
@@ -421,7 +421,7 @@ actor Company {
                     };
                 };
 
-                #ok(Vector.toArray<User.User>(managers));
+                return #ok(Vector.toArray<User.User>(managers));
             };
         };
     };
@@ -534,7 +534,7 @@ actor Company {
         };
     };
 
-    public shared (msg) func addReview(review: Review.CreateReviewInput) : async Result.Result<(), Text> {
+    public shared (msg) func addReview(review : Review.CreateReviewInput) : async Result.Result<(), Text> {
         let user_id = msg.caller;
 
         if (Principal.isAnonymous(user_id)) {
@@ -581,5 +581,5 @@ actor Company {
                 };
             };
         };
-    }
+    };
 };

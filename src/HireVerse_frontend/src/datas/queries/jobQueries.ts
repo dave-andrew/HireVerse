@@ -115,6 +115,31 @@ export function useGetJobIndustries() {
     });
 }
 
+export function useGetManagersFromCompany(
+    companyId: string | undefined,
+    // getValues: () => IQuerySortForm
+) {
+    const { getCompanyService } = useService();
+    return useQuery({
+        queryKey: ["managers", companyId],
+        queryFn: async () => {
+            if (!companyId) {
+                return null;
+            }
+
+            const response = await getCompanyService().then((s) =>
+                s.getManagersFromCompany(companyId),
+            );
+
+            if (isOk(response)) {
+                return response.ok;
+            }
+            return null;
+        },
+        enabled: !!companyId && companyId.length > 0,
+    });
+}
+
 export function useGetJobPostedByCompany(
     companyId: string | undefined,
     getValues: () => IQuerySortForm,

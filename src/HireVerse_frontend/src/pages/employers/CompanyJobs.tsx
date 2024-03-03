@@ -172,7 +172,7 @@ export default function CompanyJobs() {
                         </div>
                         <div className="grid grid-cols-3 gap-4">
                             {Array.from({ length: 5 }).map((_, index) => (
-                                <>
+                                <div key={index}>
                                     {jobs?.map((job, index) => (
                                         <JobItemManagement
                                             key={index}
@@ -183,7 +183,7 @@ export default function CompanyJobs() {
                                             }
                                         />
                                     ))}
-                                </>
+                                </div>
                             ))}
                         </div>
                     </div>

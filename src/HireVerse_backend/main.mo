@@ -69,10 +69,6 @@ actor Database {
 
     public query (msg) func getUser(principal : Principal) : async ?User {
 
-        if (principal != msg.caller) {
-            return null;
-        };
-
         return users.get(principal);
     };
 
