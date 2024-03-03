@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Rating } from "@smastrom/react-rating";
 import CircularRating from "../rating/CircularRating";
 import RatingBar from "../rating/RatingBar";
 
-export default function CompanyReviewSummary() {
-    const [rating, setRating] = React.useState(3);
+interface Props {
+    reviewId: string;
+}
+
+export default function CompanyReviewSummary({ reviewId }: Props) {
+    const [rating, setRating] = useState(3);
 
     return (
         <div className="flex flex-col gap-10">

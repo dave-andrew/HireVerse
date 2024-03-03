@@ -14,7 +14,7 @@ export function useGetFullJob(jobId: string | undefined) {
         queryKey: ["fullJob", jobId],
         queryFn: async () => {
             if (!jobId) {
-                return;
+                return null;
             }
 
             const response = await getJobService().then((s) =>

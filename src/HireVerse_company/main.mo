@@ -4,7 +4,7 @@ import Nat "mo:base/Nat";
 import Text "mo:base/Text";
 import Blob "mo:base/Blob";
 import Iter "mo:base/Iter";
-import Debug "mo:base/Debug";
+import Debug "mo:base/Debug"; 
 import Array "mo:base/Array";
 import Bool "mo:base/Bool";
 import Time "mo:base/Time";
@@ -541,7 +541,7 @@ actor Company {
             return #err("Not authorized");
         };
 
-        let company = await getCompany(review.company_id);
+        let company = await getCompany(review.companyId);
 
         switch (company) {
             case (#err(msg)) {

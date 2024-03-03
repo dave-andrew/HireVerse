@@ -287,4 +287,28 @@ export const CONSTANTS = {
     PRINCIPAL: {
         ANONYMOUS: "2vxsx-fae",
     },
+    REVIEWS: {
+        CULTURE: [
+            "Toxic: Unhealthy environment",
+            "Poor: Subpar culture",
+            "Average: Room for improvement",
+            "Good: Supportive atmosphere",
+            "Excellent: Thriving, valued employees",
+        ],
+        WORKLIFE_BALANCE: [
+            "Poor: Bad place to be in",
+            "Fair: Could be better",
+            "Average: Balances work and personal life",
+            "Good: Provides a healthy balance",
+            "Excellent: Exceptional work-life balance",
+        ],
+        SENIOR_MANAGEMENT: [
+            "Poor: Disconnected from employees",
+            "Fair: Needs improvement in communication",
+            "Average: Provides adequate direction",
+            "Good: Supportive and communicative",
+            "Excellent: Inspiring and effective leadership",
+        ],
+        RECOMMEND_TO_FRIEND: ["Yes", "No"],
+    },
 };

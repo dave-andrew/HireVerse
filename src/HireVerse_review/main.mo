@@ -5,37 +5,38 @@ import Nat "mo:base/Nat";
 import Time "mo:base/Time";
 import Result "mo:base/Result";
 import Iter "mo:base/Iter";
+import Array "mo:base/Array";
 import Helper "canister:HireVerse_helper";
+import Vector "mo:vector/Class";
 
 actor Review {
     type Review = {
         id : Text;
-        employer_id : Principal;
-        employer_name : Text;
-        career_opportunities : Nat;
-        compensation_benefits_rating : Nat;
-        culture_values_rating : Nat;
-        senior_management_rating : Nat;
-        work_life_balance_rating : Nat;
-        general_comment : Nat;
-        pros : Text;
-        cons : Text;
-        company_id : Text;
+        userId : Text;
+        title : Text;
+        isAnonymous : Bool;
+        cultureRating : Nat;
+        seniorManagementRating : Nat;
+        workLifeBalanceRating : Nat;
+        recommendToFriend : Bool;
+        generalComments : Text;
+        pros : [Text];
+        cons : [Text];
+        companyId : Text;
         timestamp : Time.Time;
     };
 
     type CreateReviewInput = {
-        employer_id : Principal;
-        employer_name : Text;
-        career_opportunities : Nat;
-        compensation_benefits_rating : Nat;
-        culture_values_rating : Nat;
-        senior_management_rating : Nat;
-        work_life_balance_rating : Nat;
-        general_comment : Nat;
-        pros : Text;
-        cons : Text;
-        company_id : Text;
+        title : Text;
+        isAnonymous : Bool;
+        cultureRating : Nat;
+        seniorManagementRating : Nat;
+        workLifeBalanceRating : Nat;
+        recommendToFriend : Bool;
+        generalComments : Text;
+        pros : [Text];
+        cons : [Text];
+        companyId : Text;
     };
 
     let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
@@ -50,17 +51,17 @@ actor Review {
 
         let review = {
             id = id;
-            employer_id = newReview.employer_id;
-            employer_name = newReview.employer_name;
-            career_opportunities = newReview.career_opportunities;
-            compensation_benefits_rating = newReview.compensation_benefits_rating;
-            culture_values_rating = newReview.culture_values_rating;
-            senior_management_rating = newReview.senior_management_rating;
-            work_life_balance_rating = newReview.work_life_balance_rating;
-            general_comment = newReview.general_comment;
+            userId = Principal.toText(msg.caller);
+            title = newReview.title;
+            isAnonymous = newReview.isAnonymous;
+            cultureRating = newReview.cultureRating;
+            seniorManagementRating = newReview.seniorManagementRating;
+            workLifeBalanceRating = newReview.workLifeBalanceRating;
+            recommendToFriend = newReview.recommendToFriend;
+            generalComments = newReview.generalComments;
             pros = newReview.pros;
             cons = newReview.cons;
-            company_id = newReview.company_id;
+            companyId = newReview.companyId;
             timestamp = Time.now();
         };
 
@@ -74,7 +75,7 @@ actor Review {
             return #err("You must be logged in to update a review");
         };
 
-        if (review.employer_id != msg.caller) {
+        if (review.userId != Principal.toText(msg.caller)) {
             return #err("You are not authorized to update this review");
         };
 
@@ -92,7 +93,7 @@ actor Review {
 
         switch (review) {
             case (?r) {
-                if (r.employer_id != msg.caller) {
+                if (r.userId != Principal.toText(msg.caller)) {
                     return #err("You are not authorized to update this review");
                 };
             };
@@ -115,6 +116,26 @@ actor Review {
                 return #err("Review not found");
             };
         };
+    };
+
+    public func getReviews(reviewsId : [Text]) : async Result.Result<[Review], Text> {
+        let reviewsList = Vector.Vector<Review>();
+
+        for (id in Iter.fromArray(reviewsId)) {
+            let data = reviews.get(id);
+
+            switch (data) {
+                case (?review) {
+                    reviewsList.add(review);
+                };
+                case (null) {
+                    
+                };
+            };
+        };
+
+        return #ok(Vector.toArray(reviewsList));
+
     };
 
     public shared (msg) func removeAllReviews() : async () {
