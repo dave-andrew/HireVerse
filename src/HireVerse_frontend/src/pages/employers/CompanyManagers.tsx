@@ -68,7 +68,6 @@ export default function CompanyManagers() {
                         <input
                             type="checkbox"
                             value=""
-                            checked={true}
                             className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
                         />
                         <label className="w-[80%] font-medium text-gray-900">

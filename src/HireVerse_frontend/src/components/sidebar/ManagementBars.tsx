@@ -40,13 +40,13 @@ const defaultMenu: Menu[] = [
         name: "Managers",
         activeUrl: ["/employer/managers"],
         redirectUrl: "/employer/managers",
-        icon: RiSuitcase2Line,
+        icon: RiUser3Line,
     },
     {
         name: "Jobs",
         activeUrl: ["/employer/jobs"],
         redirectUrl: "/employer/jobs",
-        icon: RiUser3Line,
+        icon: RiSuitcase2Line,
     },
 ];
 
@@ -165,7 +165,8 @@ export default function ManagementBars({ children }: Props) {
                  transition-all duration-500 ease-in-out
                  `}>
                     <div className="flex w-full flex-col gap-8">
-                        <div className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
+                        <div
+                            className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
                             H
                             <span
                                 className={`${isHovered ? "block" : "hidden"}`}>
