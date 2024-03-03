@@ -4,8 +4,8 @@ import { IoMdClose } from "react-icons/io";
 
 export default function InvitationItem() {
     return (
-        <div className="relative flex h-80 w-64 flex-col gap-2 rounded-md border border-gray-200">
-            <div className="mt-36 flex flex-col gap-6 p-4">
+        <div className="flex flex-col gap-2 rounded-md border border-gray-200 w-64 h-80 relative shadow-md">
+            <div className="flex flex-col gap-6 mt-36 p-4">
                 <div className="flex flex-col gap-2">
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap text-center text-xl font-bold">
                         NVIDIA Corporation asdfjsadhfg

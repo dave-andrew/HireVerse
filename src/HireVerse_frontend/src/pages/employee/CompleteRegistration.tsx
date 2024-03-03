@@ -30,6 +30,7 @@ export default function CompleteRegistration() {
             data.email,
             data.birthDate,
         );
+        window.location.reload()
     };
 
     return (

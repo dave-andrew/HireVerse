@@ -11,15 +11,14 @@ interface Props {
 }
 
 export default function InvitationModal({
-    openState,
-    setOpenState,
-    onJobCreated,
-}: Props) {
-    // const isOverflowing = 90
+                                            openState,
+                                            setOpenState,
+                                            onJobCreated,
+                                        }: Props) {
 
     return (
         <WrappedModal
-            panelClassName="!max-w-none !rounded-xl !w-[40vw] !min-w-[600px] !p-10"
+            panelClassName="!max-w-none !rounded-xl !w-[92vw] !p-10"
             isOpen={openState}
             setIsOpen={setOpenState}
             title={
@@ -39,7 +38,6 @@ export default function InvitationModal({
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />
-                <div></div>
             </div>
         </WrappedModal>
     );

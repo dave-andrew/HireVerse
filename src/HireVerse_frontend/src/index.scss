@@ -136,7 +136,7 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 2px; /* Width of the entire scrollbar */
+  height: 2px;
 }
 
 .card-scollbar::-webkit-scrollbar-thumb {
@@ -144,6 +144,16 @@ html {
   border-radius: 10px;
 }
 
+
+.scroll-box {
+
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
 
 .main-button {
   background-color: #ffd166;
