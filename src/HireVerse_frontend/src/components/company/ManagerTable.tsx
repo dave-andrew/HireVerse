@@ -60,7 +60,7 @@ export default function ManagerTable() {
                 </tr>
                 </thead>
                 <tbody>
-                {managerData.map((manager, index) => {
+                {managerData?.map((manager, index) => {
                     return (
                         <tr
                             key={index}
