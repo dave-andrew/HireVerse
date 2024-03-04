@@ -426,6 +426,46 @@ actor Company {
         };
     };
 
+    public shared func addManagerInvitation(company_id : Text, user_id : Principal) : async Result.Result<(), Text> {
+        let company = await getCompany(company_id);
+
+        switch (company) {
+            case (#err(msg)) {
+                return #err("Company not found");
+            };
+            case (#ok(company)) {
+
+                let isManager : Bool = await checkCompanyManager(company, user_id);
+
+                if (isManager) {
+                    return #err("User is already the manager!");
+                };
+
+                let manager_ids = company.company_manager_ids;
+                let updatedManagerIds = Array.append<Text>(manager_ids, [Principal.toText(user_id)]);
+
+                let updatedCompany = {
+                    id = company_id;
+                    name = company.name;
+                    founded_year = company.founded_year;
+                    profile = company.profile;
+                    founded_country = company.founded_country;
+                    office_locations = company.office_locations;
+                    social_medias = company.social_medias;
+                    image = company.image;
+                    linkedin = company.linkedin;
+                    company_manager_ids = updatedManagerIds;
+                    job_posting_ids = company.job_posting_ids;
+                    reviews_ids = company.reviews_ids;
+                    timestamp = company.timestamp;
+                    seen = company.seen;
+                };
+                companies.put(company_id, updatedCompany);
+                return #ok();
+            };
+        };
+    };
+
     public shared (msg) func acceptInvitation(invitation_id : Text) : async Result.Result<(), Text> {
         let user_id = msg.caller;
 
@@ -444,7 +484,7 @@ actor Company {
                     return #err("Not authorized");
                 };
 
-                let result = addManager(i.company_id);
+                let result = await addManagerInvitation(i.company_id, i.user_id);
 
                 let removedInvitation = invitations.remove(invitation_id);
                 return #ok();
