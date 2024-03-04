@@ -310,5 +310,6 @@ export const CONSTANTS = {
             "Excellent: Inspiring and effective leadership",
         ],
         RECOMMEND_TO_FRIEND: ["Yes", "No"],
+        ORDER_BY: ["Newest", "Oldest", "Highest Rating", "Lowest Rating"],
     },
 };

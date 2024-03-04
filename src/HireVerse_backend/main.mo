@@ -111,10 +111,20 @@ actor Database {
         return #ok(Vector.toArray(allUsers));
     };
 
-    public query func getUserByEmail(user_email: Text) : async Result.Result<Principal, Text> {
+    public query func getUserByEmail(user_email : Text) : async Result.Result<Principal, Text> {
         for (user in users.vals()) {
             if (user.email == user_email) {
                 return #ok(user.internet_identity);
+            };
+        };
+
+        return #err("User not found");
+    };
+
+    public query func getUserObjectByEmail(user_email : Text) : async Result.Result<User, Text> {
+        for (user in users.vals()) {
+            if (user.email == user_email) {
+                return #ok(user);
             };
         };
 

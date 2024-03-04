@@ -1,15 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import { isOk } from "../../utils/resultGuarder";
+import {useQuery} from "@tanstack/react-query";
+import {isOk} from "../../utils/resultGuarder";
 import useService from "../../hooks/useService";
-import { IFilterForm } from "../../components/form/JobFilter";
-import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
+import {IFilterForm} from "../../components/form/JobFilter";
+import {JobFilterInput} from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 import convertNullFormat from "../../utils/convertNullFormat";
-import { IQueryFilterSortForm } from "../../pages/employee/FindJobsPage";
-import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import { IQuerySortForm } from "../../pages/employers/CompanyJobs";
+import {IQueryFilterSortForm} from "../../pages/employee/FindJobsPage";
+import {JobManagerFilterInput} from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import {IQuerySortForm} from "../../pages/employers/CompanyJobs";
+import {Principal} from "@dfinity/principal";
 
-export function useGetFullJob(jobId: string | undefined) {
-    const { getJobService } = useService();
+export function useQueryFullJob(jobId: string | undefined) {
+    const {getJobService} = useService();
     return useQuery({
         queryKey: ["fullJob", jobId],
         queryFn: async () => {
@@ -30,11 +31,11 @@ export function useGetFullJob(jobId: string | undefined) {
     });
 }
 
-export function useGetFilteredJobs(
+export function useQueryFilteredJobs(
     filters: IFilterForm,
     getQueryFilters: () => IQueryFilterSortForm,
 ) {
-    const { getJobService } = useService();
+    const {getJobService} = useService();
 
     const getConvertedFilters = () => {
         const queryFilters = getQueryFilters();
@@ -77,11 +78,11 @@ export function useGetFilteredJobs(
     });
 }
 
-export function useGetCompanyNames(
+export function useQueryCompanyNames(
     companyIds: string[],
     autoFetch: boolean = false,
 ) {
-    const { getCompanyService } = useService();
+    const {getCompanyService} = useService();
     return useQuery({
         queryKey: ["companyNames", companyIds.toString()],
         queryFn: async () => {
@@ -98,8 +99,8 @@ export function useGetCompanyNames(
     });
 }
 
-export function useGetJobIndustries() {
-    const { getJobService } = useService();
+export function useQueryJobIndustries() {
+    const {getJobService} = useService();
     return useQuery({
         queryKey: ["jobIndustries"],
         queryFn: async () => {
@@ -115,11 +116,31 @@ export function useGetJobIndustries() {
     });
 }
 
-export function useGetManagersFromCompany(
+
+export function useQueryGetUserObjectByEmail(email: string) {
+    const {getBackendService} = useService();
+    return useQuery({
+        queryKey: ["user", email],
+        queryFn: async () => {
+            const response = await getBackendService().then((s) =>
+                s.getUserObjectByEmail(email),
+            );
+
+            if (isOk(response)) {
+                return response.ok;
+            } else {
+                throw new Error("User not found");
+            }
+        },
+        enabled: email.length > 0,
+    });
+}
+
+export function useQueryManagersFromCompany(
     companyId: string | undefined,
     // getValues: () => IQuerySortForm
 ) {
-    const { getCompanyService } = useService();
+    const {getCompanyService} = useService();
     return useQuery({
         queryKey: ["managers", companyId],
         queryFn: async () => {
@@ -140,11 +161,11 @@ export function useGetManagersFromCompany(
     });
 }
 
-export function useGetJobPostedByCompany(
+export function useQueryJobPostedByCompany(
     companyId: string | undefined,
     getValues: () => IQuerySortForm,
 ) {
-    const { getJobService } = useService();
+    const {getJobService} = useService();
 
     const getConvertedFilters = () => {
         const values = getValues();

@@ -1,14 +1,14 @@
 import CardLayout from "../../layouts/CardLayout";
 import { useEffect } from "react";
 import JobDetailSkeleton from "./JobDetailSkeleton";
-import { useGetFullJob } from "../../datas/queries/jobQueries";
+import { useQueryFullJob } from "../../datas/queries/jobQueries";
 
 interface Props {
     jobId: string;
 }
 
 export default function JobDetail({ jobId }: Props) {
-    const { data: fullJob, isLoading, refetch } = useGetFullJob(jobId);
+    const { data: fullJob, isLoading, refetch } = useQueryFullJob(jobId);
 
     useEffect(() => {
         refetch();

@@ -13,8 +13,8 @@ import { CONSTANTS } from "../../utils/constants";
 import handleKeyDown from "../../utils/handleKeyDown";
 import JobItemSkeleton from "../../components/job/JobItemSkeleton";
 import {
-    useGetCompanyNames,
-    useGetFilteredJobs,
+    useQueryCompanyNames,
+    useQueryFilteredJobs,
 } from "../../datas/queries/jobQueries";
 
 export interface IQueryFilterSortForm {
@@ -40,14 +40,12 @@ export default function FindJobs() {
         datePosted: "",
         currency: "",
     });
-    const { data: jobs, refetch: getFilteredJobs } = useGetFilteredJobs(
+    const { data: jobs, refetch: getFilteredJobs } = useQueryFilteredJobs(
         filter,
         getValues,
     );
-    const { data: companyNames, refetch: getCompanyNames } = useGetCompanyNames(
-        jobs?.map((job) => job.company_id) ?? [],
-        false,
-    );
+    const { data: companyNames, refetch: getCompanyNames } =
+        useQueryCompanyNames(jobs?.map((job) => job.company_id) ?? [], false);
     const [shownJobId, setShownJobId] = useState<string>("");
 
     useEffect(() => {

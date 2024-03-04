@@ -1,45 +1,93 @@
 import { BsLinkedin } from "react-icons/bs";
 import { BiCheck } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
+import {CompanyInvitation} from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import imageHandler from "../../utils/imageHandler";
+import {useRemoveInvitation, useAcceptInvitation} from "../../datas/mutations/companyMutations";
+import {useState} from "react";
 
-export default function InvitationItem() {
+
+export default function InvitationItem({invitation, refetch}: {invitation: CompanyInvitation, refetch: () => void}) {
+
+    const mutation = useRemoveInvitation()
+    const acceptMutation = useAcceptInvitation()
+    const [isLoading, setIsLoading] = useState(false)
+    const removeInvitation = () => {
+        setIsLoading(true)
+        mutation.mutate(invitation.invite.id, {
+            onSuccess: () => {
+                console.log("Success rejecting invitation")
+                refetch()
+                setIsLoading(false)
+            },
+            onError: (error) => {
+                console.error(error)
+                setIsLoading(false)
+            }
+        })
+    }
+
+    const acceptInvitation = () => {
+        setIsLoading(true)
+        acceptMutation.mutate(invitation.invite.id, {
+            onSuccess: () => {
+                setIsLoading(false)
+                console.log("Success accepting invitation")
+                refetch()
+            },
+            onError: (error) => {
+                setIsLoading(false)
+                console.error(error)
+            }
+        })
+    }
+
     return (
-        <div className="flex flex-col gap-2 rounded-md border border-gray-200 w-64 h-80 relative shadow-md justify-center">
-            <div className="absolute bg-[url(public/backgrounds/subtle-prism.svg)] h-24 top-0 w-full z-[-10]"> </div>
-            <div className="text-center w-full flex justify-center place-items-center pt-6">
+        <div className="relative flex h-80 w-64 flex-col justify-center gap-2 rounded-md border border-gray-200 shadow-md">
+            <div className="absolute top-0 z-[-10] h-24 w-full bg-[url(public/backgrounds/subtle-prism.svg)]">
+                {" "}
+            </div>
+            <div className="flex w-full place-items-center justify-center pt-6 text-center">
                 {/* Company Profile Image */}
                 <img
                     alt="Company Logo"
                     width="120rem"
                     height="auto"
-                    className="aspect-square shadow-md rounded-full overflow-hidden border border-gray-200 bg-white"
-                    src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"
+                    className="aspect-square overflow-hidden rounded-full border border-gray-200 bg-white shadow-md"
+                    src={imageHandler(invitation.company.image)}
                 />
             </div>
             <div className="flex flex-col gap-6 p-4">
                 <div className="flex flex-col gap-2">
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap text-center text-xl font-bold">
-                        NVIDIA Corporation asdfjsadhfg
+                        {invitation.company.name}
                     </div>
                     <div className="flex flex-col place-items-center">
                         <div className="flex flex-row place-items-center justify-center gap-2 text-sm font-bold">
                             <div className="text-blue-800">
                                 <BsLinkedin />
                             </div>
-                            in/binus-university
+                            {invitation.company.linkedin}
+                            {invitation.invite.id}
                         </div>
                         <div className="text-sm text-gray-600">
-                            Jakarta, 2004
+                            {invitation.company.founded_country}, {invitation.company.founded_year.toString()}
                         </div>
                     </div>
                 </div>
 
                 <div className="flex flex-row justify-center gap-2">
-                    <button className="flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-green-700 hover:bg-green-100 hover:text-green-900">
+                    <button
+                        disabled={isLoading}
+                        onClick={acceptInvitation}
+                        className="flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-green-700 hover:bg-green-100 hover:text-green-900">
                         <BiCheck />
                         Accept
                     </button>
-                    <button className="flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-red-700 hover:bg-red-100 hover:text-red-900">
+                    <button
+                        disabled={isLoading}
+                        onClick={removeInvitation}
+                        className="flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-red-700 hover:bg-red-100 hover:text-red-900">
                         <IoMdClose />
                         Decline
                     </button>

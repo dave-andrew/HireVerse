@@ -7,7 +7,7 @@ import WrappedRadioGroup from "./WrappedRadioGroup";
 import { IoMdClose } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { CONSTANTS } from "../../utils/constants";
-import { useGetJobIndustries } from "../../datas/queries/jobQueries";
+import { useQueryJobIndustries } from "../../datas/queries/jobQueries";
 
 export interface IFilterForm {
     salaryStart: number;
@@ -23,7 +23,8 @@ interface Props {
 }
 
 export default function JobFilter({ onApplyFilter }: Props) {
-    const { data: industries, refetch: getIndustries } = useGetJobIndustries();
+    const { data: industries, refetch: getIndustries } =
+        useQueryJobIndustries();
     const { register, control, handleSubmit } = useForm<IFilterForm>({
         defaultValues: {
             salaryStart: 0,

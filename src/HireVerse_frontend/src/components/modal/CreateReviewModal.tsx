@@ -1,5 +1,5 @@
 import WrappedModal from "../form/WrappedModal";
-import React, { useState } from "react";
+import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { IoCloseSharp } from "react-icons/io5";
 import WrappedRichText from "../form/WrappedRichText";
@@ -14,6 +14,7 @@ import { useAddReview } from "../../datas/mutations/reviewMutations";
 import useToaster from "../../hooks/useToaster";
 import { CreateReviewInput } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import { useParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface INewReviewForm {
     title: string;
@@ -28,12 +29,17 @@ interface INewReviewForm {
     cultureRating: number;
     workLifeBalanceRating: number;
     seniorManagementRating: number;
-    recommendToFriend: boolean | null;
+    recommendToFriend: string | null;
     anonymous: boolean;
 }
 
-export default function CreateReviewModal() {
-    const [isOpen, setOpenState] = useState(true);
+interface Props {
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+}
+
+export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
+    const queryClient = useQueryClient();
     const mutation = useAddReview();
     const { id } = useParams<string>();
     const {
@@ -178,13 +184,13 @@ export default function CreateReviewModal() {
             cultureRating: BigInt(data.cultureRating),
             workLifeBalanceRating: BigInt(data.workLifeBalanceRating),
             seniorManagementRating: BigInt(data.seniorManagementRating),
-            recommendToFriend: data.recommendToFriend,
+            recommendToFriend: data.recommendToFriend === "Yes",
         };
 
         mutation.mutate(newReview);
 
         reset();
-        setOpenState(false);
+        setIsOpen(false);
     };
 
     const handleSubmitForm = () => {
@@ -201,16 +207,16 @@ export default function CreateReviewModal() {
                     <button
                         className="h-fit w-fit rounded-full text-end text-xl"
                         type="button"
-                        onClick={() => setOpenState(false)}>
+                        onClick={() => setIsOpen(false)}>
                         <IoCloseSharp size="2rem" />
                     </button>
                 </div>
             }
             isOpen={isOpen}
-            setIsOpen={setOpenState}>
+            setIsOpen={setIsOpen}>
             <div className="flex flex-col">
                 <div className="flex flex-col py-5">
-                    <div className="font-bold pb-2">Review Title</div>
+                    <div className="pb-2 font-bold">Review Title</div>
                     <div className="h-full rounded-md">
                         <input
                             {...register("title", {
@@ -218,12 +224,12 @@ export default function CreateReviewModal() {
                             })}
                             type="text"
                             placeholder="e.g. My experience at Google"
-                            className="min-h-12 focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
+                            className="focus:ring-signature-primary h-full min-h-12 w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>
                 <div className="flex flex-col py-5">
-                    <div className="font-bold pb-2">General Comments</div>
+                    <div className="pb-2 font-bold">General Comments</div>
                     <div className="h-full rounded-md">
                         <WrappedRichText
                             editor={editor}
@@ -233,7 +239,7 @@ export default function CreateReviewModal() {
                 </div>
                 <div className="grid grid-cols-2 gap-5">
                     <div className="flex h-full flex-col rounded-md">
-                        <div className="font-bold pb-2">Pros</div>
+                        <div className="pb-2 font-bold">Pros</div>
                         <DynamicInputBox
                             key="pros"
                             fields={fieldsPros}
@@ -267,7 +273,7 @@ export default function CreateReviewModal() {
                         />
                     </div>
                     <div className="flex h-full flex-col rounded-md">
-                        <div className="font-bold pb-2">Cons</div>
+                        <div className="pb-2 font-bold">Cons</div>
                         <DynamicInputBox
                             key="cons"
                             fields={fieldsCons}
@@ -302,49 +308,49 @@ export default function CreateReviewModal() {
                     </div>
                 </div>
                 <div className="flex flex-col py-5">
-                    <div className="font-bold pb-2">
+                    <div className="pb-2 font-bold">
                         Rate the company culture
                     </div>
-                    <div className="flex flex-row h-full items-center gap-3 rounded-md">
+                    <div className="flex h-full flex-row items-center gap-3 rounded-md">
                         <WrappedControlledStarReview
                             control={control}
                             name="cultureRating"
                             textValues={CONSTANTS.REVIEWS.CULTURE}
-                            className="has-[svg]:w-72 [&_div]:border-[1px] [&_div]:border-gray-200 [&_div]:rounded-md [&_div]:p-1.5 [&_div:hover]:bg-gray-200 [&_div]:transition-colors gap-2"
+                            className="gap-2 has-[svg]:w-72 [&_div:hover]:bg-gray-200 [&_div]:rounded-md [&_div]:border-[1px] [&_div]:border-gray-200 [&_div]:p-1.5 [&_div]:transition-colors"
                         />
                     </div>
                 </div>
                 <div className="flex flex-col py-5">
-                    <div className="font-bold pb-2">
+                    <div className="pb-2 font-bold">
                         Rate the company work-life balance
                     </div>
-                    <div className="flex flex-row h-full items-center gap-3 rounded-md">
+                    <div className="flex h-full flex-row items-center gap-3 rounded-md">
                         <WrappedControlledStarReview
                             control={control}
                             name="workLifeBalanceRating"
                             textValues={CONSTANTS.REVIEWS.WORKLIFE_BALANCE}
-                            className="has-[svg]:w-72 [&_div]:border-[1px] [&_div]:border-gray-200 [&_div]:rounded-md [&_div]:p-1.5 [&_div:hover]:bg-gray-200 [&_div]:transition-colors gap-2"
+                            className="gap-2 has-[svg]:w-72 [&_div:hover]:bg-gray-200 [&_div]:rounded-md [&_div]:border-[1px] [&_div]:border-gray-200 [&_div]:p-1.5 [&_div]:transition-colors"
                         />
                     </div>
                 </div>
                 <div className="flex flex-col py-5">
-                    <div className="font-bold pb-2">
+                    <div className="pb-2 font-bold">
                         Rate the company senior management
                     </div>
-                    <div className="flex flex-row h-full items-center gap-3 rounded-md">
+                    <div className="flex h-full flex-row items-center gap-3 rounded-md">
                         <WrappedControlledStarReview
                             control={control}
                             name="seniorManagementRating"
                             textValues={CONSTANTS.REVIEWS.SENIOR_MANAGEMENT}
-                            className="has-[svg]:w-72 [&_div]:border-[1px] [&_div]:border-gray-200 [&_div]:rounded-md [&_div]:p-1.5 [&_div:hover]:bg-gray-200 [&_div]:transition-colors gap-2"
+                            className="gap-2 has-[svg]:w-72 [&_div:hover]:bg-gray-200 [&_div]:rounded-md [&_div]:border-[1px] [&_div]:border-gray-200 [&_div]:p-1.5 [&_div]:transition-colors"
                         />
                     </div>
                 </div>
                 <div className="flex flex-col py-5">
-                    <div className="font-bold pb-2">
+                    <div className="pb-2 font-bold">
                         Would you recommend this company to a friend?
                     </div>
-                    <div className="flex flex-row h-full items-center gap-3 rounded-md">
+                    <div className="flex h-full flex-row items-center gap-3 rounded-md">
                         <WrappedRadioGroup
                             values={CONSTANTS.REVIEWS.RECOMMEND_TO_FRIEND}
                             className="grid w-full grid-cols-2 gap-4 !p-0"
@@ -368,7 +374,7 @@ export default function CreateReviewModal() {
             <div className="flex w-full items-center justify-center gap-2 pt-5">
                 <button
                     onClick={handleSubmitForm}
-                    className=" border-signature-yellow w-fit rounded-md border-2 px-12 py-3 font-bold transition-colors bg-yellow-400 text-black">
+                    className="w-fit rounded-md bg-signature-yellow hover:bg-signature-yellow px-10 py-3 text-lg font-bold text-black transition-colors">
                     Post Review
                 </button>
             </div>

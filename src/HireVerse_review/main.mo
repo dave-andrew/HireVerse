@@ -6,6 +6,8 @@ import Time "mo:base/Time";
 import Result "mo:base/Result";
 import Iter "mo:base/Iter";
 import Array "mo:base/Array";
+import Int "mo:base/Int";
+import Debug "mo:base/Debug";
 import Helper "canister:HireVerse_helper";
 import Vector "mo:vector/Class";
 
@@ -24,6 +26,14 @@ actor Review {
         cons : [Text];
         companyId : Text;
         timestamp : Time.Time;
+    };
+
+    type ReviewSummary = {
+        cultureRating : Nat;
+        seniorManagementRating : Nat;
+        workLifeBalanceRating : Nat;
+        recommendToFriend : Nat;
+        totalReviews : Nat;
     };
 
     type CreateReviewInput = {
@@ -118,7 +128,7 @@ actor Review {
         };
     };
 
-    public func getReviews(reviewsId : [Text]) : async Result.Result<[Review], Text> {
+    public query func getReviews(reviewsId : [Text], order : Text) : async Result.Result<[Review], Text> {
         let reviewsList = Vector.Vector<Review>();
 
         for (id in Iter.fromArray(reviewsId)) {
@@ -126,16 +136,111 @@ actor Review {
 
             switch (data) {
                 case (?review) {
-                    reviewsList.add(review);
+                    if (review.isAnonymous == true) {
+                        reviewsList.add({
+                            id = review.id;
+                            userId = "Anonymous";
+                            title = review.title;
+                            isAnonymous = review.isAnonymous;
+                            cultureRating = review.cultureRating;
+                            seniorManagementRating = review.seniorManagementRating;
+                            workLifeBalanceRating = review.workLifeBalanceRating;
+                            recommendToFriend = review.recommendToFriend;
+                            generalComments = review.generalComments;
+                            pros = review.pros;
+                            cons = review.cons;
+                            companyId = review.companyId;
+                            timestamp = review.timestamp;
+                        });
+                    } else {
+                        reviewsList.add(review);
+                    };
                 };
-                case (null) {
-                    
-                };
+                case (null) {};
             };
         };
 
-        return #ok(Vector.toArray(reviewsList));
+        if (order == "Newest") {
+            let temp = Array.sort<Review>(
+                Vector.toArray(reviewsList),
+                func(a, b) {
+                    return Int.compare(b.timestamp, a.timestamp);
+                },
+            );
+            return #ok(temp);
+        };
+        if (order == "Oldest") {
+            let temp = Array.sort<Review>(
+                Vector.toArray(reviewsList),
+                func(a, b) {
+                    return Int.compare(a.timestamp, b.timestamp);
+                },
+            );
+            return #ok(temp);
+        };
+        if (order == "Highest Rating") {
+            let temp = Array.sort<Review>(
+                Vector.toArray(reviewsList),
+                func(a, b) {
+                    let bAverage = (b.cultureRating + b.seniorManagementRating + b.workLifeBalanceRating) / 3;
+                    let aAverage = (a.cultureRating + a.seniorManagementRating + a.workLifeBalanceRating) / 3;
+                    return Int.compare(bAverage, aAverage);
+                },
+            );
+            return #ok(temp);
+        };
+        if (order == "Lowest Rating") {
+            let temp = Array.sort<Review>(
+                Vector.toArray(reviewsList),
+                func(a, b) {
+                    let bAverage = (b.cultureRating + b.seniorManagementRating + b.workLifeBalanceRating) / 3;
+                    let aAverage = (a.cultureRating + a.seniorManagementRating + a.workLifeBalanceRating) / 3;
+                    return Int.compare(aAverage, bAverage);
+                },
+            );
+            return #ok(temp);
+        };
 
+        return #ok(Vector.toArray(reviewsList));
+    };
+
+    public query func getReviewSummaries(reviewIds : [Text]) : async Result.Result<ReviewSummary, Text> {
+        var cultureRating = 0;
+        var seniorManagementRating = 0;
+        var workLifeBalanceRating = 0;
+        var recommendToFriend = 0;
+        var totalReviews = 0;
+
+        for (id in Iter.fromArray(reviewIds)) {
+            let data = reviews.get(id);
+
+            switch (data) {
+                case (?review) {
+                    cultureRating += review.cultureRating;
+                    seniorManagementRating += review.seniorManagementRating;
+                    workLifeBalanceRating += review.workLifeBalanceRating;
+                    if (review.recommendToFriend) {
+                        recommendToFriend += 1;
+                    };
+                    totalReviews += 1;
+                };
+                case (null) {};
+            };
+        };
+
+        if (totalReviews == 0) {
+            return #err("No reviews found");
+        };
+
+        let summary = {
+            cultureRating = cultureRating;
+            seniorManagementRating = seniorManagementRating;
+            workLifeBalanceRating = workLifeBalanceRating;
+            recommendToFriend = (recommendToFriend * 100);
+            totalReviews = totalReviews;
+        };
+
+        return #ok(summary);
     };
 
     public shared (msg) func removeAllReviews() : async () {

@@ -1,26 +1,58 @@
+import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
+import { TbTilde } from "react-icons/tb";
+
 interface PieProps {
     percentage: number;
-    colour: string;
+    hasReview?: boolean;
 }
 
-export default function CircularRating({ percentage, colour }: PieProps) {
+export default function CircularRating({ percentage, hasReview }: PieProps) {
+    const getBarColor = (value: number) => {
+        if (value < 50) return "#EF4444";
+        if (value < 75) return "#FCC82B";
+        if (value <= 100) return "#10B981";
+        return "#10B981";
+    };
+
+    const getBorderColor = (value: number) => {
+        if (value < 50) return "border-red-500";
+        if (value < 75) return "border-yellow-500";
+        if (value <= 100) return "border-green-500";
+        return "border-green-500";
+    };
+
+    const getIcon = (value: number) => {
+        if (value < 50) return <FaRegThumbsDown />;
+        if (value < 75) return <TbTilde />;
+        if (value <= 100) return <FaRegThumbsUp />;
+        return <FaRegThumbsUp />;
+    };
+
     const pct = cleanPercentage(percentage);
     return (
-        <svg
-            width={200}
-            height={200}>
-            <g transform={`rotate(-90 ${"100 100"})`}>
-                <Circle
-                    colour="lightgrey"
-                    percentage={10}
-                />
-                <Circle
-                    colour={colour}
-                    percentage={pct}
-                />
-            </g>
-            <Text percentage={pct} />
-        </svg>
+        <div className="relative">
+            <svg
+                width={200}
+                height={200}>
+                <g transform={`rotate(-90 100 100)`}>
+                    <Circle
+                        colour={"rgb(229, 231, 235, 0.5)"}
+                        percentage={100}
+                    />
+                    <Circle
+                        colour={getBarColor(pct)}
+                        percentage={pct}
+                    />
+                </g>
+                <Text percentage={pct} />
+            </svg>
+            {hasReview && (
+                <div
+                    className={`absolute rounded-full border-4 bg-white p-2 ${getBorderColor(pct)} bottom-[12.5%] right-[12.5%] text-lg`}>
+                    {getIcon(pct)}
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -46,7 +78,7 @@ const Circle = ({ colour, percentage }: CircleProps) => {
             cy={100}
             fill="transparent"
             stroke={strokePct !== circ ? colour : ""} // remove colour as 0% sets full circumference
-            strokeWidth={"2rem"}
+            strokeWidth={"0.75rem"}
             strokeDasharray={circ}
             strokeDashoffset={percentage ? strokePct : 0}></circle>
     );

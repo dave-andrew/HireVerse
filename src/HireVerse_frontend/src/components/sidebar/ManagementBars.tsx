@@ -16,7 +16,7 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import useImageBlob from "../../hooks/useImageBlob";
 import InvitationModal from "../modal/InvitationModal";
-import { useGetManagedCompanies } from "../../datas/queries/companyQueries";
+import { useQueryManagedCompanies } from "../../datas/queries/companyQueries";
 
 type Menu = {
     name: string;
@@ -57,7 +57,7 @@ interface IDropdownForm {
 }
 
 export default function ManagementBars({ children }: Props) {
-    const { data: managedCompanies, refetch } = useGetManagedCompanies();
+    const { data: managedCompanies, refetch } = useQueryManagedCompanies();
     const [menus, setMenus] = useState<Menu[]>(defaultMenu);
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
@@ -165,8 +165,7 @@ export default function ManagementBars({ children }: Props) {
                  transition-all duration-500 ease-in-out
                  `}>
                     <div className="flex w-full flex-col gap-8">
-                        <div
-                            className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
+                        <div className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
                             H
                             <span
                                 className={`${isHovered ? "block" : "hidden"}`}>

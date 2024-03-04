@@ -50,9 +50,10 @@
     border-radius: revert;
   }
 
-  circle:hover {
-    fill: red;
-  }
+  //
+  //circle:hover {
+  //  fill: red;
+  //}
 }
 
 
@@ -66,6 +67,10 @@ html {
 
 .bg-signature-yellow {
   background-color: #ffd166;
+}
+
+.hover\:bg-signature-yellow:hover {
+  background-color: #ffb204;
 }
 
 .border-signature-yellow {

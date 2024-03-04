@@ -40,7 +40,7 @@ export default function WrappedModal({
                     </Transition.Child>
 
                     <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex min-h-full items-center justify-center py-4 px-8 text-center">
+                        <div className="flex min-h-full items-center justify-center px-8 py-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"

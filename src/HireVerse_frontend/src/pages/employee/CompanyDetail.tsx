@@ -1,4 +1,3 @@
-
 import FrontPageLayout from "../../layouts/FrontPageLayout";
 import CardLayout from "../../layouts/CardLayout";
 import {
@@ -6,28 +5,30 @@ import {
     MdOutlinePeopleAlt,
     MdOutlineQueryBuilder,
 } from "react-icons/md";
-import CompanyReviewSummary from "../../components/company/CompanyReviewSummary";
 import { useNavigate, useParams } from "react-router-dom";
 import imageHandler from "../../utils/imageHandler";
 import convertToDate from "../../utils/convertToDate";
 import SocialMediaItem from "../../components/company/SocialMediaItem";
 import {
-    useGetCompany,
-    useGetCompanyIndustries,
+    useQueryCompany,
+    useQueryCompanyIndustries,
 } from "../../datas/queries/companyQueries";
 import CreateReviewModal from "../../components/modal/CreateReviewModal";
-import CompanyReviewItem from "../../components/review/CompanyReviewItem";
-import React from "react";
-import TextDropdown from "../../components/form/TextDropdown";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import CompanyDetailReview from "../../components/review/CompanyDetailReview";
+
+export interface IReviewSortForm {
+    orderBy: string;
+}
 
 export default function CompanyDetail() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const nav = useNavigate();
-    const { control } = useForm();
     const { id } = useParams<string>();
-    const { data: company, isLoading: companyLoading } = useGetCompany(id);
+    const { data: company, isLoading: companyLoading } = useQueryCompany(id);
     const { data: industries, isLoading: industriesLoading } =
-        useGetCompanyIndustries(id);
+        useQueryCompanyIndustries(id);
 
     if (!id) {
         nav(-1);
@@ -119,48 +120,12 @@ export default function CompanyDetail() {
                                     </h3>
                                     <p>{company?.profile}</p>
                                 </CardLayout>
-                                <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
-                                    <div className="flex flex-row w-full justify-between">
-                                        <h3 className="flex flex-row justify-between p-0 m-0 text-4xl font-bold">
-                                            Reviews
-                                        </h3>
-                                        <button>Create Review</button>
-                                    </div>
-
-                                    <div>
-                                        <CompanyReviewSummary companyId={""} />
-                                    </div>
-                                </CardLayout>
-                                <CardLayout className="flex flex-row justify-between items-center gap-5 rounded-none p-4 mt-2">
-                                    <div>
-                                        <span className="text-xl font-bold">
-                                            Review Selections
-                                        </span>
-                                        <p>Showing 10 reviews</p>
-                                    </div>
-                                    <span className="flex flex-row items-center gap-3">
-                                        Order By
-                                        <TextDropdown
-                                            states={[
-                                                "Newest",
-                                                "Oldest",
-                                                "Highest Rating",
-                                                "Lowest Rating",
-                                            ]}
-                                            control={control}
-                                            name="orderBy"
-                                        />
-                                    </span>
-                                </CardLayout>
-                                <div className="flex flex-1 flex-row">
-                                    <div className="flex flex-col w-full gap-2 pt-2">
-                                        {Array.from({ length: 4 }).map(
-                                            (_, i) => (
-                                                <CompanyReviewItem />
-                                            ),
-                                        )}
-                                    </div>
-                                </div>
+                                <CompanyDetailReview
+                                    companyId={id}
+                                    onCreateReviewClick={() =>
+                                        setIsModalOpen(true)
+                                    }
+                                />
                             </div>
                             <div className="flex w-[30%] flex-col">
                                 <CardLayout className="flex flex-col gap-5 rounded-none p-10">
@@ -219,7 +184,10 @@ export default function CompanyDetail() {
                     </div>
                 </div>
             </FrontPageLayout>
-            <CreateReviewModal />
+            <CreateReviewModal
+                isOpen={isModalOpen}
+                setIsOpen={setIsModalOpen}
+            />
         </>
     );
 }
