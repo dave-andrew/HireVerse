@@ -20,6 +20,10 @@ export default function ManagerTable() {
         selectedCompany?.id,
     );
 
+    useEffect(() => {
+        console.log(managerData);
+    }, [managerData]);
+
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -44,7 +48,7 @@ export default function ManagerTable() {
                     <th
                         scope="col"
                         className="py-3">
-                        Joined Date
+                        Birth Date
                     </th>
                     <th
                         scope="col"
@@ -68,7 +72,7 @@ export default function ManagerTable() {
                             <th className="whitespace-nowrap px-2 font-medium py-4 text-black text-center">
                                 {index + 1}
                             </th>
-                            <th className="whitespace-nowrap px-2 font-medium text-black w-fit text-nowrap overflow-hidden">
+                            <th className="whitespace-nowrap px-2 font-medium text-black">
                                 {manager.internet_identity.toText()}
                             </th>
                             <td className="font-bold text-black lg:pr-12">{manager.first_name} {manager.last_name}</td>
