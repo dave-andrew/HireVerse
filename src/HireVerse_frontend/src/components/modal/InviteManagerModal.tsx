@@ -9,7 +9,6 @@ import {Company} from "../../../../declarations/HireVerse_company/HireVerse_comp
 import {toast} from "react-toastify";
 import {defaultToastOptions} from "../../layouts/ManagementPageLayout";
 
-
 interface ISearchEmailForm {
     email: string
 }

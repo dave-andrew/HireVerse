@@ -3,7 +3,6 @@ import { IoIosSearch } from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
 import { useState } from "react";
 import ManagerTable from "../../components/company/ManagerTable";
-import Modal from "../../components/modal/Modal";
 import InviteManagerModal from "../../components/modal/InviteManagerModal";
 
 export default function CompanyManagers() {

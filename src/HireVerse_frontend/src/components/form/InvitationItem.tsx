@@ -2,8 +2,9 @@ import { BsLinkedin } from "react-icons/bs";
 import { BiCheck } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 import {Invite} from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
+import {CompanyInvitation} from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 
-export default function InvitationItem({invitation}: {invitation: Invite}) {
+export default function InvitationItem({invitation}: {invitation: CompanyInvitation}) {
     return (
         <div className="relative flex h-80 w-64 flex-col justify-center gap-2 rounded-md border border-gray-200 shadow-md">
             <div className="absolute top-0 z-[-10] h-24 w-full bg-[url(public/backgrounds/subtle-prism.svg)]">
@@ -22,17 +23,17 @@ export default function InvitationItem({invitation}: {invitation: Invite}) {
             <div className="flex flex-col gap-6 p-4">
                 <div className="flex flex-col gap-2">
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap text-center text-xl font-bold">
-                        {invitation.inviter_id.toText()}
+                        {invitation.company.name}
                     </div>
                     <div className="flex flex-col place-items-center">
                         <div className="flex flex-row place-items-center justify-center gap-2 text-sm font-bold">
                             <div className="text-blue-800">
                                 <BsLinkedin />
                             </div>
-                            in/binus-university
+                            {invitation.company.linkedin}
                         </div>
                         <div className="text-sm text-gray-600">
-                            Jakarta, 2004
+                            {invitation.company.founded_country}, {invitation.company.founded_year.toString()}
                         </div>
                     </div>
                 </div>
