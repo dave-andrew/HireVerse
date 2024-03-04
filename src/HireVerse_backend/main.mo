@@ -100,6 +100,11 @@ actor Database {
         return "Hello, " # Principal.toText(message.caller) # "!";
     };
 
+
+    public shared (msg) func greetFunction() : async Text {
+        return "Hello, " # Principal.toText(msg.caller) # "!";
+    };
+
     public query func getAllUsers() : async Result.Result<[User], Text> {
 
         var allUsers = Vector.Vector<User>();

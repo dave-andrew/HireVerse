@@ -22,22 +22,21 @@ export function useQueryReviews(
             if (getFilters) {
                 filters = getFilters().orderBy;
             }
-            const response = await getCompanyService().then((s) =>
-                s.getCompany(companyId),
-            );
+            const response = await getCompanyService()
+                .then((s) => s.getCompany(companyId))
+                .catch((e) => console.error(e));
 
-            console.log(response);
-            if (isOk(response)) {
-                const company = response.ok;
-                const response2 = await getReviewService()
-                    .then((s) => s.getReviews(company.reviews_ids, filters))
-                    .catch((e) => console.error(e));
+            if (!isOk(response)) {
+                return null;
+            }
 
-                console.log(response2, "refetch bor");
+            const company = response.ok;
+            const response2 = await getReviewService()
+                .then((s) => s.getReviews(company.reviews_ids, filters))
+                .catch((e) => console.error(e));
 
-                if (isOk(response2)) {
-                    return response2.ok;
-                }
+            if (isOk(response2)) {
+                return response2.ok;
             }
 
             return null;
@@ -79,6 +78,33 @@ export function useQueryReviewSummary(companyId: string) {
 
             if (isOk(response)) {
                 console.log(response);
+                return response.ok;
+            }
+
+            return null;
+        },
+    });
+}
+
+export function useQueryGetSelfReview(companyId: string) {
+    const { getReviewService, getBackendService } = useService();
+    return useQuery({
+        queryKey: ["selfReview", companyId],
+        queryFn: async () => {
+            if (!companyId) {
+                return null;
+            }
+
+            await getBackendService().then((s) => console.log(s.greet()));
+            await getBackendService().then((s) =>
+                console.log(s.greetFunction()),
+            );
+            console.log("hahaha", companyId);
+            const response = await getReviewService()
+                .then((s) => s.getSelfReview(companyId))
+                .catch((e) => console.error(e));
+
+            if (isOk(response)) {
                 return response.ok;
             }
 

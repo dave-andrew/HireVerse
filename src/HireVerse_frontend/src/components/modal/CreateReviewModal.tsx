@@ -14,7 +14,6 @@ import { useAddReview } from "../../datas/mutations/reviewMutations";
 import useToaster from "../../hooks/useToaster";
 import { CreateReviewInput } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import { useParams } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface INewReviewForm {
     title: string;
@@ -39,7 +38,6 @@ interface Props {
 }
 
 export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
-    const queryClient = useQueryClient();
     const mutation = useAddReview();
     const { id } = useParams<string>();
     const {

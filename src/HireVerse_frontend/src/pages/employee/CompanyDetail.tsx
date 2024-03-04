@@ -44,8 +44,8 @@ export default function CompanyDetail() {
         <>
             <FrontPageLayout className="h-full">
                 <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
-                    <div className="flex flex-col place-items-center xl:w-[calc(100%-1rem)] 2xl:w-4/5">
-                        <CardLayout className="relative flex w-full flex-row place-items-center gap-10 rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6">
+                    <div className="flex flex-col place-items-center xl:w-[calc(100%-1rem)] 2xl:w-4/5 gap-2">
+                        <CardLayout className="relative flex w-full flex-row place-items-center gap-10 rounded-lg rounded-tl-none rounded-tr-none border-t-0 p-6">
                             <div className="relative">
                                 <img
                                     className="border-signature-gray aspect-square border-[1px] object-cover xl:w-48 2xl:w-96"
@@ -112,9 +112,9 @@ export default function CompanyDetail() {
                                 </div>
                             </div>
                         </CardLayout>
-                        <div className="flex w-full flex-row">
-                            <div className="flex h-auto w-[70%] flex-col">
-                                <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
+                        <div className="flex w-full flex-row gap-2">
+                            <div className="flex h-auto w-[70%] flex-col gap-2">
+                                <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-lg p-10">
                                     <h3 className="text-4xl font-bold">
                                         Company Profile
                                     </h3>
@@ -127,8 +127,8 @@ export default function CompanyDetail() {
                                     }
                                 />
                             </div>
-                            <div className="flex w-[30%] flex-col">
-                                <CardLayout className="flex flex-col gap-5 rounded-none p-10">
+                            <div className="flex w-[30%] flex-col gap-2">
+                                <CardLayout className="flex flex-col gap-5 rounded-lg p-10">
                                     <h3 className="text-4xl font-bold">
                                         Industries
                                     </h3>
@@ -144,7 +144,7 @@ export default function CompanyDetail() {
                                         })}
                                     </div>
                                 </CardLayout>
-                                <CardLayout className="flex flex-col gap-5 rounded-none p-10">
+                                <CardLayout className="flex flex-col gap-5 rounded-lg p-10">
                                     <h3 className="text-4xl font-bold">
                                         Social Medias
                                     </h3>
@@ -161,7 +161,7 @@ export default function CompanyDetail() {
                                         )}
                                     </div>
                                 </CardLayout>
-                                <CardLayout className="flex flex-col gap-5 rounded-none p-10">
+                                <CardLayout className="flex flex-col gap-5 rounded-lg p-10">
                                     <h3 className="text-4xl font-bold">
                                         Locations
                                     </h3>

@@ -7,7 +7,10 @@ import CompanyReviewItem from "./CompanyReviewItem";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IReviewSortForm } from "../../pages/employee/CompanyDetail";
-import { useQueryReviews } from "../../datas/queries/reviewQueries";
+import {
+    useQueryGetSelfReview,
+    useQueryReviews,
+} from "../../datas/queries/reviewQueries";
 import WrappedPaginationSelection, {
     Pagination,
 } from "../form/WrappedPaginationSelection";
@@ -35,6 +38,7 @@ export default function CompanyDetailReview({
         companyId,
         getFilters,
     );
+    const { data: myReview } = useQueryGetSelfReview(companyId);
 
     const getReviewStart = () =>
         (pagination.currentPage - 1) * pagination.amountPerPage;
@@ -56,7 +60,7 @@ export default function CompanyDetailReview({
 
     return (
         <>
-            <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
+            <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-lg p-10">
                 <div className="flex w-full flex-row justify-between">
                     <h3 className="m-0 flex flex-row justify-between p-0 text-4xl font-bold">
                         Reviews
@@ -75,15 +79,16 @@ export default function CompanyDetailReview({
                     <CompanyReviewSummary companyId={companyId} />
                 </div>
             </CardLayout>
+            {myReview && <CompanyReviewItem review={myReview} />}
             {reviews && reviews.length > 0 && (
-                <CardLayout className="mt-2 flex flex-row items-center justify-between gap-5 rounded-none p-4">
+                <CardLayout className="flex flex-row items-center justify-between gap-5 rounded-lg p-4">
                     <div>
                         <span className="text-xl font-bold">
                             Review Selections
                         </span>
                         <p>Showing 10 reviews</p>
                     </div>
-                    <span className="flex flex-row items-center gap-3">
+                    <span className="flex flex-row items-center gap-4">
                         Order By
                         <TextDropdown
                             states={CONSTANTS.REVIEWS.ORDER_BY}
@@ -96,7 +101,7 @@ export default function CompanyDetailReview({
             )}
 
             <div className="flex flex-1 flex-row">
-                <div className="flex w-full flex-col gap-2 pt-2">
+                <div className="flex w-full flex-col gap-2">
                     {reviews
                         ?.slice(getReviewStart(), getReviewEnd())
                         .map((review, i) => {

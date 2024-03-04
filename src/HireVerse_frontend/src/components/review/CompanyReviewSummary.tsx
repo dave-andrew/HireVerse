@@ -90,7 +90,7 @@ export default function CompanyReviewSummary({ companyId }: Props) {
                 <div className="flex flex-1 flex-col items-center gap-3 p-5">
                     <CircularRating
                         percentage={rating.recommendPercentage}
-                        hasReview={!!rating}
+                        hasReview={!!reviewSummary}
                     />
                     <p className="w-4/5 text-center">
                         Employee recommends the company to friends
