@@ -1,49 +1,53 @@
 import { BsLinkedin } from "react-icons/bs";
 import { BiCheck } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
-import {CompanyInvitation} from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import { CompanyInvitation } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import imageHandler from "../../utils/imageHandler";
-import {useRemoveInvitation, useAcceptInvitation} from "../../datas/mutations/companyMutations";
-import {useState} from "react";
+import { useRemoveInvitation, useAcceptInvitation } from "../../datas/mutations/companyMutations";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { defaultToastOptions } from "../../layouts/ManagementPageLayout";
 
 
-export default function InvitationItem({invitation, refetch}: {invitation: CompanyInvitation, refetch: () => void}) {
+export default function InvitationItem({ invitation, refetch }: { invitation: CompanyInvitation, refetch: () => void }) {
 
-    const mutation = useRemoveInvitation()
-    const acceptMutation = useAcceptInvitation()
-    const [isLoading, setIsLoading] = useState(false)
+    const mutation = useRemoveInvitation();
+    const acceptMutation = useAcceptInvitation();
+    const [isLoading, setIsLoading] = useState(false);
     const removeInvitation = () => {
-        setIsLoading(true)
+        setIsLoading(true);
         mutation.mutate(invitation.invite.id, {
             onSuccess: () => {
-                console.log("Success rejecting invitation")
-                refetch()
-                setIsLoading(false)
+                console.log("Success rejecting invitation");
+                refetch();
+                setIsLoading(false);
             },
             onError: (error) => {
-                console.error(error)
-                setIsLoading(false)
-            }
-        })
-    }
+                console.error(error);
+                setIsLoading(false);
+            },
+        });
+    };
 
     const acceptInvitation = () => {
-        setIsLoading(true)
+        setIsLoading(true);
         acceptMutation.mutate(invitation.invite.id, {
             onSuccess: () => {
-                setIsLoading(false)
-                console.log("Success accepting invitation")
+                setIsLoading(false);
+                toast.success("You have successfully joined " + invitation.company.name, defaultToastOptions);
                 refetch()
+                window.location.reload()
             },
             onError: (error) => {
-                setIsLoading(false)
-                console.error(error)
-            }
-        })
-    }
+                setIsLoading(false);
+                toast.error(error.message, defaultToastOptions)
+            },
+        });
+    };
 
     return (
-        <div className="relative flex h-80 w-64 flex-col justify-center gap-2 rounded-md border border-gray-200 shadow-md">
+        <div
+            className="relative flex h-80 w-64 flex-col justify-center gap-2 rounded-md border border-gray-200 shadow-md">
             <div className="absolute top-0 z-[-10] h-24 w-full bg-[url(public/backgrounds/subtle-prism.svg)]">
                 {" "}
             </div>
@@ -68,7 +72,6 @@ export default function InvitationItem({invitation, refetch}: {invitation: Compa
                                 <BsLinkedin />
                             </div>
                             {invitation.company.linkedin}
-                            {invitation.invite.id}
                         </div>
                         <div className="text-sm text-gray-600">
                             {invitation.company.founded_country}, {invitation.company.founded_year.toString()}
@@ -80,14 +83,14 @@ export default function InvitationItem({invitation, refetch}: {invitation: Compa
                     <button
                         disabled={isLoading}
                         onClick={acceptInvitation}
-                        className="flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-green-700 hover:bg-green-100 hover:text-green-900">
+                        className="disabled:bg-gray-100 flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-green-700 hover:bg-green-100 hover:text-green-900">
                         <BiCheck />
                         Accept
                     </button>
                     <button
                         disabled={isLoading}
                         onClick={removeInvitation}
-                        className="flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-red-700 hover:bg-red-100 hover:text-red-900">
+                        className="disabled:bg-gray-100 flex grow flex-row place-items-center justify-center gap-2 rounded-md px-2 py-2 text-sm text-red-700 hover:bg-red-100 hover:text-red-900">
                         <IoMdClose />
                         Decline
                     </button>

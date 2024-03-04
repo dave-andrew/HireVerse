@@ -30,6 +30,7 @@ export default function InviteManagerModal({isModalShown, toggleModal}: {
         register: register1,
         handleSubmit: handleSubmit1,
         formState: {errors},
+        reset
     } = useForm<ISearchEmailForm>();
 
     useEffect(() => {
@@ -59,17 +60,22 @@ export default function InviteManagerModal({isModalShown, toggleModal}: {
             return;
         }
 
-        // TODO: Reset input user kalau udah
         setMutationLoading(true)
         mutation.mutate({invitee: userData.internet_identity, company_id: selectedCompany.id}, {
             onError: (error) => {
                 setMutationLoading(false)
+                reset()
+                setEmail("")
+                getUserByEmail()
                 toast.error(
-                    "Failed to create invitation",
+                    error.message,
                     defaultToastOptions,
                 );
             },
             onSuccess: () => {
+                reset()
+                setEmail("")
+                getUserByEmail()
                 setMutationLoading(false)
                 toast.success(
                     "Invitation sent successfully",
