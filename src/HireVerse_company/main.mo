@@ -636,4 +636,55 @@ actor Company {
             };
         };
     };
+
+    public shared (msg) func getCompanyInvitations(company_id: Text) : async Result.Result<[Invite], Text>{
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Not authorized");
+        };
+
+        let company = await getCompany(company_id);
+
+        switch (company) {
+            case (#err(msg)) {
+                return #err("Company not found");
+            };
+            case (#ok(c)) {
+                let isManager : Bool = await checkCompanyManager(c, user_id);
+
+                if (not isManager) {
+                    return #err("User is not a manager of the company");
+                };
+
+                let companyInvitations = Vector.Vector<Invite>();
+
+                for (invite in invitations.vals()) {
+                    if (invite.company_id == company_id) {
+                        companyInvitations.add(invite);
+                    };
+                };
+
+                return #ok(Vector.toArray(companyInvitations));
+            };
+        };
+    };
+
+    public shared (msg) func getUserInvitations() : async Result.Result<[Invite], Text>{
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Not authorized");
+        };
+
+        let userInvitations = Vector.Vector<Invite>();
+
+        for (invite in invitations.vals()) {
+            if (invite.user_id == user_id) {
+                userInvitations.add(invite);
+            };
+        };
+
+        return #ok(Vector.toArray(userInvitations));
+    };
 };
