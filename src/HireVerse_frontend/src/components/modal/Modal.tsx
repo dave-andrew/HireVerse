@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { IoMdClose } from "react-icons/io";
+import {IoCloseSharp} from "react-icons/io5";
 export default function Modal({
     handleClose,
     show,
@@ -17,10 +18,10 @@ export default function Modal({
                 <div className="flex w-full flex-row place-items-center justify-between pb-5">
                     <div className="text-4xl font-bold">{modalTitle}</div>
                     <button
-                        className="h-fit w-fit rounded-full border border-black text-end text-xl shadow-md"
+                        className="h-fit w-fit rounded-md text-end text-xl p-1 hover:bg-gray-100 transition-colors"
                         type="button"
                         onClick={handleClose}>
-                        <IoMdClose />
+                        <IoCloseSharp size="2rem" />
                     </button>
                 </div>
                 {children}

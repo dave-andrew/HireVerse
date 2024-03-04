@@ -4,6 +4,7 @@ import CardLayout from "../../layouts/CardLayout";
 import { useState } from "react";
 import ManagerTable from "../../components/company/ManagerTable";
 import Modal from "../../components/modal/Modal";
+import InviteManagerModal from "../../components/modal/InviteManagerModal";
 
 export default function CompanyManagers() {
     let [isModalShown, setIsModalShown] = useState(false);
@@ -54,51 +55,8 @@ export default function CompanyManagers() {
                         <ManagerTable />
                     </div>
                 </div>
+                <InviteManagerModal isModalShown={isModalShown} toggleModal={toggleModal} />
 
-                <Modal
-                    handleClose={toggleModal}
-                    show={isModalShown}
-                    modalTitle={"Invite Manager"}>
-                    <div className="grid grid-cols-2">
-                        {/* Email Field */}
-                        <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
-                            <div className="font-bold">Email</div>
-                            <div className="text-sm">
-                                Input the email of your to-be manager.
-                            </div>
-                        </div>
-                        <div className="border-b border-gray-400  border-opacity-30 py-5">
-                            <div className="h-full rounded-md border border-gray-900">
-                                <input
-                                    type="text"
-                                    className={"h-full w-full rounded-md  px-3"}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex w-full items-center justify-center gap-4 ">
-                        <input
-                            type="checkbox"
-                            value=""
-                            className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                        />
-                        <label className="w-[80%] font-medium text-gray-900">
-                            <b>
-                                I took all the responsibilities of introducing a
-                                new manager to the company.{" "}
-                            </b>
-                            You <b className="inline text-red-600"> cannot </b>
-                            undo this action once the user has accepted their
-                            invites.
-                        </label>
-                    </div>
-                    <div className="flex w-full items-center justify-center gap-2">
-                        <button className="bg-signature-yellow w-fit rounded-md px-12 py-3 font-bold shadow-md">
-                            Invite Manager
-                        </button>
-                    </div>
-                </Modal>
             </ManagementPageLayout>
         </>
     );
