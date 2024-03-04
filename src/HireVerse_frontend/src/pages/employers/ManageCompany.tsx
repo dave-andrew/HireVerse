@@ -203,6 +203,7 @@ export default function ManageCompany() {
                                         (contact, i) => {
                                             return (
                                                 <SocialMediaItem
+                                                    key={i}
                                                     url={contact}
                                                 />
                                             );

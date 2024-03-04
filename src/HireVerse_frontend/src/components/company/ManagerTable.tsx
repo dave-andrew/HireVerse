@@ -7,14 +7,6 @@ export default function ManagerTable() {
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
 
-    // const { register, control, getValues } = useForm<IQuerySortForm>({
-    //     defaultValues: {
-    //         query: "",
-    //         order: "Newest",
-    //         status: "All",
-    //     },
-    // });
-
     const { data: managerData, refetch: getJobs } = useQueryManagersFromCompany(
         selectedCompany?.id,
     );

@@ -55,6 +55,26 @@ export function useQueryManagedCompanies() {
     });
 }
 
+
+export function useGetUserInvitations() {
+    const { getCompanyService } = useService();
+    return useQuery({
+        queryKey: ["userInvitations"],
+        queryFn: async () => {
+            const response = await getCompanyService().then((s) =>
+                s.getUserInvitations(),
+            );
+
+            if (isOk(response)) {
+                return response.ok;
+            }
+
+            return [];
+        },
+    });
+}
+
+
 export function useQueryCompany(companyId: string | undefined) {
     const { getCompanyService } = useService();
     return useQuery({
@@ -76,3 +96,5 @@ export function useQueryCompany(companyId: string | undefined) {
         enabled: !!companyId,
     });
 }
+
+

@@ -185,7 +185,7 @@ export default function EditCompanyModal({
                 <div className="flex w-full flex-row items-center justify-between pb-10">
                     <div className="text-4xl font-bold">Edit your company</div>
                     <button
-                        className="h-fit w-fit rounded-full text-end text-xl"
+                        className="h-fit w-fit rounded-md text-end text-xl p-1 hover:bg-gray-100 transition-colors"
                         type="button"
                         onClick={() => setOpenState(false)}>
                         <IoCloseSharp size="2rem" />
