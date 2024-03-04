@@ -130,14 +130,13 @@ actor Review {
 
     public query func getReviews(reviewsId : [Text], order : Text) : async Result.Result<[Review], Text> {
         let reviewsList = Vector.Vector<Review>();
-        
+
         for (id in Iter.fromArray(reviewsId)) {
             let data = reviews.get(id);
 
-
             switch (data) {
                 case (?review) {
-                    if(review.isAnonymous == true) {
+                    if (review.isAnonymous == true) {
                         reviewsList.add({
                             id = review.id;
                             userId = "Anonymous";
@@ -157,7 +156,7 @@ actor Review {
                         reviewsList.add(review);
                     };
                 };
-                case (null) { };
+                case (null) {};
             };
         };
 
@@ -170,7 +169,7 @@ actor Review {
             );
             return #ok(temp);
         };
-        if(order == "Oldest") {
+        if (order == "Oldest") {
             let temp = Array.sort<Review>(
                 Vector.toArray(reviewsList),
                 func(a, b) {
@@ -179,7 +178,7 @@ actor Review {
             );
             return #ok(temp);
         };
-        if(order == "Highest Rating") {
+        if (order == "Highest Rating") {
             let temp = Array.sort<Review>(
                 Vector.toArray(reviewsList),
                 func(a, b) {
@@ -190,7 +189,7 @@ actor Review {
             );
             return #ok(temp);
         };
-        if(order == "Lowest Rating") {
+        if (order == "Lowest Rating") {
             let temp = Array.sort<Review>(
                 Vector.toArray(reviewsList),
                 func(a, b) {
@@ -204,7 +203,6 @@ actor Review {
 
         return #ok(Vector.toArray(reviewsList));
     };
-
 
     public query func getReviewSummaries(reviewIds : [Text]) : async Result.Result<ReviewSummary, Text> {
         var cultureRating = 0;
@@ -226,7 +224,7 @@ actor Review {
                     };
                     totalReviews += 1;
                 };
-                case (null) { };
+                case (null) {};
             };
         };
 

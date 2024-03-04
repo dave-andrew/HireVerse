@@ -270,7 +270,7 @@ actor Company {
                     return #err("User is not a manager of the company");
                 };
 
-                if(Array.find<Text>(c.company_manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) != null) {
+                if (Array.find<Text>(c.company_manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) != null) {
                     return #err("User is already a manager of the company");
                 };
 
