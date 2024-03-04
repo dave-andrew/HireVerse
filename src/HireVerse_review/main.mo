@@ -233,10 +233,10 @@ actor Review {
         };
 
         let summary = {
-            cultureRating = cultureRating / totalReviews;
-            seniorManagementRating = seniorManagementRating / totalReviews;
-            workLifeBalanceRating = workLifeBalanceRating / totalReviews;
-            recommendToFriend = (recommendToFriend * 100) / totalReviews;
+            cultureRating = cultureRating;
+            seniorManagementRating = seniorManagementRating;
+            workLifeBalanceRating = workLifeBalanceRating;
+            recommendToFriend = (recommendToFriend * 100);
             totalReviews = totalReviews;
         };
 

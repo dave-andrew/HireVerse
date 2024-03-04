@@ -3,9 +3,10 @@ import { TbTilde } from "react-icons/tb";
 
 interface PieProps {
     percentage: number;
+    hasReview?: boolean;
 }
 
-export default function CircularRating({ percentage }: PieProps) {
+export default function CircularRating({ percentage, hasReview }: PieProps) {
     const getBarColor = (value: number) => {
         if (value < 50) return "#EF4444";
         if (value < 75) return "#FCC82B";
@@ -45,10 +46,12 @@ export default function CircularRating({ percentage }: PieProps) {
                 </g>
                 <Text percentage={pct} />
             </svg>
-            <div
-                className={`absolute rounded-full border-4 bg-white p-2 ${getBorderColor(pct)} bottom-[12.5%] right-[12.5%] text-lg`}>
-                {getIcon(pct)}
-            </div>
+            {hasReview && (
+                <div
+                    className={`absolute rounded-full border-4 bg-white p-2 ${getBorderColor(pct)} bottom-[12.5%] right-[12.5%] text-lg`}>
+                    {getIcon(pct)}
+                </div>
+            )}
         </div>
     );
 }

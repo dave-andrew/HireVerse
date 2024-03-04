@@ -33,16 +33,15 @@ export default function CompanyReviewSummary({ companyId }: Props) {
             return;
         }
 
-        const cultureRating = Number(reviewSummary?.cultureRating ?? 0);
-        const seniorManagementRating = Number(
-            reviewSummary?.seniorManagementRating ?? 0,
-        );
-        const workLifeBalanceRating = Number(
-            reviewSummary?.workLifeBalanceRating ?? 0,
-        );
-        const recommendPercentage = Number(
-            reviewSummary?.recommendToFriend ?? 0,
-        );
+        const totalReviews = Number(reviewSummary?.totalReviews ?? 0);
+        const cultureRating =
+            Number(reviewSummary?.cultureRating ?? 0) / totalReviews;
+        const seniorManagementRating =
+            Number(reviewSummary?.seniorManagementRating ?? 0) / totalReviews;
+        const workLifeBalanceRating =
+            Number(reviewSummary?.workLifeBalanceRating ?? 0) / totalReviews;
+        const recommendPercentage =
+            Number(reviewSummary?.recommendToFriend ?? 0) / totalReviews;
 
         const total =
             cultureRating + seniorManagementRating + workLifeBalanceRating;
@@ -53,7 +52,7 @@ export default function CompanyReviewSummary({ companyId }: Props) {
             workLifeBalanceRating,
             averageRating: total / 3,
             recommendPercentage: recommendPercentage,
-            totalRating: total,
+            totalRating: totalReviews,
         });
     }, [reviewSummary]);
 
@@ -68,13 +67,13 @@ export default function CompanyReviewSummary({ companyId }: Props) {
                         value={rating.averageRating}
                         readOnly={true}
                         halfFillMode="svg"
-                        className="has-[svg]:w-24"
+                        className="has-[svg]:w-32"
                     />
                     <p>
                         <b>{rating.totalRating}</b> ratings in total
                     </p>
                 </div>
-                <div className="flex min-w-[50%] flex-1 flex-col gap-2 p-5">
+                <div className="flex min-w-[40%] flex-1 flex-col gap-2 p-5">
                     <RatingBar
                         value={rating.cultureRating}
                         text="Culture"
@@ -89,7 +88,10 @@ export default function CompanyReviewSummary({ companyId }: Props) {
                     />
                 </div>
                 <div className="flex flex-1 flex-col items-center gap-3 p-5">
-                    <CircularRating percentage={rating.recommendPercentage} />
+                    <CircularRating
+                        percentage={rating.recommendPercentage}
+                        hasReview={!!rating}
+                    />
                     <p className="w-4/5 text-center">
                         Employee recommends the company to friends
                     </p>

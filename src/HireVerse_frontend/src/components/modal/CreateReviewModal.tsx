@@ -1,5 +1,5 @@
 import WrappedModal from "../form/WrappedModal";
-import React, { useState } from "react";
+import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { IoCloseSharp } from "react-icons/io5";
 import WrappedRichText from "../form/WrappedRichText";
@@ -14,6 +14,7 @@ import { useAddReview } from "../../datas/mutations/reviewMutations";
 import useToaster from "../../hooks/useToaster";
 import { CreateReviewInput } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import { useParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface INewReviewForm {
     title: string;
@@ -32,8 +33,13 @@ interface INewReviewForm {
     anonymous: boolean;
 }
 
-export default function CreateReviewModal() {
-    const [isOpen, setOpenState] = useState(true);
+interface Props {
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+}
+
+export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
+    const queryClient = useQueryClient();
     const mutation = useAddReview();
     const { id } = useParams<string>();
     const {
@@ -184,7 +190,7 @@ export default function CreateReviewModal() {
         mutation.mutate(newReview);
 
         reset();
-        setOpenState(false);
+        setIsOpen(false);
     };
 
     const handleSubmitForm = () => {
@@ -201,13 +207,13 @@ export default function CreateReviewModal() {
                     <button
                         className="h-fit w-fit rounded-full text-end text-xl"
                         type="button"
-                        onClick={() => setOpenState(false)}>
+                        onClick={() => setIsOpen(false)}>
                         <IoCloseSharp size="2rem" />
                     </button>
                 </div>
             }
             isOpen={isOpen}
-            setIsOpen={setOpenState}>
+            setIsOpen={setIsOpen}>
             <div className="flex flex-col">
                 <div className="flex flex-col py-5">
                     <div className="pb-2 font-bold">Review Title</div>
@@ -368,7 +374,7 @@ export default function CreateReviewModal() {
             <div className="flex w-full items-center justify-center gap-2 pt-5">
                 <button
                     onClick={handleSubmitForm}
-                    className=" border-signature-yellow w-fit rounded-md border-2 bg-yellow-400 px-12 py-3 font-bold text-black transition-colors">
+                    className="w-fit rounded-md bg-signature-yellow hover:bg-signature-yellow px-10 py-3 text-lg font-bold text-black transition-colors">
                     Post Review
                 </button>
             </div>

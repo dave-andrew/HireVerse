@@ -5,7 +5,6 @@ import {
     MdOutlinePeopleAlt,
     MdOutlineQueryBuilder,
 } from "react-icons/md";
-import CompanyReviewSummary from "../../components/review/CompanyReviewSummary";
 import { useNavigate, useParams } from "react-router-dom";
 import imageHandler from "../../utils/imageHandler";
 import convertToDate from "../../utils/convertToDate";
@@ -15,32 +14,21 @@ import {
     useQueryCompanyIndustries,
 } from "../../datas/queries/companyQueries";
 import CreateReviewModal from "../../components/modal/CreateReviewModal";
-import CompanyReviewItem from "../../components/review/CompanyReviewItem";
-import React from "react";
-import TextDropdown from "../../components/form/TextDropdown";
-import { useForm } from "react-hook-form";
-import { useQueryReviews } from "../../datas/queries/reviewQueries";
-import { CONSTANTS } from "../../utils/constants";
+import React, { useState } from "react";
+import CompanyDetailReview from "../../components/review/CompanyDetailReview";
 
 export interface IReviewSortForm {
     orderBy: string;
 }
 
 export default function CompanyDetail() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const nav = useNavigate();
-    const { control, getValues: getFilters } = useForm<IReviewSortForm>({
-        defaultValues: {
-            orderBy: "Newest",
-        },
-    });
     const { id } = useParams<string>();
     const { data: company, isLoading: companyLoading } = useQueryCompany(id);
     const { data: industries, isLoading: industriesLoading } =
         useQueryCompanyIndustries(id);
-    const { data: reviews, refetch: refetchReviews } = useQueryReviews(
-        id,
-        getFilters,
-    );
 
     if (!id) {
         nav(-1);
@@ -132,53 +120,12 @@ export default function CompanyDetail() {
                                     </h3>
                                     <p>{company?.profile}</p>
                                 </CardLayout>
-                                <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
-                                    <div className="flex w-full flex-row justify-between">
-                                        <h3 className="m-0 flex flex-row justify-between p-0 text-4xl font-bold">
-                                            Reviews
-                                        </h3>
-                                        <button>Create Review</button>
-                                    </div>
-
-                                    <div>
-                                        <CompanyReviewSummary companyId={id} />
-                                    </div>
-                                </CardLayout>
-                                <CardLayout className="mt-2 flex flex-row items-center justify-between gap-5 rounded-none p-4">
-                                    <div>
-                                        <span className="text-xl font-bold">
-                                            Review Selections
-                                        </span>
-                                        <p>Showing 10 reviews</p>
-                                    </div>
-                                    <span className="flex flex-row items-center gap-3">
-                                        Order By
-                                        <TextDropdown
-                                            states={CONSTANTS.REVIEWS.ORDER_BY}
-                                            control={control}
-                                            name="orderBy"
-                                            onChange={() => refetchReviews()}
-                                        />
-                                    </span>
-                                </CardLayout>
-                                <div className="flex flex-1 flex-row">
-                                    <div className="flex w-full flex-col gap-2 pt-2">
-                                        {/*{console.log(reviews)}*/}
-                                        {reviews?.map((review, i) => {
-                                            return (
-                                                <CompanyReviewItem
-                                                    key={i}
-                                                    review={review}
-                                                />
-                                            );
-                                        })}
-                                        {/*{Array.from({ length: 4 }).map(*/}
-                                        {/*    (_, i) => (*/}
-                                        {/*        <CompanyReviewItem />*/}
-                                        {/*    ),*/}
-                                        {/*)}*/}
-                                    </div>
-                                </div>
+                                <CompanyDetailReview
+                                    companyId={id}
+                                    onCreateReviewClick={() =>
+                                        setIsModalOpen(true)
+                                    }
+                                />
                             </div>
                             <div className="flex w-[30%] flex-col">
                                 <CardLayout className="flex flex-col gap-5 rounded-none p-10">
@@ -237,7 +184,10 @@ export default function CompanyDetail() {
                     </div>
                 </div>
             </FrontPageLayout>
-            <CreateReviewModal />
+            <CreateReviewModal
+                isOpen={isModalOpen}
+                setIsOpen={setIsModalOpen}
+            />
         </>
     );
 }

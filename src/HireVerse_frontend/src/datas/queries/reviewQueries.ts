@@ -22,32 +22,22 @@ export function useQueryReviews(
             if (getFilters) {
                 filters = getFilters().orderBy;
             }
-            const getCompany = async () => {
-                const company = await getCompanyService().then((s) =>
-                    s.getCompany(companyId),
-                );
-                if (isOk(company)) {
-                    return company.ok;
-                }
-            };
-
-            const company = await queryClient.fetchQuery({
-                queryKey: ["company", companyId],
-                queryFn: getCompany,
-            });
-
-            if (!company) {
-                return null;
-            }
-
-            const response = await getReviewService()
-                .then((s) => s.getReviews(company.reviews_ids, filters))
-                .catch((e) => console.error(e));
+            const response = await getCompanyService().then((s) =>
+                s.getCompany(companyId),
+            );
 
             console.log(response);
-
             if (isOk(response)) {
-                return response.ok;
+                const company = response.ok;
+                const response2 = await getReviewService()
+                    .then((s) => s.getReviews(company.reviews_ids, filters))
+                    .catch((e) => console.error(e));
+
+                console.log(response2, "refetch bor");
+
+                if (isOk(response2)) {
+                    return response2.ok;
+                }
             }
 
             return null;
@@ -88,6 +78,7 @@ export function useQueryReviewSummary(companyId: string) {
                 .catch((e) => console.error(e));
 
             if (isOk(response)) {
+                console.log(response);
                 return response.ok;
             }
 
