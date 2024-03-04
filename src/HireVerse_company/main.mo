@@ -637,7 +637,17 @@ actor Company {
         };
     };
 
-    public shared (msg) func getCompanyInvitations(company_id: Text) : async Result.Result<[Invite], Text>{
+    type UserInvitation = {
+        user : User.User;
+        invite : Invite;
+    };
+
+    type CompanyInvitation = {
+        company : Company;
+        invite : Invite;
+    };
+
+    public shared (msg) func getCompanyInvitations(company_id : Text) : async Result.Result<[UserInvitation], Text> {
         let user_id = msg.caller;
 
         if (Principal.isAnonymous(user_id)) {
@@ -657,11 +667,26 @@ actor Company {
                     return #err("User is not a manager of the company");
                 };
 
-                let companyInvitations = Vector.Vector<Invite>();
+                let companyInvitations = Vector.Vector<UserInvitation>();
 
                 for (invite in invitations.vals()) {
                     if (invite.company_id == company_id) {
-                        companyInvitations.add(invite);
+
+                        let user = await User.getUser(invite.user_id);
+
+                        switch (user) {
+                            case (null) {
+                                return #err("User not found");
+                            };
+                            case (?u) {
+                                let userInvitation = {
+                                    user = u;
+                                    invite = invite;
+                                };
+
+                                companyInvitations.add(userInvitation);
+                            };
+                        };
                     };
                 };
 
@@ -670,21 +695,35 @@ actor Company {
         };
     };
 
-    public shared (msg) func getUserInvitations() : async Result.Result<[Invite], Text>{
+    public shared (msg) func getUserInvitations() : async Result.Result<[CompanyInvitation], Text> {
         let user_id = msg.caller;
 
         if (Principal.isAnonymous(user_id)) {
             return #err("Not authorized");
         };
 
-        let userInvitations = Vector.Vector<Invite>();
+        let userInvitation = Vector.Vector<CompanyInvitation>();
 
         for (invite in invitations.vals()) {
             if (invite.user_id == user_id) {
-                userInvitations.add(invite);
+                let company = await getCompany(invite.company_id);
+
+                switch (company) {
+                    case (#err(msg)) {
+                        return #err("Company not found");
+                    };
+                    case (#ok(c)) {
+
+                        let companyInvitation = {
+                            company = c;
+                            invite = invite;
+                        };
+                        userInvitation.add(companyInvitation);
+                    };
+                };
             };
         };
 
-        return #ok(Vector.toArray(userInvitations));
+        return #ok(Vector.toArray(userInvitation));
     };
 };
