@@ -4,7 +4,7 @@ import {
     MdOutlinePeopleAlt,
     MdOutlineQueryBuilder,
 } from "react-icons/md";
-import CompanyReviewSummary from "../../components/company/CompanyReviewSummary";
+import CompanyReviewSummary from "../../components/review/CompanyReviewSummary";
 import useService from "../../hooks/useService";
 import { useEffect, useRef, useState } from "react";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
@@ -17,7 +17,7 @@ import imageHandler from "../../utils/imageHandler";
 import EditCompanyModal from "../../components/modal/EditCompanyModal";
 import SocialMediaItem from "../../components/company/SocialMediaItem";
 import purifyDOM from "../../utils/purifyDOM";
-import { useGetCompanyIndustries } from "../../datas/queries/companyQueries";
+import { useQueryCompanyIndustries } from "../../datas/queries/companyQueries";
 
 interface IManageCompanyForm {
     image: FileList;
@@ -28,7 +28,7 @@ export default function ManageCompany() {
     const { convertImageToBlob } = useImageBlob();
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
-    const { data: companyIndustries } = useGetCompanyIndustries(
+    const { data: companyIndustries } = useQueryCompanyIndustries(
         selectedCompany?.id,
     );
     const [isModalShown, setIsModalShown] = useState(false);

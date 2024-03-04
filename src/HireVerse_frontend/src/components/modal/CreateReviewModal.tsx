@@ -28,7 +28,7 @@ interface INewReviewForm {
     cultureRating: number;
     workLifeBalanceRating: number;
     seniorManagementRating: number;
-    recommendToFriend: boolean | null;
+    recommendToFriend: string | null;
     anonymous: boolean;
 }
 
@@ -178,7 +178,7 @@ export default function CreateReviewModal() {
             cultureRating: BigInt(data.cultureRating),
             workLifeBalanceRating: BigInt(data.workLifeBalanceRating),
             seniorManagementRating: BigInt(data.seniorManagementRating),
-            recommendToFriend: data.recommendToFriend,
+            recommendToFriend: data.recommendToFriend === "Yes",
         };
 
         mutation.mutate(newReview);

@@ -4,16 +4,23 @@ import { isOk } from "../../utils/resultGuarder";
 import { CreateReviewInput } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 
 export function useAddReview() {
-    const { getReviewService } = useService();
+    const { getCompanyService } = useService();
     return useMutation({
         mutationFn: async (newReview: CreateReviewInput) => {
-            const response = await getReviewService().then((s) =>
-                s.addReview(newReview),
-            );
+            console.log("hahahah", newReview);
+            try {
+                const response = await getCompanyService().then((s) =>
+                    s.addReview(newReview),
+                );
+                console.log(response);
 
-            if (isOk(response)) {
-                return null;
+                if (isOk(response)) {
+                    return null;
+                }
+            } catch (error) {
+                console.log(error);
             }
+
             return null;
         },
     });

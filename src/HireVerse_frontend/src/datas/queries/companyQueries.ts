@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { isOk } from "../../utils/resultGuarder";
 import useService from "../../hooks/useService";
 
-export function useGetCompanyIndustries(companyId: string | undefined) {
+export function useQueryCompanyIndustries(companyId: string | undefined) {
     const { getJobService } = useService();
     return useQuery({
         queryKey: ["companyIndustries", companyId],
@@ -25,7 +25,7 @@ export function useGetCompanyIndustries(companyId: string | undefined) {
     });
 }
 
-export function useGetCompanyCountries() {
+export function useQueryCompanyCountries() {
     const { getCompanyService } = useService();
     return useQuery({
         queryKey: ["companyCountries"],
@@ -37,7 +37,7 @@ export function useGetCompanyCountries() {
     });
 }
 
-export function useGetManagedCompanies() {
+export function useQueryManagedCompanies() {
     const { getCompanyService } = useService();
     return useQuery({
         queryKey: ["managedCompanies"],
@@ -55,7 +55,7 @@ export function useGetManagedCompanies() {
     });
 }
 
-export function useGetCompany(companyId: string | undefined) {
+export function useQueryCompany(companyId: string | undefined) {
     const { getCompanyService } = useService();
     return useQuery({
         queryKey: ["company", companyId],

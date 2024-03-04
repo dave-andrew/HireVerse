@@ -1,4 +1,3 @@
-
 import FrontPageLayout from "../../layouts/FrontPageLayout";
 import CardLayout from "../../layouts/CardLayout";
 import {
@@ -6,28 +5,42 @@ import {
     MdOutlinePeopleAlt,
     MdOutlineQueryBuilder,
 } from "react-icons/md";
-import CompanyReviewSummary from "../../components/company/CompanyReviewSummary";
+import CompanyReviewSummary from "../../components/review/CompanyReviewSummary";
 import { useNavigate, useParams } from "react-router-dom";
 import imageHandler from "../../utils/imageHandler";
 import convertToDate from "../../utils/convertToDate";
 import SocialMediaItem from "../../components/company/SocialMediaItem";
 import {
-    useGetCompany,
-    useGetCompanyIndustries,
+    useQueryCompany,
+    useQueryCompanyIndustries,
 } from "../../datas/queries/companyQueries";
 import CreateReviewModal from "../../components/modal/CreateReviewModal";
 import CompanyReviewItem from "../../components/review/CompanyReviewItem";
 import React from "react";
 import TextDropdown from "../../components/form/TextDropdown";
 import { useForm } from "react-hook-form";
+import { useQueryReviews } from "../../datas/queries/reviewQueries";
+import { CONSTANTS } from "../../utils/constants";
+
+export interface IReviewSortForm {
+    orderBy: string;
+}
 
 export default function CompanyDetail() {
     const nav = useNavigate();
-    const { control } = useForm();
+    const { control, getValues: getFilters } = useForm<IReviewSortForm>({
+        defaultValues: {
+            orderBy: "Newest",
+        },
+    });
     const { id } = useParams<string>();
-    const { data: company, isLoading: companyLoading } = useGetCompany(id);
+    const { data: company, isLoading: companyLoading } = useQueryCompany(id);
     const { data: industries, isLoading: industriesLoading } =
-        useGetCompanyIndustries(id);
+        useQueryCompanyIndustries(id);
+    const { data: reviews, refetch: refetchReviews } = useQueryReviews(
+        id,
+        getFilters,
+    );
 
     if (!id) {
         nav(-1);
@@ -128,7 +141,7 @@ export default function CompanyDetail() {
                                     </div>
 
                                     <div>
-                                        <CompanyReviewSummary companyId={""} />
+                                        <CompanyReviewSummary companyId={id} />
                                     </div>
                                 </CardLayout>
                                 <CardLayout className="flex flex-row justify-between items-center gap-5 rounded-none p-4 mt-2">
@@ -141,24 +154,29 @@ export default function CompanyDetail() {
                                     <span className="flex flex-row items-center gap-3">
                                         Order By
                                         <TextDropdown
-                                            states={[
-                                                "Newest",
-                                                "Oldest",
-                                                "Highest Rating",
-                                                "Lowest Rating",
-                                            ]}
+                                            states={CONSTANTS.REVIEWS.ORDER_BY}
                                             control={control}
                                             name="orderBy"
+                                            onChange={() => refetchReviews()}
                                         />
                                     </span>
                                 </CardLayout>
                                 <div className="flex flex-1 flex-row">
                                     <div className="flex flex-col w-full gap-2 pt-2">
-                                        {Array.from({ length: 4 }).map(
-                                            (_, i) => (
-                                                <CompanyReviewItem />
-                                            ),
-                                        )}
+                                        {/*{console.log(reviews)}*/}
+                                        {reviews?.map((review, i) => {
+                                            return (
+                                                <CompanyReviewItem
+                                                    key={i}
+                                                    review={review}
+                                                />
+                                            );
+                                        })}
+                                        {/*{Array.from({ length: 4 }).map(*/}
+                                        {/*    (_, i) => (*/}
+                                        {/*        <CompanyReviewItem />*/}
+                                        {/*    ),*/}
+                                        {/*)}*/}
                                     </div>
                                 </div>
                             </div>

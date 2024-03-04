@@ -16,7 +16,7 @@ import JobItemManagement from "../../components/job/JobItemManagement";
 import WrappedModal from "../../components/form/WrappedModal";
 import CreateJobModal from "../../components/modal/CreateJobModal";
 import useToaster from "../../hooks/useToaster";
-import { useGetJobPostedByCompany } from "../../datas/queries/jobQueries";
+import { useQueryJobPostedByCompany } from "../../datas/queries/jobQueries";
 
 export interface IQuerySortForm {
     query: string;
@@ -40,7 +40,7 @@ export default function CompanyJobs() {
             status: "All",
         },
     });
-    const { data: jobs, refetch: getJobs } = useGetJobPostedByCompany(
+    const { data: jobs, refetch: getJobs } = useQueryJobPostedByCompany(
         selectedCompany?.id,
         getValues,
     );

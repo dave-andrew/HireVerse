@@ -8,7 +8,7 @@ import { IQueryFilterSortForm } from "../../pages/employee/FindJobsPage";
 import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { IQuerySortForm } from "../../pages/employers/CompanyJobs";
 
-export function useGetFullJob(jobId: string | undefined) {
+export function useQueryFullJob(jobId: string | undefined) {
     const { getJobService } = useService();
     return useQuery({
         queryKey: ["fullJob", jobId],
@@ -30,7 +30,7 @@ export function useGetFullJob(jobId: string | undefined) {
     });
 }
 
-export function useGetFilteredJobs(
+export function useQueryFilteredJobs(
     filters: IFilterForm,
     getQueryFilters: () => IQueryFilterSortForm,
 ) {
@@ -77,7 +77,7 @@ export function useGetFilteredJobs(
     });
 }
 
-export function useGetCompanyNames(
+export function useQueryCompanyNames(
     companyIds: string[],
     autoFetch: boolean = false,
 ) {
@@ -98,7 +98,7 @@ export function useGetCompanyNames(
     });
 }
 
-export function useGetJobIndustries() {
+export function useQueryJobIndustries() {
     const { getJobService } = useService();
     return useQuery({
         queryKey: ["jobIndustries"],
@@ -115,7 +115,7 @@ export function useGetJobIndustries() {
     });
 }
 
-export function useGetManagersFromCompany(
+export function useQueryManagersFromCompany(
     companyId: string | undefined,
     // getValues: () => IQuerySortForm
 ) {
@@ -140,7 +140,7 @@ export function useGetManagersFromCompany(
     });
 }
 
-export function useGetJobPostedByCompany(
+export function useQueryJobPostedByCompany(
     companyId: string | undefined,
     getValues: () => IQuerySortForm,
 ) {
