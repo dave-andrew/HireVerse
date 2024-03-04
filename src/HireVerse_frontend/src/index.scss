@@ -78,11 +78,22 @@
     padding: revert;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1, h3, h4, h5, h6 {
     margin: revert;
     padding: revert;
     font-size: revert;
-    font-weight: revert;
+    font-weight: 600;
+  }
+
+  h2 {
+    margin: revert;
+    padding: revert;
+    font-size: revert;
+    font-weight: 700;
+  }
+
+  strong {
+    font-weight: 700;
   }
 
   pre {
@@ -103,7 +114,7 @@
 
 
 html {
-  font-family: "Work Sans", sans-serif;
+  font-family: "Lato", sans-serif;
 }
 
 //

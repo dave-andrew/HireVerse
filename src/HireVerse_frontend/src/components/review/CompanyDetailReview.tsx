@@ -62,13 +62,13 @@ export default function CompanyDetailReview({
         <>
             <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-lg p-10">
                 <div className="flex w-full flex-row justify-between">
-                    <h3 className="m-0 flex flex-row justify-between p-0 text-4xl font-bold">
+                    <h3 className="m-0 flex flex-row justify-between p-0 text-4xl font-semibold">
                         Reviews
                     </h3>
                     {onCreateReviewClick && (
                         <button
                             onClick={onCreateReviewClick}
-                            className="flex flex-row justify-center items-center w-fit rounded-md bg-signature-yellow hover:bg-signature-yellow px-5 py-3 text-lg font-bold text-black transition-colors gap-3">
+                            className="flex flex-row justify-center items-center w-fit rounded-md bg-signature-yellow hover:bg-signature-yellow px-5 py-3 text-lg font-semibold text-black transition-colors gap-3">
                             <IoMdAdd />
                             <span>Create Review</span>
                         </button>
@@ -83,7 +83,7 @@ export default function CompanyDetailReview({
             {reviews && reviews.length > 0 && (
                 <CardLayout className="flex flex-row items-center justify-between gap-5 rounded-lg p-4">
                     <div>
-                        <span className="text-xl font-bold">
+                        <span className="text-xl font-semibold">
                             Review Selections
                         </span>
                         <p>Showing 10 reviews</p>

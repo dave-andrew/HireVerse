@@ -4,7 +4,6 @@ import {
     MdOutlinePeopleAlt,
     MdOutlineQueryBuilder,
 } from "react-icons/md";
-import useService from "../../hooks/useService";
 import React, { useEffect, useRef, useState } from "react";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import useLocalStorage from "../../hooks/useLocalStorage";
@@ -17,19 +16,20 @@ import SocialMediaItem from "../../components/company/SocialMediaItem";
 import purifyDOM from "../../utils/purifyDOM";
 import { useQueryCompanyIndustries } from "../../datas/queries/companyQueries";
 import CompanyDetailReview from "../../components/review/CompanyDetailReview";
+import { useUpdateCompany } from "../../datas/mutations/companyMutations";
 
 interface IManageCompanyForm {
     image: FileList;
 }
 
 export default function ManageCompany() {
-    const { getJobService, getCompanyService } = useService();
     const { convertImageToBlob } = useImageBlob();
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
     const { data: companyIndustries } = useQueryCompanyIndustries(
         selectedCompany?.id,
     );
+    const mutation = useUpdateCompany();
     const [isModalShown, setIsModalShown] = useState(false);
     let imageRef = useRef<HTMLInputElement>(null);
 
@@ -38,9 +38,7 @@ export default function ManageCompany() {
             return;
         }
 
-        await getCompanyService().then((s) =>
-            s.updateCompany(selectedCompany?.id, selectedCompany),
-        );
+        mutation.mutate(selectedCompany);
     };
 
     const handleImageEdit = async () => {
@@ -52,7 +50,6 @@ export default function ManageCompany() {
         const blob = new Uint8Array(await convertImageToBlob(file));
 
         setSelectedCompany((prev) => {
-            console.log("wat");
             if (prev) {
                 return { ...prev, image: blob };
             }
@@ -88,7 +85,7 @@ export default function ManageCompany() {
                         </div>
                         <div className="flex flex-col gap-8">
                             <div className="flex flex-col gap-3 px-2">
-                                <h2 className="relative m-0 p-0 text-5xl font-bold">
+                                <h2 className="relative m-0 p-0 text-5xl font-semibold">
                                     <span className="relative">
                                         {selectedCompany?.name}
                                     </span>
@@ -106,7 +103,7 @@ export default function ManageCompany() {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-600">Founded</p>
-                                        <p className="font-bold">
+                                        <p className="font-semibold">
                                             {convertToDate(
                                                 Number(
                                                     selectedCompany?.timestamp,
@@ -123,7 +120,7 @@ export default function ManageCompany() {
                                         <p className="text-gray-600">
                                             Location
                                         </p>
-                                        <p className="font-bold">
+                                        <p className="font-semibold">
                                             {
                                                 selectedCompany
                                                     ?.office_locations?.[0]
@@ -140,7 +137,7 @@ export default function ManageCompany() {
                                             Visitors
                                         </p>
                                         {/*//TODO ADD VISITORS*/}
-                                        <p className="font-bold">
+                                        <p className="font-semibold">
                                             {Number(selectedCompany?.seen)}
                                         </p>
                                     </div>
@@ -155,7 +152,7 @@ export default function ManageCompany() {
                     <div className="flex w-full flex-row gap-2">
                         <div className="flex h-auto w-[70%] flex-col gap-2">
                             <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-lg p-10">
-                                <h3 className="h-0 p-0 text-4xl font-bold">
+                                <h3 className="p-0 m-0 text-4xl font-semibold">
                                     Company Profile
                                 </h3>
                                 <div
@@ -172,7 +169,7 @@ export default function ManageCompany() {
                         </div>
                         <div className="flex w-[30%] flex-col gap-2">
                             <CardLayout className="flex flex-col gap-5 rounded-lg p-10">
-                                <h3 className="h-0 p-0 text-4xl font-bold">
+                                <h3 className="p-0 m-0 text-4xl font-semibold">
                                     Industries
                                 </h3>
                                 <div className="flex flex-row flex-wrap gap-3">
@@ -180,7 +177,7 @@ export default function ManageCompany() {
                                         return (
                                             <div
                                                 key={i}
-                                                className="bg-blue-primary flex flex-row gap-2 rounded-md p-2 px-3 font-bold text-white opacity-80 transition-opacity hover:opacity-100">
+                                                className="bg-blue-primary flex flex-row gap-2 rounded-md p-2 px-3 font-semibold text-white opacity-80 transition-opacity hover:opacity-100">
                                                 {industry}
                                             </div>
                                         );
@@ -188,7 +185,7 @@ export default function ManageCompany() {
                                 </div>
                             </CardLayout>
                             <CardLayout className="flex flex-col gap-5 rounded-lg p-10">
-                                <h3 className="h-0 p-0 text-4xl font-bold">
+                                <h3 className="p-0 m-0 text-4xl font-semibold">
                                     Social Medias
                                 </h3>
                                 <div className="flex flex-col flex-wrap gap-3">
@@ -205,7 +202,7 @@ export default function ManageCompany() {
                                 </div>
                             </CardLayout>
                             <CardLayout className="flex flex-col gap-5 rounded-lg p-10">
-                                <h3 className="h-0 p-0 text-4xl font-bold">
+                                <h3 className="p-0 m-0 text-4xl font-semibold">
                                     Locations
                                 </h3>
                                 <div className="flex flex-col flex-wrap gap-3">
@@ -214,7 +211,7 @@ export default function ManageCompany() {
                                             return (
                                                 <div
                                                     key={i}
-                                                    className="flex flex-row gap-2 rounded-md bg-white p-2 px-3 font-bold text-black opacity-80 transition-opacity hover:opacity-100">
+                                                    className="flex flex-row gap-2 rounded-md bg-white p-2 px-3 font-semibold text-black opacity-80 transition-opacity hover:opacity-100">
                                                     {location}
                                                 </div>
                                             );

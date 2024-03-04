@@ -1,9 +1,9 @@
 import { IoCloseSharp } from "react-icons/io5";
 
-import {Dispatch, SetStateAction, useEffect} from "react";
+import { Dispatch, SetStateAction } from "react";
 import InvitationItem from "../form/InvitationItem";
 import WrappedModal from "../form/WrappedModal";
-import {useGetUserInvitations} from "../../datas/queries/companyQueries";
+import { useGetUserInvitations } from "../../datas/queries/companyQueries";
 
 interface Props {
     openState: boolean;
@@ -16,12 +16,7 @@ export default function InvitationModal({
     setOpenState,
     onJobCreated,
 }: Props) {
-
-    const {data, refetch} = useGetUserInvitations();
-
-    useEffect(() => {
-        console.log(data)
-    }, [data]);
+    const { data } = useGetUserInvitations();
 
     return (
         <WrappedModal
@@ -41,7 +36,12 @@ export default function InvitationModal({
             }>
             <div className="relative flex flex-row flex-wrap gap-6 overflow-scroll pb-4">
                 {data?.map((invitation, index) => {
-                    return <InvitationItem key={index} invitation={invitation} />;
+                    return (
+                        <InvitationItem
+                            key={index}
+                            invitation={invitation}
+                        />
+                    );
                 })}
             </div>
         </WrappedModal>

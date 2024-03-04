@@ -16,6 +16,9 @@ import {
     useQueryCompanyNames,
     useQueryFilteredJobs,
 } from "../../datas/queries/jobQueries";
+import { Job } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import { InfiniteData } from "@tanstack/react-query";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 export interface IQueryFilterSortForm {
     country: string;
@@ -24,14 +27,7 @@ export interface IQueryFilterSortForm {
 }
 
 export default function FindJobs() {
-    const { register, control, getValues, formState } =
-        useForm<IQueryFilterSortForm>({
-            defaultValues: {
-                country: "USA",
-                order: "Newest",
-                query: "",
-            },
-        });
+    const [shownJobId, setShownJobId] = useState<string>("");
     const [filter, setFilter] = useState<IFilterForm>({
         salaryStart: 0,
         salaryEnd: 0,
@@ -40,20 +36,48 @@ export default function FindJobs() {
         datePosted: "",
         currency: "",
     });
-    const { data: jobs, refetch: getFilteredJobs } = useQueryFilteredJobs(
-        filter,
-        getValues,
-    );
+    const { register, control, getValues, formState } =
+        useForm<IQueryFilterSortForm>({
+            defaultValues: {
+                country: "USA",
+                order: "Newest",
+                query: "",
+            },
+        });
+    const {
+        data: jobs,
+        refetch: getFilteredJobs,
+        fetchNextPage,
+        isFetching,
+    } = useQueryFilteredJobs(filter, getValues);
+    const { detector, isIntersecting } = useInfiniteScroll();
+    const handleData = (
+        data: InfiniteData<Job[] | null, unknown> | undefined,
+    ) => {
+        if (data) {
+            return data.pages.flat(3).filter((j): j is Job => j !== null);
+        }
+
+        return [];
+    };
+
     const { data: companyNames, refetch: getCompanyNames } =
-        useQueryCompanyNames(jobs?.map((job) => job.company_id) ?? [], false);
-    const [shownJobId, setShownJobId] = useState<string>("");
+        useQueryCompanyNames(
+            handleData(jobs).map((job) => job.company_id) ?? [],
+            false,
+        );
 
     useEffect(() => {
         if (jobs) {
             getCompanyNames();
-            setShownJobId(jobs[0]?.id);
         }
     }, [jobs]);
+
+    useEffect(() => {
+        if (isIntersecting && !isFetching) {
+            fetchNextPage();
+        }
+    }, [isIntersecting]);
 
     useEffect(() => {
         getFilteredJobs();
@@ -65,7 +89,7 @@ export default function FindJobs() {
                 <div className="w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[480px]">
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
                         <div className="flex w-full flex-col gap-5 p-8 md:w-2/6">
-                            <h3 className="text-4xl font-bold lg:text-5xl">
+                            <h3 className="m-0 p-0 text-4xl font-bold lg:text-5xl">
                                 Find Your Dream Job Now.
                             </h3>
                             <p className="text-justify text-base leading-6 md:text-sm lg:text-lg">
@@ -116,7 +140,7 @@ export default function FindJobs() {
                     <div className="flex h-full w-full flex-row gap-3">
                         <div className="flex h-auto flex-col gap-1">
                             <CardLayout className="mr-2 flex flex-row items-center justify-between pe-2 ps-5">
-                                {jobs?.length} Jobs
+                                {handleData(jobs).length} Jobs
                                 <TextDropdown
                                     name="order"
                                     control={control}
@@ -125,24 +149,47 @@ export default function FindJobs() {
                                 />
                             </CardLayout>
                             <div className="card-scollr flex w-96 flex-col gap-2 overflow-y-auto overflow-x-hidden pr-1">
-                                {jobs?.map((job, index) => {
-                                    if (!companyNames) return null;
+                                {jobs?.pages.map((p) => (
+                                    <>
+                                        {p?.map((job, index) => {
+                                            if (!companyNames) return null;
 
-                                    return (
-                                        <JobItem
-                                            key={index}
-                                            job={job}
-                                            onClick={() =>
-                                                setShownJobId(job.id)
-                                            }
-                                            companyName={companyNames?.[index]}
-                                        />
-                                    );
-                                })}
+                                            return (
+                                                <JobItem
+                                                    key={job.id}
+                                                    job={job}
+                                                    onClick={() =>
+                                                        setShownJobId(job.id)
+                                                    }
+                                                    companyName={
+                                                        companyNames?.[index]
+                                                    }
+                                                />
+                                            );
+                                        })}
+                                    </>
+                                ))}
+                                {/*{handleData(jobs).map((job, index) => {*/}
+                                {/*    if (!companyNames) return null;*/}
+
+                                {/*    return (*/}
+                                {/*        <JobItem*/}
+                                {/*            key={job.id}*/}
+                                {/*            job={job}*/}
+                                {/*            onClick={() =>*/}
+                                {/*                setShownJobId(job.id)*/}
+                                {/*            }*/}
+                                {/*            companyName={companyNames?.[index]}*/}
+                                {/*        />*/}
+                                {/*    );*/}
+                                {/*})}*/}
                                 {!jobs &&
                                     Array.from({ length: 10 }).map((_, i) => {
                                         return <JobItemSkeleton key={i} />;
                                     })}
+                                <div ref={detector}>
+                                    <JobItemSkeleton />
+                                </div>
                             </div>
                         </div>
                         <div className="flex w-full flex-col gap-2">

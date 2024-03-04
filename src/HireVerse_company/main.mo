@@ -192,6 +192,23 @@ actor Company {
         return #ok(Vector.toArray(managedCompanies));
     };
 
+    public shared query (msg) func getCompanyCountriesData(companyId : [Text]) : async Result.Result<[Text], Text> {
+        let companyList = Iter.toArray(companies.vals());
+        var countries = Vector.Vector<Text>();
+
+        for (company in companyList.vals()) {
+            let data = Array.find<Text>(companyId, func(p : Text) : Bool { p == company.id });
+            switch (data) {
+                case null {};
+                case (?c) {
+                    countries.add(company.founded_country);
+                };
+            };
+        };
+
+        return #ok(Vector.toArray(countries));
+    };
+
     public shared query func getCompanyCountries() : async [Text] {
         let companyList : [Company] = Iter.toArray(companies.vals());
         let countries = Vector.Vector<Text>();
@@ -425,6 +442,8 @@ actor Company {
             };
         };
     };
+
+    
 
     public shared (msg) func acceptInvitation(invitation_id : Text) : async Result.Result<(), Text> {
         let user_id = msg.caller;
