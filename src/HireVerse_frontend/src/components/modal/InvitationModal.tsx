@@ -41,7 +41,7 @@ export default function InvitationModal({
             }>
             <div className="relative flex flex-row flex-wrap gap-6 overflow-scroll pb-4">
                 {data?.map((invitation, index) => {
-                    return <InvitationItem key={index} invitation={invitation} />;
+                    return <InvitationItem key={index} invitation={invitation} refetch={refetch} />;
                 })}
             </div>
         </WrappedModal>

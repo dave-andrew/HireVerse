@@ -59,6 +59,7 @@ export default function InviteManagerModal({isModalShown, toggleModal}: {
             return;
         }
 
+        // TODO: Reset input user kalau udah
         setMutationLoading(true)
         mutation.mutate({invitee: userData.internet_identity, company_id: selectedCompany.id}, {
             onError: (error) => {
@@ -172,7 +173,7 @@ export default function InviteManagerModal({isModalShown, toggleModal}: {
             <div className="flex w-full items-center justify-center gap-2">
                 <button
                     onClick={createInvitation}
-                    disabled={userData == null && mutationLoading}
+                    disabled={userData == null || mutationLoading}
                     className="bg-signature-yellow w-fit rounded-md px-12 py-3 font-bold shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed">
                     Invite Manager
                 </button>

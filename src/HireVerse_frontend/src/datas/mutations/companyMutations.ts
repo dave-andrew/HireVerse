@@ -4,6 +4,49 @@ import {isOk} from "../../utils/resultGuarder";
 import type {Principal} from "../../../../../node_modules/@dfinity/principal/lib/cjs/index.d.ts";
 
 
+export function useRemoveInvitation() {
+    const {getCompanyService} = useService();
+    return useMutation({
+        mutationFn: async (invite_id: string) => {
+            try {
+                const response = await getCompanyService().then((s) =>
+                    s.removeInvite(invite_id),
+                );
+
+                if (isOk(response)) {
+                    return null;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
+            return null;
+        },
+    });
+}
+
+
+export function useAcceptInvitation() {
+    const {getCompanyService} = useService();
+    return useMutation({
+        mutationFn: async (invite_id: string) => {
+            try {
+                const response = await getCompanyService().then((s) =>
+                    s.acceptInvitation(invite_id),
+                );
+
+                if (isOk(response)) {
+                    return null;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
+            return null;
+        },
+    });
+}
+
 export function useCreateInvitation() {
     const {getCompanyService} = useService();
     return useMutation({
