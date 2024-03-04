@@ -11,12 +11,12 @@ import { defaultToastOptions } from "../../layouts/ManagementPageLayout";
 
 export default function InvitationItem({ invitation, refetch }: { invitation: CompanyInvitation, refetch: () => void }) {
 
-    const mutation = useRemoveInvitation();
+    const removeMutation = useRemoveInvitation();
     const acceptMutation = useAcceptInvitation();
     const [isLoading, setIsLoading] = useState(false);
     const removeInvitation = () => {
         setIsLoading(true);
-        mutation.mutate(invitation.invite.id, {
+        removeMutation.mutate(invitation.invite.id, {
             onSuccess: () => {
                 console.log("Success rejecting invitation");
                 refetch();
