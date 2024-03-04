@@ -120,4 +120,14 @@ actor Database {
 
         return #err("User not found");
     };
+
+    public query func getUserObjectByEmail(user_email : Text) : async Result.Result<User, Text> {
+        for (user in users.vals()) {
+            if (user.email == user_email) {
+                return #ok(user);
+            };
+        };
+
+        return #err("User not found");
+    };
 };
