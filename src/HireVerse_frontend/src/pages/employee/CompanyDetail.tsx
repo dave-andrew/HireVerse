@@ -133,8 +133,8 @@ export default function CompanyDetail() {
                                     <p>{company?.profile}</p>
                                 </CardLayout>
                                 <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
-                                    <div className="flex flex-row w-full justify-between">
-                                        <h3 className="flex flex-row justify-between p-0 m-0 text-4xl font-bold">
+                                    <div className="flex w-full flex-row justify-between">
+                                        <h3 className="m-0 flex flex-row justify-between p-0 text-4xl font-bold">
                                             Reviews
                                         </h3>
                                         <button>Create Review</button>
@@ -144,7 +144,7 @@ export default function CompanyDetail() {
                                         <CompanyReviewSummary companyId={id} />
                                     </div>
                                 </CardLayout>
-                                <CardLayout className="flex flex-row justify-between items-center gap-5 rounded-none p-4 mt-2">
+                                <CardLayout className="mt-2 flex flex-row items-center justify-between gap-5 rounded-none p-4">
                                     <div>
                                         <span className="text-xl font-bold">
                                             Review Selections
@@ -162,7 +162,7 @@ export default function CompanyDetail() {
                                     </span>
                                 </CardLayout>
                                 <div className="flex flex-1 flex-row">
-                                    <div className="flex flex-col w-full gap-2 pt-2">
+                                    <div className="flex w-full flex-col gap-2 pt-2">
                                         {/*{console.log(reviews)}*/}
                                         {reviews?.map((review, i) => {
                                             return (

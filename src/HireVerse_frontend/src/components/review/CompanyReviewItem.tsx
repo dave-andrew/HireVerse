@@ -12,17 +12,17 @@ interface Props {
 export default function CompanyReviewItem({ review }: Props) {
     return (
         <>
-            <div className="flex flex-col w-full border-[1px] border-gray-200 p-5 bg-white">
+            <div className="flex w-full flex-col border-[1px] border-gray-200 bg-white p-5">
                 <div className="flex flex-row justify-between">
-                    <div className="flex flex-row gap-5 items-center">
-                        <h2 className="!py-0 my-0">{review.title}</h2>
+                    <div className="flex flex-row items-center gap-5">
+                        <h2 className="my-0 !py-0">{review.title}</h2>
                         {review.recommendToFriend ? (
-                            <span className="inline-flex h-8 items-center bg-green-100 text-green-500 text-md gap-2 font-medium px-2.5 py-0.5 rounded-full">
+                            <span className="text-md inline-flex h-8 items-center gap-2 rounded-full bg-green-100 px-2.5 py-0.5 font-medium text-green-500">
                                 <FaCheck />
                                 Recommended
                             </span>
                         ) : (
-                            <span className="inline-flex h-8 items-center bg-red-100 text-red-500 text-md gap-2 font-medium px-2.5 py-0.5 rounded-full">
+                            <span className="text-md inline-flex h-8 items-center gap-2 rounded-full bg-red-100 px-2.5 py-0.5 font-medium text-red-500">
                                 <ImCross />
                                 Not Recommended
                             </span>
@@ -31,12 +31,12 @@ export default function CompanyReviewItem({ review }: Props) {
                     <div>{convertTimeInterval(review.timestamp)}</div>
                 </div>
                 <div className="flex flex-col gap-5">
-                    <div className="flex flex-row gap-2 items-center">
+                    <div className="flex flex-row items-center gap-2">
                         <span>
                             <b>By</b> {review.userId}
                         </span>
                     </div>
-                    <div className="flex flex-row gap-3 items-center">
+                    <div className="flex flex-row items-center gap-3">
                         <WrappedStarReview
                             review={review}
                             className="has-[svg]:w-32"

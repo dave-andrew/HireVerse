@@ -31,7 +31,7 @@ export default function ManagerTable() {
                         </th>
                         <th
                             scope="col"
-                            className="px-2 py-3 w-fit">
+                            className="w-fit px-2 py-3">
                             UID
                         </th>
                         <th
@@ -63,10 +63,10 @@ export default function ManagerTable() {
                             <tr
                                 key={index}
                                 className="border-b odd:bg-white even:bg-gray-50">
-                                <th className="whitespace-nowrap px-2 font-medium py-4 text-black text-center">
+                                <th className="whitespace-nowrap px-2 py-4 text-center font-medium text-black">
                                     {index + 1}
                                 </th>
-                                <th className="whitespace-nowrap px-2 font-medium text-black w-fit text-nowrap overflow-hidden">
+                                <th className="w-fit overflow-hidden whitespace-nowrap text-nowrap px-2 font-medium text-black">
                                     {manager.internet_identity.toText()}
                                 </th>
                                 <td className="font-bold text-black lg:pr-12">
@@ -87,7 +87,7 @@ export default function ManagerTable() {
                                 </td>
                                 <td
                                     className={
-                                        "font-semibold pr-4 text-green-600"
+                                        "pr-4 font-semibold text-green-600"
                                         // : manager.status == "Pending"
                                         //     ? "text-yellow-600"
                                         //     : "text-red-600")

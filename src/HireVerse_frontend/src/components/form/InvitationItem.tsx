@@ -4,15 +4,17 @@ import { IoMdClose } from "react-icons/io";
 
 export default function InvitationItem() {
     return (
-        <div className="flex flex-col gap-2 rounded-md border border-gray-200 w-64 h-80 relative shadow-md justify-center">
-            <div className="absolute bg-[url(public/backgrounds/subtle-prism.svg)] h-24 top-0 w-full z-[-10]"> </div>
-            <div className="text-center w-full flex justify-center place-items-center pt-6">
+        <div className="relative flex h-80 w-64 flex-col justify-center gap-2 rounded-md border border-gray-200 shadow-md">
+            <div className="absolute top-0 z-[-10] h-24 w-full bg-[url(public/backgrounds/subtle-prism.svg)]">
+                {" "}
+            </div>
+            <div className="flex w-full place-items-center justify-center pt-6 text-center">
                 {/* Company Profile Image */}
                 <img
                     alt="Company Logo"
                     width="120rem"
                     height="auto"
-                    className="aspect-square shadow-md rounded-full overflow-hidden border border-gray-200 bg-white"
+                    className="aspect-square overflow-hidden rounded-full border border-gray-200 bg-white shadow-md"
                     src="https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png"
                 />
             </div>

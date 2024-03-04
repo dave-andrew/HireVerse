@@ -11,11 +11,10 @@ interface Props {
 }
 
 export default function InvitationModal({
-                                            openState,
-                                            setOpenState,
-                                            onJobCreated,
-                                        }: Props) {
-
+    openState,
+    setOpenState,
+    onJobCreated,
+}: Props) {
     return (
         <WrappedModal
             panelClassName="!max-w-none !rounded-xl !w-[910px] !p-10"
@@ -32,7 +31,7 @@ export default function InvitationModal({
                     </button>
                 </div>
             }>
-            <div className="relative flex flex-row gap-6 overflow-scroll pb-4 flex-wrap">
+            <div className="relative flex flex-row flex-wrap gap-6 overflow-scroll pb-4">
                 <InvitationItem />
                 <InvitationItem />
                 <InvitationItem />

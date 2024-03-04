@@ -59,7 +59,7 @@ export default function WrappedStarReview({
     }, [review]);
 
     return (
-        <div className="flex flex-row items-center gap-2 relative">
+        <div className="relative flex flex-row items-center gap-2">
             <div>{rating.averageRating.toFixed(1)}/5</div>
             <div
                 onMouseOver={() => setIsHovered(true)}
@@ -84,7 +84,7 @@ export default function WrappedStarReview({
                 <div
                     id="tooltip-right"
                     role="tooltip"
-                    className={`absolute z-10 min-w-80 -translate-y-1/2 inline-block px-3 py-2 pb-1 text-sm font-medium text-black bg-white border-[1px] border-gray-200 rounded-lg shadow-sm tooltip`}>
+                    className={`tooltip absolute z-10 inline-block min-w-80 -translate-y-1/2 rounded-lg border-[1px] border-gray-200 bg-white px-3 py-2 pb-1 text-sm font-medium text-black shadow-sm`}>
                     <RatingBar
                         value={rating.cultureRating}
                         text="Culture"

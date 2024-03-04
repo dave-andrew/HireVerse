@@ -46,7 +46,7 @@ export default function CircularRating({ percentage }: PieProps) {
                 <Text percentage={pct} />
             </svg>
             <div
-                className={`absolute border-4 rounded-full p-2 bg-white ${getBorderColor(pct)} bottom-[12.5%] right-[12.5%] text-lg`}>
+                className={`absolute rounded-full border-4 bg-white p-2 ${getBorderColor(pct)} bottom-[12.5%] right-[12.5%] text-lg`}>
                 {getIcon(pct)}
             </div>
         </div>
