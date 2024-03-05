@@ -151,7 +151,7 @@ actor Job {
         };
 
         jobs.put(id, job);
-        let test = Company.addJob(newJob.company_id, id);
+        ignore await Company.addJob(newJob.company_id, id);
         return #ok(job);
     };
 
@@ -430,6 +430,18 @@ actor Job {
                 };
 
                 jobsList := Vector.toArray(newJobList);
+            };
+        };
+
+        switch (jobFilters.currency) {
+            case null {};
+            case (?currency) {
+                jobsList := Array.filter<Job>(
+                    jobsList,
+                    func(job) {
+                        return job.currency == currency;
+                    },
+                );
             };
         };
 

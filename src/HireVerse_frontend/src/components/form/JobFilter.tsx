@@ -8,6 +8,9 @@ import { IoMdClose } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { CONSTANTS } from "../../utils/constants";
 import { getJobIndustries } from "../../datas/queries/jobQueries";
+import { MdCurrencyExchange } from "react-icons/md";
+import CountryDropdown from "./CountryDropdown";
+import TextDropdown from "./TextDropdown";
 
 export interface IFilterForm {
     salaryStart: number;
@@ -36,6 +39,8 @@ export default function JobFilter({ onApplyFilter }: Props) {
     });
 
     const onSubmit = (data: IFilterForm) => {
+        const splitCurrency = data.currency.split(" ");
+        data.currency = splitCurrency[0];
         onApplyFilter(data);
     };
 
@@ -82,6 +87,18 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                             className="cursor-pointer p-3 pl-5 text-lg transition-colors"
                                             text="Salary Range">
                                             <div className="flex w-full flex-col justify-center gap-3 text-black">
+                                                <label className="flex flex-row text-lg">
+                                                    <span className="bg-signature-gray font-normal border-signature-gray flex min-w-16 flex-col items-center justify-center rounded-l-lg border-[1px] p-2">
+                                                        <MdCurrencyExchange className="w-[30px] h-auto" />
+                                                    </span>
+                                                    <TextDropdown
+                                                        states={CONSTANTS.JOB.CURRENCY}
+                                                        className="w-full !p-0"
+                                                        innerClassName="!h-full !ps-3 transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0"
+                                                        control={control}
+                                                        name="currency"
+                                                    />
+                                                </label>
                                                 <label className="flex flex-row text-lg">
                                                     <span className="bg-signature-gray font-normal border-signature-gray flex min-w-16 flex-col items-center justify-center rounded-l-lg border-[1px] p-2">
                                                         Start
