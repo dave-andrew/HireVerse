@@ -73,7 +73,7 @@ export default function Navbar() {
                                             : ""
                                     } text-s group mx-2  flex h-full flex-row place-items-center justify-center gap-2 border-b-2 border-transparent text-xl transition-colors hover:border-gray-400 md:min-w-24 xl:text-base`}>
                                     {menu.iconElement}
-                                    <div className="hidden text-xs opacity-0 duration-1000 group-hover:block group-hover:opacity-100 group-hover:duration-300 md:text-sm lg:text-base">
+                                    <div className="invisible absolute group-hover:static group-hover:visible text-xs opacity-0 duration-600 group-hover:transition-all group-hover:ease-in-out group-hover:opacity-100 group-hover:duration-300 md:text-sm lg:text-base">
                                         {menu.name}
                                     </div>
                                 </div>

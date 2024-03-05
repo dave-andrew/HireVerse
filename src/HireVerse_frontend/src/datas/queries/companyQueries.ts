@@ -74,6 +74,27 @@ export function useGetUserInvitations() {
     });
 }
 
+export function useQueryGetCompanyInvitations(companyId: string | undefined) {
+    const { getCompanyService } = useService();
+    return useQuery({
+        queryKey: ["companyInvitations"],
+        queryFn: async () => {
+
+            if (!companyId) return;
+
+            const response = await getCompanyService().then((s) =>
+                s.getCompanyInvitations(companyId),
+            );
+
+            if (isOk(response)) {
+                return response.ok;
+            }
+
+            throw new Error(response.err);
+        },
+    });
+}
+
 
 export function useQueryCompany(companyId: string | undefined) {
     const { getCompanyService } = useService();

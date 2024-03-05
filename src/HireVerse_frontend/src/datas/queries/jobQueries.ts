@@ -1,13 +1,13 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { isOk } from "../../utils/resultGuarder";
+import {useQuery} from "@tanstack/react-query";
+import {isOk} from "../../utils/resultGuarder";
 import useService from "../../hooks/useService";
 import { IFilterForm } from "../../components/form/JobFilter";
 import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 import convertNullFormat from "../../utils/convertNullFormat";
-import { IQueryFilterSortForm } from "../../pages/employee/FindJobsPage";
-import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import { IQuerySortForm } from "../../pages/employers/CompanyJobs";
-import { IJobItem } from "../../types/IJobItem";
+import {IQueryFilterSortForm} from "../../pages/employee/FindJobsPage";
+import {JobManagerFilterInput} from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import {IQuerySortForm} from "../../pages/employers/CompanyJobs";
+import {Principal} from "@dfinity/principal";
 
 export function useQueryFullJob(jobId: string | undefined) {
     const { getJobService } = useService();
@@ -167,13 +167,15 @@ export function useQueryGetUserObjectByEmail(email: string) {
             const response = await getBackendService()
                 .then((s) => s.getUserObjectByEmail(email))
                 .catch((e) => console.error(e));
+            if (email.length < 1) return null;
+
             if (isOk(response)) {
                 return response.ok;
             } else {
                 throw new Error("User not found");
             }
         },
-        enabled: email.length > 0,
+        enabled: !!email && email.length > 0,
     });
 }
 

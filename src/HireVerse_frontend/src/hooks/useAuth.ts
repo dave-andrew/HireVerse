@@ -1,10 +1,10 @@
 import useLocalStorage from "./useLocalStorage";
-import { User } from "../../../../.dfx/local/canisters/HireVerse_backend/service.did";
 import { AuthClient } from "@dfinity/auth-client";
 import { useCallback, useEffect } from "react";
 import useService from "./useService";
 import { canisterId as internetIdentityCanisterId } from "../../../declarations/internet_identity";
 import { useQueryClient } from "@tanstack/react-query";
+import { User } from "../../../declarations/HireVerse_backend/HireVerse_backend.did";
 
 export enum AuthState {
     Authenticated = "Authenticated",
