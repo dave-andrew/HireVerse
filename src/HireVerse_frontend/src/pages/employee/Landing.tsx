@@ -6,6 +6,7 @@ import { useRef } from "react";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Section3 from "../../components/landing/Section3";
+import FooterSection from "../../components/landing/FooterSection";
 
 export default function Landing() {
 
@@ -34,7 +35,7 @@ export default function Landing() {
                 <HeaderSection parentRef={parentRef} />
                 <Section2 parentRef={parentRef} />
                 <Section3 parentRef={parentRef} />
-
+                <FooterSection />
             </div>
         </FrontPageLayout>
     );
