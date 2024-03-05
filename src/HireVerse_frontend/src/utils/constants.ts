@@ -200,11 +200,33 @@ export const CONSTANTS = {
             "Zimbabwe",
         ],
     },
+
     DATE: {
         RANGE: ["Last Day", "Last Week", "Last Month", "Last Year"],
     },
     JOB: {
         STATUS: ["Active", "Hidden"],
+        CURRENCY: [
+            "Rp Rupiah",
+            "$ Dollar",
+            "£ Pound",
+            "€ Euro",
+            "¥ Yen",
+            "₹ Rupee",
+            "₽ Ruble",
+            "₩ Won",
+            "₪ Shekel",
+            "₴ Hryvnia",
+            "₮ Tugrik",
+            "₦ Naira",
+            "₱ Peso",
+            "₲ Guarani",
+            "₳ Austral",
+            "₴ UAH",
+            "₵ Cedi",
+            "₸ Tenge",
+            "₼ Manat",
+        ],
         EXPERIENCES: [
             "Full-time",
             "Part-time",

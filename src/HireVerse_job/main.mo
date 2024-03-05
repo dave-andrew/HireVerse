@@ -433,6 +433,18 @@ actor Job {
             };
         };
 
+        switch (jobFilters.currency) {
+            case null {};
+            case (?currency) {
+                jobsList := Array.filter<Job>(
+                    jobsList,
+                    func(job) {
+                        return job.currency == currency;
+                    },
+                );
+            };
+        };
+
         switch (jobFilters.order) {
             case null {};
             case (?order) {
