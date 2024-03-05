@@ -68,7 +68,7 @@ export default function JobDetail({ jobId }: Props) {
                         <div className="flex flex-row items-center h-full gap-4">
                             <a
                                 className="aspect-square object-cover h-full"
-                                href={`company/detail/${fullJob.id}`}>
+                                href={`company/detail/${fullJob.company.id}`}>
                                 <img
                                     onError={handleDefaultImage}
                                     src={convertBlobToImage(
