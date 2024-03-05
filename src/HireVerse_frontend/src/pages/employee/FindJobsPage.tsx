@@ -98,7 +98,7 @@ export default function FindJobs() {
                     <div className="flex w-full flex-row gap-5 sticky top-0 bg-white z-50 p-3">
                         <JobFilter onApplyFilter={(data) => setFilter(data)} />
                         <CardLayout className="flex w-full flex-row items-center">
-                            <span className="flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3 transition-colors has-[:focus]:bg-gray-100">
+                            <span className="flex flex-1 flex-row gap-2 rounded-bl-lg rounded-tl-lg p-3 transition-colors has-[:focus]:bg-gray-100">
                                 <IoIosSearch size="1.5rem" />
                                 <input
                                     {...register("query")}
@@ -114,12 +114,13 @@ export default function FindJobs() {
                                     }
                                 />
                             </span>
-                            <span className="border-signature-gray flex flex-row items-center gap-2 rounded-br-xl rounded-tr-xl border-l-[1px] p-1 pl-5 transition-colors has-[:focus]:bg-gray-100">
+                            <span className="border-signature-gray flex flex-row items-center gap-2 rounded-br-lg rounded-tr-lg border-l-[1px] pl-5 transition-colors has-[:focus]:bg-gray-100">
                                 <IoLocationOutline size="1.5rem" />
                                 <WrappedAutoDropdown
                                     data={countries}
                                     control={control}
-                                    name="country data="
+                                    defaultData={countries ? countries[0] : ""}
+                                    name="country"
                                     onChange={(_) => reGetFilteredJobs()}
                                 />
                             </span>

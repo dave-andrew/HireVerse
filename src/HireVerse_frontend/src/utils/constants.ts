@@ -291,6 +291,7 @@ export const CONSTANTS = {
             "Renewable Energy",
             "Retail",
             "Robotics",
+            "Software Development",
             "Space Exploration",
             "Sports Management",
             "Sustainable Development",

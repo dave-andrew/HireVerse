@@ -51,7 +51,7 @@ actor Review {
 
     let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
 
-    public shared (msg) func addReview(newReview : CreateReviewInput) : async Result.Result<Text, Text> {
+    public shared (msg) func addReview(user_id: Principal, newReview : CreateReviewInput) : async Result.Result<Text, Text> {
 
         Debug.print("Adding review: " # Principal.toText(msg.caller));
         if (Principal.isAnonymous(msg.caller)) {
@@ -62,7 +62,7 @@ actor Review {
 
         let review = {
             id = id;
-            userId = Principal.toText(msg.caller);
+            userId = Principal.toText(user_id);
             title = newReview.title;
             isAnonymous = newReview.isAnonymous;
             cultureRating = newReview.cultureRating;
@@ -81,20 +81,18 @@ actor Review {
     };
 
     public shared query (msg) func getSelfReview(companyId : Text) : async Result.Result<Review, Text> {
-        if (Principal.isAnonymous(msg.caller)) {
-            return #err("You must be logged in to check if you have reviewed a company");
-        };
-
-
-        for (review in reviews.vals()) {
-            Debug.print("Review: " # review.userId # " " # Principal.toText(msg.caller));
-
-            if (Principal.equal(Principal.fromText(review.userId), msg.caller) and review.companyId == companyId) {
-                return #ok(review);
+            
+            if (Principal.isAnonymous(msg.caller)) {
+                return #err("You must be logged in to view your review");
             };
-        };
-
-        return #err("Review not found");
+    
+            for (review in reviews.vals()) {
+                if (review.userId == Principal.toText(msg.caller) and review.companyId == companyId) {
+                    return #ok(review);
+                };
+            };
+    
+            return #err("Review not found");
     };
 
     public shared (msg) func updateReview(review : Review) : async Result.Result<Text, Text> {

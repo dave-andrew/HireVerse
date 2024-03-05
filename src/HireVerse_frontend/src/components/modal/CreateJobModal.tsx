@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import WrappedModal from "../form/WrappedModal";
 import { IoCloseSharp } from "react-icons/io5";
-import TextDropdown from "../form/TextDropdown";
 import { useFieldArray, useForm } from "react-hook-form";
 import WrappedRadioGroup from "../form/WrappedRadioGroup";
 import { CONSTANTS } from "../../utils/constants";
@@ -15,6 +14,10 @@ import {
 } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { useCreateNewJob } from "../../datas/mutations/jobMutation";
+import WrappedAutoDropdown from "../form/WrappedAutoDropdown";
+import useRichTextEditor from "../../hooks/useRichTextEditor";
+import WrappedRichText from "../form/WrappedRichText";
+import { Placeholder } from "@tiptap/extension-placeholder";
 
 interface Props {
     openState: boolean;
@@ -27,9 +30,6 @@ interface IEditCompanyForm {
     salaryStart: number;
     salaryEnd: number;
     industry: string;
-    shortDescription: string;
-    requirements: string;
-    jobDescription: string;
     applyWebsite: string;
     location: string;
     applyContacts: {
@@ -42,12 +42,9 @@ interface IEditCompanyForm {
 const defaultValues = {
     name: "",
     employmentType: "",
-    industry: "Please Select an Industry",
+    industry: "",
     salaryStart: 0,
     salaryEnd: 0,
-    shortDescription: "",
-    requirements: "",
-    jobDescription: "",
     applyWebsite: "",
     applyContacts: [],
     terms: false,
@@ -65,11 +62,35 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
         handleSubmit,
         setError,
         reset,
-        formState: { errors, isValid },
+        formState: { errors },
     } = useForm<IEditCompanyForm, string>({ defaultValues });
     const { fields, append, remove } = useFieldArray({
         name: "applyContacts",
         control,
+    });
+    const shortDescriptionEditor = useRichTextEditor({
+        addExtensions: [
+            Placeholder.configure({
+                placeholder:
+                    "e.g. We are looking for a software engineer to join our team.",
+            }),
+        ],
+    });
+    const jobDescriptionEditor = useRichTextEditor({
+        addExtensions: [
+            Placeholder.configure({
+                placeholder:
+                    "e.g. You will be responsible for developing software applications.",
+            }),
+        ],
+    });
+    const requirementsEditor = useRichTextEditor({
+        addExtensions: [
+            Placeholder.configure({
+                placeholder:
+                    "e.g. 5 years of experience in software engineering",
+            }),
+        ],
     });
     const mutation = useCreateNewJob();
     const { errorToast } = useToaster();
@@ -109,7 +130,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
             });
             return;
         }
-        if (data.industry === "Please Select an Industry") {
+        if (data.industry === "") {
             setError("industry", {
                 type: "manual",
                 message: "Please select an industry",
@@ -133,13 +154,35 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
             return;
         }
 
+        const shortDescription = shortDescriptionEditor?.getHTML();
+        const jobDescription = jobDescriptionEditor?.getHTML();
+        const requirements = requirementsEditor?.getHTML();
+        if (shortDescription === "<p></p>") {
+            errorToast({
+                message: "Short description is required",
+            });
+            return;
+        }
+        if (jobDescription === "<p></p>") {
+            errorToast({
+                message: "Job description is required",
+            });
+            return;
+        }
+        if (requirements === "<p></p>") {
+            errorToast({
+                message: "Requirements is required",
+            });
+            return;
+        }
+
         const newJob: CreateJobInput = {
             industry: data.industry,
             position: data.name,
             employType: data.employmentType,
-            short_description: data.shortDescription,
-            requirements: data.requirements,
-            job_description: data.jobDescription,
+            short_description: shortDescription ?? "",
+            requirements: requirements ?? "",
+            job_description: jobDescription ?? "",
             location: data.location,
             currency: "IDR", //TODO change this to be dynamic
             contacts: data.applyContacts.map((contact) => contact.contact),
@@ -251,32 +294,15 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                         Choose the industry for this job.
                     </div>
                 </div>
-                <div className="border-b border-gray-400  border-opacity-30 py-5">
-                    <div className="h-full">
-                        <TextDropdown
-                            states={CONSTANTS.JOB.INDUSTRIES}
+                <div className="border-b border-gray-400 border-opacity-30 py-5">
+                    <div className="h-full ">
+                        <WrappedAutoDropdown
+                            data={CONSTANTS.JOB.INDUSTRIES}
                             className="w-full !p-0"
-                            innerClassName="!h-full !ps-3 transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0"
+                            innerClassName="!h-full !ps-3 transition-all rounded-md !border-[1px] focus:ring-2 focus:ring-signature-primary !border-gray-200 focus:bg-gray-100 outline-0"
                             control={control}
                             name="industry"
-                        />
-                    </div>
-                </div>
-                {/* Requirements Field */}
-                <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
-                    <div className="font-bold">Requirements</div>
-                    <div className="text-sm">
-                        Input the requirements to get this role.
-                    </div>
-                </div>
-                <div className="border-b border-gray-400  border-opacity-30 py-5">
-                    <div className="h-full rounded-md">
-                        <textarea
-                            {...register("requirements", {
-                                required: "Requirements are required",
-                            })}
-                            placeholder="e.g. 5 years of experience in software engineering"
-                            className="focus:ring-signature-primary h-full min-h-32 w-full rounded-md border-[1px] border-gray-200 p-2 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
+                            placeholder="e.g. Software Development"
                         />
                     </div>
                 </div>
@@ -287,14 +313,11 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                         Input the short description of this job.
                     </div>
                 </div>
-                <div className="border-b border-gray-400  border-opacity-30 py-5">
-                    <div className="h-full rounded-md">
-                        <textarea
-                            {...register("shortDescription", {
-                                required: "Short description is required",
-                            })}
-                            placeholder="e.g. We are looking for a software engineer to join our team."
-                            className="focus:ring-signature-primary h-full min-h-32 w-full rounded-md border-[1px] border-gray-200 p-2 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
+                <div className="border-b border-gray-400 border-opacity-30 py-5 ">
+                    <div className="has-[:focus]:ring-signature-primary relative h-full rounded-md has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
+                        <WrappedRichText
+                            editor={shortDescriptionEditor}
+                            className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] p-2 px-3 transition-all *:min-h-32 *:outline-0 focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>
@@ -305,14 +328,26 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                         Describe what this role does in detail.
                     </div>
                 </div>
-                <div className="border-b border-gray-400  border-opacity-30 py-5">
-                    <div className="h-full rounded-md">
-                        <textarea
-                            {...register("jobDescription", {
-                                required: "Job description is required",
-                            })}
-                            placeholder="e.g. You will be responsible for developing software applications."
-                            className="focus:ring-signature-primary h-full min-h-32 w-full rounded-md border-[1px] border-gray-200 p-2 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
+                <div className="border-b border-gray-400 border-opacity-30 py-5 ">
+                    <div className="has-[:focus]:ring-signature-primary relative h-full rounded-md has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
+                        <WrappedRichText
+                            editor={jobDescriptionEditor}
+                            className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] p-2 px-3 transition-all *:min-h-32 *:outline-0 focus:bg-gray-100 focus:ring-2"
+                        />
+                    </div>
+                </div>
+                {/* Requirements Field */}
+                <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
+                    <div className="font-bold">Requirements</div>
+                    <div className="text-sm">
+                        Input the requirements to get this role.
+                    </div>
+                </div>
+                <div className="border-b border-gray-400 border-opacity-30 py-5 ">
+                    <div className="has-[:focus]:ring-signature-primary relative h-full rounded-md has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
+                        <WrappedRichText
+                            editor={requirementsEditor}
+                            className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] p-2 px-3 transition-all *:min-h-32 *:outline-0 focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>
