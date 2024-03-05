@@ -84,7 +84,9 @@ export default function EditCompanyModal({
     });
     const mutation = useUpdateCompany();
     const { errorToast } = useToaster();
-    const editor = useRichTextEditor(selectedCompany?.profile ?? "");
+    const editor = useRichTextEditor({
+        content: selectedCompany?.profile ?? "",
+    });
 
     const checkError = () => {
         for (const error in errors) {

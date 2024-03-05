@@ -85,7 +85,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
         name: "cons",
         control,
     });
-    const editor = useRichTextEditor("");
+    const editor = useRichTextEditor();
     const { errorToast } = useToaster();
 
     const checkError = () => {

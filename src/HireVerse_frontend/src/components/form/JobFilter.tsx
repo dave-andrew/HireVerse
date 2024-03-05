@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 import { CONSTANTS } from "../../utils/constants";
 import { getJobIndustries } from "../../datas/queries/jobQueries";
 import { MdCurrencyExchange } from "react-icons/md";
-import CountryDropdown from "./CountryDropdown";
 import TextDropdown from "./TextDropdown";
 
 export interface IFilterForm {
@@ -92,7 +91,10 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                                         <MdCurrencyExchange className="w-[30px] h-auto" />
                                                     </span>
                                                     <TextDropdown
-                                                        states={CONSTANTS.JOB.CURRENCY}
+                                                        states={
+                                                            CONSTANTS.JOB
+                                                                .CURRENCY
+                                                        }
                                                         className="w-full !p-0"
                                                         innerClassName="!h-full !ps-3 transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0"
                                                         control={control}
