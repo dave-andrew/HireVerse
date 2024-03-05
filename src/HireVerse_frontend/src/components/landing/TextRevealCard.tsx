@@ -118,12 +118,12 @@ export const TextRevealCard = ({
                 <div className="text-xl font-semibold flex flex-row gap-2 place-items-center">
                     Developed with <FaHeart /> by:
                 </div>
-                <div className="grid grid-cols-3 py-8">
+                <div className="grid grid-cols-3 py-8 gap-4">
                     <a
                         target="_blank"
                         href="https://github.com/dave-andrew"
                         className="hover:bg-[#27262d] cursor-pointer p-6 text-center rounded-lg flex flex-col gap-4 place-items-center justify-center">
-                        <div className="text-5xl">Dave Andrew Nathanael</div>
+                        <div className="text-5xl">Dave Andrew Nathaniel</div>
                         <div className="flex flex-col gap-1 text-center place-items-center">
                             <div className="flex flex-row gap-2 place-items-center">
                                 <FaLinkedin /> dave-andrew-nathaniel-54a99b251

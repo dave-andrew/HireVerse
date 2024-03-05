@@ -51,7 +51,7 @@ export default function HeaderSection({ parentRef }: { parentRef: React.MutableR
 
     return (
         <animated.div style={fadeAnimation}
-                      className={`snap-center grid z-10 ${isMobile ? "grid-cols-1" : "grid-cols-2"} place-items-center justify-center gap-16 py-32 px-[10vh] 2xl:px-[40vh] transition-all ease-in-out duration-1000`}>
+                      className={`snap-center grid z-10 ${isMobile ? "grid-cols-1" : "grid-cols-2"} place-items-center justify-center gap-16 py-32 px-[10vh] 2xl:px-[35vh] transition-all ease-in-out duration-1000`}>
             <div className="flex flex-col gap-12 w-full">
                 <div className="flex flex-col gap-6 w-full">
                     <div className="h-44 text-black text-start font-bebas text-8xl">
