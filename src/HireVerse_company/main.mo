@@ -348,16 +348,7 @@ actor Company {
                 return #err("Company not found");
             };
             case (#ok(company)) {
-                let jobIds = Vector.fromArray<Text>(company.job_posting_ids);
-
-                jobIds.add(job_id);
-
-                Debug.print("number" # Nat.toText(jobIds.size()));
-                var i = 0;
-                for (job in jobIds.vals()) {
-                    Debug.print(company_id # job_id # Nat.toText(i));
-                    i += 1;
-                };
+                let jobIds = company.job_posting_ids;
 
                 let updatedCompany : Company = {
                     id = company_id;
@@ -370,11 +361,12 @@ actor Company {
                     image = company.image;
                     linkedin = company.linkedin;
                     company_manager_ids = company.company_manager_ids;
-                    job_posting_ids = Vector.toArray<Text>(jobIds);
+                    job_posting_ids = Array.append<Text>(jobIds, [job_id]);
                     reviews_ids = company.reviews_ids;
                     timestamp = company.timestamp;
                     seen = company.seen;
                 };
+
                 companies.put(company_id, updatedCompany);
                 #ok();
             };
