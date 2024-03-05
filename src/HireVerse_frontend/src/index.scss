@@ -287,11 +287,13 @@
   border-color: rgb(168, 168, 168);
 }
 
+
+
 .input-cursor {
   display: inline-block;
   width: 2px;
   height: 1em;
-  background-color: white;
+  background-color: black;
   margin-left: 3px;
   animation: blink .6s linear infinite alternate;
 }

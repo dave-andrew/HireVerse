@@ -113,8 +113,26 @@ export function getFilteredJobs(
         return jobFilter;
     };
 
+    const jsonJob = {
+        country: convertNullFormat(getQueryFilters().country, ""),
+        order: convertNullFormat(getQueryFilters().order, ""),
+        experience: convertNullFormat(filters.experience, ""),
+        industry: convertNullFormat(filters.industry, ""),
+        position: convertNullFormat(getQueryFilters().query, ""),
+        date_posted: convertNullFormat(
+            Number(filters.datePosted),
+            Number(0),
+        ),
+        currency: convertNullFormat(filters.currency, ""),
+        salary_end: convertNullFormat(Number(filters.salaryEnd), Number(0)),
+        salary_start: convertNullFormat(
+            Number(filters.salaryStart),
+            Number(0),
+        ),
+    };
+
     return useInfiniteQuery({
-        queryKey: ["jobs", JSON.stringify(getConvertedFilters())],
+        queryKey: ["jobs", JSON.stringify(jsonJob)],
         queryFn: async ({ pageParam }) => {
             const response = await getJobService()
                 .then((s) =>
