@@ -72,7 +72,7 @@ export default function FindJobs() {
 
     return (
         <FrontPageLayout>
-            <div className="relative flex h-[120vh] w-full flex-col place-items-center gap-20 pb-20">
+            <div className="flex flex-col place-items-center gap-20 pb-20">
                 <div className="w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[480px]">
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
                         <div className="flex w-full flex-col gap-5 p-8 md:w-2/6">
@@ -94,11 +94,11 @@ export default function FindJobs() {
                         />
                     </div>
                 </div>
-                <div className="md:min-w-[1000px] md:max-w-[1000px] m-auto flex flex-col gap-10 pb-10 lg:min-w-[1200px] lg:max-w-[1200px] relative max-h-[80vh] pb-5">
+                <div className="md:min-w-[1000px] md:max-w-[1000px] m-auto flex flex-col gap-10 pb-10 lg:min-w-[1200px] lg:max-w-[1200px] relative pb-5">
                     <div className="flex w-full flex-row gap-5 sticky top-0 bg-white z-50 p-3">
                         <JobFilter onApplyFilter={(data) => setFilter(data)} />
                         <CardLayout className="flex w-full flex-row items-center">
-                            <span className="flex flex-1 flex-row gap-2 rounded-bl-lg rounded-tl-lg p-3 transition-colors has-[:focus]:bg-gray-100">
+                            <span className="flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3 transition-colors has-[:focus]:bg-gray-100">
                                 <IoIosSearch size="1.5rem" />
                                 <input
                                     {...register("query")}
@@ -114,13 +114,12 @@ export default function FindJobs() {
                                     }
                                 />
                             </span>
-                            <span className="border-signature-gray flex flex-row items-center gap-2 rounded-br-lg rounded-tr-lg border-l-[1px] pl-5 transition-colors has-[:focus]:bg-gray-100">
+                            <span className="border-signature-gray flex flex-row items-center gap-2 rounded-br-xl rounded-tr-xl border-l-[1px] p-1 pl-5 transition-colors has-[:focus]:bg-gray-100">
                                 <IoLocationOutline size="1.5rem" />
                                 <WrappedAutoDropdown
                                     data={countries}
                                     control={control}
-                                    defaultData={countries ? countries[0] : ""}
-                                    name="country"
+                                    name="country data="
                                     onChange={(_) => reGetFilteredJobs()}
                                 />
                             </span>
