@@ -7,6 +7,7 @@ import convertNullFormat from "../../utils/convertNullFormat";
 import { IQueryFilterSortForm } from "../../pages/employee/FindJobsPage";
 import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { IQuerySortForm } from "../../pages/employers/CompanyJobs";
+import { IJobItem } from "../../types/IJobItem";
 
 export function useQueryFullJob(jobId: string | undefined) {
     const { getJobService } = useService();
@@ -33,7 +34,7 @@ export function useQueryFilteredJobs(
     filters: IFilterForm,
     getQueryFilters: () => IQueryFilterSortForm,
 ) {
-    const { getJobService } = useService();
+    const { getJobService, getCompanyService } = useService();
 
     const getConvertedFilters = () => {
         const queryFilters = getQueryFilters();
@@ -72,10 +73,40 @@ export function useQueryFilteredJobs(
                 )
                 .catch((e) => console.error(e));
 
-            if (isOk(response)) {
-                return response.ok;
+            console.log(response);
+            if (!isOk(response)) {
+                return null;
             }
-            return null;
+
+            const jobs = response.ok;
+
+            const responseCompanyData = await getCompanyService()
+                .then((s) =>
+                    s.getCompanyNameAndImages(jobs.map((j) => j.company_id)),
+                )
+                .catch((e) => console.error(e));
+
+            if (!isOk(responseCompanyData)) {
+                return null;
+            }
+
+            const companyData = responseCompanyData.ok;
+
+            return jobs.map((job) => {
+                const company = companyData.find(
+                    (c) => c.id === job.company_id,
+                );
+                return {
+                    id: job.id,
+                    position: job.position,
+                    location: job.location,
+                    currency: job.currency,
+                    salaryStart: job.salary_start.toString(),
+                    salaryEnd: job.salary_end.toString(),
+                    companyName: company?.name || "",
+                    companyImage: company?.image || [],
+                } as IJobItem;
+            });
         },
         initialPageParam: 0,
         getNextPageParam: (
@@ -100,12 +131,12 @@ export function useQueryCompanyNames(
     return useQuery({
         queryKey: ["companyNames", companyIds.toString()],
         queryFn: async () => {
-            const response = await getCompanyService()
-                .then((s) => s.getCompanyNames(companyIds))
-                .catch((e) => console.error(e));
-            if (isOk(response)) {
-                return response.ok;
-            }
+            // const response = await getCompanyService()
+            //     .then((s) => s.getCompanyNames(companyIds))
+            //     .catch((e) => console.error(e));
+            // if (isOk(response)) {
+            //     return response.ok;
+            // }
             return null;
         },
         enabled: autoFetch,

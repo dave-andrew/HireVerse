@@ -559,22 +559,32 @@ actor Company {
         };
     };
 
-    public shared composite query func getCompanyNames(company_ids : [Text]) : async Result.Result<[Text], Text> {
-        let companyNames = Vector.Vector<Text>();
+    type CompanyWithImage = {
+        id : Text;
+        name : Text;
+        image : Blob;
+    };
+
+
+    public shared query func getCompanyNameAndImages(company_ids : [Text]) : async Result.Result<[CompanyWithImage], Text> {
+        let companyDatas = Vector.Vector<CompanyWithImage>();
 
         for (company_id in company_ids.vals()) {
-            let company = await getCompany(company_id);
+            let company = companies.get(company_id);
             switch (company) {
-                case (#err(msg)) {
-                    return #err("Company with id " # company_id # " not found");
-                };
-                case (#ok(c)) {
-                    companyNames.add(c.name);
+                case (null) {};
+                case (?c) {
+                    let companyWithImage = {
+                        id = c.id;
+                        name = c.name;
+                        image = c.image;
+                    };
+                    companyDatas.add(companyWithImage);
                 };
             };
         };
 
-        return #ok(Vector.toArray(companyNames));
+        return #ok(Vector.toArray(companyDatas));
     };
 
     public shared func getUserCompanies(user_id : Principal) : async Result.Result<[Company], Text> {

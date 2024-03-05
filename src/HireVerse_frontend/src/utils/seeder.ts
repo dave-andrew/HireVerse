@@ -247,7 +247,7 @@ export async function seedJob({
     getBackendService,
 }: ServiceContextType) {
     await getJobService().then((s) =>
-        jobSeeder(s, ["12c1da71-ce0f-4b73-bc76-db622558de90"]),
+        jobSeeder(s, ["81e7dc49-d791-4f1c-b2e5-7a9c035c7f9c"]),
     );
 }
 
