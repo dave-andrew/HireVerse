@@ -1,13 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
-import { isOk } from "../../utils/resultGuarder";
+import {useQuery} from "@tanstack/react-query";
+import {isOk} from "../../utils/resultGuarder";
 import useService from "../../hooks/useService";
 import { IFilterForm } from "../../components/form/JobFilter";
 import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 import convertNullFormat from "../../utils/convertNullFormat";
-import { IQueryFilterSortForm } from "../../pages/employee/FindJobsPage";
-import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import { IQuerySortForm } from "../../pages/employers/CompanyJobs";
-import { Principal } from "@dfinity/principal";
+import {IQueryFilterSortForm} from "../../pages/employee/FindJobsPage";
+import {JobManagerFilterInput} from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import {IQuerySortForm} from "../../pages/employers/CompanyJobs";
+import {Principal} from "@dfinity/principal";
 
 export function useQueryFullJob(jobId: string | undefined) {
     const { getJobService } = useService();
@@ -18,10 +18,9 @@ export function useQueryFullJob(jobId: string | undefined) {
                 return null;
             }
 
-            const response = await getJobService().then((s) =>
-                s.getFullJob(jobId),
-            );
-
+            const response = await getJobService()
+                .then((s) => s.getFullJob(jobId))
+                .catch((e) => console.error(e));
             if (isOk(response)) {
                 return response.ok;
             }
@@ -35,7 +34,7 @@ export function useQueryFilteredJobs(
     filters: IFilterForm,
     getQueryFilters: () => IQueryFilterSortForm,
 ) {
-    const { getJobService } = useService();
+    const { getJobService, getCompanyService } = useService();
 
     const getConvertedFilters = () => {
         const queryFilters = getQueryFilters();
@@ -61,19 +60,65 @@ export function useQueryFilteredJobs(
         return jobFilter;
     };
 
-    return useQuery({
+    return useInfiniteQuery({
         queryKey: ["jobs", JSON.stringify(getConvertedFilters())],
-        queryFn: async () => {
-            const response = await getJobService().then((s) =>
-                s.getJobs(BigInt(0), BigInt(10), getConvertedFilters()),
-            );
+        queryFn: async ({ pageParam }) => {
+            const response = await getJobService()
+                .then((s) =>
+                    s.getJobs(
+                        BigInt(pageParam),
+                        BigInt(10),
+                        getConvertedFilters(),
+                    ),
+                )
+                .catch((e) => console.error(e));
 
-            console.log("hahah");
-            if (isOk(response)) {
-                console.log(response.ok);
-                return response.ok;
+            console.log(response);
+            if (!isOk(response)) {
+                return null;
             }
-            return null;
+
+            const jobs = response.ok;
+
+            const responseCompanyData = await getCompanyService()
+                .then((s) =>
+                    s.getCompanyNameAndImages(jobs.map((j) => j.company_id)),
+                )
+                .catch((e) => console.error(e));
+
+            if (!isOk(responseCompanyData)) {
+                return null;
+            }
+
+            const companyData = responseCompanyData.ok;
+
+            return jobs.map((job) => {
+                const company = companyData.find(
+                    (c) => c.id === job.company_id,
+                );
+                return {
+                    id: job.id,
+                    position: job.position,
+                    location: job.location,
+                    currency: job.currency,
+                    salaryStart: job.salary_start.toString(),
+                    salaryEnd: job.salary_end.toString(),
+                    companyName: company?.name || "",
+                    companyImage: company?.image || [],
+                } as IJobItem;
+            });
+        },
+        initialPageParam: 0,
+        getNextPageParam: (
+            lastPage,
+            allPages,
+            lastPageParam,
+            allPageParams,
+        ) => {
+            if (lastPage && lastPage.length == 10) {
+                return lastPageParam + 10;
+            }
+            return undefined;
         },
     });
 }
@@ -86,13 +131,12 @@ export function useQueryCompanyNames(
     return useQuery({
         queryKey: ["companyNames", companyIds.toString()],
         queryFn: async () => {
-            const response = await getCompanyService().then((s) =>
-                s.getCompanyNames(companyIds),
-            );
-
-            if (isOk(response)) {
-                return response.ok;
-            }
+            // const response = await getCompanyService()
+            //     .then((s) => s.getCompanyNames(companyIds))
+            //     .catch((e) => console.error(e));
+            // if (isOk(response)) {
+            //     return response.ok;
+            // }
             return null;
         },
         enabled: autoFetch,
@@ -104,10 +148,9 @@ export function useQueryJobIndustries() {
     return useQuery({
         queryKey: ["jobIndustries"],
         queryFn: async () => {
-            const response = await getJobService().then((s) =>
-                s.getAllIndustry(),
-            );
-
+            const response = await getJobService()
+                .then((s) => s.getAllIndustry())
+                .catch((e) => console.error(e));
             if (isOk(response)) {
                 return response.ok;
             }
@@ -116,17 +159,15 @@ export function useQueryJobIndustries() {
     });
 }
 
-
 export function useQueryGetUserObjectByEmail(email: string) {
     const { getBackendService } = useService();
     return useQuery({
         queryKey: ["user", email],
         queryFn: async () => {
+            const response = await getBackendService()
+                .then((s) => s.getUserObjectByEmail(email))
+                .catch((e) => console.error(e));
             if (email.length < 1) return null;
-
-            const response = await getBackendService().then((s) =>
-                s.getUserObjectByEmail(email),
-            );
 
             if (isOk(response)) {
                 return response.ok;
@@ -150,10 +191,9 @@ export function useQueryManagersFromCompany(
                 return null;
             }
 
-            const response = await getCompanyService().then((s) =>
-                s.getManagersFromCompany(companyId),
-            );
-
+            const response = await getCompanyService()
+                .then((s) => s.getManagersFromCompany(companyId))
+                .catch((e) => console.error(e));
             if (isOk(response)) {
                 return response.ok;
             }

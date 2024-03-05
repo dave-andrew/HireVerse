@@ -14,7 +14,7 @@ import { ActorSubclass } from "@dfinity/agent";
 
 async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
     console.log("test");
-    
+
     const response = await companyService.getCompanies();
 
     console.log("Seeding companies...");
@@ -239,6 +239,17 @@ const jobSeeder = async (
 
     console.log("finished generating data");
 };
+
+export async function seedJob({
+    getCompanyService,
+    getJobService,
+    getReviewService,
+    getBackendService,
+}: ServiceContextType) {
+    await getJobService().then((s) =>
+        jobSeeder(s, ["81e7dc49-d791-4f1c-b2e5-7a9c035c7f9c"]),
+    );
+}
 
 export default async function seeder({
     getCompanyService,

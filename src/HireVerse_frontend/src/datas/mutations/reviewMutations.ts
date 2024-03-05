@@ -19,11 +19,17 @@ export function useAddReview() {
             return null;
         },
         onSuccess: (data) => {
-            queryClient.resetQueries({
+            queryClient.invalidateQueries({
                 queryKey: ["reviews", data],
             });
-            queryClient.resetQueries({
+            queryClient.invalidateQueries({
                 queryKey: ["company", data],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["reviewSummary", data],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["selfReview", data],
             });
         },
     });

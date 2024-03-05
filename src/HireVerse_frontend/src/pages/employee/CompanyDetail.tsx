@@ -16,6 +16,7 @@ import {
 import CreateReviewModal from "../../components/modal/CreateReviewModal";
 import React, { useState } from "react";
 import CompanyDetailReview from "../../components/review/CompanyDetailReview";
+import purifyDOM from "../../utils/purifyDOM";
 
 export interface IReviewSortForm {
     orderBy: string;
@@ -44,8 +45,8 @@ export default function CompanyDetail() {
         <>
             <FrontPageLayout className="h-full">
                 <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
-                    <div className="flex flex-col place-items-center xl:w-[calc(100%-1rem)] 2xl:w-4/5">
-                        <CardLayout className="relative flex w-full flex-row place-items-center gap-10 rounded-none rounded-tl-none rounded-tr-none border-t-0 p-6">
+                    <div className="flex flex-col place-items-center xl:w-[calc(100%-1rem)] 2xl:w-4/5 gap-2">
+                        <CardLayout className="relative flex w-full flex-row place-items-center gap-10 rounded-lg rounded-tl-none rounded-tr-none border-t-0 p-6">
                             <div className="relative">
                                 <img
                                     className="border-signature-gray aspect-square border-[1px] object-cover xl:w-48 2xl:w-96"
@@ -55,7 +56,7 @@ export default function CompanyDetail() {
                             </div>
                             <div className="flex flex-col gap-8">
                                 <div className="flex flex-col gap-3 px-2">
-                                    <h2 className="relative text-5xl font-bold">
+                                    <h2 className="p-0 m-0 relative text-5xl font-semibold">
                                         <span className="relative">
                                             {company?.name}
                                         </span>
@@ -75,7 +76,7 @@ export default function CompanyDetail() {
                                             <p className="text-gray-600">
                                                 Founded
                                             </p>
-                                            <p className="font-bold">
+                                            <p className="font-semibold">
                                                 {convertToDate(
                                                     Number(company?.timestamp),
                                                 ).toLocaleDateString()}
@@ -90,7 +91,7 @@ export default function CompanyDetail() {
                                             <p className="text-gray-600">
                                                 Location
                                             </p>
-                                            <p className="font-bold">
+                                            <p className="font-semibold">
                                                 {company?.office_locations?.[0]}
                                             </p>
                                         </div>
@@ -104,7 +105,7 @@ export default function CompanyDetail() {
                                                 Visitors
                                             </p>
                                             {/*//TODO ADD VISITORS*/}
-                                            <p className="font-bold">
+                                            <p className="font-semibold">
                                                 {Number(company?.seen)}
                                             </p>
                                         </div>
@@ -112,13 +113,17 @@ export default function CompanyDetail() {
                                 </div>
                             </div>
                         </CardLayout>
-                        <div className="flex w-full flex-row">
-                            <div className="flex h-auto w-[70%] flex-col">
-                                <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-none p-10">
-                                    <h3 className="text-4xl font-bold">
+                        <div className="flex w-full flex-row gap-2">
+                            <div className="flex h-auto w-[70%] flex-col gap-2">
+                                <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-lg p-10">
+                                    <h3 className="p-0 m-0 text-4xl font-semibold">
                                         Company Profile
                                     </h3>
-                                    <p>{company?.profile}</p>
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: purifyDOM(company?.profile),
+                                        }}
+                                    />
                                 </CardLayout>
                                 <CompanyDetailReview
                                     companyId={id}
@@ -127,9 +132,9 @@ export default function CompanyDetail() {
                                     }
                                 />
                             </div>
-                            <div className="flex w-[30%] flex-col">
-                                <CardLayout className="flex flex-col gap-5 rounded-none p-10">
-                                    <h3 className="text-4xl font-bold">
+                            <div className="flex w-[30%] flex-col gap-2">
+                                <CardLayout className="flex flex-col gap-5 rounded-lg p-10">
+                                    <h3 className="p-0 m-0 text-4xl font-semibold">
                                         Industries
                                     </h3>
                                     <div className="flex flex-row flex-wrap gap-3">
@@ -137,15 +142,15 @@ export default function CompanyDetail() {
                                             return (
                                                 <div
                                                     key={i}
-                                                    className="bg-blue-primary flex flex-row gap-2 rounded-md p-2 px-3 font-bold text-white opacity-80 transition-opacity hover:opacity-100">
+                                                    className="bg-blue-primary flex flex-row gap-2 rounded-md p-2 px-3 font-semibold text-white opacity-80 transition-opacity hover:opacity-100">
                                                     {industry}
                                                 </div>
                                             );
                                         })}
                                     </div>
                                 </CardLayout>
-                                <CardLayout className="flex flex-col gap-5 rounded-none p-10">
-                                    <h3 className="text-4xl font-bold">
+                                <CardLayout className="flex flex-col gap-5 rounded-lg p-10">
+                                    <h3 className="p-0 m-0 text-4xl font-semibold">
                                         Social Medias
                                     </h3>
                                     <div className="flex flex-col flex-wrap gap-3">
@@ -161,8 +166,8 @@ export default function CompanyDetail() {
                                         )}
                                     </div>
                                 </CardLayout>
-                                <CardLayout className="flex flex-col gap-5 rounded-none p-10">
-                                    <h3 className="text-4xl font-bold">
+                                <CardLayout className="flex flex-col gap-5 rounded-lg p-10">
+                                    <h3 className="p-0 m-0 text-4xl font-semibold">
                                         Locations
                                     </h3>
                                     <div className="flex flex-col flex-wrap gap-3">
@@ -171,7 +176,7 @@ export default function CompanyDetail() {
                                                 return (
                                                     <div
                                                         key={i}
-                                                        className="flex flex-row gap-2 rounded-md bg-white p-2 px-3 font-bold text-black opacity-80 transition-opacity hover:opacity-100">
+                                                        className="flex flex-row gap-2 rounded-md bg-white p-2 px-3 font-semibold text-black opacity-80 transition-opacity hover:opacity-100">
                                                         {location}
                                                     </div>
                                                 );

@@ -22,7 +22,7 @@ export default function WrappedPaginationSelection({
             return (
                 <li onClick={() => setPagination(shownNumber)}>
                     <div
-                        className={`flex items-center justify-center px-4 h-10 ${currentPage == shownNumber ? "bg-signature-yellow" : "hover:bg-gray-100 hover:text-gray-700"} leading-tight text-gray-500 bg-white border border-gray-300`}>
+                        className={`flex items-center cursor-pointer justify-center px-4 h-10 ${currentPage == shownNumber ? "bg-signature-yellow" : "hover:bg-gray-200 hover:text-gray-700"} leading-tight text-gray-500 bg-white border border-gray-300`}>
                         {shownNumber}
                     </div>
                 </li>
@@ -56,7 +56,7 @@ export default function WrappedPaginationSelection({
                         <button
                             disabled={currentPage == 1}
                             onClick={() => setPagination(currentPage - 1)}
-                            className={`${currentPage == 1 ? "cursor-not-allowed" : "hover:bg-gray-100 hover:text-gray-700"} flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg`}>
+                            className={`${currentPage == 1 ? "cursor-not-allowed" : "hover:bg-gray-200 hover:text-gray-700"} flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg`}>
                             <span className="sr-only">Previous</span>
                             <MdArrowBackIos />
                         </button>
@@ -68,7 +68,7 @@ export default function WrappedPaginationSelection({
                         <button
                             disabled={currentPage == totalPage}
                             onClick={() => setPagination(currentPage + 1)}
-                            className={`${currentPage == totalPage ? "cursor-not-allowed" : "hover:bg-gray-100 hover:text-gray-700"} flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg`}>
+                            className={`${currentPage == totalPage ? "cursor-not-allowed" : "hover:bg-gray-200 hover:text-gray-700"} flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg`}>
                             <span className="sr-only">Next</span>
                             <MdArrowForwardIos />
                         </button>

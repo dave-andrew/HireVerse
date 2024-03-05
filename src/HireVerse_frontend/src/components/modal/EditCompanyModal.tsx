@@ -7,12 +7,12 @@ import { CONSTANTS } from "../../utils/constants";
 import useToaster from "../../hooks/useToaster";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import useService from "../../hooks/useService";
 import DynamicInputBox from "../form/DynamicInputBox";
 import { MdAdd } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import WrappedRichText from "../form/WrappedRichText";
 import useRichTextEditor from "../../hooks/useRichTextEditor";
+import { useUpdateCompany } from "../../datas/mutations/companyMutations";
 
 interface Props {
     openState: boolean;
@@ -82,7 +82,7 @@ export default function EditCompanyModal({
         name: "socialMedias",
         control,
     });
-    const { getCompanyService } = useService();
+    const mutation = useUpdateCompany();
     const { errorToast } = useToaster();
     const editor = useRichTextEditor(selectedCompany?.profile ?? "");
 
@@ -161,9 +161,7 @@ export default function EditCompanyModal({
             job_posting_ids: selectedCompany?.job_posting_ids,
         };
 
-        await getCompanyService().then((s) =>
-            s.updateCompany(selectedCompany.id, updatedCompany),
-        );
+        mutation.mutate(updatedCompany);
 
         setSelectedCompany(updatedCompany);
 

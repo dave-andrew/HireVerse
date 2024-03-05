@@ -1,4 +1,4 @@
-import seeder from "../../utils/seeder";
+import seeder, { seedJob } from "../../utils/seeder";
 import useService from "../../hooks/useService";
 import { useForm } from "react-hook-form";
 import { isOk } from "../../utils/resultGuarder";
@@ -98,6 +98,7 @@ export default function Seeder() {
                 }>
                 Remove all reviews
             </button>
+            <button onClick={() => seedJob(service)}>Seed jOBS</button>
         </div>
     );
 }

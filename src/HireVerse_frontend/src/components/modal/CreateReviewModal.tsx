@@ -14,7 +14,6 @@ import { useAddReview } from "../../datas/mutations/reviewMutations";
 import useToaster from "../../hooks/useToaster";
 import { CreateReviewInput } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import { useParams } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface INewReviewForm {
     title: string;
@@ -39,7 +38,6 @@ interface Props {
 }
 
 export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
-    const queryClient = useQueryClient();
     const mutation = useAddReview();
     const { id } = useParams<string>();
     const {
@@ -203,7 +201,9 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
             panelClassName="!max-w-none !rounded-xl !w-[52vw] !p-10 !mt-20"
             title={
                 <div className="flex w-full flex-row items-center justify-between pb-5">
-                    <div className="text-4xl font-bold">Post a new review</div>
+                    <div className="text-4xl font-semibold">
+                        Post a new review
+                    </div>
                     <button
                         className="h-fit w-fit rounded-full text-end text-xl"
                         type="button"
@@ -216,7 +216,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
             setIsOpen={setIsOpen}>
             <div className="flex flex-col">
                 <div className="flex flex-col py-5">
-                    <div className="pb-2 font-bold">Review Title</div>
+                    <div className="pb-2 font-semibold">Review Title</div>
                     <div className="h-full rounded-md">
                         <input
                             {...register("title", {
@@ -229,7 +229,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
                     </div>
                 </div>
                 <div className="flex flex-col py-5">
-                    <div className="pb-2 font-bold">General Comments</div>
+                    <div className="pb-2 font-semibold">General Comments</div>
                     <div className="h-full rounded-md">
                         <WrappedRichText
                             editor={editor}
@@ -239,7 +239,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
                 </div>
                 <div className="grid grid-cols-2 gap-5">
                     <div className="flex h-full flex-col rounded-md">
-                        <div className="pb-2 font-bold">Pros</div>
+                        <div className="pb-2 font-semibold">Pros</div>
                         <DynamicInputBox
                             key="pros"
                             fields={fieldsPros}
@@ -252,7 +252,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
                             addButton={
                                 <div className="flex w-full justify-end">
                                     <button
-                                        className="hover:input-signature-gray flex flex-row items-center justify-end gap-2 rounded-lg p-2 font-bold"
+                                        className="hover:input-signature-gray flex flex-row items-center justify-end gap-2 rounded-lg p-2 font-semibold"
                                         onClick={() =>
                                             appendPros({
                                                 message: "",
@@ -273,7 +273,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
                         />
                     </div>
                     <div className="flex h-full flex-col rounded-md">
-                        <div className="pb-2 font-bold">Cons</div>
+                        <div className="pb-2 font-semibold">Cons</div>
                         <DynamicInputBox
                             key="cons"
                             fields={fieldsCons}
@@ -286,7 +286,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
                             addButton={
                                 <div className="flex w-full justify-end">
                                     <button
-                                        className="hover:input-signature-gray flex flex-row items-center justify-end gap-2 rounded-lg p-2 font-bold"
+                                        className="hover:input-signature-gray flex flex-row items-center justify-end gap-2 rounded-lg p-2 font-semibold"
                                         onClick={() =>
                                             appendCons({
                                                 message: "",
@@ -308,7 +308,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
                     </div>
                 </div>
                 <div className="flex flex-col py-5">
-                    <div className="pb-2 font-bold">
+                    <div className="pb-2 font-semibold">
                         Rate the company culture
                     </div>
                     <div className="flex h-full flex-row items-center gap-3 rounded-md">
@@ -321,7 +321,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
                     </div>
                 </div>
                 <div className="flex flex-col py-5">
-                    <div className="pb-2 font-bold">
+                    <div className="pb-2 font-semibold">
                         Rate the company work-life balance
                     </div>
                     <div className="flex h-full flex-row items-center gap-3 rounded-md">
@@ -334,7 +334,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
                     </div>
                 </div>
                 <div className="flex flex-col py-5">
-                    <div className="pb-2 font-bold">
+                    <div className="pb-2 font-semibold">
                         Rate the company senior management
                     </div>
                     <div className="flex h-full flex-row items-center gap-3 rounded-md">
@@ -347,7 +347,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
                     </div>
                 </div>
                 <div className="flex flex-col py-5">
-                    <div className="pb-2 font-bold">
+                    <div className="pb-2 font-semibold">
                         Would you recommend this company to a friend?
                     </div>
                     <div className="flex h-full flex-row items-center gap-3 rounded-md">
@@ -374,7 +374,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
             <div className="flex w-full items-center justify-center gap-2 pt-5">
                 <button
                     onClick={handleSubmitForm}
-                    className="w-fit rounded-md bg-signature-yellow hover:bg-signature-yellow px-10 py-3 text-lg font-bold text-black transition-colors">
+                    className="w-fit rounded-md bg-signature-yellow hover:bg-signature-yellow px-10 py-3 text-lg font-semibold text-black transition-colors">
                     Post Review
                 </button>
             </div>
