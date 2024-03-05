@@ -1,11 +1,11 @@
 import {Typewriter} from "react-simple-typewriter";
 import useAuth, {AuthState} from "../../hooks/useAuth";
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import {animated, useSpring} from "@react-spring/web";
 
 
-export default function HeaderSection() {
+export default function HeaderSection({parentRef}: {parentRef: React.MutableRefObject<HTMLElement | null>}) {
     const {user, authState, login, logout} = useAuth();
     const navigate = useNavigate();
 
@@ -26,13 +26,13 @@ export default function HeaderSection() {
 
     useEffect(() => {
         const handleScroll = () => {
-            const scrollY = window.scrollY;
+            const scrollY = parentRef?.current?.scrollTop || 0;
             setIsVisible(scrollY <= triggerPoint);
         };
         handleScroll()
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [triggerPoint]);
+        parentRef?.current?.addEventListener('scroll', handleScroll);
+        return () => parentRef?.current?.removeEventListener('scroll', handleScroll);
+    }, [triggerPoint, parentRef]);
 
     const fadeAnimation = useSpring({
         opacity: isVisible ? 1 : 0,
