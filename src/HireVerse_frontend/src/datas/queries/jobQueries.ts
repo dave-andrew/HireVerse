@@ -44,6 +44,7 @@ export function getJobDetails(jobId: string | undefined) {
                 position: job.position,
                 location: job.location,
                 currency: job.currency,
+                employType: job.employType,
                 company: {
                     id: job.company_id,
                     name: companyData[0].name,
@@ -54,6 +55,8 @@ export function getJobDetails(jobId: string | undefined) {
                 requirements: job.requirements,
                 salaryEnd: Number(job.salary_end),
                 salaryStart: Number(job.salary_start),
+                contacts: job.contacts,
+                timestamp: Number(job.timestamp),
             } as IJobDetail;
         },
     });

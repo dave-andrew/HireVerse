@@ -151,7 +151,7 @@ actor Job {
         };
 
         jobs.put(id, job);
-        let test = Company.addJob(newJob.company_id, id);
+        ignore await Company.addJob(newJob.company_id, id);
         return #ok(job);
     };
 

@@ -14,12 +14,11 @@ import {
     CreateJobInput,
 } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import useService from "../../hooks/useService";
+import { useCreateNewJob } from "../../datas/mutations/jobMutation";
 
 interface Props {
     openState: boolean;
     setOpenState: Dispatch<SetStateAction<boolean>>;
-    onEditFinished?: () => void;
 }
 
 interface IEditCompanyForm {
@@ -40,13 +39,26 @@ interface IEditCompanyForm {
     terms: boolean;
 }
 
-export default function CreateJobModal({
-    openState,
-    setOpenState,
-    onEditFinished,
-}: Props) {
-    const [selectedCompany, setSelectedCompany] =
-        useLocalStorage<Company | null>("selectedCompany", null);
+const defaultValues = {
+    name: "",
+    employmentType: "",
+    industry: "Please Select an Industry",
+    salaryStart: 0,
+    salaryEnd: 0,
+    shortDescription: "",
+    requirements: "",
+    jobDescription: "",
+    applyWebsite: "",
+    applyContacts: [],
+    terms: false,
+    location: "",
+};
+
+export default function CreateJobModal({ openState, setOpenState }: Props) {
+    const [selectedCompany, _] = useLocalStorage<Company | null>(
+        "selectedCompany",
+        null,
+    );
     const {
         control,
         register,
@@ -54,27 +66,12 @@ export default function CreateJobModal({
         setError,
         reset,
         formState: { errors, isValid },
-    } = useForm<IEditCompanyForm, string>({
-        defaultValues: {
-            name: "",
-            employmentType: "",
-            industry: "Please Select an Industry",
-            salaryStart: 0,
-            salaryEnd: 0,
-            shortDescription: "",
-            requirements: "",
-            jobDescription: "",
-            applyWebsite: "",
-            applyContacts: [],
-            terms: false,
-            location: "",
-        },
-    });
+    } = useForm<IEditCompanyForm, string>({ defaultValues });
     const { fields, append, remove } = useFieldArray({
         name: "applyContacts",
         control,
     });
-    const { getJobService } = useService();
+    const mutation = useCreateNewJob();
     const { errorToast } = useToaster();
 
     const checkError = () => {
@@ -151,10 +148,7 @@ export default function CreateJobModal({
             salary_start: BigInt(data.salaryStart),
         };
 
-        await getJobService().then((s) => s.createJob(newJob));
-        if (onEditFinished) {
-            onEditFinished();
-        }
+        mutation.mutate(newJob);
         reset();
         setOpenState(false);
     };

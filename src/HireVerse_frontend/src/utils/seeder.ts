@@ -227,11 +227,8 @@ const jobSeeder = async (
         },
     ];
 
-    const promises = newJobs.map(async (j) => jobService.createJobForce(j));
-
-    const responses = await Promise.all(promises);
-
-    for (const response of responses) {
+    for (const job of newJobs) {
+        const response = await jobService.createJobForce(job);
         if (isOk(response)) {
             console.log("Job created");
         }

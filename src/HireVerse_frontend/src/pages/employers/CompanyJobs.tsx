@@ -15,7 +15,6 @@ import handleKeyDown from "../../utils/handleKeyDown";
 import JobItemManagement from "../../components/job/JobItemManagement";
 import WrappedModal from "../../components/form/WrappedModal";
 import CreateJobModal from "../../components/modal/CreateJobModal";
-import useToaster from "../../hooks/useToaster";
 import { getJobPostedByCompany } from "../../datas/queries/jobQueries";
 
 export interface IQuerySortForm {
@@ -27,12 +26,10 @@ export interface IQuerySortForm {
 export default function CompanyJobs() {
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
-
     const [selectedJob, setSelectedJob] = useState<Job | null>(null);
     const [isModalShown, setIsModalShown] = useState(false);
     const [confirmationModal, setConfirmationModal] = useState(false);
     const { getJobService } = useService();
-    const { successToast } = useToaster();
     const { register, control, getValues } = useForm<IQuerySortForm>({
         defaultValues: {
             query: "",
@@ -64,13 +61,6 @@ export default function CompanyJobs() {
         }
         setSelectedJob(null);
         setConfirmationModal(false);
-    };
-
-    const onJobCreated = () => {
-        successToast({
-            message: "Job created successfully",
-        });
-        getJobs();
     };
 
     return (
@@ -171,19 +161,13 @@ export default function CompanyJobs() {
                             </div>
                         </div>
                         <div className="grid grid-cols-3 gap-4">
-                            {Array.from({ length: 5 }).map((_, index) => (
-                                <div key={index}>
-                                    {jobs?.map((job, index) => (
-                                        <JobItemManagement
-                                            key={index}
-                                            job={job}
-                                            onClick={() => setSelectedJob(job)}
-                                            setConfirmationState={
-                                                setConfirmationModal
-                                            }
-                                        />
-                                    ))}
-                                </div>
+                            {jobs?.map((job, index) => (
+                                <JobItemManagement
+                                    key={index}
+                                    job={job}
+                                    onClick={() => setSelectedJob(job)}
+                                    setConfirmationState={setConfirmationModal}
+                                />
                             ))}
                         </div>
                     </div>
@@ -196,7 +180,6 @@ export default function CompanyJobs() {
                 <CreateJobModal
                     openState={isModalShown}
                     setOpenState={setIsModalShown}
-                    onEditFinished={onJobCreated}
                 />
             </ManagementPageLayout>
         </>

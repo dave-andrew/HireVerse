@@ -1,15 +1,15 @@
 import FrontPageLayout from "../../layouts/FrontPageLayout";
 import CardLayout from "../../layouts/CardLayout";
-import { PiLockKeyOpenBold } from "react-icons/pi";
-import { TbWorldSearch } from "react-icons/tb";
+import {PiLockKeyOpenBold} from "react-icons/pi";
+import {TbWorldSearch} from "react-icons/tb";
 import CustomTextField from "../../components/form/CustomTextField";
-import { CustomCheckBox } from "../../components/form/CustomCheckBox";
-import { useForm } from "react-hook-form";
+import {CustomCheckBox} from "../../components/form/CustomCheckBox";
+import {useForm} from "react-hook-form";
 import useService from "../../hooks/useService";
 import useImageBlob from "../../hooks/useImageBlob";
-import { CreateCompanyInput } from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {CreateCompanyInput} from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 interface IRegisterCompanyForm {
     companyName: string;
@@ -26,11 +26,11 @@ export default function RegisterCompany() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
     } = useForm<IRegisterCompanyForm>();
 
-    const { getCompanyService } = useService();
-    const { convertImageToBlob } = useImageBlob();
+    const {getCompanyService} = useService();
+    const {convertImageToBlob} = useImageBlob();
     const navigate = useNavigate();
 
     const handleFormSubmit = async (data: IRegisterCompanyForm) => {
@@ -53,11 +53,14 @@ export default function RegisterCompany() {
         navigate("/employer");
     };
 
+    const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+
     return (
         <FrontPageLayout>
-            <div className="flex h-[calc(100vh-4rem)] flex-col justify-center gap-8 pb-6 md:px-12 lg:px-24 xl:px-48 2xl:px-96">
+            <div
+                className="flex h-[calc(100vh-4rem)] flex-col justify-center gap-6 pb-6 md:px-12 lg:px-24 xl:px-48 2xl:px-96">
                 <div className="flex flex-row items-center justify-center">
-                    <h1 className="main-title">Register Company</h1>
+                    <h1 className="my-2 text-3xl">Register Company</h1>
                 </div>
                 <div className="flex w-full flex-row-reverse items-start justify-center gap-5 px-5">
                     <div className="hidden h-full flex-col justify-center gap-4 lg:flex">
@@ -66,15 +69,15 @@ export default function RegisterCompany() {
                             to validate the legitimacy of the business
                         </CardLayout>
                         <CardLayout className="px-10 py-4">
-                            Register Company to unlock features: <br /> - Create
-                            Hiring Notice <br /> - Manage Managers <br /> -
+                            Register Company to unlock features: <br/> - Create
+                            Hiring Notice <br/> - Manage Managers <br/> -
                             Receive Reviews & Feedback
                         </CardLayout>
                         <CardLayout className="p-6">
                             <div className="flex flex-col gap-6">
                                 <div className="flex flex-row items-center gap-5">
                                     <div>
-                                        <PiLockKeyOpenBold size="4rem" />
+                                        <PiLockKeyOpenBold size="4rem"/>
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <h1 className="text-2xl font-bold">
@@ -89,7 +92,7 @@ export default function RegisterCompany() {
                                 </div>
                                 <div className="flex flex-row items-center gap-5">
                                     <div>
-                                        <TbWorldSearch size="4rem" />
+                                        <TbWorldSearch size="4rem"/>
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <h1 className="text-2xl font-bold">
@@ -160,6 +163,14 @@ export default function RegisterCompany() {
                                         {...register("companyLogo", {
                                             required:
                                                 "Company Logo is required",
+                                            validate: {
+                                                checkFileSize: (fileList) => {
+                                                    if (fileList[0] && fileList[0].size > MAX_FILE_SIZE) {
+                                                        return `Company Logo must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB, current size: ${fileList[0].size / 1024 / 1024}MB`
+                                                    }
+                                                    return true
+                                                }
+                                            }
                                         })}
                                         type={"file"}
                                         accept="image/png, image/gif, image/jpeg, image/svg+xml, image/svg"
