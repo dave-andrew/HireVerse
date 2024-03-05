@@ -6,6 +6,7 @@ import {MdOutlineDateRange, MdOutlineEmail} from "react-icons/md";
 import useAuth from "../../hooks/useAuth";
 import {defaultToastOptions} from "../../layouts/ManagementPageLayout";
 import {toast} from "react-toastify";
+import {useState} from "react";
 
 interface ICompleteRegisterForm {
     firstName: string;
@@ -23,7 +24,10 @@ export default function CompleteRegistration() {
         formState: {errors},
     } = useForm<ICompleteRegisterForm>();
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const handleFormSubmit = async (data: ICompleteRegisterForm) => {
+        setIsLoading(true)
         const principal = await getPrincipal();
         if (principal.toString() === "2vxsx-fae") return;
         const result = await registerNewUser(
@@ -33,7 +37,7 @@ export default function CompleteRegistration() {
             data.birthDate,
         );
 
-        console.log(result)
+        setIsLoading(false)
         // @ts-ignore
         if (result.err) {
             // @ts-ignore
@@ -54,8 +58,11 @@ export default function CompleteRegistration() {
 
     return (
         <FrontPageLayout>
-            <div className="bg-signature-yellow flex h-[calc(100vh-4rem)] w-full place-items-center justify-center">
-                {/*    TODO: Set the textured background*/}
+            <div className="bg-signature-blue bg-gradient-to-r from-cyan-600 flex h-[calc(100vh-4rem)] w-full place-items-center justify-center relative">
+                <div className="left-0 bottom-0 absolute">
+                    <iframe className="h-96"
+                        src="https://lottie.host/embed/19081eaa-1ac5-4a21-b8a6-fb0f49790d47/srpS9AML6B.json"></iframe>
+                </div>
                 <div className="flex w-[40vw] min-w-[500px] flex-col gap-10 rounded-lg bg-white p-12">
                     <div className="font-bebas text-5xl">
                         Complete Registration
@@ -245,8 +252,9 @@ export default function CompleteRegistration() {
 
                         <div className="flex w-full justify-center">
                             <button
+                                disabled={isLoading}
                                 onClick={handleSubmit(handleFormSubmit)}
-                                className="bg-signature-yellow w-fit rounded-md px-12 py-3 font-bold">
+                                className="bg-signature-blue text-white hover:bg-signature-blue-darker disabled:bg-gray-400 disabled:cursor-not-allowed w-fit rounded-md px-12 py-3 font-bold">
                                 Register
                             </button>
                         </div>

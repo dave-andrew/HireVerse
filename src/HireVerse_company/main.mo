@@ -396,7 +396,7 @@ actor Company {
                 return #err("Invite not found");
             };
             case (?i) {
-                if (i.inviter_id != user_id) {
+                if (i.inviter_id != user_id or i.user_id != user_id) {
                     return #err("Not authorized");
                 };
                 return #ok(invitations.remove(id));
