@@ -5,7 +5,6 @@ import CardLayout from "../../layouts/CardLayout";
 import TextDropdown from "../../components/form/TextDropdown";
 import JobItem from "../../components/job/JobItem";
 import { IoLocationOutline } from "react-icons/io5";
-import CountryDropdown from "../../components/form/CountryDropdown";
 import JobDetail from "../../components/job/JobDetail";
 import JobFilter, { IFilterForm } from "../../components/form/JobFilter";
 import { useForm } from "react-hook-form";
@@ -15,6 +14,8 @@ import JobItemSkeleton from "../../components/job/JobItemSkeleton";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { InfiniteData } from "@tanstack/react-query";
 import { getFilteredJobs } from "../../datas/queries/jobQueries";
+import WrappedAutoDropdown from "../../components/form/WrappedAutoDropdown";
+import { getCompanyCountries } from "../../datas/queries/companyQueries";
 
 export interface IQueryFilterSortForm {
     country: string;
@@ -40,6 +41,7 @@ export default function FindJobs() {
                 query: "",
             },
         });
+    const { data: countries } = getCompanyCountries();
     const {
         data: jobs,
         refetch: reGetFilteredJobs,
@@ -70,7 +72,7 @@ export default function FindJobs() {
 
     return (
         <FrontPageLayout>
-            <div className="relative flex h-[100vh] w-full flex-col place-items-center gap-20">
+            <div className="relative flex h-[120vh] w-full flex-col place-items-center gap-20 pb-20">
                 <div className="w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[480px]">
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
                         <div className="flex w-full flex-col gap-5 p-8 md:w-2/6">
@@ -92,7 +94,7 @@ export default function FindJobs() {
                         />
                     </div>
                 </div>
-                <div className="md:[1000px] m-auto flex flex-col gap-10 pb-10 lg:min-w-[1200px] relative max-h-[80vh]">
+                <div className="md:min-w-[1000px] md:max-w-[1000px] m-auto flex flex-col gap-10 pb-10 lg:min-w-[1200px] lg:max-w-[1200px] relative max-h-[80vh] pb-5">
                     <div className="flex w-full flex-row gap-5 sticky top-0 bg-white z-50 p-3">
                         <JobFilter onApplyFilter={(data) => setFilter(data)} />
                         <CardLayout className="flex w-full flex-row items-center">
@@ -114,9 +116,10 @@ export default function FindJobs() {
                             </span>
                             <span className="border-signature-gray flex flex-row items-center gap-2 rounded-br-xl rounded-tr-xl border-l-[1px] p-1 pl-5 transition-colors has-[:focus]:bg-gray-100">
                                 <IoLocationOutline size="1.5rem" />
-                                <CountryDropdown
-                                    name="country"
+                                <WrappedAutoDropdown
+                                    data={countries}
                                     control={control}
+                                    name="country data="
                                     onChange={(_) => reGetFilteredJobs()}
                                 />
                             </span>
@@ -124,7 +127,7 @@ export default function FindJobs() {
                     </div>
                     <div className="flex h-full w-full flex-row gap-3">
                         <div className="flex h-auto flex-col gap-1">
-                            <CardLayout className="mr-1 flex flex-row items-center justify-between pe-2 py-2 ps-5">
+                            <CardLayout className="mr-1 flex flex-row items-center justify-between pe-2 py-2 ps-5 shadow-sm">
                                 Showing {flattenData(jobs)?.length} Jobs
                                 <TextDropdown
                                     name="order"
@@ -155,14 +158,14 @@ export default function FindJobs() {
                                     {hasNextPage && <JobItemSkeleton />}
                                 </div>
                                 {jobs && jobs.pages[0]?.length === 0 && (
-                                    <div className="flex flex-col items-center justify-center">
+                                    <div className="flex flex-col items-center justify-center min-h-[75vh]">
                                         <img
                                             className="w-64"
                                             src="storyset/empty-cuate.png"
                                             alt="empty"
                                         />
-                                        <h3>No job found</h3>
-                                        <p>Try to change your filter</p>
+                                        <h3 className="m-2">No job found</h3>
+                                        <p>Try changing your filter</p>
                                     </div>
                                 )}
                             </div>

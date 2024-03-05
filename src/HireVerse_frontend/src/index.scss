@@ -106,22 +106,13 @@
     border-radius: revert;
   }
 
-  //
-  //circle:hover {
-  //  fill: red;
-  //}
+  html {
+    font-family: "Lato", sans-serif;
+    scroll-behavior: smooth;
+  }
+
 }
 
-
-html {
-  font-family: "Lato", sans-serif;
-}
-
-//
-//.font-lato {
-//  font-family: "Lato", sans-serif;
-//
-//}
 
 .text-blue-primary {
   color: #00b4d8;
@@ -207,7 +198,7 @@ html {
 }
 
 .card-scollbar::-webkit-scrollbar-thumb {
-  background-color: #919191;
+  background-color: #c7c7c7;
   border-radius: 10px;
 }
 
@@ -288,9 +279,18 @@ html {
   margin-left: 3px;
   animation: blink .6s linear infinite alternate;
 }
+
 @keyframes blink {
-  0% {opacity: 1;}
-  40% {opacity: 1;}
-  60% {opacity: 0;}
-  100% {opacity: 0;}
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }

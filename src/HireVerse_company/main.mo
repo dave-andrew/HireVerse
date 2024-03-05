@@ -352,6 +352,13 @@ actor Company {
 
                 jobIds.add(job_id);
 
+                Debug.print("number" # Nat.toText(jobIds.size()));
+                var i = 0;
+                for (job in jobIds.vals()) {
+                    Debug.print(company_id # job_id # Nat.toText(i));
+                    i += 1;
+                };
+
                 let updatedCompany : Company = {
                     id = company_id;
                     name = company.name;

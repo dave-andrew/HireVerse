@@ -3,9 +3,9 @@ import CardLayout from "../../layouts/CardLayout";
 export default function JobDetailSkeleton() {
     return (
         <CardLayout className="relative h-full overflow-auto">
-            <div className="border-signature-gray sticky top-0 bg-white z-10 flex h-32 w-full flex-row items-center border-b-[1px]">
+            <div className="border-signature-gray sticky flex h-32 w-full top-0 bg-white flex-row items-center justify-between border-b-[1px] shadow-sm p-4 gap-4">
                 <div className="animate-pulse space-y-8 md:flex md:items-center md:space-x-8 md:space-y-0 rtl:space-x-reverse">
-                    <div className="flex h-32 w-full items-center justify-center rounded bg-gray-300 sm:w-72 dark:bg-gray-200">
+                    <div className="flex h-28 w-full items-center justify-center rounded bg-gray-300 sm:w-72 dark:bg-gray-200">
                         <svg
                             className="h-10 w-10 text-gray-200 dark:text-gray-600"
                             aria-hidden="true"
