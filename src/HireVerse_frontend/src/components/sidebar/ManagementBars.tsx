@@ -168,7 +168,7 @@ export default function ManagementBars({ children }: Props) {
                         <div className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
                             H
                             <span
-                                className={`${isHovered ? "block" : "hidden"}`}>
+                                className={`${isHovered ? "opacity-100 static" : "opacity-0 absolute"} transition-opacity ease-linear duration-300`}>
                                 IREVERSE
                             </span>
                         </div>

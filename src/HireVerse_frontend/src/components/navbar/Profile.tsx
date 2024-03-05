@@ -31,9 +31,7 @@ export default function Profile() {
                                                 <p className="text-sm font-medium text-gray-900">
                                                     {authState ==
                                                     AuthState.Authenticated
-                                                        ? user?.first_name.concat(
-                                                              user?.last_name,
-                                                          )
+                                                        ? (`${user?.first_name} ${user?.last_name}`)
                                                         : "Not Logged In"}
                                                 </p>
                                                 <p className="text-sm text-gray-500">

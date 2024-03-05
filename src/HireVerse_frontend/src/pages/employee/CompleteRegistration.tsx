@@ -1,9 +1,11 @@
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import FrontPageLayout from "../../layouts/FrontPageLayout";
 import CardLayout from "../../layouts/CardLayout";
-import { BsPersonVcard } from "react-icons/bs";
-import { MdOutlineDateRange, MdOutlineEmail } from "react-icons/md";
+import {BsPersonVcard} from "react-icons/bs";
+import {MdOutlineDateRange, MdOutlineEmail} from "react-icons/md";
 import useAuth from "../../hooks/useAuth";
+import {defaultToastOptions} from "../../layouts/ManagementPageLayout";
+import {toast} from "react-toastify";
 
 interface ICompleteRegisterForm {
     firstName: string;
@@ -14,24 +16,41 @@ interface ICompleteRegisterForm {
 }
 
 export default function CompleteRegistration() {
-    const { getPrincipal, register: registerNewUser } = useAuth();
+    const {getPrincipal, register: registerNewUser} = useAuth();
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
     } = useForm<ICompleteRegisterForm>();
 
     const handleFormSubmit = async (data: ICompleteRegisterForm) => {
         const principal = await getPrincipal();
         if (principal.toString() === "2vxsx-fae") return;
-        await registerNewUser(
+        const result = await registerNewUser(
             data.firstName,
             data.lastName,
             data.email,
             data.birthDate,
         );
-        window.location.reload();
+
+        console.log(result)
+        // @ts-ignore
+        if (result.err) {
+            // @ts-ignore
+            toast.error(result.err, defaultToastOptions);
+        } else {
+            toast.success("Successfully Register", defaultToastOptions);
+            window.location.reload();
+        }
     };
+
+    const currentDate = new Date();
+    const minDate = new Date(
+        currentDate.getFullYear() - 17,
+        currentDate.getMonth(),
+        currentDate.getDate()
+    );
+    const minDateValue = minDate.toISOString().split("T")[0];
 
     return (
         <FrontPageLayout>
@@ -42,184 +61,195 @@ export default function CompleteRegistration() {
                         Complete Registration
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        {/* First Name Field */}
-                        <div className="border-signature-gray flex flex-col border-t-[1px] pt-4">
-                            <div className="font-bold">First Name</div>
-                            <div>Input the first name of your name.</div>
-                        </div>
-                        <div className="border-signature-gray border-t-[1px] pt-4">
-                            <CardLayout
-                                className={`rounded-md ${
-                                    errors.firstName
-                                        ? "border-red-500"
-                                        : "border-signature-gray"
-                                }`}>
-                                <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
+                    <div className="flex flex-col gap-4 w-full">
+                        <div className="grid grid-cols-2">
+                            {/* First Name Field */}
+                            <div className="border-signature-gray flex flex-col border-t-[1px] pt-2 pb-4 pr-4">
+                                <div className="font-bold">First Name</div>
+                                <div>Input the first name of your name.</div>
+                            </div>
+                            <div className="border-signature-gray border-t-[1px] pt-4">
+                                <CardLayout
+                                    className={`rounded-md ${
+                                        errors.firstName
+                                            ? "border-red-500"
+                                            : "border-signature-gray"
+                                    }`}>
+                                    <div
+                                        className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                     <span
                                         className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
                                             errors.firstName
                                                 ? "border-red-500"
                                                 : "border-signature-gray"
                                         }`}>
-                                        <BsPersonVcard size="1.5rem" />
+                                        <BsPersonVcard size="1.5rem"/>
                                     </span>
-                                    <input
-                                        {...register("firstName", {
-                                            required: "First Name is required.",
-                                        })}
-                                        type="text"
-                                        className="w-full bg-transparent p-3 outline-0 "
-                                        placeholder="First Name"
-                                    />
+                                        <input
+                                            {...register("firstName", {
+                                                required: "First Name is required.",
+                                            })}
+                                            type="text"
+                                            className="w-full bg-transparent p-3 outline-0 "
+                                            placeholder="First Name"
+                                        />
+                                    </div>
+                                </CardLayout>
+                                <div
+                                    className={`text-sm ${
+                                        errors.firstName ? "text-red-500" : "h-5"
+                                    }`}>
+                                    {errors.firstName?.message}
                                 </div>
-                            </CardLayout>
-                            <div
-                                className={`text-sm ${
-                                    errors.firstName ? "text-red-500" : "h-5"
-                                }`}>
-                                {errors.firstName?.message}
                             </div>
-                        </div>
-                        {/* Last Name Field */}
-                        <div className="border-signature-gray flex flex-col border-t-[1px] pt-4">
-                            <div className="font-bold">Last Name</div>
-                            <div>Input the last name of your name.</div>
-                        </div>
-                        <div className="border-signature-gray border-t-[1px] pt-4">
-                            <CardLayout
-                                className={`rounded-md ${
-                                    errors.lastName
-                                        ? "border-red-500"
-                                        : "border-signature-gray"
-                                }`}>
-                                <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
+                            {/* Last Name Field */}
+                            <div className="border-signature-gray flex flex-col border-t-[1px] pt-2 pb-4 pr-4">
+                                <div className="font-bold">Last Name</div>
+                                <div>Input the last name of your name.</div>
+                            </div>
+                            <div className="border-signature-gray border-t-[1px] pt-4">
+                                <CardLayout
+                                    className={`rounded-md ${
+                                        errors.lastName
+                                            ? "border-red-500"
+                                            : "border-signature-gray"
+                                    }`}>
+                                    <div
+                                        className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                     <span
                                         className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
                                             errors.lastName
                                                 ? "border-red-500"
                                                 : "border-signature-gray"
                                         }`}>
-                                        <BsPersonVcard size="1.5rem" />
+                                        <BsPersonVcard size="1.5rem"/>
                                     </span>
-                                    <input
-                                        {...register("lastName", {
-                                            required: "Last Name is required.",
-                                        })}
-                                        type="text"
-                                        className="w-full bg-transparent p-3 outline-0 "
-                                        placeholder="Last Name"
-                                    />
+                                        <input
+                                            {...register("lastName", {
+                                                required: "Last Name is required.",
+                                            })}
+                                            type="text"
+                                            className="w-full bg-transparent p-3 outline-0 "
+                                            placeholder="Last Name"
+                                        />
+                                    </div>
+                                </CardLayout>
+                                <div
+                                    className={`text-sm ${
+                                        errors.lastName ? "text-red-500" : "h-5"
+                                    }`}>
+                                    {errors.lastName?.message}
                                 </div>
-                            </CardLayout>
-                            <div
-                                className={`text-sm ${
-                                    errors.lastName ? "text-red-500" : "h-5"
-                                }`}>
-                                {errors.lastName?.message}
                             </div>
-                        </div>
-                        {/* Email Field */}
-                        <div className="border-signature-gray flex flex-col border-t-[1px] pt-4">
-                            <div className="font-bold">Email</div>
-                            <div>Provide your personal email.</div>
-                        </div>
-                        <div className="border-signature-gray border-t-[1px] pt-4">
-                            <CardLayout
-                                className={`rounded-md ${
-                                    errors.email
-                                        ? "border-red-500"
-                                        : "border-signature-gray"
-                                }`}>
-                                <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
+                            {/* Email Field */}
+                            <div className="border-signature-gray flex flex-col border-t-[1px]  pt-2 pb-4 pr-4">
+                                <div className="font-bold">Email</div>
+                                <div>Provide your personal email.</div>
+                            </div>
+                            <div className="border-signature-gray border-t-[1px] pt-4">
+                                <CardLayout
+                                    className={`rounded-md ${
+                                        errors.email
+                                            ? "border-red-500"
+                                            : "border-signature-gray"
+                                    }`}>
+                                    <div
+                                        className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                     <span
                                         className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
                                             errors.email
                                                 ? "border-red-500"
                                                 : "border-signature-gray"
                                         }`}>
-                                        <MdOutlineEmail size="1.5rem" />
+                                        <MdOutlineEmail size="1.5rem"/>
                                     </span>
-                                    <input
-                                        {...register("email", {
-                                            required: "Email is required.",
-                                            pattern: {
-                                                value: /\S+@\S+\.\S+/,
-                                                message:
-                                                    "Invalid email address.",
-                                            },
-                                        })}
-                                        type="email"
-                                        className="w-full bg-transparent p-3 outline-0"
-                                        placeholder="Email"
-                                    />
+                                        <input
+                                            {...register("email", {
+                                                required: "Email is required.",
+                                                pattern: {
+                                                    value: /\S+@\S+\.\S+/,
+                                                    message:
+                                                        "Invalid email address.",
+                                                },
+                                            })}
+                                            type="email"
+                                            className="w-full bg-transparent p-3 outline-0"
+                                            placeholder="Email"
+                                        />
+                                    </div>
+                                </CardLayout>
+                                <div
+                                    className={`text-sm ${
+                                        errors.email ? "text-red-500" : "h-5"
+                                    }`}>
+                                    {errors.email?.message}
                                 </div>
-                            </CardLayout>
-                            <div
-                                className={`text-sm ${
-                                    errors.email ? "text-red-500" : "h-5"
-                                }`}>
-                                {errors.email?.message}
                             </div>
-                        </div>
-                        {/* Birth Date Field */}
-                        <div className="border-signature-gray flex flex-col border-y-[1px] py-5">
-                            <div className="font-bold">Birth Date</div>
-                            <div>Provide the date of your birth.</div>
-                        </div>
-                        <div className="border-signature-gray border-y-[1px] py-5">
-                            <CardLayout
-                                className={`rounded-md ${
-                                    errors.birthDate
-                                        ? "border-red-500"
-                                        : "border-signature-gray"
-                                }`}>
-                                <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
+                            {/* Birth Date Field */}
+                            <div className="border-signature-gray flex flex-col border-y-[1px] pt-2 pb-4 pr-4">
+                                <div className="font-bold">Birth Date</div>
+                                <div>Provide the date of your birth.</div>
+                            </div>
+                            <div className="border-signature-gray border-y-[1px] pt-3">
+                                <CardLayout
+                                    className={`rounded-md ${
+                                        errors.birthDate
+                                            ? "border-red-500"
+                                            : "border-signature-gray"
+                                    }`}>
+                                    <div
+                                        className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                     <span
                                         className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
                                             errors.birthDate
                                                 ? "border-red-500"
                                                 : "border-signature-gray"
                                         }`}>
-                                        <MdOutlineDateRange size="1.5rem" />
+                                        <MdOutlineDateRange size="1.5rem"/>
                                     </span>
-                                    <input
-                                        {...register("birthDate", {
-                                            required: "Birth Date is required.",
-                                        })}
-                                        placeholder="Birth Date"
-                                        type="date"
-                                        className="max-h-12 w-full bg-transparent p-3 outline-0"
-                                    />
+                                        <input
+                                            {...register("birthDate", {
+                                                required: "Birth Date is required.",
+                                                max: {
+                                                    value: minDateValue,
+                                                    message:
+                                                        "You must be at least 17 years old.",
+                                                }
+                                            })}
+                                            placeholder="Birth Date"
+                                            type="date"
+                                            className="max-h-12 w-full bg-transparent p-3 outline-0"
+                                        />
+                                    </div>
+                                </CardLayout>
+                                <div
+                                    className={`text-sm ${
+                                        errors.birthDate ? "text-red-500" : "h-5"
+                                    }`}>
+                                    {errors.birthDate?.message}
                                 </div>
-                            </CardLayout>
-                            <div
-                                className={`text-sm ${
-                                    errors.birthDate ? "text-red-500" : "h-5"
-                                }`}>
-                                {errors.birthDate?.message}
                             </div>
                         </div>
-                    </div>
-                    <div className="flex w-full items-center justify-center gap-2">
-                        <input
-                            type="checkbox"
-                            {...register("terms", {
-                                required: "You must accept the terms.",
-                            })}
-                            className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600"
-                        />
-                        <label className="text-lg text-black">
-                            I accept all the terms and requirements
-                        </label>
-                    </div>
+                        <div className="flex w-full items-center justify-center gap-2">
+                            <input
+                                type="checkbox"
+                                {...register("terms", {
+                                    required: "You must accept the terms.",
+                                })}
+                                className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600"
+                            />
+                            <label className="text-lg text-black">
+                                I accept all the terms and requirements
+                            </label>
+                        </div>
 
-                    <div className="flex w-full justify-center">
-                        <button
-                            onClick={handleSubmit(handleFormSubmit)}
-                            className="bg-signature-yellow w-fit rounded-md px-12 py-3 font-bold">
-                            Register
-                        </button>
+                        <div className="flex w-full justify-center">
+                            <button
+                                onClick={handleSubmit(handleFormSubmit)}
+                                className="bg-signature-yellow w-fit rounded-md px-12 py-3 font-bold">
+                                Register
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

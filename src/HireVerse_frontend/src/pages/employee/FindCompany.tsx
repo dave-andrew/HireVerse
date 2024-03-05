@@ -296,14 +296,14 @@ export default function FindCompany() {
                                     {searchCompany?.map((cp, index) => {
                                         return (
                                             <CardLayout
-                                                className="flex flex-col gap-2 rounded-md px-6 py-5"
+                                                className="flex flex-col gap-2 rounded-md px-6 py-5 bg-white hover:bg-gray-100 hover:cursor-pointer"
                                                 key={index}
                                                 onClick={() => {
                                                     nav(
                                                         `/company/detail/${cp.id}`,
                                                     );
                                                 }}>
-                                                <div className="flex flex-row place-items-center bg-white">
+                                                <div className="flex flex-row place-items-center">
                                                     <img
                                                         className="mr-4 aspect-square w-24 rounded-xl object-cover"
                                                         src={imageHandler(

@@ -1,10 +1,11 @@
 import FrontPageLayout from "../../layouts/FrontPageLayout";
-import useAuth, { AuthState } from "../../hooks/useAuth";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import useAuth, {AuthState} from "../../hooks/useAuth";
+import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import Typewriter from "../../components/Typewriter";
 
 export default function Landing() {
-    const { user, authState, login, logout } = useAuth();
+    const {user, authState, login, logout} = useAuth();
     const navigate = useNavigate();
 
     const clickHandler = async () => {
@@ -30,7 +31,9 @@ export default function Landing() {
                             HIREVERSE
                         </div>
                         <div className="text-center align-middle text-2xl font-bold text-white">
-                            Secure your job.
+                            <Typewriter
+                                texts={["Hire the best employee.", "Secure your job", "Create opportunities for others.", "Credible and reliable job reviews.", "Learn from other experiences"]}
+                                speed={100}/>
                         </div>
                     </div>
                     {/*{user ? <p>Logged in as: {user.email}</p> : <p>Not logged in</p>}*/}

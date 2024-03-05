@@ -217,3 +217,18 @@ html {
 .border-form {
   border-color: rgb(168, 168, 168);
 }
+
+.input-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: white;
+  margin-left: 3px;
+  animation: blink .6s linear infinite alternate;
+}
+@keyframes blink {
+  0% {opacity: 1;}
+  40% {opacity: 1;}
+  60% {opacity: 0;}
+  100% {opacity: 0;}
+}

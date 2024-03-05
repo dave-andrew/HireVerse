@@ -82,9 +82,8 @@ export default function useAuth() {
                 s.register(first_name, last_name, email, date),
             );
 
-            //TODO ADD VALIDATION
             await fetchUserData();
-            // console.log("Return value dari register: ", returnValue);
+            return returnValue;
         },
         [],
     );
