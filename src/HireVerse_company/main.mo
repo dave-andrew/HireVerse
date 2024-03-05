@@ -672,7 +672,7 @@ actor Company {
             case (#ok(company)) {
                 let reviews_ids = company.reviews_ids;
 
-                let newReview = await Review.addReview(review);
+                let newReview = await Review.addReview(user_id, review);
 
                 switch (newReview) {
                     case (#err(msg)) {

@@ -51,7 +51,7 @@ actor Review {
 
     let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
 
-    public shared (msg) func addReview(newReview : CreateReviewInput) : async Result.Result<Text, Text> {
+    public shared (msg) func addReview(user_id: Principal, newReview : CreateReviewInput) : async Result.Result<Text, Text> {
 
         Debug.print("Adding review: " # Principal.toText(msg.caller));
         if (Principal.isAnonymous(msg.caller)) {
@@ -62,7 +62,7 @@ actor Review {
 
         let review = {
             id = id;
-            userId = Principal.toText(msg.caller);
+            userId = Principal.toText(user_id);
             title = newReview.title;
             isAnonymous = newReview.isAnonymous;
             cultureRating = newReview.cultureRating;
