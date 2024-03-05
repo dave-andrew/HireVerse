@@ -136,14 +136,6 @@ export default function ManagementBars({ children }: Props) {
                             className="w-52"
                             onChange={changeCompany}
                         />
-                        <button
-                            onClick={toggleModal}
-                            className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 rounded-md border-l-2 border-transparent p-3">
-                            <RiMailOpenLine className="min-w-[1.5rem]" />
-                            <span className={`overflow-hidden`}>
-                                Invitations
-                            </span>
-                        </button>
                     </div>
                     <div className="flex h-full flex-row place-items-center">
                         <a
@@ -184,7 +176,7 @@ export default function ManagementBars({ children }: Props) {
                                         <div
                                             key={index}
                                             className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
-                                            <menu.icon className="min-w-[1.5rem]" />
+                                            <menu.icon className="min-w-[1.5rem]"/>
                                             <span className={`overflow-hidden`}>
                                                 {menu.name}
                                             </span>
@@ -192,6 +184,15 @@ export default function ManagementBars({ children }: Props) {
                                     </Link>
                                 );
                             })}
+                            <hr className="my-8"/>
+                            <button
+                                onClick={toggleModal}
+                                className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 rounded-md border-l-2 border-transparent p-3">
+                                <RiMailOpenLine className="min-w-[1.5rem]"/>
+                                <span className={`overflow-hidden`}>
+                                Invitations
+                            </span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -199,7 +200,7 @@ export default function ManagementBars({ children }: Props) {
                     className={`flex h-full ${isHovered ? "min-w-[18rem]" : "min-w-[5rem]"} transition-all duration-500 ease-in-out`}
                 />
                 <div className="flex-grow-1 flex h-full w-full flex-col">
-                    <div className="min-h-16 w-full" />
+                    <div className="min-h-16 w-full"/>
                     {children}
                 </div>
             </div>
