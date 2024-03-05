@@ -16,13 +16,13 @@ export function useCreateNewJob() {
                 return null;
             }
 
-            return result.ok.id;
+            return result.ok.company_id;
         },
         onSuccess: async (data) => {
             successToast({
                 message: "Job created successfully",
             });
-            
+
             return await queryClient.invalidateQueries({
                 queryKey: ["jobPostedByCompany", data],
             });

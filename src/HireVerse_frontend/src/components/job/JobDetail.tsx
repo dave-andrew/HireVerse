@@ -7,6 +7,7 @@ import handleDefaultImage from "../../utils/handleDefaultImage";
 import useImageBlob from "../../hooks/useImageBlob";
 import { convertShortTimeInterval } from "../../utils/convertTimeInterval";
 import EmployTypeIndicator from "./EmployTypeIndicator";
+import purifyDOM from "../../utils/purifyDOM";
 
 export interface IJobDetail {
     id: string;
@@ -65,14 +66,17 @@ export default function JobDetail({ jobId }: Props) {
                 <>
                     <div className="border-signature-gray sticky flex h-32 w-full top-0 bg-white flex-row items-center justify-between border-b-[1px] shadow-sm p-4 gap-4">
                         <div className="flex flex-row items-center h-full gap-4">
-                            <img
+                            <a
                                 className="aspect-square object-cover h-full"
-                                onError={handleDefaultImage}
-                                src={convertBlobToImage(
-                                    fullJob?.company.image ?? [],
-                                )}
-                                alt={fullJob.company.name}
-                            />
+                                href={`company/detail/${fullJob.id}`}>
+                                <img
+                                    onError={handleDefaultImage}
+                                    src={convertBlobToImage(
+                                        fullJob?.company.image ?? [],
+                                    )}
+                                    alt={fullJob.company.name}
+                                />
+                            </a>
                             <div className="flex flex-col">
                                 <h1 className="m-0 p-0 text-4xl font-bold flex flex-row items-center gap-3">
                                     {fullJob?.position}{" "}
@@ -83,7 +87,10 @@ export default function JobDetail({ jobId }: Props) {
                                 <p className="text-base">
                                     On{" "}
                                     <span className="font-bold">
-                                        {fullJob?.company.name}
+                                        <a
+                                            href={`company/detail/${fullJob.id}`}>
+                                            {fullJob?.company.name}
+                                        </a>
                                         {" - "}
                                     </span>
                                     {fullJob?.location}
@@ -96,17 +103,26 @@ export default function JobDetail({ jobId }: Props) {
                     </div>
                     <div className="flex flex-col gap-8 overflow-auto p-6 [&_h3]:text-base [&_h3]:font-bold border-b-[1px]">
                         <div>
-                            <p>{fullJob?.shortDescription}</p>
+                            <p
+                                dangerouslySetInnerHTML={{
+                                    __html: purifyDOM(
+                                        fullJob?.shortDescription,
+                                    ),
+                                }}></p>
                         </div>
                         <div>
                             <h3 className="m-0 p-0">Job Description</h3>
-                            <p>{fullJob?.jobDescription}</p>
+                            <p
+                                dangerouslySetInnerHTML={{
+                                    __html: purifyDOM(fullJob?.jobDescription),
+                                }}></p>
                         </div>
                         <div>
                             <h3 className="m-0 p-0">Requirements</h3>
-                            <ul className="m-0 pl-5">
-                                <li>{fullJob?.requirements}</li>
-                            </ul>
+                            <p
+                                dangerouslySetInnerHTML={{
+                                    __html: purifyDOM(fullJob?.requirements),
+                                }}></p>
                         </div>
                         <div>
                             <h3 className="m-0 p-0">Salary</h3>

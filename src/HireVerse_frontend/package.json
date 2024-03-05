@@ -35,7 +35,8 @@
     "react-simple-maps": "^3.0.0",
     "react-toastify": "^10.0.4",
     "suspend-react": "^0.1.3",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "@react-buddy/ide-toolbox": "^2.4.0"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
