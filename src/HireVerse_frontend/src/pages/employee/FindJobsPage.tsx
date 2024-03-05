@@ -119,7 +119,8 @@ export default function FindJobs() {
                                 <WrappedAutoDropdown
                                     data={countries}
                                     control={control}
-                                    name="country data="
+                                    defaultData={countries ? countries[0] : ""}
+                                    name="country"
                                     onChange={(_) => reGetFilteredJobs()}
                                 />
                             </span>

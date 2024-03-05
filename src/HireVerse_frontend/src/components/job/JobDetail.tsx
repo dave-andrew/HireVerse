@@ -7,6 +7,7 @@ import handleDefaultImage from "../../utils/handleDefaultImage";
 import useImageBlob from "../../hooks/useImageBlob";
 import { convertShortTimeInterval } from "../../utils/convertTimeInterval";
 import EmployTypeIndicator from "./EmployTypeIndicator";
+import purifyDOM from "../../utils/purifyDOM";
 
 export interface IJobDetail {
     id: string;
@@ -96,17 +97,26 @@ export default function JobDetail({ jobId }: Props) {
                     </div>
                     <div className="flex flex-col gap-8 overflow-auto p-6 [&_h3]:text-base [&_h3]:font-bold border-b-[1px]">
                         <div>
-                            <p>{fullJob?.shortDescription}</p>
+                            <p
+                                dangerouslySetInnerHTML={{
+                                    __html: purifyDOM(
+                                        fullJob?.shortDescription,
+                                    ),
+                                }}></p>
                         </div>
                         <div>
                             <h3 className="m-0 p-0">Job Description</h3>
-                            <p>{fullJob?.jobDescription}</p>
+                            <p
+                                dangerouslySetInnerHTML={{
+                                    __html: purifyDOM(fullJob?.jobDescription),
+                                }}></p>
                         </div>
                         <div>
                             <h3 className="m-0 p-0">Requirements</h3>
-                            <ul className="m-0 pl-5">
-                                <li>{fullJob?.requirements}</li>
-                            </ul>
+                            <p
+                                dangerouslySetInnerHTML={{
+                                    __html: purifyDOM(fullJob?.requirements),
+                                }}></p>
                         </div>
                         <div>
                             <h3 className="m-0 p-0">Salary</h3>

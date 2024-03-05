@@ -284,15 +284,18 @@ export function getJobPostedByCompany(
                 return;
             }
 
-            const response = await getJobService().then((s) =>
-                s.getJobPostedByCompany(
-                    companyId,
-                    BigInt(0),
-                    BigInt(20),
-                    getConvertedFilters(),
-                ),
-            );
+            const response = await getJobService()
+                .then((s) =>
+                    s.getJobPostedByCompany(
+                        companyId,
+                        BigInt(0),
+                        BigInt(20),
+                        getConvertedFilters(),
+                    ),
+                )
+                .catch((e) => console.error(e));
 
+            console.log(response);
             if (isOk(response)) {
                 return response.ok;
             }

@@ -9,6 +9,10 @@ interface Props {
     name: string;
     onChange?: (value: string) => void;
     data?: string[];
+    className?: string;
+    innerClassName?: string;
+    placeholder?: string;
+    defaultData?: string;
 }
 
 export default function WrappedAutoDropdown({
@@ -16,6 +20,10 @@ export default function WrappedAutoDropdown({
     name,
     onChange,
     data,
+    className,
+    innerClassName,
+    placeholder,
+    defaultData,
 }: Props) {
     const [query, setQuery] = useState("");
     const [selected, setSelected] = useState({});
@@ -38,10 +46,14 @@ export default function WrappedAutoDropdown({
     }, [query, data]);
 
     useEffect(() => {
+        if (defaultData) {
+            setSelected(defaultData);
+            return;
+        }
         if (data) {
             setSelected(data[0]);
         }
-    }, [data]);
+    }, [data, defaultData]);
 
     return (
         <Controller
@@ -55,9 +67,11 @@ export default function WrappedAutoDropdown({
                         onChange?.(e);
                     }}>
                     <div className="relative mt-1">
-                        <div className="flow-hidden relative w-full cursor-default text-left sm:text-sm">
+                        <div
+                            className={`flow-hidden relative w-full cursor-default text-left sm:text-sm ${className}`}>
                             <Combobox.Input
-                                className="w-full border-none bg-transparent py-2 pl-0 pr-10 text-sm leading-5 text-gray-900 focus:outline-none"
+                                placeholder={placeholder}
+                                className={`w-full bg-transparent py-3 pl-0 pr-10 text-sm leading-5 text-gray-900 focus:outline-none ${innerClassName}`}
                                 displayValue={(data: string) => data}
                                 onChange={(event) =>
                                     setQuery(event.target.value)
