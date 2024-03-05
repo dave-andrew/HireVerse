@@ -2,16 +2,9 @@ import { ReactNode, useEffect, useState } from "react";
 import Profile from "../navbar/Profile";
 import { IconType } from "react-icons";
 import { Link, useLocation } from "react-router-dom";
-import {
-    RiHome4Line,
-    RiMailOpenLine,
-    RiSuitcase2Line,
-    RiUser3Line,
-} from "react-icons/ri";
+import { RiHome4Line, RiMailOpenLine, RiSuitcase2Line, RiUser3Line } from "react-icons/ri";
 import { useForm } from "react-hook-form";
-import ImageLabeledDropdown, {
-    DropdownItems,
-} from "../form/ImageLabeledDropdown";
+import ImageLabeledDropdown, { DropdownItems } from "../form/ImageLabeledDropdown";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import useImageBlob from "../../hooks/useImageBlob";
@@ -59,8 +52,7 @@ interface IDropdownForm {
 export default function ManagementBars({ children }: Props) {
     const { data: managedCompanies, refetch } = getManagedCompanies();
     const [menus, setMenus] = useState<Menu[]>(defaultMenu);
-    const [selectedCompany, setSelectedCompany] =
-        useLocalStorage<Company | null>("selectedCompany", null);
+    const [selectedCompany, setSelectedCompany] = useLocalStorage<Company | null>("selectedCompany", null);
     const [dropdownItems, setDropdownItems] = useState<DropdownItems[]>([]);
     const [isHovered, setIsHovered] = useState(false);
     const [isModalShown, setIsModalShown] = useState(false);
@@ -89,9 +81,7 @@ export default function ManagementBars({ children }: Props) {
         setDropdownItems(items);
 
         if (selectedCompany) {
-            const company = managedCompanies.find(
-                (c) => c.id === selectedCompany.id,
-            );
+            const company = managedCompanies.find((c) => c.id === selectedCompany.id);
 
             if (company) {
                 setValue("label", company.name);
@@ -99,11 +89,8 @@ export default function ManagementBars({ children }: Props) {
             }
         }
 
-        if (managedCompanies.length === 0) {
-            setValue("label", "No Company");
-            setSelectedCompany(null);
-            return;
-        }
+        setValue("label", "No Company");
+        setSelectedCompany(null);
     };
 
     const changeCompany = (companyLabel: string) => {
@@ -125,10 +112,9 @@ export default function ManagementBars({ children }: Props) {
 
     return (
         <>
-            <div className="flex h-[100vh] w-[100vw] flex-row">
+            <div className="bg-gray flex h-full w-[100vw] flex-row">
                 <div className="fixed z-50 flex h-16 w-full flex-row justify-between bg-white shadow-md">
-                    <div
-                        className={`flex h-full flex-row place-items-center transition-all duration-500 ease-in-out ${isHovered ? "pl-80" : "pl-24"}`}>
+                    <div className={`flex h-full flex-row place-items-center transition-all duration-500 ease-in-out ${isHovered ? "pl-80" : "pl-24"}`}>
                         <ImageLabeledDropdown
                             name="label"
                             states={dropdownItems}
@@ -148,21 +134,26 @@ export default function ManagementBars({ children }: Props) {
                         </div>
                     </div>
                 </div>
-
                 <div
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
-                    className={`fixed z-50 flex h-full flex-col place-items-center justify-between
-                 bg-white px-2 pb-6 pt-4 shadow-md ${isHovered ? "w-[18rem]" : "w-[5rem]"}
+                    className={`fixed z-50 flex h-full flex-col place-items-center justify-between bg-white px-2 pb-6 pt-4 shadow-md ${isHovered ? "w-[18rem]" : "w-[5rem]"}
                  transition-all duration-500 ease-in-out
                  `}>
                     <div className="flex w-full flex-col gap-8">
                         <div className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
-                            H
-                            <span
-                                className={`${isHovered ? "opacity-100 static" : "opacity-0 absolute"} transition-opacity ease-linear duration-300`}>
-                                IREVERSE
-                            </span>
+                            <div className="flex flex-col">
+                                <span>
+                                    H
+                                    <span className={`${isHovered ? "static opacity-100" : "absolute opacity-0"} transition-opacity duration-300 ease-linear`}>
+                                        IREVERSE
+                                    </span>
+                                </span>
+                                <span
+                                    className={`${isHovered ? "opacity-100" : "opacity-0"} mt-[-0.5rem] text-lg text-black transition-opacity duration-300 ease-linear`}>
+                                    EMPLOYERS
+                                </span>
+                            </div>
                         </div>
                         <div className="flex flex-col text-lg text-gray-500">
                             {menus.map((menu, index) => {
@@ -176,31 +167,25 @@ export default function ManagementBars({ children }: Props) {
                                         <div
                                             key={index}
                                             className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
-                                            <menu.icon className="min-w-[1.5rem]"/>
-                                            <span className={`overflow-hidden`}>
-                                                {menu.name}
-                                            </span>
+                                            <menu.icon className="min-w-[1.5rem]" />
+                                            <span className={`overflow-hidden`}>{menu.name}</span>
                                         </div>
                                     </Link>
                                 );
                             })}
-                            <hr className="my-8"/>
+                            <hr className="my-8" />
                             <button
                                 onClick={toggleModal}
                                 className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 rounded-md border-l-2 border-transparent p-3">
-                                <RiMailOpenLine className="min-w-[1.5rem]"/>
-                                <span className={`overflow-hidden`}>
-                                Invitations
-                            </span>
+                                <RiMailOpenLine className="min-w-[1.5rem]" />
+                                <span className={`overflow-hidden`}>Invitations</span>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div
-                    className={`flex h-full ${isHovered ? "min-w-[18rem]" : "min-w-[5rem]"} transition-all duration-500 ease-in-out`}
-                />
+                <div className={`flex h-full ${isHovered ? "min-w-[18rem]" : "min-w-[5rem]"} transition-all duration-500 ease-in-out`} />
                 <div className="flex-grow-1 flex h-full w-full flex-col">
-                    <div className="min-h-16 w-full"/>
+                    <div className="min-h-16 w-full" />
                     {children}
                 </div>
             </div>

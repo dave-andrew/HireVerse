@@ -10,11 +10,7 @@ interface Props {
     onClick?: () => void;
 }
 
-export default function ProfileEditButton({
-    className,
-    editStateProps,
-    onClick,
-}: Props) {
+export default function ProfileEditButton({ className, editStateProps, onClick }: Props) {
     const handleOnClick = () => {
         if (onClick) {
             onClick();

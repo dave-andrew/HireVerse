@@ -9,15 +9,13 @@ import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.di
 import { useNavigate } from "react-router-dom";
 import imageHandler from "../../utils/imageHandler";
 
-export default function FindCompany() {
+export default function FindCompanyPage() {
     const nav = useNavigate();
 
     const { getCompanyService } = useService();
 
     const [search, setSearch] = useState<string>("");
-    const [searchCompany, setSearchCompany] = useState<Company[] | undefined>(
-        [],
-    );
+    const [searchCompany, setSearchCompany] = useState<Company[] | undefined>([]);
 
     const [popularCompanies, setPopularCompanies] = useState<Company[]>();
     // [
@@ -105,9 +103,7 @@ export default function FindCompany() {
 
     useEffect(() => {
         const searchJob = async () => {
-            const response = await getCompanyService().then((s) =>
-                s.getCompanies(),
-            );
+            const response = await getCompanyService().then((s) => s.getCompanies());
             setResultCompanies(response);
             setSearchCompany(response);
         };
@@ -117,9 +113,7 @@ export default function FindCompany() {
     useEffect(() => {
         if (search.length > 0) {
             const searched = resultCompanies?.filter((company) => {
-                return company.name
-                    .toLowerCase()
-                    .includes(search.toLowerCase());
+                return company.name.toLowerCase().includes(search.toLowerCase());
             });
 
             setSearchCompany(searched);
@@ -135,61 +129,45 @@ export default function FindCompany() {
                     <div className="flex flex-col place-items-center gap-8 p-8">
                         <div className="flex flex-col items-center justify-center">
                             <div className="flex w-full flex-col gap-3 self-start">
-                                <h3 className="text-4xl font-bold lg:text-5xl">
-                                    Popular Companies
-                                </h3>
-                                <p className="text-lg leading-6 lg:text-xl">
-                                    These companies have the largest visitor
-                                    count this month.
-                                </p>
+                                <h3 className="text-4xl font-bold lg:text-5xl">Popular Companies</h3>
+                                <p className="text-lg leading-6 lg:text-xl">These companies have the largest visitor count this month.</p>
                             </div>
                             <div className="flex w-full flex-row items-center gap-10">
                                 <div className="grid h-fit grid-cols-2 gap-4 py-8">
-                                    {resultCompanies
-                                        ?.slice(0, 4)
-                                        .map((company: Company) => {
-                                            return (
-                                                <CardLayout
-                                                    className="flex h-32 w-64 p-4 xl:w-80"
-                                                    key={company.id}
-                                                    onClick={() => {
-                                                        nav(
-                                                            `/company/detail/${company.id}`,
-                                                        );
-                                                    }}>
-                                                    <div className="flex flex-row place-items-center">
-                                                        <img
-                                                            width="80rem"
-                                                            height="auto"
-                                                            className="mr-4 aspect-square rounded-xl object-cover"
-                                                            src={imageHandler(
-                                                                company.image,
-                                                            )}
-                                                            alt="Company Image"
-                                                        />
-                                                        <div className="flex flex-col">
-                                                            <div className="font-semibold">
-                                                                {company.name}
-                                                            </div>
-                                                            <div>
-                                                                TODO: Taroh star
-                                                                disini TODO:
-                                                                Taroh jumlah
-                                                                {/* {company.rating} */}
-                                                            </div>
-                                                            <div className="text-xs">
-                                                                TODO: review
-                                                                count
-                                                                {/* {
+                                    {resultCompanies?.slice(0, 4).map((company: Company) => {
+                                        return (
+                                            <CardLayout
+                                                className="flex h-32 w-64 p-4 xl:w-80"
+                                                key={company.id}
+                                                onClick={() => {
+                                                    nav(`/company/detail/${company.id}`);
+                                                }}>
+                                                <div className="flex flex-row place-items-center">
+                                                    <img
+                                                        width="80rem"
+                                                        height="auto"
+                                                        className="mr-4 aspect-square rounded-xl object-cover"
+                                                        src={imageHandler(company.image)}
+                                                        alt="Company Image"
+                                                    />
+                                                    <div className="flex flex-col">
+                                                        <div className="font-semibold">{company.name}</div>
+                                                        <div>
+                                                            TODO: Taroh star disini TODO: Taroh jumlah
+                                                            {/* {company.rating} */}
+                                                        </div>
+                                                        <div className="text-xs">
+                                                            TODO: review count
+                                                            {/* {
                                                                     company.reviewCount
                                                                 }{" "} */}
-                                                                Reviews
-                                                            </div>
+                                                            Reviews
                                                         </div>
                                                     </div>
-                                                </CardLayout>
-                                            );
-                                        })}
+                                                </div>
+                                            </CardLayout>
+                                        );
+                                    })}
                                 </div>
                                 <div className="hidden xl:block">
                                     <img
@@ -224,9 +202,7 @@ export default function FindCompany() {
                             </div>
                             <div className="flex flex-row gap-4">
                                 <CardLayout className="flex h-fit w-72 flex-col gap-2 p-4">
-                                    <div className="p-1 text-lg font-bold">
-                                        Filter Companies
-                                    </div>
+                                    <div className="p-1 text-lg font-bold">Filter Companies</div>
                                     <hr />
                                     <div className="flex flex-col gap-6 p-4">
                                         <CustomTextField
@@ -244,9 +220,7 @@ export default function FindCompany() {
                                     </div>
                                     <hr />
                                     <div className="flex flex-col gap-2 p-4">
-                                        <div className="text-xs font-bold">
-                                            Experience
-                                        </div>
+                                        <div className="text-xs font-bold">Experience</div>
                                         <div className="grid grid-cols-2 gap-2">
                                             <div className="flex items-center">
                                                 <input
@@ -255,9 +229,7 @@ export default function FindCompany() {
                                                     defaultChecked={true}
                                                     className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                                                 />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                    Full-Time
-                                                </label>
+                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Full-Time</label>
                                             </div>
                                             <div className="flex items-center">
                                                 <input
@@ -265,9 +237,7 @@ export default function FindCompany() {
                                                     value=""
                                                     className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                                                 />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                    Part-Time
-                                                </label>
+                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Part-Time</label>
                                             </div>
                                             <div className="flex items-center">
                                                 <input
@@ -275,9 +245,7 @@ export default function FindCompany() {
                                                     value=""
                                                     className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                                                 />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                    Internship
-                                                </label>
+                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Internship</label>
                                             </div>
                                             <div className="flex items-center">
                                                 <input
@@ -285,9 +253,7 @@ export default function FindCompany() {
                                                     value=""
                                                     className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                                                 />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                    Volunteer
-                                                </label>
+                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Volunteer</label>
                                             </div>
                                         </div>
                                     </div>
@@ -296,64 +262,39 @@ export default function FindCompany() {
                                     {searchCompany?.map((cp, index) => {
                                         return (
                                             <CardLayout
-                                                className="flex flex-col gap-2 rounded-md px-6 py-5 bg-white hover:bg-gray-100 hover:cursor-pointer"
+                                                className="flex flex-col gap-2 rounded-md bg-white px-6 py-5 hover:cursor-pointer hover:bg-gray-100"
                                                 key={index}
                                                 onClick={() => {
-                                                    nav(
-                                                        `/company/detail/${cp.id}`,
-                                                    );
+                                                    nav(`/company/detail/${cp.id}`);
                                                 }}>
                                                 <div className="flex flex-row place-items-center">
                                                     <img
                                                         className="mr-4 aspect-square w-24 rounded-xl object-cover"
-                                                        src={imageHandler(
-                                                            cp.image,
-                                                        )}
+                                                        src={imageHandler(cp.image)}
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">
-                                                        <div className="font-bold">
-                                                            {cp.name}
-                                                        </div>
+                                                        <div className="font-bold">{cp.name}</div>
                                                         <div>X X X X X 4.9</div>
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col gap-4">
                                                     <div className="grid grid-cols-3">
                                                         <div className="flex flex-col">
-                                                            <div className="text-sm font-bold">
-                                                                Location:
-                                                            </div>
-                                                            <div>
-                                                                {
-                                                                    cp
-                                                                        .office_locations[0]
-                                                                }
-                                                            </div>
+                                                            <div className="text-sm font-bold">Location:</div>
+                                                            <div>{cp.office_locations[0]}</div>
                                                         </div>
                                                         <div className="flex flex-col">
-                                                            <div className="text-sm font-bold">
-                                                                Country:
-                                                            </div>
-                                                            <div>
-                                                                {
-                                                                    cp.founded_country
-                                                                }
-                                                            </div>
+                                                            <div className="text-sm font-bold">Country:</div>
+                                                            <div>{cp.founded_country}</div>
                                                         </div>
                                                         <div className="flex flex-col">
-                                                            <div className="text-sm font-bold">
-                                                                Industry:
-                                                            </div>
-                                                            <div>
-                                                                {cp.founded_year.toString()}
-                                                            </div>
+                                                            <div className="text-sm font-bold">Industry:</div>
+                                                            <div>{cp.founded_year.toString()}</div>
                                                         </div>
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <div className="text-sm font-bold">
-                                                            Linkedin:
-                                                        </div>
+                                                        <div className="text-sm font-bold">Linkedin:</div>
                                                         <div className="flex flex-row place-items-center gap-2">
                                                             <FaLinkedin />
                                                             {cp.linkedin}

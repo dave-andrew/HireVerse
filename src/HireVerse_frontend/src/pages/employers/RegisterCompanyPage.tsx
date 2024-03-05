@@ -1,15 +1,15 @@
 import FrontPageLayout from "../../layouts/FrontPageLayout";
 import CardLayout from "../../layouts/CardLayout";
-import {PiLockKeyOpenBold} from "react-icons/pi";
-import {TbWorldSearch} from "react-icons/tb";
+import { PiLockKeyOpenBold } from "react-icons/pi";
+import { TbWorldSearch } from "react-icons/tb";
 import CustomTextField from "../../components/form/CustomTextField";
-import {CustomCheckBox} from "../../components/form/CustomCheckBox";
-import {useForm} from "react-hook-form";
+import { CustomCheckBox } from "../../components/form/CustomCheckBox";
+import { useForm } from "react-hook-form";
 import useService from "../../hooks/useService";
 import useImageBlob from "../../hooks/useImageBlob";
-import {CreateCompanyInput} from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { CreateCompanyInput } from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface IRegisterCompanyForm {
     companyName: string;
@@ -21,16 +21,16 @@ interface IRegisterCompanyForm {
     isAgree: boolean;
 }
 
-export default function RegisterCompany() {
+export default function RegisterCompanyPage() {
     const [isLoading, setIsLoading] = useState(false);
     const {
         register,
         handleSubmit,
-        formState: {errors},
+        formState: { errors },
     } = useForm<IRegisterCompanyForm>();
 
-    const {getCompanyService} = useService();
-    const {convertImageToBlob} = useImageBlob();
+    const { getCompanyService } = useService();
+    const { convertImageToBlob } = useImageBlob();
     const navigate = useNavigate();
 
     const handleFormSubmit = async (data: IRegisterCompanyForm) => {
@@ -57,52 +57,36 @@ export default function RegisterCompany() {
 
     return (
         <FrontPageLayout>
-            <div
-                className="flex h-[calc(100vh-4rem)] flex-col justify-center gap-6 pb-6 md:px-12 lg:px-24 xl:px-48 2xl:px-96">
+            <div className="flex h-[calc(100vh-4rem)] flex-col justify-center gap-6 pb-6 md:px-12 lg:px-24 xl:px-48 2xl:px-96">
                 <div className="flex flex-row items-center justify-center">
                     <h1 className="my-2 text-3xl">Register Company</h1>
                 </div>
                 <div className="flex w-full flex-row-reverse items-start justify-center gap-5 px-5">
                     <div className="hidden h-full flex-col justify-center gap-4 lg:flex">
                         <CardLayout className="px-10 py-4">
-                            Registering Company might take 4 - 6 business days
-                            to validate the legitimacy of the business
+                            Registering Company might take 4 - 6 business days to validate the legitimacy of the business
                         </CardLayout>
                         <CardLayout className="px-10 py-4">
-                            Register Company to unlock features: <br/> - Create
-                            Hiring Notice <br/> - Manage Managers <br/> -
-                            Receive Reviews & Feedback
+                            Register Company to unlock features: <br /> - Create Hiring Notice <br /> - Manage Managers <br /> - Receive Reviews & Feedback
                         </CardLayout>
                         <CardLayout className="p-6">
                             <div className="flex flex-col gap-6">
                                 <div className="flex flex-row items-center gap-5">
                                     <div>
-                                        <PiLockKeyOpenBold size="4rem"/>
+                                        <PiLockKeyOpenBold size="4rem" />
                                     </div>
                                     <div className="flex flex-col gap-2">
-                                        <h1 className="text-2xl font-bold">
-                                            Save & Secure
-                                        </h1>
-                                        <p>
-                                            Protected by Indonesian Officials
-                                            with Internet Computers data
-                                            Security & Protection
-                                        </p>
+                                        <h1 className="text-2xl font-bold">Save & Secure</h1>
+                                        <p>Protected by Indonesian Officials with Internet Computers data Security & Protection</p>
                                     </div>
                                 </div>
                                 <div className="flex flex-row items-center gap-5">
                                     <div>
-                                        <TbWorldSearch size="4rem"/>
+                                        <TbWorldSearch size="4rem" />
                                     </div>
                                     <div className="flex flex-col gap-2">
-                                        <h1 className="text-2xl font-bold">
-                                            Faster Search
-                                        </h1>
-                                        <p>
-                                            Post jobs hiring on the website and
-                                            with HireVerse recommending system,
-                                            match your potential employee
-                                        </p>
+                                        <h1 className="text-2xl font-bold">Faster Search</h1>
+                                        <p>Post jobs hiring on the website and with HireVerse recommending system, match your potential employee</p>
                                     </div>
                                 </div>
                             </div>
@@ -156,35 +140,25 @@ export default function RegisterCompany() {
                             </div>
                             <div className="flex flex-row">
                                 <div className={`flex flex-col gap-[5px]`}>
-                                    <div className="text-xs font-bold">
-                                        Company Logo
-                                    </div>
+                                    <div className="text-xs font-bold">Company Logo</div>
                                     <input
                                         {...register("companyLogo", {
-                                            required:
-                                                "Company Logo is required",
+                                            required: "Company Logo is required",
                                             validate: {
                                                 checkFileSize: (fileList) => {
                                                     if (fileList[0] && fileList[0].size > MAX_FILE_SIZE) {
-                                                        return `Company Logo must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB, current size: ${fileList[0].size / 1024 / 1024}MB`
+                                                        return `Company Logo must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB, current size: ${fileList[0].size / 1024 / 1024}MB`;
                                                     }
-                                                    return true
-                                                }
-                                            }
+                                                    return true;
+                                                },
+                                            },
                                         })}
                                         type={"file"}
                                         accept="image/png, image/gif, image/jpeg, image/svg+xml, image/svg"
                                         className="outline-0"
                                         placeholder="Company Profile Image"
                                     />
-                                    <div
-                                        className={`hidden text-xs ${
-                                            errors.companyLogo
-                                                ? "!block text-red-500"
-                                                : "h-5"
-                                        }`}>
-                                        {errors.companyLogo?.message}
-                                    </div>
+                                    <div className={`hidden text-xs ${errors.companyLogo ? "!block text-red-500" : "h-5"}`}>{errors.companyLogo?.message}</div>
                                 </div>
                             </div>
                             <div className="flex flex-row">
@@ -193,8 +167,7 @@ export default function RegisterCompany() {
                                     type="text"
                                     className="w-full"
                                     useFormRef={register("linkedInProfile", {
-                                        required:
-                                            "LinkedIn Profile Link is required",
+                                        required: "LinkedIn Profile Link is required",
                                     })}
                                     error={errors.linkedInProfile}
                                 />
@@ -203,19 +176,14 @@ export default function RegisterCompany() {
                                 <CustomCheckBox
                                     className="w-full"
                                     useFormRef={register("isAgree", {
-                                        required:
-                                            "You must agree to the terms and conditions",
+                                        required: "You must agree to the terms and conditions",
                                     })}
                                     error={errors.isAgree}
                                 />
                             </div>
                             <div className="flex flex-row items-center justify-center">
                                 <button
-                                    className={`main-button ${
-                                        isLoading
-                                            ? "cursor-not-allowed !bg-gray-600"
-                                            : ""
-                                    }`}
+                                    className={`main-button ${isLoading ? "cursor-not-allowed !bg-gray-600" : ""}`}
                                     disabled={isLoading}
                                     onClick={handleSubmit(handleFormSubmit)}>
                                     Register Company

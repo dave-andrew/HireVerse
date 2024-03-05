@@ -15,9 +15,7 @@ export default function RatingBar({ value, text }: Props) {
         <div>
             <div className="flex w-full flex-row justify-between">
                 <div className="mb-1 text-base font-medium">{text}</div>
-                <div className="mb-1 text-base font-bold">
-                    {value.toFixed(1)}/5
-                </div>
+                <div className="mb-1 text-base font-bold">{value.toFixed(1)}/5</div>
             </div>
             <div className="mb-4 h-2 w-full rounded-full bg-gray-200">
                 <div

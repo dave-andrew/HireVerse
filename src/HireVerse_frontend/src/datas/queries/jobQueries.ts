@@ -6,7 +6,7 @@ import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_jo
 import convertNullFormat from "../../utils/convertNullFormat";
 import { IQueryFilterSortForm } from "../../pages/employee/FindJobsPage";
 import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import { IQuerySortForm } from "../../pages/employers/CompanyJobs";
+import { IQuerySortForm } from "../../pages/employers/CompanyJobsPage";
 import { IJobItem } from "../../components/job/JobItem";
 import { IJobDetail } from "../../components/job/JobDetail";
 
@@ -83,10 +83,7 @@ export function getFullJob(jobId: string | undefined) {
     });
 }
 
-export function getFilteredJobs(
-    filters: IFilterForm,
-    getQueryFilters: () => IQueryFilterSortForm,
-) {
+export function getFilteredJobs(filters: IFilterForm, getQueryFilters: () => IQueryFilterSortForm) {
     const { getJobService, getCompanyService } = useService();
 
     const getConvertedFilters = () => {
@@ -98,16 +95,10 @@ export function getFilteredJobs(
             experience: convertNullFormat(filters.experience, ""),
             industry: convertNullFormat(filters.industry, ""),
             position: convertNullFormat(queryFilters.query, ""),
-            date_posted: convertNullFormat(
-                BigInt(filters.datePosted),
-                BigInt(0),
-            ),
+            date_posted: convertNullFormat(BigInt(filters.datePosted), BigInt(0)),
             currency: convertNullFormat(filters.currency, ""),
             salary_end: convertNullFormat(BigInt(filters.salaryEnd), BigInt(0)),
-            salary_start: convertNullFormat(
-                BigInt(filters.salaryStart),
-                BigInt(0),
-            ),
+            salary_start: convertNullFormat(BigInt(filters.salaryStart), BigInt(0)),
         };
 
         return jobFilter;
@@ -117,13 +108,7 @@ export function getFilteredJobs(
         queryKey: [],
         queryFn: async ({ pageParam }) => {
             const response = await getJobService()
-                .then((s) =>
-                    s.getJobs(
-                        BigInt(pageParam),
-                        BigInt(10),
-                        getConvertedFilters(),
-                    ),
-                )
+                .then((s) => s.getJobs(BigInt(pageParam), BigInt(10), getConvertedFilters()))
                 .catch((e) => console.error(e));
 
             console.log(response);
@@ -134,9 +119,7 @@ export function getFilteredJobs(
             const jobs = response.ok;
 
             const responseCompanyData = await getCompanyService()
-                .then((s) =>
-                    s.getCompanyNameAndImages(jobs.map((j) => j.company_id)),
-                )
+                .then((s) => s.getCompanyNameAndImages(jobs.map((j) => j.company_id)))
                 .catch((e) => console.error(e));
 
             if (!isOk(responseCompanyData)) {
@@ -146,9 +129,7 @@ export function getFilteredJobs(
             const companyData = responseCompanyData.ok;
 
             return jobs.map((job) => {
-                const company = companyData.find(
-                    (c) => c.id === job.company_id,
-                );
+                const company = companyData.find((c) => c.id === job.company_id);
                 return {
                     id: job.id,
                     position: job.position,
@@ -164,12 +145,7 @@ export function getFilteredJobs(
             });
         },
         initialPageParam: 0,
-        getNextPageParam: (
-            lastPage,
-            allPages,
-            lastPageParam,
-            allPageParams,
-        ) => {
+        getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
             if (lastPage && lastPage.length == 10) {
                 return lastPageParam + 10;
             }
@@ -178,10 +154,7 @@ export function getFilteredJobs(
     });
 }
 
-export function getCompanyNames(
-    companyIds: string[],
-    autoFetch: boolean = false,
-) {
+export function getCompanyNames(companyIds: string[], autoFetch: boolean = false) {
     const { getCompanyService } = useService();
     return useQuery({
         queryKey: ["companyNames", companyIds.toString()],
@@ -258,10 +231,7 @@ export function getManagersFromCompany(
     });
 }
 
-export function getJobPostedByCompany(
-    companyId: string | undefined,
-    getValues: () => IQuerySortForm,
-) {
+export function getJobPostedByCompany(companyId: string | undefined, getValues: () => IQuerySortForm) {
     const { getJobService } = useService();
 
     const getConvertedFilters = () => {
@@ -269,10 +239,7 @@ export function getJobPostedByCompany(
         const jobFilter: JobManagerFilterInput = {
             order: convertNullFormat(values.order, ""),
             position: convertNullFormat(values.query, ""),
-            status: convertNullFormat(
-                values.status === "All" ? "" : values.status.toLowerCase(),
-                "",
-            ),
+            status: convertNullFormat(values.status === "All" ? "" : values.status.toLowerCase(), ""),
         };
         return jobFilter;
     };
@@ -285,14 +252,7 @@ export function getJobPostedByCompany(
             }
 
             const response = await getJobService()
-                .then((s) =>
-                    s.getJobPostedByCompany(
-                        companyId,
-                        BigInt(0),
-                        BigInt(20),
-                        getConvertedFilters(),
-                    ),
-                )
+                .then((s) => s.getJobPostedByCompany(companyId, BigInt(0), BigInt(20), getConvertedFilters()))
                 .catch((e) => console.error(e));
 
             console.log(response);

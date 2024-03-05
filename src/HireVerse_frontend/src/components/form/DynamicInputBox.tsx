@@ -1,8 +1,4 @@
-import {
-    FieldArrayWithId,
-    UseFieldArrayRemove,
-    UseFormRegister,
-} from "react-hook-form";
+import { FieldArrayWithId, UseFieldArrayRemove, UseFormRegister } from "react-hook-form";
 import { Fragment, ReactNode } from "react";
 
 interface Props {
@@ -17,17 +13,7 @@ interface Props {
     inputName: string;
 }
 
-export default function DynamicInputBox({
-    className,
-    inputClassName,
-    fields,
-    register,
-    addButton,
-    removeButton,
-    remove,
-    inputObject,
-    inputName,
-}: Props) {
+export default function DynamicInputBox({ className, inputClassName, fields, register, addButton, removeButton, remove, inputObject, inputName }: Props) {
     return (
         <Fragment key="t">
             {fields.map((field, index) => (

@@ -13,17 +13,7 @@ interface CustomTextFieldProps {
     error?: FieldError;
 }
 
-export default function CustomTextField({
-    label,
-    type,
-    placeholder,
-    className,
-    onChange,
-    min,
-    max,
-    useFormRef,
-    error,
-}: CustomTextFieldProps) {
+export default function CustomTextField({ label, type, placeholder, className, onChange, min, max, useFormRef, error }: CustomTextFieldProps) {
     return (
         <div className={`flex flex-col gap-[5px] ${className}`}>
             <div className="text-xs font-bold">{label}</div>
@@ -36,12 +26,7 @@ export default function CustomTextField({
                 min={min}
                 max={max}
             />
-            <div
-                className={`hidden text-xs ${
-                    error ? "!block text-red-500" : "h-5"
-                }`}>
-                {error?.message}
-            </div>
+            <div className={`hidden text-xs ${error ? "!block text-red-500" : "h-5"}`}>{error?.message}</div>
         </div>
     );
 }

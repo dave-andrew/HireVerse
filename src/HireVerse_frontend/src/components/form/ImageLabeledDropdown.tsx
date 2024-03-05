@@ -18,13 +18,7 @@ interface Props {
     onChange?: (value: string) => void;
 }
 
-export default function ImageLabeledDropdown({
-    states,
-    className,
-    control,
-    name,
-    onChange,
-}: Props) {
+export default function ImageLabeledDropdown({ states, className, control, name, onChange }: Props) {
     return (
         <>
             <Controller
@@ -44,25 +38,13 @@ export default function ImageLabeledDropdown({
                                     <span className="block truncate">
                                         <img
                                             className={`mr-2 h-8 w-8 rounded-full object-cover ${
-                                                !states?.filter(
-                                                    (s) =>
-                                                        s.label === field.value,
-                                                )[0]?.img
-                                                    ? "hidden"
-                                                    : ""
+                                                !states?.filter((s) => s.label === field.value)[0]?.img ? "hidden" : ""
                                             }`}
-                                            src={
-                                                states?.filter(
-                                                    (s) =>
-                                                        s.label === field.value,
-                                                )[0]?.img
-                                            }
+                                            src={states?.filter((s) => s.label === field.value)[0]?.img}
                                             alt=""
                                         />
                                     </span>
-                                    <span className="block truncate text-left">
-                                        {field.value}
-                                    </span>
+                                    <span className="block truncate text-left">{field.value}</span>
                                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                         <IoMdArrowDropdown />
                                     </span>
@@ -72,34 +54,22 @@ export default function ImageLabeledDropdown({
                                     leave="transition ease-in duration-100"
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0">
-                                    <Listbox.Options className="absolute mt-1 max-h-60 w-full *:list-none m-0 p-0 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                                    <Listbox.Options className="absolute m-0 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-0 py-1 text-base shadow-lg ring-1 ring-black/5 *:list-none focus:outline-none sm:text-sm">
                                         {states?.map((item, index) => (
                                             <Listbox.Option
                                                 key={index}
                                                 className={({ active }) =>
                                                     `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                                        active
-                                                            ? "bg-blue-primary text-black"
-                                                            : "text-gray-900"
+                                                        active ? "bg-blue-primary text-black" : "text-gray-900"
                                                     }`
                                                 }
                                                 value={item.value}>
                                                 {({ selected }) => (
                                                     <>
-                                                        <span
-                                                            className={`block truncate text-left ${
-                                                                selected
-                                                                    ? "font-medium"
-                                                                    : "font-normal"
-                                                            }`}>
+                                                        <span className={`block truncate text-left ${selected ? "font-medium" : "font-normal"}`}>
                                                             {item.label}
                                                         </span>
-                                                        <span
-                                                            className={`black absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                                                selected
-                                                                    ? ""
-                                                                    : "hidden"
-                                                            }`}>
+                                                        <span className={`black absolute inset-y-0 left-0 flex items-center pl-3 ${selected ? "" : "hidden"}`}>
                                                             <FaCheck />
                                                         </span>
                                                     </>

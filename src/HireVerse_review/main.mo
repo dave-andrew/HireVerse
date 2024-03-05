@@ -82,6 +82,7 @@ actor Review {
 
     public shared query (msg) func getSelfReview(companyId : Text) : async Result.Result<Review, Text> {
             
+            Debug.print(Principal.toText(msg.caller) # " is trying to get their review");
             if (Principal.isAnonymous(msg.caller)) {
                 return #err("You must be logged in to view your review");
             };

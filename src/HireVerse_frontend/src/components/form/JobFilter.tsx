@@ -24,17 +24,19 @@ interface Props {
     onApplyFilter: (data: IFilterForm) => void;
 }
 
+const defaultValues: IFilterForm = {
+    salaryStart: 0,
+    salaryEnd: 0,
+    currency: "Rp",
+    industry: "",
+    experience: "",
+    datePosted: "",
+};
+
 export default function JobFilter({ onApplyFilter }: Props) {
     const { data: industries, refetch: getIndustries } = getJobIndustries();
     const { register, control, handleSubmit } = useForm<IFilterForm>({
-        defaultValues: {
-            salaryStart: 0,
-            salaryEnd: 0,
-            currency: "Rp",
-            industry: "",
-            experience: "",
-            datePosted: "",
-        },
+        defaultValues,
     });
 
     const onSubmit = (data: IFilterForm) => {
@@ -73,9 +75,7 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                 <Menu.Items className="absolute left-0 mt-2 w-96 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
                                     <div className="h-fit px-1 py-1">
                                         <div className="flex w-full flex-row items-center justify-between p-4">
-                                            <h3 className="m-0 p-0 text-2xl font-bold">
-                                                Filter Jobs
-                                            </h3>
+                                            <h3 className="m-0 p-0 text-2xl font-bold">Filter Jobs</h3>
                                             <IoMdClose
                                                 className="cursor-pointer"
                                                 onClick={close}
@@ -87,8 +87,8 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                             text="Salary Range">
                                             <div className="flex w-full flex-col justify-center gap-3 text-black">
                                                 <label className="flex flex-row text-lg">
-                                                    <span className="bg-signature-gray font-normal border-signature-gray flex min-w-16 flex-col items-center justify-center rounded-l-lg border-[1px] p-2">
-                                                        <MdCurrencyExchange className="w-[30px] h-auto" />
+                                                    <span className="bg-signature-gray border-signature-gray flex min-w-16 flex-col items-center justify-center rounded-l-lg border-[1px] p-2 font-normal">
+                                                        <MdCurrencyExchange className="h-auto w-[30px]" />
                                                     </span>
                                                     <WrappedAutoDropdown
                                                         data={CONSTANTS.JOB.CURRENCY}
@@ -99,33 +99,25 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                                     />
                                                 </label>
                                                 <label className="flex flex-row text-lg">
-                                                    <span className="bg-signature-gray font-normal border-signature-gray flex min-w-16 flex-col items-center justify-center rounded-l-lg border-[1px] p-2">
+                                                    <span className="bg-signature-gray border-signature-gray flex min-w-16 flex-col items-center justify-center rounded-l-lg border-[1px] p-2 font-normal">
                                                         Start
                                                     </span>
                                                     <input
-                                                        {...register(
-                                                            "salaryStart",
-                                                            {
-                                                                pattern:
-                                                                    /^[0-9]*$/,
-                                                            },
-                                                        )}
+                                                        {...register("salaryStart", {
+                                                            pattern: /^[0-9]*$/,
+                                                        })}
                                                         type="number"
                                                         className="border-signature-gray col-span-8 w-full rounded-r-lg border-[1px] p-2 outline-0"
                                                     />
                                                 </label>
                                                 <label className="flex flex-row text-lg">
-                                                    <span className="bg-signature-gray font-normal border-signature-gray flex min-w-16 flex-col items-center justify-center rounded-l-lg border-[1px] p-2">
+                                                    <span className="bg-signature-gray border-signature-gray flex min-w-16 flex-col items-center justify-center rounded-l-lg border-[1px] p-2 font-normal">
                                                         End
                                                     </span>
                                                     <input
-                                                        {...register(
-                                                            "salaryEnd",
-                                                            {
-                                                                pattern:
-                                                                    /^[0-9]*$/,
-                                                            },
-                                                        )}
+                                                        {...register("salaryEnd", {
+                                                            pattern: /^[0-9]*$/,
+                                                        })}
                                                         type="number"
                                                         className="border-signature-gray col-span-8 w-full rounded-r-lg border-[1px] p-2 outline-0"
                                                     />
@@ -155,9 +147,7 @@ export default function JobFilter({ onApplyFilter }: Props) {
                                                 name="experience"
                                                 control={control}
                                                 selectionClassName="hover:bg-gray-200 rounded-none"
-                                                values={
-                                                    CONSTANTS.JOB.EXPERIENCES
-                                                }
+                                                values={CONSTANTS.JOB.EXPERIENCES}
                                             />
                                         </WrappedDisclosure>
                                         <WrappedDisclosure

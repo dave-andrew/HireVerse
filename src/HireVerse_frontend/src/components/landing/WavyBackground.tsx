@@ -2,21 +2,22 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+// @ts-ignore
 import { createNoise3D } from "simplex-noise";
 import cn from "../../utils/cn";
 
 export const WavyBackground = ({
-                                   children,
-                                   className,
-                                   containerClassName,
-                                   colors,
-                                   waveWidth,
-                                   backgroundFill,
-                                   blur = 10,
-                                   speed = "fast",
-                                   waveOpacity = 0.5,
-                                   ...props
-                               }: {
+    children,
+    className,
+    containerClassName,
+    colors,
+    waveWidth,
+    backgroundFill,
+    blur = 10,
+    speed = "fast",
+    waveOpacity = 0.5,
+    ...props
+}: {
     children?: any;
     className?: string;
     containerClassName?: string;
@@ -29,13 +30,7 @@ export const WavyBackground = ({
     [key: string]: any;
 }) => {
     const noise = createNoise3D();
-    let w: number,
-        h: number,
-        nt: number,
-        i: number,
-        x: number,
-        ctx: any,
-        canvas: any;
+    let w: number, h: number, nt: number, i: number, x: number, ctx: any, canvas: any;
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const getSpeed = () => {
         switch (speed) {
@@ -55,7 +50,7 @@ export const WavyBackground = ({
         h = ctx.canvas.height = window.innerHeight;
         ctx.filter = `blur(${blur}px)`;
         nt = 0;
-        window.onresize = function() {
+        window.onresize = function () {
             w = ctx.canvas.width = window.innerWidth;
             h = ctx.canvas.height = window.innerHeight;
             ctx.filter = `blur(${blur}px)`;
@@ -63,13 +58,7 @@ export const WavyBackground = ({
         render();
     };
 
-    const waveColors = colors ?? [
-        "#38bdf8",
-        "#818cf8",
-        "#c084fc",
-        "#e879f9",
-        "#22d3ee",
-    ];
+    const waveColors = colors ?? ["#38bdf8", "#818cf8", "#c084fc", "#e879f9", "#22d3ee"];
     const drawWave = (n: number) => {
         nt += getSpeed();
         for (i = 0; i < n; i++) {
@@ -103,29 +92,21 @@ export const WavyBackground = ({
 
     const [isSafari, setIsSafari] = useState(false);
     useEffect(() => {
-        setIsSafari(
-            typeof window !== "undefined" &&
-            navigator.userAgent.includes("Safari") &&
-            !navigator.userAgent.includes("Chrome"),
-        );
+        setIsSafari(typeof window !== "undefined" && navigator.userAgent.includes("Safari") && !navigator.userAgent.includes("Chrome"));
     }, []);
 
     return (
-        <div
-            className={cn(
-                "relative h-screen flex flex-col items-center justify-center",
-                containerClassName,
-            )}
-        >
+        <div className={cn("relative flex h-screen flex-col items-center justify-center", containerClassName)}>
             <canvas
                 className="absolute inset-0 z-0"
                 ref={canvasRef}
                 id="canvas"
                 style={{
                     ...(isSafari ? { filter: `blur(${blur}px)` } : {}),
-                }}
-            ></canvas>
-            <div className={cn("relative z-10", className)} {...props}>
+                }}></canvas>
+            <div
+                className={cn("relative z-10", className)}
+                {...props}>
                 {children}
             </div>
         </div>

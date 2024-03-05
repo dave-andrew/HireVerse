@@ -21,7 +21,6 @@ export function useRemoveInvitation() {
     });
 }
 
-
 export function useAcceptInvitation() {
     const { getCompanyService } = useService();
     return useMutation({
@@ -42,9 +41,12 @@ export function useAcceptInvitation() {
 export function useCreateInvitation() {
     const { getCompanyService } = useService();
     return useMutation({
-        mutationFn: async ({ invitee, company_id }: {
-            invitee: Principal,
-            company_id: string
+        mutationFn: async ({
+            invitee,
+            company_id,
+        }: {
+            invitee: Principal;
+            company_id: string;
         }) => {
             const response = await getCompanyService().then((s) =>
                 s.createInvitation(invitee, company_id),

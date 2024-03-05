@@ -1,16 +1,12 @@
-import {
-    createBrowserRouter,
-    RouteObject,
-    RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import FindJobs from "./pages/employee/FindJobsPage";
-import RegisterCompany from "./pages/employers/RegisterCompany";
-import FindCompany from "./pages/employee/FindCompany";
-import Landing from "./pages/employee/Landing";
-import CompleteRegistration from "./pages/employee/CompleteRegistration";
-import CompanyDetail from "./pages/employee/CompanyDetail";
-import CompanyManagers from "./pages/employers/CompanyManagers";
-import CompanyJobs from "./pages/employers/CompanyJobs";
+import RegisterCompanyPage from "./pages/employers/RegisterCompanyPage";
+import FindCompanyPage from "./pages/employee/FindCompanyPage";
+import LandingPage from "./pages/employee/LandingPage";
+import CompleteRegistrationPage from "./pages/employee/CompleteRegistrationPage";
+import CompanyDetailPage from "./pages/employee/CompanyDetailPage";
+import CompanyManagersPage from "./pages/employers/CompanyManagersPage";
+import CompanyJobsPage from "./pages/employers/CompanyJobsPage";
 import NotFoundPage from "./pages/others/NotFoundPage";
 import Seeder from "./pages/others/Seeder";
 import UnregisteredProtectedRoutes from "./components/protected/UnregisteredProtectedRoutes";
@@ -18,12 +14,12 @@ import UnauthenticatedProtectedRoutes from "./components/protected/Unauthenticat
 import EmployerProtectedRoutes from "./components/protected/EmployerProtectedRoutes";
 import AuthorizedProtectedRoutes from "./components/protected/AuthorizedProtectedRoutes";
 import CompanyInvitation from "./pages/employers/CompanyInvitation";
-import EmployerHome from "./pages/employers/EmployerHome";
+import EmployerHomePage from "./pages/employers/EmployerHomePage";
 
 const guestRoutes: RouteObject[] = [
     {
         path: "/",
-        Component: Landing,
+        Component: LandingPage,
     },
 ];
 
@@ -34,30 +30,30 @@ const frontRoutes: RouteObject[] = [
     },
     {
         path: "/find-company",
-        Component: FindCompany,
+        Component: FindCompanyPage,
     },
     {
         path: "/company/detail/:id",
-        Component: CompanyDetail,
+        Component: CompanyDetailPage,
     },
 ];
 
 const backRoutes: RouteObject[] = [
     {
         path: "/employer",
-        Component: EmployerHome,
+        Component: EmployerHomePage,
     },
     {
         path: "/employer/managers",
-        Component: CompanyManagers,
+        Component: CompanyManagersPage,
     },
     {
         path: "/employer/register",
-        Component: RegisterCompany,
+        Component: RegisterCompanyPage,
     },
     {
         path: "/employer/jobs",
-        Component: CompanyJobs,
+        Component: CompanyJobsPage,
     },
     {
         path: "/employer/invitations",
@@ -79,7 +75,7 @@ const otherRoutes: RouteObject[] = [
 const unregisteredProtectedRoutes: RouteObject[] = [
     {
         path: "/complete-registration",
-        Component: CompleteRegistration,
+        Component: CompleteRegistrationPage,
     },
 ];
 

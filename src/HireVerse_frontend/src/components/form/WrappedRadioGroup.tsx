@@ -13,16 +13,7 @@ interface Props {
     rules?: RegisterOptions<any, any>;
 }
 
-export default function WrappedRadioGroup({
-    values,
-    onChange,
-    label,
-    className,
-    selectionClassName,
-    name,
-    control,
-    rules,
-}: Props) {
+export default function WrappedRadioGroup({ values, onChange, label, className, selectionClassName, name, control, rules }: Props) {
     return (
         <Controller
             name={name}
@@ -32,21 +23,13 @@ export default function WrappedRadioGroup({
                 <RadioGroup
                     className={`${className}`}
                     {...field}>
-                    {label && (
-                        <RadioGroup.Label className="block text-sm font-medium text-gray-700">
-                            {label}
-                        </RadioGroup.Label>
-                    )}
+                    {label && <RadioGroup.Label className="block text-sm font-medium text-gray-700">{label}</RadioGroup.Label>}
                     {values.map((value) => (
                         <RadioGroup.Option
                             key={value}
                             value={value}
                             className={({ checked }) =>
-                                `${
-                                    checked
-                                        ? "bg-signature-gray text-black"
-                                        : "bg-white"
-                                }
+                                `${checked ? "bg-signature-gray text-black" : "bg-white"}
                     relative flex cursor-pointer rounded-lg px-5 py-4 focus:outline-none ${selectionClassName}`
                             }>
                             {({ active, checked }) => (
@@ -56,11 +39,7 @@ export default function WrappedRadioGroup({
                                             <div className="text-sm text-black">
                                                 <RadioGroup.Label
                                                     as="p"
-                                                    className={`font-medium  ${
-                                                        checked
-                                                            ? "text-black"
-                                                            : "text-gray-900"
-                                                    }`}>
+                                                    className={`font-medium  ${checked ? "text-black" : "text-gray-900"}`}>
                                                     {value}
                                                 </RadioGroup.Label>
                                             </div>

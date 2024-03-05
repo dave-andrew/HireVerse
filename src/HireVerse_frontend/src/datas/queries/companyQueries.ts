@@ -11,9 +11,7 @@ export function getCompanyIndustries(companyId: string | undefined) {
                 return null;
             }
 
-            const result = await getJobService().then((s) =>
-                s.getCompanyJobIndustries(companyId),
-            );
+            const result = await getJobService().then((s) => s.getCompanyJobIndustries(companyId));
 
             if (isOk(result)) {
                 return result.ok;
@@ -30,9 +28,7 @@ export function getCompanyCountries() {
     return useQuery({
         queryKey: ["companyCountries"],
         queryFn: async () => {
-            return await getCompanyService().then((s) =>
-                s.getCompanyCountries(),
-            );
+            return await getCompanyService().then((s) => s.getCompanyCountries());
         },
     });
 }
@@ -42,9 +38,7 @@ export function getManagedCompanies() {
     return useQuery({
         queryKey: ["managedCompanies"],
         queryFn: async () => {
-            const response = await getCompanyService().then((s) => {
-                return s.getManagedCompanies();
-            });
+            const response = await getCompanyService().then((s) => s.getManagedCompanies());
 
             if (isOk(response)) {
                 return response.ok;
@@ -60,9 +54,7 @@ export function getUserInvitations() {
     return useQuery({
         queryKey: ["userInvitations"],
         queryFn: async () => {
-            const response = await getCompanyService().then((s) =>
-                s.getUserInvitations(),
-            );
+            const response = await getCompanyService().then((s) => s.getUserInvitations());
 
             if (isOk(response)) {
                 return response.ok;
@@ -80,15 +72,13 @@ export function getGetCompanyInvitations(companyId: string | undefined) {
         queryFn: async () => {
             if (!companyId) return;
 
-            const response = await getCompanyService().then((s) =>
-                s.getCompanyInvitations(companyId),
-            );
+            const response = await getCompanyService().then((s) => s.getCompanyInvitations(companyId));
 
             if (isOk(response)) {
                 return response.ok;
             }
 
-            throw new Error(response.err);
+            return [];
         },
     });
 }
@@ -102,9 +92,7 @@ export function getCompany(companyId: string | undefined) {
                 return;
             }
 
-            const response = await getCompanyService().then((s) =>
-                s.getCompany(companyId),
-            );
+            const response = await getCompanyService().then((s) => s.getCompany(companyId));
 
             if (isOk(response)) {
                 return response.ok;
@@ -114,5 +102,3 @@ export function getCompany(companyId: string | undefined) {
         enabled: !!companyId,
     });
 }
-
-

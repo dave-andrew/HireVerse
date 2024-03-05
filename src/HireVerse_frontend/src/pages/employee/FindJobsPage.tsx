@@ -23,36 +23,32 @@ export interface IQueryFilterSortForm {
     query: string;
 }
 
+const defaultFilter: IFilterForm = {
+    salaryStart: 0,
+    salaryEnd: 0,
+    industry: "",
+    experience: "",
+    datePosted: "",
+    currency: "",
+};
+
+const defaultQueryFilterSort: IQueryFilterSortForm = {
+    country: "USA",
+    order: "Newest",
+    query: "",
+};
+
 export default function FindJobs() {
     const [shownJobId, setShownJobId] = useState<string>("");
-    const [filter, setFilter] = useState<IFilterForm>({
-        salaryStart: 0,
-        salaryEnd: 0,
-        industry: "",
-        experience: "",
-        datePosted: "",
-        currency: "",
+    const [filter, setFilter] = useState<IFilterForm>(defaultFilter);
+    const { register, control, getValues, formState } = useForm<IQueryFilterSortForm>({
+        defaultValues: defaultQueryFilterSort,
     });
-    const { register, control, getValues, formState } =
-        useForm<IQueryFilterSortForm>({
-            defaultValues: {
-                country: "USA",
-                order: "Newest",
-                query: "",
-            },
-        });
     const { data: countries } = getCompanyCountries();
-    const {
-        data: jobs,
-        refetch: reGetFilteredJobs,
-        fetchNextPage,
-        isFetching,
-        hasNextPage,
-    } = getFilteredJobs(filter, getValues);
+    const { data: jobs, refetch: reGetFilteredJobs, fetchNextPage, isFetching, hasNextPage } = getFilteredJobs(filter, getValues);
     const { detector, isIntersecting } = useInfiniteScroll();
 
-    const flattenData = (data: InfiniteData<any> | undefined) =>
-        data?.pages.flat().filter((j) => j !== null);
+    const flattenData = (data: InfiniteData<any> | undefined) => data?.pages.flat().filter((j) => j !== null);
 
     useEffect(() => {
         if (isIntersecting && !isFetching) {
@@ -76,15 +72,10 @@ export default function FindJobs() {
                 <div className="w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[480px]">
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
                         <div className="flex w-full flex-col gap-5 p-8 md:w-2/6">
-                            <h3 className="m-0 p-0 text-4xl font-bold lg:text-5xl">
-                                Find Your Dream Job Now.
-                            </h3>
+                            <h3 className="m-0 p-0 text-4xl font-bold lg:text-5xl">Find Your Dream Job Now.</h3>
                             <p className="text-justify text-base leading-6 md:text-sm lg:text-lg">
-                                Find your dream job now! Our platform connects
-                                you with top employers and provides valuable
-                                resources to enhance your job search experience.
-                                Start exploring today for a brighter future and
-                                take the first step towards a fulfilling career.
+                                Find your dream job now! Our platform connects you with top employers and provides valuable resources to enhance your job search
+                                experience. Start exploring today for a brighter future and take the first step towards a fulfilling career.
                             </p>
                         </div>
                         <img
@@ -94,32 +85,27 @@ export default function FindJobs() {
                         />
                     </div>
                 </div>
-                <div className="md:min-w-[1000px] md:max-w-[1000px] m-auto flex flex-col gap-10 pb-10 lg:min-w-[1200px] lg:max-w-[1200px] relative pb-5">
-                    <div className="flex w-full flex-row gap-5 sticky top-0 bg-white z-50 p-3">
+                <div className="relative m-auto flex flex-col gap-10 pb-10 pb-5 md:min-w-[1000px] md:max-w-[1000px] lg:min-w-[1200px] lg:max-w-[1200px]">
+                    <div className="sticky top-0 z-50 flex w-full flex-row gap-5 bg-white p-3">
                         <JobFilter onApplyFilter={(data) => setFilter(data)} />
                         <CardLayout className="flex w-full flex-row items-center">
-                            <span className="flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3 transition-colors has-[:focus]:bg-gray-100">
+                            <span className="has-[:focus]:ring-signature-primary flex flex-1 flex-row gap-2 rounded-bl-lg rounded-tl-lg p-3 transition-colors has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
                                 <IoIosSearch size="1.5rem" />
                                 <input
                                     {...register("query")}
                                     type="text"
                                     className="w-full bg-transparent outline-0"
                                     placeholder="Search Job"
-                                    onKeyDown={(e) =>
-                                        handleKeyDown(
-                                            e.key,
-                                            "Enter",
-                                            reGetFilteredJobs,
-                                        )
-                                    }
+                                    onKeyDown={(e) => handleKeyDown(e.key, "Enter", reGetFilteredJobs)}
                                 />
                             </span>
-                            <span className="border-signature-gray flex flex-row items-center gap-2 rounded-br-xl rounded-tr-xl border-l-[1px] p-1 pl-5 transition-colors has-[:focus]:bg-gray-100">
+                            <span className="border-signature-gray has-[:focus]:ring-signature-primary flex flex-row items-center gap-2 rounded-br-lg rounded-tr-lg border-l-[1px] pl-5 transition-colors has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
                                 <IoLocationOutline size="1.5rem" />
                                 <WrappedAutoDropdown
                                     data={countries}
                                     control={control}
-                                    name="country data="
+                                    defaultData={countries ? countries[0] : ""}
+                                    name="country"
                                     onChange={(_) => reGetFilteredJobs()}
                                 />
                             </span>
@@ -127,7 +113,7 @@ export default function FindJobs() {
                     </div>
                     <div className="flex h-full w-full flex-row gap-3">
                         <div className="flex h-auto flex-col gap-1">
-                            <CardLayout className="mr-1 flex flex-row items-center justify-between pe-2 py-2 ps-5 shadow-sm">
+                            <CardLayout className="mr-1 flex flex-row items-center justify-between py-2 pe-2 ps-5 shadow-sm">
                                 Showing {flattenData(jobs)?.length} Jobs
                                 <TextDropdown
                                     name="order"
@@ -143,9 +129,7 @@ export default function FindJobs() {
                                             <JobItem
                                                 key={job.id}
                                                 job={job}
-                                                onClick={() =>
-                                                    setShownJobId(job.id)
-                                                }
+                                                onClick={() => setShownJobId(job.id)}
                                             />
                                         ))}
                                     </Fragment>
@@ -154,11 +138,9 @@ export default function FindJobs() {
                                     Array.from({ length: 10 }).map((_, i) => {
                                         return <JobItemSkeleton key={i} />;
                                     })}
-                                <div ref={detector}>
-                                    {hasNextPage && <JobItemSkeleton />}
-                                </div>
+                                <div ref={detector}>{hasNextPage && <JobItemSkeleton />}</div>
                                 {jobs && jobs.pages[0]?.length === 0 && (
-                                    <div className="flex flex-col items-center justify-center min-h-[75vh]">
+                                    <div className="flex min-h-[75vh] flex-col items-center justify-center">
                                         <img
                                             className="w-64"
                                             src="storyset/empty-cuate.png"

@@ -13,6 +13,8 @@ import Error "mo:base/Error";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
 import Vector "mo:vector/Class";
+import TextX "mo:xtended-text/TextX";
+import CharX "mo:xtended-text/CharX";
 
 actor Job {
     type Job = {
@@ -338,14 +340,22 @@ actor Job {
     public shared composite query func getJobs(startFrom : Nat, amount : Nat, jobFilters : JobFilterInput) : async Result.Result<[Job], Text> {
         var jobsList = Iter.toArray(jobs.vals());
 
-        //jangan diaksih
+        jobsList := Array.filter<Job>(
+            jobsList,
+            func(job) {
+                return Text.equal(TextX.toLower(job.status), "active")
+            },
+        );
+
+
         switch (jobFilters.position) {
             case null {};
             case (?position) {
                 jobsList := Array.filter<Job>(
                     jobsList,
                     func(job) {
-                        return Text.contains(job.position, #text position);
+                        let tempPosition = TextX.toLower(position);
+                        return Text.contains(TextX.toLower(job.position), #text tempPosition);
                     },
                 );
             };
@@ -393,7 +403,8 @@ actor Job {
                 jobsList := Array.filter<Job>(
                     jobsList,
                     func(job) {
-                        return Text.contains(job.requirements, #text experience);
+                        let tempExperience = TextX.toLower(experience);
+                        return Text.contains(TextX.toLower(job.employType), #text tempExperience);
                     },
                 );
             };
@@ -422,7 +433,8 @@ actor Job {
                     switch (company) {
                         case (#err(errmsg)) {};
                         case (#ok(company)) {
-                            if (Text.contains(company.founded_country, #text country)) {
+                            let tempCountry = TextX.toLower(country);
+                            if (Text.contains(TextX.toLower(company.founded_country), #text tempCountry)) {
                                 newJobList.add(job);
                             };
                         };
@@ -579,7 +591,7 @@ actor Job {
                             jobsList := Array.sort<Job>(
                                 jobsList,
                                 func(a, b) {
-                                    return Int.compare(a.timestamp, b.timestamp);
+                                    return Int.compare(b.timestamp, a.timestamp);
                                 },
                             );
                         };
@@ -588,7 +600,7 @@ actor Job {
                             jobsList := Array.sort<Job>(
                                 jobsList,
                                 func(a, b) {
-                                    return Int.compare(b.timestamp, a.timestamp);
+                                    return Int.compare(a.timestamp, b.timestamp);
                                 },
                             );
                         };

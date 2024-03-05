@@ -12,17 +12,14 @@ interface Props {
     setPagination: (nextPage: number) => void;
 }
 
-export default function WrappedPaginationSelection({
-    pagination: { currentPage, totalPage, amountPerPage },
-    setPagination,
-}: Props) {
+export default function WrappedPaginationSelection({ pagination: { currentPage, totalPage, amountPerPage }, setPagination }: Props) {
     const getPaginationNumbers = (i: number) => {
         const PaginationNumber = () => {
             const shownNumber = startPage + i + 1;
             return (
                 <li onClick={() => setPagination(shownNumber)}>
                     <div
-                        className={`flex items-center cursor-pointer justify-center px-4 h-10 ${currentPage == shownNumber ? "bg-signature-yellow" : "hover:bg-gray-200 hover:text-gray-700"} leading-tight text-gray-500 bg-white border border-gray-300`}>
+                        className={`flex h-10 cursor-pointer items-center justify-center px-4 ${currentPage == shownNumber ? "bg-signature-yellow" : "hover:bg-gray-200 hover:text-gray-700"} border border-gray-300 bg-white leading-tight text-gray-500`}>
                         {shownNumber}
                     </div>
                 </li>
@@ -50,13 +47,13 @@ export default function WrappedPaginationSelection({
 
     return (
         <>
-            <nav className="flex flex-row items-center justify-center w-full text-base">
-                <ul className="flex flex-row items-center h-10 text-base *:list-none gap-1">
+            <nav className="flex w-full flex-row items-center justify-center text-base">
+                <ul className="flex h-10 flex-row items-center gap-1 text-base *:list-none">
                     <li>
                         <button
                             disabled={currentPage == 1}
                             onClick={() => setPagination(currentPage - 1)}
-                            className={`${currentPage == 1 ? "cursor-not-allowed" : "hover:bg-gray-200 hover:text-gray-700"} flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg`}>
+                            className={`${currentPage == 1 ? "cursor-not-allowed" : "hover:bg-gray-200 hover:text-gray-700"} ms-0 flex h-10 items-center justify-center rounded-s-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500`}>
                             <span className="sr-only">Previous</span>
                             <MdArrowBackIos />
                         </button>
@@ -68,7 +65,7 @@ export default function WrappedPaginationSelection({
                         <button
                             disabled={currentPage == totalPage}
                             onClick={() => setPagination(currentPage + 1)}
-                            className={`${currentPage == totalPage ? "cursor-not-allowed" : "hover:bg-gray-200 hover:text-gray-700"} flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg`}>
+                            className={`${currentPage == totalPage ? "cursor-not-allowed" : "hover:bg-gray-200 hover:text-gray-700"} flex h-10 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500`}>
                             <span className="sr-only">Next</span>
                             <MdArrowForwardIos />
                         </button>

@@ -15,6 +15,35 @@ export default function Seeder() {
         seeder(service);
     };
 
+    const addReview = async () => {
+        // const response = await service.getReviewService().then((s) =>
+        // s.addReview({
+        //     companyId: "1",
+        //     cons: ["Cons"],
+        //     title: "Title",
+        //     pros: ["Pros"],
+        //     cultureRating: BigInt(5),
+        //     isAnonymous: false,
+        //     generalComments: "General Comments",
+        //     recommendToFriend: true,
+        //     workLifeBalanceRating: BigInt(5),
+        //     seniorManagementRating: BigInt(5),
+        // }),
+        // );
+        // if (isOk(response)) {
+        //     console.log("Review added");
+        // }
+    };
+
+    const getReviewByCompany = async () => {
+        const response = await service
+            .getReviewService()
+            .then((s) => s.getSelfReview("1"));
+        if (isOk(response)) {
+            console.log(response);
+        }
+    };
+
     const handleAddSelfToCompanyManager = async (data: ISeederForm) => {
         const id = data.companyId;
         if (!id) {
@@ -108,6 +137,8 @@ export default function Seeder() {
                 onClick={() => seedJob(service, getValues().companyJobSeedId)}>
                 Seed jOBS
             </button>
+            <button onClick={() => addReview()}>GENERATE REVIEWS</button>
+            <button onClick={() => getReviewByCompany()}>GET REVIEW</button>
         </div>
     );
 }

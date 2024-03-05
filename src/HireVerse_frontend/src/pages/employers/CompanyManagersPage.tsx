@@ -8,21 +8,16 @@ import { getGetCompanyInvitations } from "../../datas/queries/companyQueries";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 
-export default function CompanyManagers() {
+export default function CompanyManagersPage() {
     let [isModalShown, setIsModalShown] = useState(false);
 
     const toggleModal = () => {
         setIsModalShown(!isModalShown);
     };
 
-    const [selectedCompany, setSelectedCompany] =
-        useLocalStorage<Company | null>("selectedCompany", null);
+    const [selectedCompany, setSelectedCompany] = useLocalStorage<Company | null>("selectedCompany", null);
 
-    let {
-        data: companyInvitation,
-        refetch: getCompanyInvitation,
-        isFetching,
-    } = getGetCompanyInvitations(selectedCompany?.id);
+    let { data: companyInvitation, refetch: getCompanyInvitation, isFetching } = getGetCompanyInvitations(selectedCompany?.id);
 
     useEffect(() => {
         getCompanyInvitation();
@@ -36,21 +31,16 @@ export default function CompanyManagers() {
                     <div className="flex flex-col gap-4">
                         <div className="mt-8 text-4xl font-bold">Managers</div>
                         <div className="flex flex-col">
-                            <div className="font-semibold text-gray-600">
-                                These person are responsible for managing job
-                                posting in this company.
-                            </div>
+                            <div className="font-semibold text-gray-600">These person are responsible for managing job posting in this company.</div>
                             <div className="text-gray-600">
-                                Once invited you cannot kick the manager, you
-                                may ask them to kindly leave managing the
-                                company instead.
+                                Once invited you cannot kick the manager, you may ask them to kindly leave managing the company instead.
                             </div>
                         </div>
                     </div>
                     <div className="flex flex-col gap-4">
                         <div className="flex h-12 flex-row place-items-end justify-end gap-4">
                             <CardLayout className="flex h-full w-96 flex-row items-center bg-white">
-                                <span className="flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3 transition-colors has-[:focus]:bg-gray-100">
+                                <span className="has-[:focus]:ring-signature-primary flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3  transition-colors has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
                                     <IoIosSearch size="1.5rem" />
                                     <input
                                         type="text"

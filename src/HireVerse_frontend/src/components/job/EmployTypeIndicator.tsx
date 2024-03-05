@@ -12,10 +12,7 @@ const employColor = {
 
 export default function EmployTypeIndicator({ employType }: Props) {
     return (
-        <span
-            className={`inline-flex items-center ${
-                employColor[employType as keyof typeof employColor]
-            } text-xs font-semibold px-2.5 py-1 rounded-full`}>
+        <span className={`inline-flex items-center ${employColor[employType as keyof typeof employColor]} rounded-lg px-2.5 py-1 text-xs font-semibold`}>
             {employType}
         </span>
     );

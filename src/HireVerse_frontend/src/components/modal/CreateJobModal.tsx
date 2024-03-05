@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import WrappedModal from "../form/WrappedModal";
 import { IoCloseSharp } from "react-icons/io5";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -413,7 +413,6 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                     </div>
                 </div>
             </div>
-
             <div className="flex w-full items-center justify-center gap-2 pb-10 pt-20">
                 <input
                     {...register("terms", {
@@ -429,7 +428,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
             <div className="flex w-full items-center justify-center gap-2">
                 <button
                     onClick={handleSubmitForm}
-                    className=" border-signature-yellow text-signature-yellow w-fit rounded-md border-2 px-12 py-3 font-bold transition-colors hover:bg-yellow-400 hover:text-black">
+                    className="w-fit rounded-md bg-signature-yellow hover:bg-signature-yellow px-10 py-3 text-lg font-semibold text-black transition-colors">
                     Post Job
                 </button>
             </div>

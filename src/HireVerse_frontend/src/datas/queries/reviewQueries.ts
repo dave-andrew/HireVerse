@@ -1,12 +1,9 @@
 import useService from "../../hooks/useService";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { isOk } from "../../utils/resultGuarder";
-import { IReviewSortForm } from "../../pages/employee/CompanyDetail";
+import { IReviewSortForm } from "../../pages/employee/CompanyDetailPage";
 
-export function useQueryReviews(
-    companyId: string | undefined,
-    getFilters: (() => IReviewSortForm) | null,
-) {
+export function useQueryReviews(companyId: string | undefined, getFilters: (() => IReviewSortForm) | null) {
     const { getReviewService, getCompanyService } = useService();
     const queryClient = useQueryClient();
 
@@ -96,9 +93,7 @@ export function useQueryGetSelfReview(companyId: string) {
             }
 
             await getBackendService().then((s) => console.log(s.greet()));
-            await getBackendService().then((s) =>
-                console.log(s.greetFunction()),
-            );
+            await getBackendService().then((s) => console.log(s.greetFunction()));
             console.log("hahaha", companyId);
             const response = await getReviewService()
                 .then((s) => s.getSelfReview(companyId))
