@@ -1,19 +1,22 @@
 import FrontPageLayout from "../../layouts/FrontPageLayout";
-import {LiaLongArrowAltDownSolid} from "react-icons/lia";
+import { LiaLongArrowAltDownSolid } from "react-icons/lia";
 import HeaderSection from "../../components/landing/HeaderSection";
 import Section2 from "../../components/landing/Section2";
-import {useRef} from "react";
+import { useRef } from "react";
+import clsx, { ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+import Section3 from "../../components/landing/Section3";
 
 export default function Landing() {
 
-    const parentRef: React.MutableRefObject<null | HTMLDivElement> = useRef(null)
+    const parentRef: React.MutableRefObject<null | HTMLDivElement> = useRef(null);
 
     return (
         <FrontPageLayout>
             {/*<WorldMap />*/}
             <div
                 ref={parentRef}
-                className="landing-page relative flex flex-col bg-gradient-to-br from-cyan-100 to-pink-50 via-white snap-y snap-mandatory overflow-scroll h-[100vh]">
+                className="relative flex flex-col bg-gradient-to-br from-cyan-100 to-pink-200 via-white snap-y snap-mandatory overflow-scroll h-[100vh]">
                 <div
                     className="absolute z-0 h-96 w-96 rounded-full bg-gradient-to-bl from-pink-300 to-purple-950 opacity-30 blur-md top-20 left-52"></div>
                 <div
@@ -26,17 +29,16 @@ export default function Landing() {
                         Scroll Down
                     </div>
                     <LiaLongArrowAltDownSolid
-                        className="h-10 w-10"/>
+                        className="h-10 w-10" />
                 </div>
-                <div className="snap-center z-10 scroll-snap-align-start">
-                    <HeaderSection parentRef={parentRef}/>
-                </div>
-                <div className="z-10 scroll-snap-align-start">
-                    <Section2 parentRef={parentRef}/>
-                </div>
-
+                <HeaderSection parentRef={parentRef} />
+                <Section2 parentRef={parentRef} />
+                <Section3 parentRef={parentRef} />
 
             </div>
         </FrontPageLayout>
     );
 }
+
+
+

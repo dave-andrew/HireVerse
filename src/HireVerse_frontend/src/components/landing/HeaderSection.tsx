@@ -1,12 +1,13 @@
-import {Typewriter} from "react-simple-typewriter";
-import useAuth, {AuthState} from "../../hooks/useAuth";
-import {useNavigate} from "react-router-dom";
-import {ReactNode, useEffect, useState} from "react";
-import {animated, useSpring} from "@react-spring/web";
+import { Typewriter } from "react-simple-typewriter";
+import useAuth, { AuthState } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { ReactNode, useEffect, useState } from "react";
+import { animated, useSpring } from "@react-spring/web";
+import useMobile from "../../hooks/useMobile";
 
 
-export default function HeaderSection({parentRef}: {parentRef: React.MutableRefObject<HTMLElement | null>}) {
-    const {user, authState, login, logout} = useAuth();
+export default function HeaderSection({ parentRef }: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
+    const { user, authState, login, logout } = useAuth();
     const navigate = useNavigate();
 
     const clickHandler = async () => {
@@ -29,31 +30,39 @@ export default function HeaderSection({parentRef}: {parentRef: React.MutableRefO
             const scrollY = parentRef?.current?.scrollTop || 0;
             setIsVisible(scrollY <= triggerPoint);
         };
-        handleScroll()
-        parentRef?.current?.addEventListener('scroll', handleScroll);
-        return () => parentRef?.current?.removeEventListener('scroll', handleScroll);
+        handleScroll();
+        parentRef?.current?.addEventListener("scroll", handleScroll);
+        return () => parentRef?.current?.removeEventListener("scroll", handleScroll);
     }, [triggerPoint, parentRef]);
 
     const fadeAnimation = useSpring({
         opacity: isVisible ? 1 : 0,
-        from: {opacity: 0},
-        config: {duration: 200}
+        from: { opacity: 0 },
+        config: { duration: 200 },
     });
+
+    const flyAnimation = useSpring({
+        from: { transform: "translateY(75%) translateX(-75%)" },
+        to: { transform: "translateY(0%) translateX(0%)" },
+        config: { duration: 700 },
+    });
+
+    const { isMobile } = useMobile();
 
     return (
         <animated.div style={fadeAnimation}
-            className={`grid z-10 grid-cols-2 place-items-center justify-center gap-16 py-32 px-[10vh] 2xl:px-[40vh] transition-all ease-in-out duration-1000`}>
+                      className={`snap-center grid z-10 ${isMobile ? "grid-cols-1" : "grid-cols-2"} place-items-center justify-center gap-16 py-32 px-[10vh] 2xl:px-[40vh] transition-all ease-in-out duration-1000`}>
             <div className="flex flex-col gap-12 w-full">
                 <div className="flex flex-col gap-6 w-full">
                     <div className="h-44 text-black text-start font-bebas text-8xl">
                         Easier to <Typewriter
-                        words={['Find Jobs', 'Review Company', 'Manage Job Posting', 'Find Talent', 'Hire!']}
+                        words={["Find Jobs", "Review Company", "Manage Jobs", "Find Talent", "Hire!"]}
                         loop={5}
                         cursor
-                        cursorStyle='_'
+                        cursorStyle="_"
                         typeSpeed={70}
                         deleteSpeed={50}
-                        delaySpeed={1000}/>
+                        delaySpeed={1000} />
                     </div>
                     <div className="text-start align-middle text-xl text-gray-600 px-2">
                         Hireverse empowers job seeker with straight from the source insights to make the best
@@ -70,11 +79,14 @@ export default function HeaderSection({parentRef}: {parentRef: React.MutableRefO
                     </button>
                 )}
             </div>
-            <img
-                className="w-[28rem]"
-                src="/storyset/work-landing.svg"
-                alt=""
-            />
+            {!isMobile &&
+                <animated.img
+                    style={flyAnimation}
+                    className="w-[28rem]"
+                    src="/storyset/work-landing.svg"
+                    alt=""
+                />
+            }
         </animated.div>
-    )
+    );
 }
