@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { isOk } from "../../utils/resultGuarder";
 import useService from "../../hooks/useService";
 
-export function useQueryCompanyIndustries(companyId: string | undefined) {
+export function getCompanyIndustries(companyId: string | undefined) {
     const { getJobService } = useService();
     return useQuery({
         queryKey: ["companyIndustries", companyId],
@@ -25,7 +25,7 @@ export function useQueryCompanyIndustries(companyId: string | undefined) {
     });
 }
 
-export function useQueryCompanyCountries() {
+export function getCompanyCountries() {
     const { getCompanyService } = useService();
     return useQuery({
         queryKey: ["companyCountries"],
@@ -37,7 +37,7 @@ export function useQueryCompanyCountries() {
     });
 }
 
-export function useQueryManagedCompanies() {
+export function getManagedCompanies() {
     const { getCompanyService } = useService();
     return useQuery({
         queryKey: ["managedCompanies"],
@@ -55,8 +55,7 @@ export function useQueryManagedCompanies() {
     });
 }
 
-
-export function useGetUserInvitations() {
+export function getUserInvitations() {
     const { getCompanyService } = useService();
     return useQuery({
         queryKey: ["userInvitations"],
@@ -74,12 +73,11 @@ export function useGetUserInvitations() {
     });
 }
 
-export function useQueryGetCompanyInvitations(companyId: string | undefined) {
+export function getGetCompanyInvitations(companyId: string | undefined) {
     const { getCompanyService } = useService();
     return useQuery({
         queryKey: ["companyInvitations"],
         queryFn: async () => {
-
             if (!companyId) return;
 
             const response = await getCompanyService().then((s) =>
@@ -95,8 +93,7 @@ export function useQueryGetCompanyInvitations(companyId: string | undefined) {
     });
 }
 
-
-export function useQueryCompany(companyId: string | undefined) {
+export function getCompany(companyId: string | undefined) {
     const { getCompanyService } = useService();
     return useQuery({
         queryKey: ["company", companyId],

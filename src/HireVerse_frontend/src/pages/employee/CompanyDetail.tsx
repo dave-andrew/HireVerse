@@ -10,8 +10,8 @@ import imageHandler from "../../utils/imageHandler";
 import convertToDate from "../../utils/convertToDate";
 import SocialMediaItem from "../../components/company/SocialMediaItem";
 import {
-    useQueryCompany,
-    useQueryCompanyIndustries,
+    getCompany,
+    getCompanyIndustries,
 } from "../../datas/queries/companyQueries";
 import CreateReviewModal from "../../components/modal/CreateReviewModal";
 import React, { useState } from "react";
@@ -27,9 +27,9 @@ export default function CompanyDetail() {
 
     const nav = useNavigate();
     const { id } = useParams<string>();
-    const { data: company, isLoading: companyLoading } = useQueryCompany(id);
+    const { data: company, isLoading: companyLoading } = getCompany(id);
     const { data: industries, isLoading: industriesLoading } =
-        useQueryCompanyIndustries(id);
+        getCompanyIndustries(id);
 
     if (!id) {
         nav(-1);

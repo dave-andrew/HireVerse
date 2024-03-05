@@ -5,10 +5,11 @@ import { isOk } from "../../utils/resultGuarder";
 
 interface ISeederForm {
     companyId: string;
+    companyJobSeedId: string;
 }
 
 export default function Seeder() {
-    const { register, handleSubmit } = useForm<ISeederForm>();
+    const { register, handleSubmit, getValues } = useForm<ISeederForm>();
     const service = useService();
     const handleSeedCompanyJobs: any = async () => {
         seeder(service);
@@ -98,7 +99,15 @@ export default function Seeder() {
                 }>
                 Remove all reviews
             </button>
-            <button onClick={() => seedJob(service)}>Seed jOBS</button>
+            <input
+                className="border-2 border-black"
+                {...register("companyJobSeedId")}
+                type="text"
+            />
+            <button
+                onClick={() => seedJob(service, getValues().companyJobSeedId)}>
+                Seed jOBS
+            </button>
         </div>
     );
 }

@@ -12,9 +12,9 @@ import { useForm } from "react-hook-form";
 import { CONSTANTS } from "../../utils/constants";
 import handleKeyDown from "../../utils/handleKeyDown";
 import JobItemSkeleton from "../../components/job/JobItemSkeleton";
-import { useQueryFilteredJobs } from "../../datas/queries/jobQueries";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { InfiniteData } from "@tanstack/react-query";
+import { getFilteredJobs } from "../../datas/queries/jobQueries";
 
 export interface IQueryFilterSortForm {
     country: string;
@@ -42,20 +42,15 @@ export default function FindJobs() {
         });
     const {
         data: jobs,
-        refetch: getFilteredJobs,
+        refetch: reGetFilteredJobs,
         fetchNextPage,
         isFetching,
-    } = useQueryFilteredJobs(filter, getValues);
+        hasNextPage,
+    } = getFilteredJobs(filter, getValues);
     const { detector, isIntersecting } = useInfiniteScroll();
 
     const flattenData = (data: InfiniteData<any> | undefined) =>
         data?.pages.flat().filter((j) => j !== null);
-
-    useEffect(() => {
-        if (jobs) {
-            // getCompanyNames();
-        }
-    }, [jobs]);
 
     useEffect(() => {
         if (isIntersecting && !isFetching) {
@@ -64,12 +59,18 @@ export default function FindJobs() {
     }, [isIntersecting]);
 
     useEffect(() => {
-        getFilteredJobs();
+        if (jobs && jobs.pages[0] && !shownJobId) {
+            setShownJobId(jobs.pages[0][0]?.id);
+        }
+    }, [jobs]);
+
+    useEffect(() => {
+        reGetFilteredJobs();
     }, [filter]);
 
     return (
         <FrontPageLayout>
-            <div className="flex h-full w-full flex-col place-items-center gap-20">
+            <div className="relative flex h-[100vh] w-full flex-col place-items-center gap-20">
                 <div className="w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[480px]">
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
                         <div className="flex w-full flex-col gap-5 p-8 md:w-2/6">
@@ -91,8 +92,8 @@ export default function FindJobs() {
                         />
                     </div>
                 </div>
-                <div className="md:[800px] m-auto flex flex-col gap-10 pb-10 lg:min-w-[1000px]">
-                    <div className="flex w-full flex-row gap-5">
+                <div className="md:[1000px] m-auto flex flex-col gap-10 pb-10 lg:min-w-[1200px] relative max-h-[80vh]">
+                    <div className="flex w-full flex-row gap-5 sticky top-0 bg-white z-50 p-3">
                         <JobFilter onApplyFilter={(data) => setFilter(data)} />
                         <CardLayout className="flex w-full flex-row items-center">
                             <span className="flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3 transition-colors has-[:focus]:bg-gray-100">
@@ -106,7 +107,7 @@ export default function FindJobs() {
                                         handleKeyDown(
                                             e.key,
                                             "Enter",
-                                            getFilteredJobs,
+                                            reGetFilteredJobs,
                                         )
                                     }
                                 />
@@ -116,47 +117,54 @@ export default function FindJobs() {
                                 <CountryDropdown
                                     name="country"
                                     control={control}
-                                    onChange={(_) => getFilteredJobs()}
+                                    onChange={(_) => reGetFilteredJobs()}
                                 />
                             </span>
                         </CardLayout>
                     </div>
                     <div className="flex h-full w-full flex-row gap-3">
                         <div className="flex h-auto flex-col gap-1">
-                            <CardLayout className="mr-2 flex flex-row items-center justify-between pe-2 ps-5">
-                                {flattenData(jobs)?.length} Jobs
+                            <CardLayout className="mr-1 flex flex-row items-center justify-between pe-2 py-2 ps-5">
+                                Showing {flattenData(jobs)?.length} Jobs
                                 <TextDropdown
                                     name="order"
                                     control={control}
                                     states={CONSTANTS.ORDER}
-                                    onChange={(_) => getFilteredJobs()}
+                                    onChange={(_) => reGetFilteredJobs()}
                                 />
                             </CardLayout>
                             <div className="card-scollr flex w-96 flex-col gap-2 overflow-y-auto overflow-x-hidden pr-1">
                                 {jobs?.pages.map((p, i) => (
                                     <Fragment key={i}>
-                                        {p?.map((job, index) => {
-                                            // if (!companyNames) return null;
-
-                                            return (
-                                                <JobItem
-                                                    key={job.id}
-                                                    job={job}
-                                                    onClick={() =>
-                                                        setShownJobId(job.id)
-                                                    }
-                                                />
-                                            );
-                                        })}
+                                        {p?.map((job, index) => (
+                                            <JobItem
+                                                key={job.id}
+                                                job={job}
+                                                onClick={() =>
+                                                    setShownJobId(job.id)
+                                                }
+                                            />
+                                        ))}
                                     </Fragment>
                                 ))}
-                                {/*{!jobs &&*/}
-                                {/*    Array.from({ length: 10 }).map((_, i) => {*/}
-                                {/*        return <JobItemSkeleton key={i} />;*/}
-                                {/*    })}*/}
+                                {!jobs &&
+                                    Array.from({ length: 10 }).map((_, i) => {
+                                        return <JobItemSkeleton key={i} />;
+                                    })}
                                 <div ref={detector}>
-                                    <JobItemSkeleton />
+                                    {hasNextPage && <JobItemSkeleton />}
                                 </div>
+                                {jobs && jobs.pages[0]?.length === 0 && (
+                                    <div className="flex flex-col items-center justify-center">
+                                        <img
+                                            className="w-64"
+                                            src="storyset/empty-cuate.png"
+                                            alt="empty"
+                                        />
+                                        <h3>No job found</h3>
+                                        <p>Try to change your filter</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className="flex w-full flex-col gap-2">

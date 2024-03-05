@@ -16,7 +16,7 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import useImageBlob from "../../hooks/useImageBlob";
 import InvitationModal from "../modal/InvitationModal";
-import { useQueryManagedCompanies } from "../../datas/queries/companyQueries";
+import { getManagedCompanies } from "../../datas/queries/companyQueries";
 
 type Menu = {
     name: string;
@@ -57,7 +57,7 @@ interface IDropdownForm {
 }
 
 export default function ManagementBars({ children }: Props) {
-    const { data: managedCompanies, refetch } = useQueryManagedCompanies();
+    const { data: managedCompanies, refetch } = getManagedCompanies();
     const [menus, setMenus] = useState<Menu[]>(defaultMenu);
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);

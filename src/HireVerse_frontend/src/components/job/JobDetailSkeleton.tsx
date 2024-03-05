@@ -2,8 +2,8 @@ import CardLayout from "../../layouts/CardLayout";
 
 export default function JobDetailSkeleton() {
     return (
-        <CardLayout className="relative h-full">
-            <div className="border-signature-gray absolute flex h-32 w-full flex-row items-center border-b-[1px]">
+        <CardLayout className="relative h-full overflow-auto">
+            <div className="border-signature-gray sticky top-0 bg-white z-10 flex h-32 w-full flex-row items-center border-b-[1px]">
                 <div className="animate-pulse space-y-8 md:flex md:items-center md:space-x-8 md:space-y-0 rtl:space-x-reverse">
                     <div className="flex h-32 w-full items-center justify-center rounded bg-gray-300 sm:w-72 dark:bg-gray-200">
                         <svg
@@ -26,7 +26,6 @@ export default function JobDetailSkeleton() {
                     <span className="sr-only">Loading...</span>
                 </div>
             </div>
-            <div className="h-32" />
             <div className="flex flex-col gap-8 overflow-auto p-6 [&_h3]:text-base  [&_h3]:font-bold">
                 <div className="max-w-sm animate-pulse">
                     <div className="mb-4 h-2.5 w-48 rounded-full bg-gray-200 dark:bg-gray-200"></div>

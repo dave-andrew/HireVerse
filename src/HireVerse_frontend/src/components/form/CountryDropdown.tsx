@@ -3,7 +3,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { FaCheck } from "react-icons/fa";
 import { Control, Controller } from "react-hook-form";
-import { useQueryCompanyCountries } from "../../datas/queries/companyQueries";
+import { getCompanyCountries } from "../../datas/queries/companyQueries";
 
 interface Props {
     control: Control<any>;
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function CountryDropdown({ control, name, onChange }: Props) {
-    const { data: countries } = useQueryCompanyCountries();
+    const { data: countries } = getCompanyCountries();
     const [query, setQuery] = useState("");
     const [selected, setSelected] = useState({});
 

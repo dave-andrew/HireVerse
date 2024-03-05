@@ -1,15 +1,65 @@
-import {useQuery} from "@tanstack/react-query";
-import {isOk} from "../../utils/resultGuarder";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { isOk } from "../../utils/resultGuarder";
 import useService from "../../hooks/useService";
 import { IFilterForm } from "../../components/form/JobFilter";
 import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 import convertNullFormat from "../../utils/convertNullFormat";
-import {IQueryFilterSortForm} from "../../pages/employee/FindJobsPage";
-import {JobManagerFilterInput} from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import {IQuerySortForm} from "../../pages/employers/CompanyJobs";
-import {Principal} from "@dfinity/principal";
+import { IQueryFilterSortForm } from "../../pages/employee/FindJobsPage";
+import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import { IQuerySortForm } from "../../pages/employers/CompanyJobs";
+import { IJobItem } from "../../components/job/JobItem";
+import { IJobDetail } from "../../components/job/JobDetail";
 
-export function useQueryFullJob(jobId: string | undefined) {
+export function getJobDetails(jobId: string | undefined) {
+    const { getJobService, getCompanyService } = useService();
+    return useQuery({
+        queryKey: ["jobDetails", jobId],
+        queryFn: async () => {
+            if (!jobId) {
+                return null;
+            }
+
+            const response = await getJobService()
+                .then((s) => s.getJob(jobId))
+                .catch((e) => console.error(e));
+
+            if (!isOk(response)) {
+                return null;
+            }
+
+            const job = response.ok;
+
+            const responseCompany = await getCompanyService()
+                .then((s) => s.getCompanyNameAndImages([job.company_id]))
+                .catch((e) => console.error(e));
+
+            if (!isOk(responseCompany)) {
+                return null;
+            }
+
+            const companyData = responseCompany.ok;
+
+            return {
+                id: job.id,
+                position: job.position,
+                location: job.location,
+                currency: job.currency,
+                company: {
+                    id: job.company_id,
+                    name: companyData[0].name,
+                    image: companyData[0].image,
+                },
+                jobDescription: job.job_description,
+                shortDescription: job.short_description,
+                requirements: job.requirements,
+                salaryEnd: Number(job.salary_end),
+                salaryStart: Number(job.salary_start),
+            } as IJobDetail;
+        },
+    });
+}
+
+export function getFullJob(jobId: string | undefined) {
     const { getJobService } = useService();
     return useQuery({
         queryKey: ["fullJob", jobId],
@@ -30,7 +80,7 @@ export function useQueryFullJob(jobId: string | undefined) {
     });
 }
 
-export function useQueryFilteredJobs(
+export function getFilteredJobs(
     filters: IFilterForm,
     getQueryFilters: () => IQueryFilterSortForm,
 ) {
@@ -105,6 +155,8 @@ export function useQueryFilteredJobs(
                     salaryEnd: job.salary_end.toString(),
                     companyName: company?.name || "",
                     companyImage: company?.image || [],
+                    timestamp: Number(job.timestamp),
+                    employType: job.employType,
                 } as IJobItem;
             });
         },
@@ -123,7 +175,7 @@ export function useQueryFilteredJobs(
     });
 }
 
-export function useQueryCompanyNames(
+export function getCompanyNames(
     companyIds: string[],
     autoFetch: boolean = false,
 ) {
@@ -143,7 +195,7 @@ export function useQueryCompanyNames(
     });
 }
 
-export function useQueryJobIndustries() {
+export function getJobIndustries() {
     const { getJobService } = useService();
     return useQuery({
         queryKey: ["jobIndustries"],
@@ -159,7 +211,7 @@ export function useQueryJobIndustries() {
     });
 }
 
-export function useQueryGetUserObjectByEmail(email: string) {
+export function getUserObjectByEmail(email: string) {
     const { getBackendService } = useService();
     return useQuery({
         queryKey: ["user", email],
@@ -179,7 +231,7 @@ export function useQueryGetUserObjectByEmail(email: string) {
     });
 }
 
-export function useQueryManagersFromCompany(
+export function getManagersFromCompany(
     companyId: string | undefined,
     // getValues: () => IQuerySortForm
 ) {
@@ -203,7 +255,7 @@ export function useQueryManagersFromCompany(
     });
 }
 
-export function useQueryJobPostedByCompany(
+export function getJobPostedByCompany(
     companyId: string | undefined,
     getValues: () => IQuerySortForm,
 ) {

@@ -14,7 +14,7 @@ import imageHandler from "../../utils/imageHandler";
 import EditCompanyModal from "../../components/modal/EditCompanyModal";
 import SocialMediaItem from "../../components/company/SocialMediaItem";
 import purifyDOM from "../../utils/purifyDOM";
-import { useQueryCompanyIndustries } from "../../datas/queries/companyQueries";
+import { getCompanyIndustries } from "../../datas/queries/companyQueries";
 import CompanyDetailReview from "../../components/review/CompanyDetailReview";
 import { useUpdateCompany } from "../../datas/mutations/companyMutations";
 
@@ -26,7 +26,7 @@ export default function ManageCompany() {
     const { convertImageToBlob } = useImageBlob();
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
-    const { data: companyIndustries } = useQueryCompanyIndustries(
+    const { data: companyIndustries } = getCompanyIndustries(
         selectedCompany?.id,
     );
     const mutation = useUpdateCompany();

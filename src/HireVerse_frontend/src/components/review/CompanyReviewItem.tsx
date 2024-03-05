@@ -2,9 +2,9 @@ import WrappedStarReview from "../form/WrappedStarReview";
 import { FaCheck, FaRegEdit } from "react-icons/fa";
 import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import purifyDOM from "../../utils/purifyDOM";
-import convertTimeInterval from "../../utils/convertTimeInterval";
 import { ImCross } from "react-icons/im";
 import useService from "../../hooks/useService";
+import { convertTimeInterval } from "../../utils/convertTimeInterval";
 
 interface Props {
     review: Review;

@@ -1,16 +1,23 @@
 import { BsLinkedin } from "react-icons/bs";
 import { BiCheck } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
-import { CompanyInvitation } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import imageHandler from "../../utils/imageHandler";
-import { useRemoveInvitation, useAcceptInvitation } from "../../datas/mutations/companyMutations";
+import {
+    useAcceptInvitation,
+    useRemoveInvitation,
+} from "../../datas/mutations/companyMutations";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { defaultToastOptions } from "../../layouts/ManagementPageLayout";
+import { CompanyInvitation } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 
-
-export default function InvitationItem({ invitation, refetch }: { invitation: CompanyInvitation, refetch: () => void }) {
-
+export default function InvitationItem({
+    invitation,
+    refetch,
+}: {
+    invitation: CompanyInvitation;
+    refetch: () => void;
+}) {
     const removeMutation = useRemoveInvitation();
     const acceptMutation = useAcceptInvitation();
     const [isLoading, setIsLoading] = useState(false);
@@ -34,20 +41,22 @@ export default function InvitationItem({ invitation, refetch }: { invitation: Co
         acceptMutation.mutate(invitation.invite.id, {
             onSuccess: () => {
                 setIsLoading(false);
-                toast.success("You have successfully joined " + invitation.company.name, defaultToastOptions);
-                refetch()
-                window.location.reload()
+                toast.success(
+                    "You have successfully joined " + invitation.company.name,
+                    defaultToastOptions,
+                );
+                refetch();
+                window.location.reload();
             },
             onError: (error) => {
                 setIsLoading(false);
-                toast.error(error.message, defaultToastOptions)
+                toast.error(error.message, defaultToastOptions);
             },
         });
     };
 
     return (
-        <div
-            className="relative flex h-80 w-64 flex-col justify-center gap-2 rounded-md border border-gray-200 shadow-md">
+        <div className="relative flex h-80 w-64 flex-col justify-center gap-2 rounded-md border border-gray-200 shadow-md">
             <div className="absolute top-0 z-[-10] h-24 w-full bg-[url(public/backgrounds/subtle-prism.svg)]">
                 {" "}
             </div>
@@ -74,7 +83,8 @@ export default function InvitationItem({ invitation, refetch }: { invitation: Co
                             {invitation.company.linkedin}
                         </div>
                         <div className="text-sm text-gray-600">
-                            {invitation.company.founded_country}, {invitation.company.founded_year.toString()}
+                            {invitation.company.founded_country},{" "}
+                            {invitation.company.founded_year.toString()}
                         </div>
                     </div>
                 </div>

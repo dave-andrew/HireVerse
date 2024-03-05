@@ -240,15 +240,16 @@ const jobSeeder = async (
     console.log("finished generating data");
 };
 
-export async function seedJob({
-    getCompanyService,
-    getJobService,
-    getReviewService,
-    getBackendService,
-}: ServiceContextType) {
-    await getJobService().then((s) =>
-        jobSeeder(s, ["81e7dc49-d791-4f1c-b2e5-7a9c035c7f9c"]),
-    );
+export async function seedJob(
+    {
+        getCompanyService,
+        getJobService,
+        getReviewService,
+        getBackendService,
+    }: ServiceContextType,
+    id: string,
+) {
+    await getJobService().then((s) => jobSeeder(s, [id]));
 }
 
 export default async function seeder({

@@ -4,7 +4,7 @@ import CardLayout from "../../layouts/CardLayout";
 import { useEffect, useState } from "react";
 import ManagerTable from "../../components/company/ManagerTable";
 import InviteManagerModal from "../../components/modal/InviteManagerModal";
-import { useQueryGetCompanyInvitations } from "../../datas/queries/companyQueries";
+import { getGetCompanyInvitations } from "../../datas/queries/companyQueries";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 
@@ -18,9 +18,11 @@ export default function CompanyManagers() {
     const [selectedCompany, setSelectedCompany] =
         useLocalStorage<Company | null>("selectedCompany", null);
 
-    let { data: companyInvitation, refetch: getCompanyInvitation, isFetching } = useQueryGetCompanyInvitations(
-        selectedCompany?.id,
-    );
+    let {
+        data: companyInvitation,
+        refetch: getCompanyInvitation,
+        isFetching,
+    } = getGetCompanyInvitations(selectedCompany?.id);
 
     useEffect(() => {
         getCompanyInvitation();
@@ -28,8 +30,7 @@ export default function CompanyManagers() {
 
     return (
         <>
-            <div
-                className="absolute z-0 h-96 w-full bg-[url(/backgrounds/liquid-cheese.svg)] bg-cover opacity-50"></div>
+            <div className="absolute z-0 h-96 w-full bg-[url(/backgrounds/liquid-cheese.svg)] bg-cover opacity-50"></div>
             <ManagementPageLayout>
                 <div className="z-10 flex flex-col gap-8 px-14 py-8">
                     <div className="flex flex-col gap-4">
@@ -49,8 +50,7 @@ export default function CompanyManagers() {
                     <div className="flex flex-col gap-4">
                         <div className="flex h-12 flex-row place-items-end justify-end gap-4">
                             <CardLayout className="flex h-full w-96 flex-row items-center bg-white">
-                                <span
-                                    className="flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3 transition-colors has-[:focus]:bg-gray-100">
+                                <span className="flex flex-1 flex-row gap-2 rounded-bl-xl rounded-tl-xl p-3 transition-colors has-[:focus]:bg-gray-100">
                                     <IoIosSearch size="1.5rem" />
                                     <input
                                         type="text"
@@ -62,19 +62,24 @@ export default function CompanyManagers() {
                             <button
                                 className="h-full"
                                 onClick={toggleModal}>
-                                <CardLayout
-                                    className="flex h-full place-items-center justify-center rounded-xl px-8 py-4 hover:bg-gray-100">
+                                <CardLayout className="flex h-full place-items-center justify-center rounded-xl px-8 py-4 hover:bg-gray-100">
                                     + Add Manager
                                 </CardLayout>
                             </button>
                         </div>
-                        <ManagerTable companyInvitation={companyInvitation} selectedCompany={selectedCompany}
-                                      isFetchingInvitation={isFetching} refetchInvitation={getCompanyInvitation} />
+                        <ManagerTable
+                            companyInvitation={companyInvitation}
+                            selectedCompany={selectedCompany}
+                            isFetchingInvitation={isFetching}
+                            refetchInvitation={getCompanyInvitation}
+                        />
                     </div>
                 </div>
-                <InviteManagerModal isModalShown={isModalShown} toggleModal={toggleModal}
-                                    refetchInvitation={getCompanyInvitation} />
-
+                <InviteManagerModal
+                    isModalShown={isModalShown}
+                    toggleModal={toggleModal}
+                    refetchInvitation={getCompanyInvitation}
+                />
             </ManagementPageLayout>
         </>
     );
