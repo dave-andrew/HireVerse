@@ -705,6 +705,65 @@ actor Company {
         };
     };
 
+    public shared (msg) func deleteReview(company_id: Text, id: Text) : async Result.Result<(), Text>{
+        let user_id = msg.caller;
+
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Not authorized");
+        };
+
+        let company = await getCompany(company_id);
+
+        switch (company) {
+            case (#err(msg)) {
+                return #err("Company not found");
+            };
+            case (#ok(company)) {
+                let reviews_ids = company.reviews_ids;
+
+                let updatedReviews = Array.filter<Text>(
+                    reviews_ids,
+                    func(p : Text) : Bool {
+                        p != id;
+                    },
+                );
+
+                let updatedCompany = {
+                    id = company.id;
+                    name = company.name;
+                    founded_year = company.founded_year;
+                    profile = company.profile;
+                    founded_country = company.founded_country;
+                    office_locations = company.office_locations;
+                    social_medias = company.social_medias;
+                    image = company.image;
+                    linkedin = company.linkedin;
+                    company_manager_ids = company.company_manager_ids;
+                    job_posting_ids = company.job_posting_ids;
+                    reviews_ids = updatedReviews;
+                    timestamp = company.timestamp;
+                    seen = company.seen;
+                };
+                companies.put(company.id, updatedCompany);
+
+                let deletedReview = await Review.deleteReview(id);
+
+                switch (deletedReview) {
+                    case (#err(msg)) {
+                        return #err(msg);
+                    };
+                    case (#ok(null)) {
+                        return #ok();
+                    };
+                    case (#ok(?review)) {
+                        let doneDeleted = review;
+                        return #ok();
+                    };
+                };
+            };
+        };
+    };
+
     type UserInvitation = {
         user : User.User;
         invite : Invite;
