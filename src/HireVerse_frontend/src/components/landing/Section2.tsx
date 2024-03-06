@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
-import { animated, useSpring, useTrail } from "@react-spring/web";
+import {useEffect, useState} from "react";
+import {animated, useSpring, useTrail} from "@react-spring/web";
 import useMobile from "../../hooks/useMobile";
+import {LiaLongArrowAltUpSolid} from "react-icons/lia";
 
 
-export default function Section2({ parentRef }: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
+export default function Section2({parentRef}: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
     const upperTriggerPoint = 600;
     const lowerTriggerPoint = 900;
     const [open, setOpen] = useState(false);
 
-    const { isMobile } = useMobile();
+    const {isMobile} = useMobile();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -56,29 +57,39 @@ export default function Section2({ parentRef }: { parentRef: React.MutableRefObj
     ];
 
     const trail = useTrail(benefitItem.length, {
-        config: { mass: 5, tension: 2000, friction: 200 },
+        config: {mass: 5, tension: 2000, friction: 200},
         opacity: open ? 1 : 0,
         x: open ? 0 : 20,
         height: open ? (isMobile ? 140 : 220) : 0,
-        from: { opacity: 0, x: 20, height: 0 },
+        from: {opacity: 0, x: 20, height: 0},
     });
 
     return (
-        <div
-            className={`grid z-10 grid-cols-1 xl:grid-cols-2 place-items-center justify-center gap-16 py-32 px-[10vh] md:px-[20vh] transition-all ease-in-out duration-1000 min-h-[1000px] `}>
-            <iframe
-                className="w-[400px] h-[400px] hidden xl:block"
-                src="https://lottie.host/embed/0ecd5b53-c72f-491c-b93e-3d016ec43aeb/7wGwl9KBRm.json"></iframe>
-            <div className="flex flex-col place-items-start w-full gap-5">
-                {trail.map(({ x, height, ...rest }, index) => (
-                    <animated.div
-                        key={index}
-                        className="w-full"
-                        style={{ ...rest, transform: x.to(x => `translate3d(0,${x}px,0)`) }}>
-                        <animated.div style={{ height }}>{benefitItem[index]}</animated.div>
-                    </animated.div>
-                ))}
+        <div className="flex flex-row justify-end place-items-center">
+            <div
+                className={`grow grid z-10 grid-cols-1 xl:grid-cols-2 place-items-center justify-center gap-16 py-32 px-[10vh] md:px-[20vh] transition-all ease-in-out duration-1000 min-h-[1000px] `}>
+                <iframe
+                    className="w-[400px] h-[400px] hidden xl:block"
+                    src="https://lottie.host/embed/0ecd5b53-c72f-491c-b93e-3d016ec43aeb/7wGwl9KBRm.json"></iframe>
+                <div className="flex flex-col place-items-start w-full gap-5">
+                    {trail.map(({x, height, ...rest}, index) => (
+                        <animated.div
+                            key={index}
+                            className="w-full"
+                            style={{...rest, transform: x.to(x => `translate3d(0,${x}px,0)`)}}>
+                            <animated.div style={{height}}>{benefitItem[index]}</animated.div>
+                        </animated.div>
+                    ))}
+                </div>
             </div>
+            <button
+                className="cursor-pointer sticky z-0 flex flex-col gap-10 place-items-center rounded-full top-10 ms-auto text-xl animate-bounce">
+                <LiaLongArrowAltUpSolid
+                    className="h-10 w-10"/>
+                <div className="rotate-90 pb-1 text-base w-24">
+                    Scroll Up
+                </div>
+            </button>
         </div>
     );
 }
