@@ -3,103 +3,51 @@ import FrontPageLayout from "../../layouts/FrontPageLayout";
 import { IoIosSearch } from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
 import { useEffect, useState } from "react";
-import CustomTextField from "../../components/form/CustomTextField";
 import useService from "../../hooks/useService";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { useNavigate } from "react-router-dom";
 import imageHandler from "../../utils/imageHandler";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { useForm } from "react-hook-form";
+import CompanyFilter, { IFilterCompanyForm } from "../../components/form/CompanyFilter";
+import { getFilterCompany} from "../../datas/queries/jobQueries";
+
+export interface IQueryCompanyFilter {
+    location: string,
+    industries: string,
+    experience: string
+}
+
+const defaultValue : IQueryCompanyFilter = {
+    location: "",
+    industries: "",
+    experience: ""
+}
 
 export default function FindCompanyPage() {
     const nav = useNavigate();
-
     const { getCompanyService } = useService();
-
+    const [shownCompanyId, setShownCompanyId] = useState<string>("");
     const [search, setSearch] = useState<string>("");
     const [searchCompany, setSearchCompany] = useState<Company[] | undefined>([]);
-
     const [popularCompanies, setPopularCompanies] = useState<Company[]>();
-    // [
-    //     {
-    //         id: "1",
-    //         name: "BINUS University",
-
-    //         image: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-
-    //     },
-    //     {
-    //         id: "2",
-    //         name: "BINUS University",
-    //         rating: 4.05,
-    //         reviewCount: 12,
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //     },
-    //     {
-    //         id: "3",
-    //         name: "BINUS University",
-    //         rating: 4.05,
-    //         reviewCount: 12,
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //     },
-    //     {
-    //         id: "4",
-    //         name: "BINUS University",
-    //         rating: 4.05,
-    //         reviewCount: 12,
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //     },
-    // ]
-
     const [resultCompanies, setResultCompanies] = useState<Company[]>();
-    // [
-    //     {
-    //         name: "Universitas Tarumanegara",
-    //         location: "Jakarta",
-    //         country: "Indonesia",
-    //         industry: "Education",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         linkedin: "in/untar",
-    //     },
-    //     {
-    //         name: "Universitas Airlangga",
-    //         location: "Jakarta",
-    //         country: "Indonesia",
-    //         industry: "Education",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         linkedin: "in/untar",
-    //     },
-    //     {
-    //         name: "Universitas 11 Maret",
-    //         location: "Surabaya",
-    //         country: "Indonesia",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         industry: "Education",
-    //         linkedin: "in/untar",
-    //     },
-    //     {
-    //         name: "Universitas 11 Maret",
-    //         location: "Surabaya",
-    //         country: "Indonesia",
-    //         industry: "Education",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         linkedin: "in/untar",
-    //     },
-    //     {
-    //         name: "Universitas 11 Maret",
-    //         location: "Surabaya",
-    //         country: "Indonesia",
-    //         industry: "Education",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         linkedin: "in/untar",
-    //     },
-    //     {
-    //         name: "Universitas 11 Maret",
-    //         location: "Surabaya",
-    //         country: "Indonesia",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         industry: "Education",
-    //         linkedin: "in/untar",
-    //     },
-    // ]
+    const [filter, setFilter] = useState<IFilterCompanyForm>(defaultValue);
+    const { detector, isIntersecting } = useInfiniteScroll();
+    const { register, control, getValues, formState} = useForm<IQueryCompanyFilter>({
+        defaultValues: defaultValue,
+    });
+
+    // Initialize isFetching state
+    const [isFetching, setIsFetching] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (detector && isIntersecting && !isFetching) {
+            fetchNextPage();
+        }
+    }, [detector, isIntersecting, isFetching]);
+
+    const { data: company, refetch: reGetFilteredCompany, fetchNextPage, hasNextPage } = getFilterCompany(filter, getValues);
 
     useEffect(() => {
         const searchJob = async () => {
@@ -122,11 +70,21 @@ export default function FindCompanyPage() {
         }
     }, [search]);
 
+    useEffect(() => {
+        if (company && company.pages[0] && !shownCompanyId) {
+            setShownCompanyId(company.pages[0][0]?.id);
+        }
+    }, [company]);
+
+    useEffect(() => {
+        reGetFilteredCompany();
+    }, [filter]);
+
     return (
         <FrontPageLayout>
-            <div className="flex flex-col">
+            <div className="flex flex-col overflow-hidden">
                 <div className="h-fit w-full place-items-center bg-[url(src/HireVerse_frontend/backgrounds/subtle-prism.svg)] shadow-md">
-                    <div className="flex flex-col place-items-center gap-8 p-8">
+                    <div className="h-[100vh] flex flex-col place-items-center gap-8">
                         <div className="flex flex-col items-center justify-center">
                             <div className="flex w-full flex-col gap-3 self-start">
                                 <h3 className="text-4xl font-bold lg:text-5xl">Popular Companies</h3>
@@ -184,7 +142,8 @@ export default function FindCompanyPage() {
                     <div
                         style={{
                             width: "min(1000px, 100%)",
-                        }}>
+                        }}
+                        className="h-[85vh]">
                         <div className="flex w-full flex-col gap-8">
                             <div className="flex flex-col gap-2">
                                 Find your dream company
@@ -201,64 +160,8 @@ export default function FindCompanyPage() {
                                 </CardLayout>
                             </div>
                             <div className="flex flex-row gap-4">
-                                <CardLayout className="flex h-fit w-72 flex-col gap-2 p-4">
-                                    <div className="p-1 text-lg font-bold">Filter Companies</div>
-                                    <hr />
-                                    <div className="flex flex-col gap-6 p-4">
-                                        <CustomTextField
-                                            label="Location"
-                                            type="Location"
-                                        />
-                                        <CustomTextField
-                                            label="Industries"
-                                            type="Industries"
-                                        />
-                                        <CustomTextField
-                                            label="Job Titles"
-                                            type="Job Titles"
-                                        />
-                                    </div>
-                                    <hr />
-                                    <div className="flex flex-col gap-2 p-4">
-                                        <div className="text-xs font-bold">Experience</div>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            <div className="flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    value=""
-                                                    defaultChecked={true}
-                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                                                />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Full-Time</label>
-                                            </div>
-                                            <div className="flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    value=""
-                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                                                />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Part-Time</label>
-                                            </div>
-                                            <div className="flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    value=""
-                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                                                />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Internship</label>
-                                            </div>
-                                            <div className="flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    value=""
-                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                                                />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Volunteer</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </CardLayout>
-                                <div className="grid grow grid-cols-2 gap-4">
+                                <CompanyFilter onApplyFilter={(data) => setFilter(data)} />
+                                <div className="h-[70vh] grid grow grid-cols-2 gap-4 pr-4 overflow-y-scroll">
                                     {searchCompany?.map((cp, index) => {
                                         return (
                                             <CardLayout
