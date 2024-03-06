@@ -10,7 +10,7 @@ import { Company } from "../../../../declarations/HireVerse_company/HireVerse_co
 import useImageBlob from "../../hooks/useImageBlob";
 import InvitationModal from "../modal/InvitationModal";
 import { getManagedCompanies } from "../../datas/queries/companyQueries";
-import {BsBuilding} from "react-icons/bs";
+import { BsBuilding } from "react-icons/bs";
 
 type Menu = {
     name: string;
@@ -138,9 +138,7 @@ export default function ManagementBars({ children }: Props) {
                 <div
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
-                    className={`fixed z-50 flex h-full flex-col place-items-center justify-between bg-white px-2 pb-6 pt-4 shadow-md ${isHovered ? "w-[18rem]" : "w-[5rem]"}
-                 transition-all duration-500 ease-in-out
-                 `}>
+                    className={`fixed z-50 flex h-full flex-col place-items-center justify-between bg-white px-2 pb-6 pt-4 shadow-md ${isHovered ? "w-[18rem]" : "w-[5rem]"} transition-all duration-500 ease-in-out`}>
                     <div className="flex w-full flex-col gap-8">
                         <div className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
                             <div className="flex flex-col">
@@ -191,7 +189,7 @@ export default function ManagementBars({ children }: Props) {
                     </div>
                 </div>
                 <div className={`flex h-full ${isHovered ? "min-w-[18rem]" : "min-w-[5rem]"} transition-all duration-500 ease-in-out`} />
-                <div className="flex-grow-1 flex h-full w-full flex-col">
+                <div className="flex-grow-1 flex h-full w-full flex-1 flex-col">
                     <div className="min-h-16 w-full" />
                     {children}
                 </div>

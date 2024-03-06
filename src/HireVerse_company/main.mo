@@ -17,6 +17,7 @@ import Result "mo:base/Result";
 import Error "mo:base/Error";
 import Order "mo:base/Order";
 import Int "mo:base/Int";
+import TextX "mo:xtended-text/TextX";
 import Review "canister:HireVerse_review";
 
 actor Company {
@@ -122,10 +123,15 @@ actor Company {
                 return #err("Company not found");
             };
             case (?c) {
+                let company_manager_ids : [Text] = c.company_manager_ids;
+                let manager = Array.find<Text>(
+                    company_manager_ids,
+                    func(p : Text) : Bool {
+                        p == Principal.toText(msg.caller);
+                    },
+                );
 
-                let isManager : Bool = await checkCompanyManager(c, msg.caller);
-
-                if (not isManager) {
+                if (manager == null) {
                     return #err("User is not a manager of the company");
                 };
 
@@ -259,7 +265,7 @@ actor Company {
     public shared func checkCompanyManager(company : Company, user_id : Principal) : async Bool {
         let company_manager_ids : [Text] = company.company_manager_ids;
 
-        Array.find<Text>(
+        return Array.find<Text>(
             company_manager_ids,
             func(p : Text) : Bool {
                 p == Principal.toText(user_id);
@@ -281,12 +287,18 @@ actor Company {
                 return #err("Company not found");
             };
             case (#ok(c)) {
-                let isManager : Bool = await checkCompanyManager(c, inviter_id);
+                let company_manager_ids : [Text] = c.company_manager_ids;
+                let manager = Array.find<Text>(
+                    company_manager_ids,
+                    func(p : Text) : Bool {
+                        p == Principal.toText(msg.caller);
+                    },
+                );
 
-                if (not isManager) {
+                if (manager == null) {
                     return #err("User is not a manager of the company");
                 };
-
+            
                 if (Array.find<Text>(c.company_manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) != null) {
                     return #err("User is already a manager of the company");
                 };
@@ -333,7 +345,7 @@ actor Company {
         };
     };
 
-    public shared (msg) func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+    public shared query(msg) func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
 
         let user_id = msg.caller;
 
@@ -341,13 +353,13 @@ actor Company {
             return #err("Not authorized");
         };
 
-        let company = await getCompany(company_id);
+        let company = companies.get(company_id);
 
         switch (company) {
-            case (#err(msg)) {
+            case (null) {
                 return #err("Company not found");
             };
-            case (#ok(company)) {
+            case (?company) {
                 let jobIds = company.job_posting_ids;
 
                 let updatedCompany : Company = {
@@ -410,6 +422,7 @@ actor Company {
                 return #err("Company not found");
             };
             case (#ok(company)) {
+                //TODO
 
                 let isManager : Bool = await checkCompanyManager(company, user_id);
 
@@ -510,7 +523,6 @@ actor Company {
 
     public shared composite query func getManagersFromCompany(company_id : Text) : async Result.Result<[User.User], Text> {
         let companies = await getCompany(company_id);
-        Debug.print(company_id);
         switch (companies) {
             case (#err(msg)) {
                 return #err("Company not found");
@@ -541,7 +553,8 @@ actor Company {
         var searchResult = Vector.Vector<Company>();
 
         for (company in companyList.vals()) {
-            if (Text.contains(company.name, #text name)) {
+            let tempName = TextX.toLower(name);
+            if (Text.contains(TextX.toLower(company.name), #text tempName)) {
                 searchResult.add(company);
             };
         };
