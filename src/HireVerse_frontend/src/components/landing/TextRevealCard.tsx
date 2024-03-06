@@ -58,7 +58,7 @@ export const TextRevealCard = ({
             onMouseMove={mouseMoveHandler}
             ref={cardRef}
             className={cn(
-                "bg-[#1d1c20] w-full py-24 relative overflow-hidden flex flex-col gap-5",
+                "bg-[#1d1c20] w-full py-24 relative overflow-hidden flex flex-col gap-5 snap-end",
                 className,
             )}
         >
@@ -67,7 +67,7 @@ export const TextRevealCard = ({
                 <div className="text-xl font-semibold">
                     Created for:
                 </div>
-                <div className="snap-center relative flex items-center overflow-hidden">
+                <div className="relative flex items-center overflow-hidden">
                     <motion.div
                         style={{
                             width: "100%",
@@ -114,11 +114,11 @@ export const TextRevealCard = ({
                 </div>
             </div>
 
-            <div className="px-24 mt-24 flex flex-col gap-4 text-gray-500">
+            <div className=" px-24 mt-24 flex flex-col gap-4 text-gray-500">
                 <div className="text-xl font-semibold flex flex-row gap-2 place-items-center">
                     Developed with <FaHeart /> by:
                 </div>
-                <div className="grid grid-cols-3 py-8 gap-4">
+                <div className="grid grid-cols-3 py-8 gap-4 ">
                     <a
                         target="_blank"
                         href="https://github.com/dave-andrew"
