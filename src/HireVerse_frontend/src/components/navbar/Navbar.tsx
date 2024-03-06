@@ -64,7 +64,7 @@ export default function Navbar() {
                         }
                         return (
                             <Link
-                                className="flex h-full w-full place-items-center justify-center "
+                                className="flex h-full w-full place-items-center justify-center"
                                 to={menu.redirectUrl || ""}
                                 key={index}>
                                 <div
@@ -73,10 +73,10 @@ export default function Navbar() {
                                         isActive(menu.activeUrl)
                                             ? "text-blue-primary border-color-blue-primary font-semibold"
                                             : ""
-                                    } text-s group mx-2  flex h-full flex-row place-items-center justify-center gap-2 border-b-2 border-transparent text-xl transition-colors hover:border-gray-400 md:min-w-24 xl:text-base`}>
+                                    } text-s group px-4 md:px-0 mx-2 flex h-full flex-row place-items-center justify-center gap-2 border-b-2 border-transparent text-xl transition-colors hover:border-gray-400 md:min-w-24 xl:text-base`}>
                                     {menu.iconElement}
                                     <div
-                                        className="invisible absolute group-hover:static group-hover:visible text-xs opacity-0 duration-600 group-hover:transition-all group-hover:ease-in-out group-hover:opacity-100 group-hover:duration-300 md:text-sm lg:text-base">
+                                        className=" invisible md:visible absolute md:relative group-hover:static group-hover:visible text-xs opacity-0 md:opacity-100 duration-600 group-hover:transition-all group-hover:ease-in-out group-hover:opacity-100 group-hover:duration-300 md:text-sm lg:text-base">
                                         {menu.name}
                                     </div>
                                 </div>
