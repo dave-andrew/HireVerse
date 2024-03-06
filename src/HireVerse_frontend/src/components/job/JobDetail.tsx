@@ -8,6 +8,7 @@ import useImageBlob from "../../hooks/useImageBlob";
 import { convertShortTimeInterval } from "../../utils/convertTimeInterval";
 import EmployTypeIndicator from "./EmployTypeIndicator";
 import purifyDOM from "../../utils/purifyDOM";
+import { Link } from "react-router-dom";
 
 export interface IJobDetail {
     id: string;
@@ -61,15 +62,15 @@ export default function JobDetail({ jobId }: Props) {
                 <>
                     <div className="border-signature-gray sticky top-0 flex h-32 w-full flex-row items-center justify-between gap-4 border-b-[1px] bg-white p-4 shadow-sm">
                         <div className="flex h-full flex-row items-center gap-4">
-                            <a
+                            <Link
                                 className="aspect-square h-full object-cover"
-                                href={`company/detail/${fullJob.company.id}`}>
+                                to={`company/detail/${fullJob.company.id}`}>
                                 <img
                                     onError={handleDefaultImage}
                                     src={convertBlobToImage(fullJob?.company.image ?? [])}
                                     alt={fullJob.company.name}
                                 />
-                            </a>
+                            </Link>
                             <div className="flex flex-col">
                                 <h1 className="m-0 flex flex-row items-center gap-3 p-0 text-4xl font-bold">
                                     {fullJob?.position} <EmployTypeIndicator employType={fullJob.employType} />
@@ -77,7 +78,7 @@ export default function JobDetail({ jobId }: Props) {
                                 <p className="text-base">
                                     On{" "}
                                     <span className="font-bold">
-                                        <a href={`company/detail/${fullJob.id}`}>{fullJob?.company.name}</a>
+                                        <Link to={`company/detail/${fullJob.id}`}>{fullJob?.company.name}</Link>
                                         {" - "}
                                     </span>
                                     {fullJob?.location}

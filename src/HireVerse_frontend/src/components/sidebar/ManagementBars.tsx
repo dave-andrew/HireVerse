@@ -125,11 +125,11 @@ export default function ManagementBars({ children }: Props) {
                         />
                     </div>
                     <div className="flex h-full flex-row place-items-center">
-                        <a
-                            href="/"
+                        <Link
+                            to="/"
                             className="hover:border-blue-primary hover:text-blue-primary mr-6 flex h-full cursor-pointer items-center justify-center border-b-2 border-transparent transition-colors">
                             Employer
-                        </a>
+                        </Link>
                         <div className="border-l-2">
                             <Profile />
                         </div>

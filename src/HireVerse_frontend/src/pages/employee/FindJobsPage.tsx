@@ -16,6 +16,7 @@ import { InfiniteData } from "@tanstack/react-query";
 import { getFilteredJobs } from "../../datas/queries/jobQueries";
 import WrappedAutoDropdown from "../../components/form/WrappedAutoDropdown";
 import { getCompanyCountries } from "../../datas/queries/companyQueries";
+import canisterInjector from "../../utils/canisterInjector";
 
 export interface IQueryFilterSortForm {
     country: string;
@@ -69,7 +70,7 @@ export default function FindJobs() {
     return (
         <FrontPageLayout>
             <div className="flex flex-col place-items-center gap-20 pb-20">
-                <div className="w-full bg-[url(public/backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[480px]">
+                <div className={`w-full bg-[url(${canisterInjector("backgrounds/subtle-prism.svg")})] shadow-md md:h-[360px] lg:h-[480px]`}>
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
                         <div className="flex w-full flex-col gap-5 p-8 md:w-2/6">
                             <h3 className="m-0 p-0 text-4xl font-bold lg:text-5xl">Find Your Dream Job Now.</h3>

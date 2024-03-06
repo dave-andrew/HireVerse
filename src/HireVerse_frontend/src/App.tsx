@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, HashRouter, Route, RouteObject, Routes } from "react-router-dom";
 import FindJobs from "./pages/employee/FindJobsPage";
 import RegisterCompanyPage from "./pages/employers/RegisterCompanyPage";
 import FindCompanyPage from "./pages/employee/FindCompanyPage";
@@ -15,6 +15,8 @@ import EmployerProtectedRoutes from "./components/protected/EmployerProtectedRou
 import AuthorizedProtectedRoutes from "./components/protected/AuthorizedProtectedRoutes";
 import CompanyInvitation from "./pages/employers/CompanyInvitation";
 import EmployerHomePage from "./pages/employers/EmployerHomePage";
+import { useLayoutEffect } from "react";
+import canisterInjector from "./utils/canisterInjector";
 
 const guestRoutes: RouteObject[] = [
     {
@@ -99,10 +101,109 @@ const router = createBrowserRouter([
     ...otherRoutes,
 ]);
 
+const fonts = [
+    {
+        fontFamily: "Bebas Neue",
+        src: `url(${canisterInjector("/fonts/Bebas_Neue/BebasNeue-Regular.ttf")}) format("truetype")`,
+    },
+    {
+        fontFamily: "Lato",
+        src: `url(${canisterInjector("/fonts/Lato/Lato-Regular.ttf")}) format("truetype")`,
+    },
+    {
+        fontFamily: "Lato",
+        fontWeight: "bold",
+        src: `url(${canisterInjector("/fonts/Lato/Lato-Bold.ttf")}) format("truetype")`,
+    },
+    {
+        fontFamily: "Lato",
+        fontWeight: 300,
+        src: `url(${canisterInjector("/fonts/Lato/Lato-Light.ttf")}) format("truetype")`,
+    },
+    {
+        fontFamily: "Lato",
+        fontWeight: 400,
+        src: `url(${canisterInjector("/fonts/Lato/Lato-Regular.ttf")}) format("truetype")`,
+    },
+];
+
+const fontLoader = () => {
+    for (const font of fonts) {
+        const style = document.createElement("style");
+        style.innerHTML = `
+            @font-face {
+                font-family: '${font.fontFamily}';
+                src: ${font.src};
+                font-weight: ${font.fontWeight || 400};
+                font-style: normal;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+};
+
 function App() {
     // TODO: Disabling all console logs for production
     // console.log = () => {};
-    return <RouterProvider router={router} />;
+
+    useLayoutEffect(() => {
+        fontLoader();
+    }, []);
+
+    return (
+        <HashRouter>
+            <Routes>
+                <Route
+                    path="/"
+                    element={<LandingPage />}
+                />
+                <Route
+                    path="/*"
+                    element={<NotFoundPage />}
+                />
+                <Route
+                    path="seeder"
+                    element={<Seeder />}
+                />
+                <Route
+                    path="/find-job"
+                    element={<FindJobs />}
+                />
+                <Route
+                    path="/find-company"
+                    element={<FindCompanyPage />}
+                />
+                <Route
+                    path="/company/detail/:id"
+                    element={<CompanyDetailPage />}
+                />
+                <Route
+                    path="/employer"
+                    element={<EmployerHomePage />}
+                />
+                <Route
+                    path="employer/managers"
+                    element={<CompanyManagersPage />}
+                />
+                <Route
+                    path="/employer/register"
+                    element={<RegisterCompanyPage />}
+                />
+                <Route
+                    path="/employer/jobs"
+                    element={<CompanyJobsPage />}
+                />
+                <Route
+                    path="/employer/invitations"
+                    element={<CompanyInvitation />}
+                />
+                <Route
+                    path="/complete-registration"
+                    element={<CompleteRegistrationPage />}
+                />
+            </Routes>
+        </HashRouter>
+    );
 }
 
 export default App;

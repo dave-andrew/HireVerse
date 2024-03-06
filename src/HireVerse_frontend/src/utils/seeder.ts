@@ -3,9 +3,6 @@ import { CreateJobInput } from "../../../../.dfx/local/canisters/HireVerse_job/s
 import { isOk } from "./resultGuarder";
 import { ServiceContextType } from "../components/context/ServiceContext";
 import { CONSTANTS } from "./constants";
-
-// import { _SERVICE as _SERVICE_BACKEND } from "../../../../declarations/HireVerse_backend/HireVerse_backend.did";
-// import { _SERVICE as _SERVICE_REVIEW } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import { _SERVICE as _SERVICE_JOB } from "../../../declarations/HireVerse_job/HireVerse_job.did";
 import { ActorSubclass } from "@dfinity/agent";
 

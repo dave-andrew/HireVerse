@@ -8,6 +8,7 @@ import useService from "../../hooks/useService";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { useNavigate } from "react-router-dom";
 import imageHandler from "../../utils/imageHandler";
+import canisterInjector from "../../utils/canisterInjector";
 
 export default function FindCompanyPage() {
     const nav = useNavigate();
@@ -125,7 +126,7 @@ export default function FindCompanyPage() {
     return (
         <FrontPageLayout>
             <div className="flex flex-col">
-                <div className="h-fit w-full place-items-center bg-[url(src/HireVerse_frontend/backgrounds/subtle-prism.svg)] shadow-md">
+                <div className={`h-fit w-full place-items-center bg-[url(${canisterInjector("backgrounds/subtle-prism.svg")})] shadow-md`}>
                     <div className="flex flex-col place-items-center gap-8 p-8">
                         <div className="flex flex-col items-center justify-center">
                             <div className="flex w-full flex-col gap-3 self-start">
