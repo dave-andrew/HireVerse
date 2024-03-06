@@ -17,9 +17,18 @@ export default function LandingPage() {
 
             <div ref={parentRef}
                  className="relative flex h-[100vh] snap-y snap-mandatory flex-col overflow-scroll bg-gradient-to-br from-cyan-100 via-white to-pink-200">
-                <RandomCircleBackground parentRef={parentRef} />
+                <RandomCircleBackground parentRef={parentRef}/>
                 <HeaderSection parentRef={parentRef}/>
+                {/*<button*/}
+                {/*    className="cursor-pointer sticky z-0 flex flex-col gap-10 place-items-center rounded-full top-10 ms-auto text-xl animate-bounce">*/}
+                {/*    <LiaLongArrowAltUpSolid*/}
+                {/*        className="h-10 w-10"/>*/}
+                {/*    <div className="rotate-90 pb-1 text-base w-24">*/}
+                {/*        Scroll Up*/}
+                {/*    </div>*/}
+                {/*</button>*/}
                 <Section2 parentRef={parentRef}/>
+
                 {/*<div*/}
                 {/*    className="sticky z-0 flex flex-col gap-10 place-items-center rounded-full top-0 left-9 text-xl animate-bounce">*/}
                 {/*    <div className="rotate-90 pb-1 text-base">*/}

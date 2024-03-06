@@ -1,13 +1,13 @@
-import { Typewriter } from "react-simple-typewriter";
-import useAuth, { AuthState } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-import { ReactNode, useEffect, useState } from "react";
-import { animated, useSpring } from "@react-spring/web";
+import {Typewriter} from "react-simple-typewriter";
+import useAuth, {AuthState} from "../../hooks/useAuth";
+import {useNavigate} from "react-router-dom";
+import {ReactNode, useEffect, useState} from "react";
+import {animated, useSpring} from "@react-spring/web";
 import useMobile from "../../hooks/useMobile";
 
 
-export default function HeaderSection({ parentRef }: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
-    const { user, authState, login, logout } = useAuth();
+export default function HeaderSection({parentRef}: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
+    const {user, authState, login, logout} = useAuth();
     const navigate = useNavigate();
 
     const clickHandler = async () => {
@@ -37,17 +37,11 @@ export default function HeaderSection({ parentRef }: { parentRef: React.MutableR
 
     const fadeAnimation = useSpring({
         opacity: isVisible ? 1 : 0,
-        from: { opacity: 0 },
-        config: { duration: 200 },
+        from: {opacity: 0},
+        config: {duration: 200},
     });
 
-    const flyAnimation = useSpring({
-        from: { transform: "translateY(75%) translateX(-75%)" },
-        to: { transform: "translateY(0%) translateX(0%)" },
-        config: { duration: 700 },
-    });
-
-    const { isMobile } = useMobile();
+    const {isMobile} = useMobile();
 
     return (
         <animated.div style={fadeAnimation}
@@ -62,7 +56,7 @@ export default function HeaderSection({ parentRef }: { parentRef: React.MutableR
                         cursorStyle="_"
                         typeSpeed={70}
                         deleteSpeed={50}
-                        delaySpeed={1000} />
+                        delaySpeed={1000}/>
                     </div>
                     <div className="text-start align-middle text-xl text-gray-600 px-2">
                         Hireverse empowers job seeker with straight from the source insights to make the best
@@ -80,12 +74,10 @@ export default function HeaderSection({ parentRef }: { parentRef: React.MutableR
                 )}
             </div>
             {!isMobile &&
-                <animated.img
-                    style={flyAnimation}
+
+                <iframe
                     className="w-[28rem]"
-                    src="/storyset/work-landing.svg"
-                    alt=""
-                />
+                    src="https://lottie.host/embed/0ecd5b53-c72f-491c-b93e-3d016ec43aeb/7wGwl9KBRm.json"></iframe>
             }
         </animated.div>
     );
