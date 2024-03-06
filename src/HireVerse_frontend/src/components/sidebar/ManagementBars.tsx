@@ -10,6 +10,7 @@ import { Company } from "../../../../declarations/HireVerse_company/HireVerse_co
 import useImageBlob from "../../hooks/useImageBlob";
 import InvitationModal from "../modal/InvitationModal";
 import { getManagedCompanies } from "../../datas/queries/companyQueries";
+import {BsBuilding} from "react-icons/bs";
 
 type Menu = {
     name: string;
@@ -180,6 +181,12 @@ export default function ManagementBars({ children }: Props) {
                                 <RiMailOpenLine className="min-w-[1.5rem]" />
                                 <span className={`overflow-hidden`}>Invitations</span>
                             </button>
+                            <a
+                                href="/employer/register"
+                                className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 rounded-md border-l-2 border-transparent p-3">
+                                <BsBuilding className="min-w-[1.5rem]" />
+                                <span className={`overflow-hidden`}>Register</span>
+                            </a>
                         </div>
                     </div>
                 </div>

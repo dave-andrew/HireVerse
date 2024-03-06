@@ -58,26 +58,26 @@ export default function ManageCompanyPage() {
     return (
         <>
             <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
-                <div className="flex flex-col place-items-center gap-2 xl:w-[calc(100%-1rem)] 2xl:w-4/5">
+                <div className="flex flex-col place-items-center gap-2 xl:w-[calc(100%-1rem)] px-4 md:px-0 2xl:w-4/5">
                     {/*<div*/}
                     {/*    className="relative flex w-full flex-col md:flex-row place-items-center gap-10 rounded-lg rounded-tl-none rounded-tr-none border-t-0 p-6">*/}
 
 
-                        {/*<ProfileEditButton*/}
-                        {/*    className="absolute xl:right-4 xl:top-4 2xl:right-10 2xl:top-10"*/}
-                        {/*    onClick={() => setIsModalShown(true)}*/}
-                        {/*/>*/}
+                    {/*<ProfileEditButton*/}
+                    {/*    className="absolute xl:right-4 xl:top-4 2xl:right-10 2xl:top-10"*/}
+                    {/*    onClick={() => setIsModalShown(true)}*/}
+                    {/*/>*/}
                     {/*</div>*/}
-                    <div className="flex w-full flex-row gap-2 mt-12">
-                        <div className="sticky top-20 h-fit w-full md:w-[30%]">
+                    <div className="flex w-full flex-col md:flex-row gap-8 mt-12">
+                        <div className="md:sticky md:top-20 h-fit w-full px-32 md:px-0 md:w-[30%] flex flex-col gap-4">
                             <div className="relative">
                                 <img
-                                    className="border-signature-gray rounded-xl aspect-square border-[1px] object-cover w-48 xl:w-96"
+                                    className="border-signature-gray rounded-xl aspect-square border-[1px] object-cover w-full"
                                     src={imageHandler(selectedCompany?.image)}
                                     alt=""
                                 />
                                 <ProfileEditButton
-                                    className="xl:left-4 xl:top-4 2xl:left-10 2xl:top-10"
+                                    className="left-4 top-4 2xl:left-10 2xl:top-10"
                                     onClick={() => imageRef.current?.click()}
                                 />
                                 <input
@@ -86,6 +86,19 @@ export default function ManageCompanyPage() {
                                     type="file"
                                     className="hidden"
                                 />
+                            </div>
+
+                            <div className="flex flex-col gap-2 font-semibold">
+                                <button
+                                    className="w-full bg-gray-300 hover:bg-gray-400 p-2 rounded-md"
+                                    onClick={() => setIsModalShown(true)}>
+                                    Edit Profile
+                                </button>
+                                <button
+                                    className="w-full bg-red-700 hover:bg-red-800 text-white p-2 rounded-md"
+                                    onClick={() => setIsModalShown(true)}>
+                                    Leave Company
+                                </button>
                             </div>
                             {/*<CardLayout className="flex flex-col gap-5 rounded-lg p-10">*/}
                             {/*    <h3 className="m-0 p-0 text-4xl font-semibold">Industries</h3>*/}
@@ -141,7 +154,7 @@ export default function ManageCompanyPage() {
                                         return (
                                             <div
                                                 key={i}
-                                                className="rounded-3xl border-green-400 hover:bg-green-300 text-green-700 bg-green-200 py-1 px-4 border">
+                                                className="rounded-3xl border-green-400 cursor-default text-green-700 bg-green-200 py-1 px-4 border">
                                                 {industry}
                                             </div>
                                         );
