@@ -25,7 +25,7 @@ export default function ImageLabeledDropdown({ states, className, control, name,
                 name={name}
                 control={control}
                 render={({ field }) => (
-                    <div className={`top-16 w-40 ${className}`}>
+                    <div className={`top-16 w-fit ${className}`}>
                         <Listbox
                             disabled={!states}
                             {...field}

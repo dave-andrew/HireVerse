@@ -59,15 +59,6 @@ export default function ManageCompanyPage() {
         <>
             <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
                 <div className="flex flex-col place-items-center gap-2 xl:w-[calc(100%-1rem)] px-4 md:px-0 2xl:w-4/5">
-                    {/*<div*/}
-                    {/*    className="relative flex w-full flex-col md:flex-row place-items-center gap-10 rounded-lg rounded-tl-none rounded-tr-none border-t-0 p-6">*/}
-
-
-                    {/*<ProfileEditButton*/}
-                    {/*    className="absolute xl:right-4 xl:top-4 2xl:right-10 2xl:top-10"*/}
-                    {/*    onClick={() => setIsModalShown(true)}*/}
-                    {/*/>*/}
-                    {/*</div>*/}
                     <div className="flex w-full flex-col md:flex-row gap-8 mt-12">
                         <div className="md:sticky md:top-20 h-fit w-full px-32 md:px-0 md:w-[30%] flex flex-col gap-4">
                             <div className="relative">
@@ -100,47 +91,6 @@ export default function ManageCompanyPage() {
                                     Leave Company
                                 </button>
                             </div>
-                            {/*<CardLayout className="flex flex-col gap-5 rounded-lg p-10">*/}
-                            {/*    <h3 className="m-0 p-0 text-4xl font-semibold">Industries</h3>*/}
-                            {/*    <div className="flex flex-row flex-wrap gap-3">*/}
-                            {/*        {companyIndustries?.map((industry, i) => {*/}
-                            {/*            return (*/}
-                            {/*                <div*/}
-                            {/*                    key={i}*/}
-                            {/*                    className="bg-blue-primary flex flex-row gap-2 rounded-md p-2 px-3 font-semibold text-white opacity-80 transition-opacity hover:opacity-100">*/}
-                            {/*                    {industry}*/}
-                            {/*                </div>*/}
-                            {/*            );*/}
-                            {/*        })}*/}
-                            {/*    </div>*/}
-                            {/*</CardLayout>*/}
-                            {/*<CardLayout className="flex flex-col gap-5 rounded-lg p-10">*/}
-                            {/*    <h3 className="m-0 p-0 text-4xl font-semibold">Social Medias</h3>*/}
-                            {/*    <div className="flex flex-col flex-wrap gap-3">*/}
-                            {/*        {selectedCompany?.social_medias?.map((contact, i) => {*/}
-                            {/*            return (*/}
-                            {/*                <SocialMediaItem*/}
-                            {/*                    key={i}*/}
-                            {/*                    url={contact}*/}
-                            {/*                />*/}
-                            {/*            );*/}
-                            {/*        })}*/}
-                            {/*    </div>*/}
-                            {/*</CardLayout>*/}
-                            {/*<CardLayout className="flex flex-col gap-5 rounded-lg p-10">*/}
-                            {/*    <h3 className="m-0 p-0 text-4xl font-semibold">Locations</h3>*/}
-                            {/*    <div className="flex flex-col flex-wrap gap-3">*/}
-                            {/*        {selectedCompany?.office_locations?.map((location, i) => {*/}
-                            {/*            return (*/}
-                            {/*                <div*/}
-                            {/*                    key={i}*/}
-                            {/*                    className="flex flex-row gap-2 rounded-md bg-white p-2 px-3 font-semibold text-black opacity-80 transition-opacity hover:opacity-100">*/}
-                            {/*                    {location}*/}
-                            {/*                </div>*/}
-                            {/*            );*/}
-                            {/*        })}*/}
-                            {/*    </div>*/}
-                            {/*</CardLayout>*/}
                         </div>
                         <div className="flex h-auto w-full md:w-[70%] flex-col gap-12">
 
@@ -210,7 +160,6 @@ export default function ManageCompanyPage() {
                                                 );
                                             })}
                                         </div>
-                                        {/*<p className="font-semibold">{selectedCompany?.office_locations?.[0]}</p>*/}
                                     </div>
                                 </div>
                                 <div className="flex flex-row gap-3">

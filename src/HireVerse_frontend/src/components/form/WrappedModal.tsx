@@ -26,7 +26,7 @@ export default function WrappedModal({
                 as={Fragment}>
                 <Dialog
                     as="div"
-                    className="relative z-50"
+                    className="relative z-[500]"
                     onClose={() => setIsOpen(false)}>
                     <Transition.Child
                         as={Fragment}
