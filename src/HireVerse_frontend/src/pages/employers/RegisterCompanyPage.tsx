@@ -50,7 +50,7 @@ export default function RegisterCompanyPage() {
         await getCompanyService().then((s) => s.registerCompanies(companyData));
 
         setIsLoading(false);
-        navigate("/employer");
+        navigate("/employer", { replace: true });
     };
 
     const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB

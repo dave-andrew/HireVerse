@@ -14,6 +14,7 @@ import {getCompanyIndustries} from "../../datas/queries/companyQueries";
 import CompanyDetailReview from "../../components/review/CompanyDetailReview";
 import {useUpdateCompany} from "../../datas/mutations/companyMutations";
 import {FaLinkedin} from "react-icons/fa";
+import LeaveCompanyModal from "../../components/modal/LeaveCompanyModal";
 
 interface IManageCompanyForm {
     image: FileList;
@@ -25,6 +26,7 @@ export default function ManageCompanyPage() {
     const {data: companyIndustries} = getCompanyIndustries(selectedCompany?.id);
     const mutation = useUpdateCompany();
     const [isModalShown, setIsModalShown] = useState(false);
+    const [isConfirmationModalShown, setIsConfirmationModalShown] = useState(false);
     let imageRef = useRef<HTMLInputElement>(null);
 
     const updateCompanyData = async () => {
@@ -87,7 +89,7 @@ export default function ManageCompanyPage() {
                                 </button>
                                 <button
                                     className="w-full bg-red-700 hover:bg-red-800 text-white p-2 rounded-md"
-                                    onClick={() => setIsModalShown(true)}>
+                                    onClick={() => setIsConfirmationModalShown(true)}>
                                     Leave Company
                                 </button>
                             </div>
@@ -152,11 +154,11 @@ export default function ManageCompanyPage() {
                                         <div className="flex flex-row">
                                             {selectedCompany?.office_locations?.map((location, i) => {
                                                 return (
-                                                    <>
+                                                    <div key ={i}>
                                                         {i !== 0 &&
-                                                            <p key={i} className="font-semibold pr-1">, </p>}
-                                                        <p key={i} className="font-semibold">{location}</p>
-                                                    </>
+                                                            <p className="font-semibold pr-1">, </p>}
+                                                        <p className="font-semibold">{location}</p>
+                                                    </div>
                                                 );
                                             })}
                                         </div>
@@ -193,6 +195,9 @@ export default function ManageCompanyPage() {
                 setOpenState={setIsModalShown}
                 // onEditFinished={onJobCreated}
             />
+            <LeaveCompanyModal
+                openState={isConfirmationModalShown}
+                setOpenState={setIsConfirmationModalShown}/>
         </>
     );
 }
