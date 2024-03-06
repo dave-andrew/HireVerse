@@ -1,8 +1,8 @@
 import FrontPageLayout from "../../layouts/FrontPageLayout";
 import HeaderSection from "../../components/landing/HeaderSection";
-import Section2 from "../../components/landing/Section2";
+import BenefitSection from "../../components/landing/BenefitSection";
 import {useRef} from "react";
-import Section3 from "../../components/landing/Section3";
+import SponsorSection from "../../components/landing/SponsorSection";
 import FooterSection from "../../components/landing/FooterSection";
 import {Parallax, ParallaxLayer} from "@react-spring/parallax";
 import {LiaLongArrowAltDownSolid, LiaLongArrowAltUpSolid} from "react-icons/lia";
@@ -27,7 +27,7 @@ export default function LandingPage() {
                 {/*        Scroll Up*/}
                 {/*    </div>*/}
                 {/*</button>*/}
-                <Section2 parentRef={parentRef}/>
+                <BenefitSection parentRef={parentRef}/>
 
                 {/*<div*/}
                 {/*    className="sticky z-0 flex flex-col gap-10 place-items-center rounded-full top-0 left-9 text-xl animate-bounce">*/}
@@ -37,7 +37,7 @@ export default function LandingPage() {
                 {/*    <LiaLongArrowAltDownSolid*/}
                 {/*        className="h-10 w-10" />*/}
                 {/*</div>*/}
-                <Section3 parentRef={parentRef}/>
+                <SponsorSection parentRef={parentRef}/>
                 <FooterSection/>
             </div>
         </FrontPageLayout>

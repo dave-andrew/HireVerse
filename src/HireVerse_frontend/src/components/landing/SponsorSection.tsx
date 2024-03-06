@@ -1,7 +1,7 @@
 import { ContainerScroll } from "./ContainerScrollAnimation";
 import { WavyBackground } from "./WavyBackground";
 
-export default function Section3({ parentRef }: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
+export default function SponsorSection({ parentRef }: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
     return (
         <WavyBackground className="flex flex-col">
             <ContainerScroll

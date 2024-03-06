@@ -4,8 +4,8 @@ import useMobile from "../../hooks/useMobile";
 import {LiaLongArrowAltUpSolid} from "react-icons/lia";
 
 
-export default function Section2({parentRef}: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
-    const upperTriggerPoint = 600;
+export default function BenefitSection({parentRef}: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
+    const upperTriggerPoint = 500;
     const lowerTriggerPoint = 900;
     const [open, setOpen] = useState(false);
 
@@ -26,14 +26,14 @@ export default function Section2({parentRef}: { parentRef: React.MutableRefObjec
             <div className="text-2xl md:text-4xl font-bebas ">
                 Decentralized Hiring
             </div>
-            <div className="text-gray-600 text-sm md:text-lg">
+            <div className="text-gray-600 text-sm md:text-lg justify-center">
                 Embrace a faster, more cost-effective hiring experience. Cut out the middleman and take control
                 of your recruitment process with Internet Computer. This innovative technology allows you to
                 directly connect with talent, eliminating dependence on third-party platforms and ensuring your
                 data remains under your complete control.
             </div>
         </div>),
-        (<div className="snap-center flex flex-col place-items-start w-full mb-12">
+        (<div className="snap-center flex flex-col place-items-start w-full mb-12 justify-center">
             <div className="text-2xl md:text-4xl font-bebas ">
                 Credible Reviews
             </div>
@@ -44,7 +44,7 @@ export default function Section2({parentRef}: { parentRef: React.MutableRefObjec
                 insights you encounter come from verified individuals with genuine experiences.
             </div>
         </div>),
-        (<div className="translate-x-[-10%] flex flex-col place-items-start w-full">
+        (<div className="translate-x-[-10%] flex flex-col place-items-start w-full justify-center">
             <div className="text-2xl md:text-4xl font-bebas ">
                 Secure and Private
             </div>
@@ -64,21 +64,20 @@ export default function Section2({parentRef}: { parentRef: React.MutableRefObjec
         from: {opacity: 0, x: 20, height: 0},
     });
 
-
-    const flyAnimation = useSpring({
-        from: {transform: "translateY(75%) translateX(-75%)"},
-        to: {transform: "translateY(0%) translateX(0%)"},
-        config: {duration: 700},
+    const fadeAnimation = useSpring({
+        opacity: open ? 1 : 0,
+        from: {opacity: 0},
+        config: {duration: 200},
     });
-
 
     return (
         <div
-            className={`grow grid z-10 grid-cols-1 xl:grid-cols-2 place-items-center justify-center gap-16 py-32 px-[10vh] md:px-[20vh] transition-all ease-in-out duration-1000 min-h-[1000px] `}>
+            className={`grow grid z-10 grid-cols-1 xl:grid-cols-2 place-items-center justify-center gap-16 
+            py-14 px-[10vh] md:px-[20vh] transition-all ease-in-out duration-1000 min-h-[1000px] `}>
 
             <animated.img
-                style={flyAnimation}
-                className=" w-[400px] h-[400px] hidden xl:block"
+                style={fadeAnimation}
+                className=" w-[500px] h-[500px] hidden xl:block"
                 src="/storyset/work-landing.svg"
                 alt=""
             />
