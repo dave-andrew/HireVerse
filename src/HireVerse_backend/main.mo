@@ -9,6 +9,7 @@ import Iter "mo:base/Iter";
 import Result "mo:base/Result";
 import Helper "canister:HireVerse_helper";
 import Vector "mo:vector/Class";
+import TextX "mo:xtended-text/TextX";
 
 actor Database {
 
@@ -118,7 +119,8 @@ actor Database {
 
     public query func getUserByEmail(user_email : Text) : async Result.Result<Principal, Text> {
         for (user in users.vals()) {
-            if (user.email == user_email) {
+            let tempEmail = TextX.toLower(user.email);
+            if (tempEmail == TextX.toLower(user_email)) {
                 return #ok(user.internet_identity);
             };
         };
@@ -128,7 +130,8 @@ actor Database {
 
     public query func getUserObjectByEmail(user_email : Text) : async Result.Result<User, Text> {
         for (user in users.vals()) {
-            if (user.email == user_email) {
+            let tempEmail = TextX.toLower(user.email);
+            if (tempEmail == TextX.toLower(user_email)) {
                 return #ok(user);
             };
         };

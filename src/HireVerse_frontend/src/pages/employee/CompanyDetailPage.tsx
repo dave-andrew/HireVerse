@@ -30,7 +30,6 @@ export default function CompanyDetailPage() {
         return;
     }
 
-    // TODO: jadiin skeleton masukin return ()
     if (companyLoading && industriesLoading) {
         return <div>Loading...</div>;
     }

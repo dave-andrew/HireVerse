@@ -517,7 +517,8 @@ actor Job {
         let filteredJobs = Array.filter<Job>(
             jobsList,
             func(job) {
-                return Text.contains(job.position, #text position);
+                let tempPosition = TextX.toLower(position);
+                return Text.contains(TextX.toLower(job.position) , #text tempPosition);
             },
         );
 
@@ -525,7 +526,8 @@ actor Job {
             Array.filter<Job>(
                 filteredJobs,
                 func(job) {
-                    return Text.contains(job.location, #text country);
+                    let tempPosition = TextX.toLower(country);
+                    return Text.contains(TextX.toLower(job.location) , #text tempPosition);
                 },
             )
         );
@@ -558,7 +560,8 @@ actor Job {
                         let newJobList = Vector.Vector<Job>();
 
                         for (job in Iter.fromArray(Vector.toArray(jobPostings))) {
-                            if (Text.contains(job.position, #text position)) {
+                            let tempPosition = TextX.toLower(position);
+                            if (Text.contains(TextX.toLower(job.position), #text tempPosition)) {
                                 newJobList.add(job);
                             };
                         };
@@ -573,7 +576,8 @@ actor Job {
                         let newJobList = Vector.Vector<Job>();
 
                         for (job in Iter.fromArray(Vector.toArray(jobPostings))) {
-                            if (Text.contains(job.status, #text status)) {
+                            let tempStatus = TextX.toLower(status);
+                            if (Text.contains(TextX.toLower(job.status), #text tempStatus)) {
                                 newJobList.add(job);
                             };
                         };

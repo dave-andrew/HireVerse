@@ -34,26 +34,21 @@ interface Props {
 }
 
 export default function JobDetail({ jobId }: Props) {
-    const {
-        data: fullJob,
-        isLoading,
-        isFetching,
-        refetch,
-    } = getJobDetails(jobId);
+    const { data: fullJob, isLoading, isFetching, refetch } = getJobDetails(jobId);
     const { convertBlobToImage } = useImageBlob();
 
     useEffect(() => {
         refetch();
     }, [jobId]);
 
-    if (!jobId || isLoading) {
+    if (isLoading) {
         return <JobDetailSkeleton />;
     }
 
     return (
         <CardLayout className="relative h-full overflow-auto">
             {!(jobId && fullJob) ? (
-                <div className="flex flex-col w-full h-full justify-center items-center">
+                <div className="flex h-full w-full flex-col items-center justify-center">
                     <img
                         className="w-72"
                         src="storyset/empty-bro.png"
@@ -64,50 +59,38 @@ export default function JobDetail({ jobId }: Props) {
                 </div>
             ) : (
                 <>
-                    <div className="border-signature-gray sticky flex h-32 w-full top-0 bg-white flex-row items-center justify-between border-b-[1px] shadow-sm p-4 gap-4">
-                        <div className="flex flex-row items-center h-full gap-4">
+                    <div className="border-signature-gray sticky top-0 flex h-32 w-full flex-row items-center justify-between gap-4 border-b-[1px] bg-white p-4 shadow-sm">
+                        <div className="flex h-full flex-row items-center gap-4">
                             <a
-                                className="aspect-square object-cover h-full"
+                                className="aspect-square h-full object-cover"
                                 href={`company/detail/${fullJob.company.id}`}>
                                 <img
                                     onError={handleDefaultImage}
-                                    src={convertBlobToImage(
-                                        fullJob?.company.image ?? [],
-                                    )}
+                                    src={convertBlobToImage(fullJob?.company.image ?? [])}
                                     alt={fullJob.company.name}
                                 />
                             </a>
                             <div className="flex flex-col">
-                                <h1 className="m-0 p-0 text-4xl font-bold flex flex-row items-center gap-3">
-                                    {fullJob?.position}{" "}
-                                    <EmployTypeIndicator
-                                        employType={fullJob.employType}
-                                    />
+                                <h1 className="m-0 flex flex-row items-center gap-3 p-0 text-4xl font-bold">
+                                    {fullJob?.position} <EmployTypeIndicator employType={fullJob.employType} />
                                 </h1>
                                 <p className="text-base">
                                     On{" "}
                                     <span className="font-bold">
-                                        <a
-                                            href={`company/detail/${fullJob.id}`}>
-                                            {fullJob?.company.name}
-                                        </a>
+                                        <a href={`company/detail/${fullJob.id}`}>{fullJob?.company.name}</a>
                                         {" - "}
                                     </span>
                                     {fullJob?.location}
                                 </p>
                             </div>
                         </div>
-                        <div className="h-full">
-                            {convertShortTimeInterval(fullJob?.timestamp)} ago
-                        </div>
+                        <div className="h-full">{convertShortTimeInterval(fullJob?.timestamp)} ago</div>
                     </div>
-                    <div className="flex flex-col gap-8 overflow-auto p-6 [&_h3]:text-base [&_h3]:font-bold border-b-[1px]">
+                    <div className="flex flex-col gap-8 overflow-auto border-b-[1px] p-6 [&_h3]:text-base [&_h3]:font-bold">
                         <div>
                             <p
                                 dangerouslySetInnerHTML={{
-                                    __html: purifyDOM(
-                                        fullJob?.shortDescription,
-                                    ),
+                                    __html: purifyDOM(fullJob?.shortDescription),
                                 }}></p>
                         </div>
                         <div>
@@ -128,8 +111,7 @@ export default function JobDetail({ jobId }: Props) {
                             <h3 className="m-0 p-0">Salary</h3>
                             <p>
                                 {fullJob?.currency}
-                                {fullJob?.salaryStart.toString()} -{" "}
-                                {fullJob?.currency}
+                                {fullJob?.salaryStart.toString()} - {fullJob?.currency}
                                 {fullJob?.salaryEnd.toString()}
                             </p>
                         </div>
@@ -137,9 +119,7 @@ export default function JobDetail({ jobId }: Props) {
                             <h3 className="m-0 p-0">Contacts</h3>
                             <p>
                                 {/*{console.log(fullJob)}*/}
-                                {fullJob.contacts?.map((contact, index) => (
-                                    <span key={index}>{contact}</span>
-                                ))}
+                                {fullJob.contacts?.map((contact, index) => <span key={index}>{contact}</span>)}
                             </p>
                         </div>
                     </div>
