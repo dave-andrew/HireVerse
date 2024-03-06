@@ -8,7 +8,7 @@ export default function SponsorSection({ parentRef }: { parentRef: React.Mutable
                 parentRef={parentRef}
                 titleComponent={
                     <>
-                        <h1 className="text-4xl font-semibold text-black dark:text-white">
+                        <h1 className="text-4xl font-semibold text-black dark:text-white snap-center">
                             Supported in Web3.0 using
                             <br />
                             <span

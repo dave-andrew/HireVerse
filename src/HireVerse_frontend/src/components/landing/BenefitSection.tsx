@@ -26,7 +26,7 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
             <div className="text-2xl md:text-4xl font-bebas ">
                 Decentralized Hiring
             </div>
-            <div className="text-gray-600 text-sm md:text-lg justify-center">
+            <div className="text-gray-600 text-sm 2xl:text-base justify-center">
                 Embrace a faster, more cost-effective hiring experience. Cut out the middleman and take control
                 of your recruitment process with Internet Computer. This innovative technology allows you to
                 directly connect with talent, eliminating dependence on third-party platforms and ensuring your
@@ -37,7 +37,7 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
             <div className="text-2xl md:text-4xl font-bebas ">
                 Credible Reviews
             </div>
-            <div className="text-gray-600 text-sm md:text-lg">
+            <div className="text-gray-600 text-sm 2xl:text-base">
                 Boost your confidence in your next career move. Our platform empowers you with credible and
                 trustworthy reviews from both employees and employers. Internet Identity ensures the authenticity of
                 every user, guaranteeing that the valuable
@@ -48,7 +48,7 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
             <div className="text-2xl md:text-4xl font-bebas ">
                 Secure and Private
             </div>
-            <div className="text-gray-600 text-sm md:text-lg">
+            <div className="text-gray-600 text-sm 2xl:text-base">
                 Maintain complete control over your information. Internet Identity empowers you with
                 unparalleled data security and privacy. Your information remains exclusively accessible to you,
                 ensuring your personal details are never shared without your explicit consent.
@@ -60,7 +60,7 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
         config: {mass: 5, tension: 2000, friction: 200},
         opacity: open ? 1 : 0,
         x: open ? 0 : 20,
-        height: open ? (isMobile ? 140 : 220) : 0,
+        height: open ? (isMobile ? 140 : 200) : 0,
         from: {opacity: 0, x: 20, height: 0},
     });
 
