@@ -549,7 +549,9 @@ actor Company {
         return #ok(Vector.toArray(searchResult));
     };
 
-    public shared (msg) func leaveCompany(company_id : Text, user_id : Principal) : async Result.Result<(), Text> {
+    public shared (msg) func leaveCompany(company_id : Text) : async Result.Result<(), Text> {
+
+        let user_id = msg.caller;
 
         if (Principal.isAnonymous(user_id)) {
             return #err("Not authorized");
