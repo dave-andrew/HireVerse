@@ -1,11 +1,30 @@
 import useService from "../../hooks/useService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { isOk } from "../../utils/resultGuarder";
-import type { Principal } from "../../../../../node_modules/@dfinity/principal/lib/cjs/index.d.ts";
-import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {isOk} from "../../utils/resultGuarder";
+import type {Principal} from "../../../../../node_modules/@dfinity/principal/lib/cjs/index.d.ts";
+import {Company} from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+
+export function useLeaveCompany() {
+    const {getCompanyService} = useService();
+    return useMutation({
+        mutationFn: async (company_id: string) => {
+            const response = await getCompanyService().then((s) =>
+                s.leaveCompany(company_id),
+            );
+            console.log("LEAVE!!")
+
+            if (isOk(response)) {
+                return null;
+            }
+
+            throw new Error(response.err);
+        },
+    });
+
+}
 
 export function useRemoveInvitation() {
-    const { getCompanyService } = useService();
+    const {getCompanyService} = useService();
     return useMutation({
         mutationFn: async (invite_id: string) => {
             const response = await getCompanyService().then((s) =>
@@ -22,7 +41,7 @@ export function useRemoveInvitation() {
 }
 
 export function useAcceptInvitation() {
-    const { getCompanyService } = useService();
+    const {getCompanyService} = useService();
     return useMutation({
         mutationFn: async (invite_id: string) => {
             const response = await getCompanyService().then((s) =>
@@ -39,12 +58,12 @@ export function useAcceptInvitation() {
 }
 
 export function useCreateInvitation() {
-    const { getCompanyService } = useService();
+    const {getCompanyService} = useService();
     return useMutation({
         mutationFn: async ({
-            invitee,
-            company_id,
-        }: {
+                               invitee,
+                               company_id,
+                           }: {
             invitee: Principal;
             company_id: string;
         }) => {
@@ -62,7 +81,7 @@ export function useCreateInvitation() {
 
 export function useUpdateCompany() {
     const queryClient = useQueryClient();
-    const { getCompanyService } = useService();
+    const {getCompanyService} = useService();
     return useMutation({
         mutationFn: async (company: Company) => {
             const response = await getCompanyService()
