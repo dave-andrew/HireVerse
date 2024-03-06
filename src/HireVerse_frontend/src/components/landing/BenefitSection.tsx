@@ -75,12 +75,14 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
             className={`grow grid z-10 grid-cols-1 xl:grid-cols-2 place-items-center justify-center gap-16 
             py-14 px-[10vh] md:px-[20vh] transition-all ease-in-out duration-1000 min-h-[1000px] `}>
 
-            <animated.img
+
+            <animated.div
                 style={fadeAnimation}
-                className=" w-[500px] h-[500px] hidden xl:block"
-                src="/storyset/work-landing.svg"
-                alt=""
-            />
+            >
+                <iframe
+                    className=" w-[500px] h-[500px] hidden xl:block"
+                    src="https://lottie.host/embed/7761944a-3364-4bfe-b7db-bc3ae9475dd6/Ex2qyJXCQZ.json"></iframe>
+            </animated.div>
             <div className="flex flex-col place-items-start w-full gap-5">
                 {trail.map(({x, height, ...rest}, index) => (
                     <animated.div
