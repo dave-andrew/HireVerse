@@ -3,7 +3,7 @@ import { getManagersFromCompany } from "../../datas/queries/jobQueries";
 import { useState } from "react";
 import { useRemoveInvitation } from "../../datas/mutations/companyMutations";
 import {
-    Company,
+    Company, User,
     UserInvitation,
 } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 
@@ -12,15 +12,15 @@ export default function ManagerTable({
     selectedCompany,
     isFetchingInvitation,
     refetchInvitation,
+    managerData
 }: {
     companyInvitation: UserInvitation[] | undefined;
     selectedCompany: Company | null;
     isFetchingInvitation: boolean;
     refetchInvitation: () => void;
+    managerData: User[] | null | undefined;
 }) {
-    const { data: managerData, refetch: getManagers } = getManagersFromCompany(
-        selectedCompany?.id,
-    );
+
 
     const [isLoadingRemove, setIsLoadingRemove] = useState(false);
     const removeMutation = useRemoveInvitation();
