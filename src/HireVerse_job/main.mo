@@ -592,8 +592,6 @@ actor Job {
                      jobPostings.add(jp);
                   };
                };
-
-               Debug.print("di  a" # Nat.toText(jobPostings.size()));
             };
 
             switch (filter.position) {
@@ -609,8 +607,6 @@ actor Job {
                   };
 
                   jobPostings := newJobList;
-
-                  Debug.print("di  b" # Nat.toText(jobPostings.size()));
                };
             };
 
@@ -627,7 +623,6 @@ actor Job {
                   };
 
                   jobPostings := newJobList;
-                  Debug.print("di  c" # Nat.toText(jobPostings.size()));
                };
             };
 
@@ -672,8 +667,6 @@ actor Job {
                      );
                   };
                   jobPostings := Vector.fromArray(jobsList);
-
-                  Debug.print("di  d" # Nat.toText(jobPostings.size()));
                };
             };
 

@@ -36,9 +36,7 @@ export default function Seeder() {
     };
 
     const getReviewByCompany = async () => {
-        const response = await service
-            .getReviewService()
-            .then((s) => s.getSelfReview("1"));
+        const response = await service.getReviewService().then((s) => s.getSelfReview("1"));
         if (isOk(response)) {
             console.log(response);
         }
@@ -51,9 +49,7 @@ export default function Seeder() {
             return;
         }
 
-        const response = await service
-            .getCompanyService()
-            .then((s) => s.addManager(id));
+        const response = await service.getCompanyService().then((s) => s.addManager(id));
 
         if (isOk(response)) {
             console.log(`Added self to company ${id} manager`);
@@ -62,9 +58,7 @@ export default function Seeder() {
 
     const handleGetAllCompany = async () => {
         console.log("Getting all company...");
-        const response = await service
-            .getCompanyService()
-            .then((s) => s.getCompanies());
+        const response = await service.getCompanyService().then((s) => s.getCompanies());
         console.log(response);
     };
     return (
@@ -103,7 +97,7 @@ export default function Seeder() {
                 onClick={() =>
                     service
                         .getCompanyService()
-                        .then((s) => s.deleteAllCompany())
+                        .then((s) => s.cleanCompanies())
                         .then(() => console.log("All companies deleted"))
                 }>
                 Remove all companies
@@ -133,10 +127,7 @@ export default function Seeder() {
                 {...register("companyJobSeedId")}
                 type="text"
             />
-            <button
-                onClick={() => seedJob(service, getValues().companyJobSeedId)}>
-                Seed jOBS
-            </button>
+            <button onClick={() => seedJob(service, getValues().companyJobSeedId)}>Seed jOBS</button>
             <button onClick={() => addReview()}>GENERATE REVIEWS</button>
             <button onClick={() => getReviewByCompany()}>GET REVIEW</button>
         </div>

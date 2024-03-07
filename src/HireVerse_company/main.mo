@@ -19,6 +19,7 @@ import Order "mo:base/Order";
 import Int "mo:base/Int";
 import TextX "mo:xtended-text/TextX";
 import Review "canister:HireVerse_review";
+import Fuzz "mo:fuzz";
 
 actor Company {
 
@@ -66,29 +67,6 @@ actor Company {
     let invitations = TrieMap.TrieMap<Text, Invite>(Text.equal, Text.hash);
 
 
-    // Generates a company with default values
-    public shared func generateCompany() : async Text {
-        let company = {
-            id = await Helper.generateUUID();
-            name = "Google";
-            founded_year = 1998;
-            profile = "Google is an American multinational technology company that specializes in Internet-related services and products, which include online advertising technologies, a search engine, cloud computing, software, and hardware. It is considered one of the Big Five technology companies in the U.S. information technology industry, alongside Amazon, Facebook, Apple, and Microsoft.";
-            founded_country = "USA";
-            office_locations = ["Mountain View, California", "New York City, New York"];
-            social_medias = ["https://www.facebook.com/Google", "https://twitter.com/Google", "https://www.instagram.com/google"];
-            image = await Random.blob();
-            linkedin = "https://www.linkedin.com/company/google";
-            company_manager_ids = [];
-            job_posting_ids = [];
-            reviews_ids = [];
-            timestamp = Time.now();
-            seen = 0;
-        };
-
-        companies.put(company.id, company);
-
-        return company.id;
-    };
 
     // Generates a company with user Input
     public shared (msg) func registerCompany(newCompany : CreateCompanyInput) : async Result.Result<Company, Text> {
@@ -277,6 +255,44 @@ actor Company {
         };
     };
 
+    public shared (msg) func viewCompany(companyId : Text) : async Result.Result<(), Text> {
+        let userId = msg.caller;
+
+        if (Principal.isAnonymous(userId)) {
+            return #err("Not authorized");
+        };
+
+        let company = await getCompany(companyId);
+
+        switch (company) {
+            case (#err(msg)) {
+                return #err("Company not found");
+            };
+            case (#ok(c)) {
+                let updatedCompany = {
+                    id = c.id;
+                    name = c.name;
+                    founded_year = c.founded_year;
+                    profile = c.profile;
+                    founded_country = c.founded_country;
+                    office_locations = c.office_locations;
+                    social_medias = c.social_medias;
+                    image = c.image;
+                    linkedin = c.linkedin;
+                    company_manager_ids = c.company_manager_ids;
+                    job_posting_ids = c.job_posting_ids;
+                    reviews_ids = c.reviews_ids;
+                    timestamp = c.timestamp;
+                    seen = c.seen + 1;
+                };
+
+                companies.put(c.id, updatedCompany);
+
+                return #ok();
+            };
+        };
+    };
+
     // Check if a user is a manager of a company
     public shared func checkCompanyManager(company : Company, user_id : Principal) : async Bool {
         let company_manager_ids : [Text] = company.company_manager_ids;
@@ -381,10 +397,6 @@ actor Company {
             };
             case (?company) {
                 let jobIds = Array.append<Text>(company.job_posting_ids, [job_id]);
-
-                for (job in jobIds.vals()) {
-                    Debug.print(job);
-                };
 
                 let updatedCompany : Company = {
                     id = company_id;
@@ -699,13 +711,6 @@ actor Company {
         return #ok(Vector.toArray(companies));
     };
 
-    // Delete all companies
-    public shared func deleteAllCompany() : async () {
-        for (company in companies.vals()) {
-            ignore companies.remove(company.id);
-        };
-    };
-
     // Add a review to a company
     public shared (msg) func addReview(review : Review.CreateReviewInput) : async Result.Result<(), Text> {
         let user_id = msg.caller;
@@ -908,5 +913,54 @@ actor Company {
         };
 
         return #ok(Vector.toArray(userInvitation));
+    };
+
+
+        // Generates a company with default values
+    public shared func seed_companies() : async Result.Result<(), Text> {
+        let fuzz = Fuzz.Fuzz();
+
+        let amount = fuzz.nat.randomRange(10, 20);
+
+        var curr = 0;
+
+        while (curr < amount) {
+            let id = await Helper.generateUUID();
+
+            let company = {
+                id = id;
+                name = fuzz.text.randomText(fuzz.nat.randomRange(5, 30));
+                founded_year = fuzz.nat.randomRange(2000, 2023);
+                profile = fuzz.text.randomText(fuzz.nat.randomRange(75, 500));
+                founded_country = fuzz.text.randomText(fuzz.nat.randomRange(10, 30));
+                office_locations = fuzz.array.randomArray(fuzz.nat.randomRange(1, 4), func() : Text {
+                    return fuzz.text.randomText(fuzz.nat.randomRange(10, 30));
+                });
+                social_medias = fuzz.array.randomArray(fuzz.nat.randomRange(1, 4), func() : Text {
+                    return fuzz.text.randomText(fuzz.nat.randomRange(10, 30));
+                });
+                image = Blob.fromArray([0]);
+                linkedin = fuzz.text.randomText(fuzz.nat.randomRange(5, 30));
+                company_manager_ids = [];
+                job_posting_ids = [];
+                reviews_ids = [];
+                timestamp = Time.now();
+                seen = fuzz.nat.randomRange(0, 100);
+            };
+
+            companies.put(company.id, company);
+
+            curr += 1;
+        };
+
+        return #ok();
+    };
+
+    
+    // Delete all companies
+    public shared func cleanCompanies() : async () {
+        for (company in companies.vals()) {
+            ignore companies.remove(company.id);
+        };
     };
 };

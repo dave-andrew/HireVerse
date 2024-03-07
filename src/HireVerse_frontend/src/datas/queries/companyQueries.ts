@@ -87,14 +87,21 @@ export function getCompany(companyId: string | undefined) {
     const { getCompanyService } = useService();
     return useQuery({
         queryKey: ["company", companyId],
+
         queryFn: async () => {
             if (!companyId) {
                 return;
             }
 
-            const response = await getCompanyService().then((s) => s.getCompany(companyId));
+            const response = await getCompanyService()
+                .then((s) => s.getCompany(companyId))
+                .catch((e) => console.error(e));
 
             if (isOk(response)) {
+                getCompanyService()
+                    .then((s) => s.viewCompany(companyId))
+                    .catch((e) => console.error(e));
+
                 return response.ok;
             }
             return null;
