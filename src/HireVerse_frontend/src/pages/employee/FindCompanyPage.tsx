@@ -7,23 +7,22 @@ import useService from "../../hooks/useService";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { useNavigate } from "react-router-dom";
 import imageHandler from "../../utils/imageHandler";
-import canisterInjector from "../../utils/canisterInjector";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { useForm } from "react-hook-form";
 import CompanyFilter, { IFilterCompanyForm } from "../../components/form/CompanyFilter";
-import { getFilterCompany} from "../../datas/queries/jobQueries";
+import { getFilterCompany } from "../../datas/queries/jobQueries";
 
 export interface IQueryCompanyFilter {
-    location: string,
-    industries: string,
-    experience: string
+    location: string;
+    industries: string;
+    experience: string;
 }
 
-const defaultValue : IQueryCompanyFilter = {
+const defaultValue: IQueryCompanyFilter = {
     location: "",
     industries: "",
-    experience: ""
-}
+    experience: "",
+};
 
 export default function FindCompanyPage() {
     const nav = useNavigate();
@@ -35,20 +34,16 @@ export default function FindCompanyPage() {
     const [resultCompanies, setResultCompanies] = useState<Company[]>();
     const [filter, setFilter] = useState<IFilterCompanyForm>(defaultValue);
     const { detector, isIntersecting } = useInfiniteScroll();
-    const { register, control, getValues, formState} = useForm<IQueryCompanyFilter>({
+    const { register, control, getValues, formState } = useForm<IQueryCompanyFilter>({
         defaultValues: defaultValue,
     });
-
-    // Initialize isFetching state
-    const [isFetching, setIsFetching] = useState<boolean>(false);
+    const { data: company, refetch: reGetFilteredCompany, fetchNextPage, hasNextPage, isFetching } = getFilterCompany(filter, getValues);
 
     useEffect(() => {
-        if (detector && isIntersecting && !isFetching) {
+        if (isIntersecting && !isFetching) {
             fetchNextPage();
         }
-    }, [detector, isIntersecting, isFetching]);
-
-    const { data: company, refetch: reGetFilteredCompany, fetchNextPage, hasNextPage } = getFilterCompany(filter, getValues);
+    }, [isIntersecting]);
 
     useEffect(() => {
         const searchJob = async () => {
@@ -84,8 +79,8 @@ export default function FindCompanyPage() {
     return (
         <FrontPageLayout>
             <div className="flex flex-col overflow-hidden">
-                <div className="h-fit w-full place-items-center bg-[url(src/HireVerse_frontend/backgrounds/subtle-prism.svg)] shadow-md">
-                    <div className="h-[100vh] flex flex-col place-items-center gap-8">
+                <div className="h-fit w-full place-items-center bg-[url(backgrounds/subtle-prism.svg)] shadow-md">
+                    <div className="flex h-[100vh] flex-col place-items-center gap-8">
                         <div className="flex flex-col items-center justify-center">
                             <div className="flex w-full flex-col gap-3 self-start">
                                 <h3 className="text-4xl font-bold lg:text-5xl">Popular Companies</h3>
@@ -162,7 +157,7 @@ export default function FindCompanyPage() {
                             </div>
                             <div className="flex flex-row gap-4">
                                 <CompanyFilter onApplyFilter={(data) => setFilter(data)} />
-                                <div className="h-[70vh] grid grow grid-cols-2 gap-4 pr-4 overflow-y-scroll">
+                                <div className="grid h-[70vh] grow grid-cols-2 gap-4 overflow-y-scroll pr-4">
                                     {searchCompany?.map((cp, index) => {
                                         return (
                                             <CardLayout
@@ -209,6 +204,7 @@ export default function FindCompanyPage() {
                                         );
                                     })}
                                 </div>
+                                <div ref={detector}></div>
                             </div>
                         </div>
                     </div>

@@ -16,7 +16,6 @@ import { InfiniteData } from "@tanstack/react-query";
 import { getFilteredJobs } from "../../datas/queries/jobQueries";
 import WrappedAutoDropdown from "../../components/form/WrappedAutoDropdown";
 import { getCompanyCountries } from "../../datas/queries/companyQueries";
-import canisterInjector from "../../utils/canisterInjector";
 
 export interface IQueryFilterSortForm {
     country: string;
@@ -69,8 +68,8 @@ export default function FindJobs() {
 
     return (
         <FrontPageLayout>
-            <div className="flex flex-col place-items-center gap-20 pb-20">
-                <div className={`w-full bg-[url(${canisterInjector("backgrounds/subtle-prism.svg")})] shadow-md md:h-[360px] lg:h-[480px]`}>
+            <div className="flex snap-y flex-col place-items-center gap-20 pb-20">
+                <div className={`w-full snap-center bg-[url(backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[640px]`}>
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
                         <div className="flex w-full flex-col gap-5 p-8 md:w-2/6">
                             <h3 className="m-0 p-0 text-4xl font-bold lg:text-5xl">Find Your Dream Job Now.</h3>
@@ -79,14 +78,12 @@ export default function FindJobs() {
                                 experience. Start exploring today for a brighter future and take the first step towards a fulfilling career.
                             </p>
                         </div>
-                        <img
-                            className="hidden md:block md:h-[240px] md:w-[240px] lg:h-[320px] lg:w-[320px]"
-                            src="/storyset/resume-folder-cuate.png"
-                            alt=""
-                        />
+                        <iframe
+                            className="hidden h-[500px] w-[500px] xl:block"
+                            src="https://lottie.host/embed/4964a47d-ebfc-4dc3-a211-d7af1866255f/7fZu5T6gmI.json"></iframe>
                     </div>
                 </div>
-                <div className="relative m-auto flex flex-col gap-10 pb-10 pb-5 md:min-w-[1000px] md:max-w-[1000px] lg:min-w-[1200px] lg:max-w-[1200px]">
+                <div className="relative m-auto flex snap-center flex-col gap-10 pb-10 pb-5 md:min-w-[1000px] md:max-w-[1000px] lg:min-w-[1200px] lg:max-w-[1200px]">
                     <div className="sticky top-0 z-50 flex w-full flex-row gap-5 bg-white p-3">
                         <JobFilter onApplyFilter={(data) => setFilter(data)} />
                         <CardLayout className="flex w-full flex-row items-center">

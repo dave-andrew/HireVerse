@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import FindJobs from "./pages/employee/FindJobsPage";
 import RegisterCompanyPage from "./pages/employers/RegisterCompanyPage";
 import FindCompanyPage from "./pages/employee/FindCompanyPage";
@@ -103,7 +103,6 @@ const protector: RouterProtector[] = [
         element: <EmployerProtectedRoutes />,
         children: backRoutes,
     },
-    ...otherRoutes,
 ];
 
 const fonts = [
@@ -153,7 +152,7 @@ function App() {
     }, []);
 
     return (
-        <HashRouter>
+        <BrowserRouter>
             <Routes>
                 {protector.map((route, index) => (
                     <Route
@@ -168,8 +167,15 @@ function App() {
                         ))}
                     </Route>
                 ))}
+                {otherRoutes.map((route, index) => (
+                    <Route
+                        key={index}
+                        path={route.path}
+                        element={route.element}
+                    />
+                ))}
             </Routes>
-        </HashRouter>
+        </BrowserRouter>
     );
 }
 
