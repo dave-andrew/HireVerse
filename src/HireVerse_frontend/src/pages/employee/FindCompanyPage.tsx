@@ -66,6 +66,11 @@ export default function FindCompanyPage() {
         reGetFilteredCompany();
     }, [filter]);
 
+    useEffect(() => {
+        setResultCompanies(company?.pages[0]);
+        setSearchCompany(resultCompanies);
+    }, [])
+
     return (
         <FrontPageLayout>
             <div className="flex flex-col overflow-hidden">
