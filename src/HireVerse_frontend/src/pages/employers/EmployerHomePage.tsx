@@ -6,5 +6,10 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 
 export default function EmployerHomePage() {
     const [selectedCompany, setSelectedCompany] = useLocalStorage<Company | null>("selectedCompany", null);
-    return <ManagementPageLayout>{selectedCompany ? <ManageCompanyPage /> : <EmptyPage />}</ManagementPageLayout>;
+    return (
+        <>
+            {" "}
+            <ManagementPageLayout>{selectedCompany ? <ManageCompanyPage /> : <EmptyPage />}</ManagementPageLayout>
+        </>
+    );
 }

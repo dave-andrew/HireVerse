@@ -20,7 +20,7 @@ export const defaultToastOptions = {
 
 export default function ManagementPageLayout({ children }: Props) {
     return (
-        <div className="bg-signature-gray flex min-h-[100vh] flex-row">
+        <div className="bg-signature-gray flex flex-row">
             <ManagementBars>{children}</ManagementBars>
             <ToastContainer />
         </div>
