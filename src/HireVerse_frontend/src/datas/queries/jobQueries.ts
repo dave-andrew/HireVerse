@@ -5,7 +5,7 @@ import { IFilterForm } from "../../components/form/JobFilter";
 import { JobFilterInput } from "../../../../../.dfx/local/canisters/HireVerse_job/service.did";
 import convertNullFormat from "../../utils/convertNullFormat";
 import { IQueryFilterSortForm } from "../../pages/employee/FindJobsPage";
-import { JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import { Company, JobManagerFilterInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { IQuerySortForm } from "../../pages/employers/CompanyJobsPage";
 import { IJobItem } from "../../components/job/JobItem";
 import { IJobDetail } from "../../components/job/JobDetail";
@@ -157,14 +157,12 @@ export function getFilteredJobs(filters: IFilterForm, getQueryFilters: () => IQu
     });
 }
 
-export function getFilterCompany(filter: IFilterCompanyForm, getValues: () => IQueryCompanyFilter) {
+export function getFilterCompany(filter: IFilterCompanyForm) {
     const { getCompanyService } = useService();
 
     const getConvertedFilters = () => {
-        const values = getValues();
+        console.log(filter)
         const companyFilter: FilterCompany = {
-            experiences: convertNullFormat(filter.experience, ""),
-            industries: convertNullFormat(filter.industries, ""),
             location: convertNullFormat(filter.location, ""),
         };
         return companyFilter;
@@ -177,7 +175,26 @@ export function getFilterCompany(filter: IFilterCompanyForm, getValues: () => IQ
                 .then((s) => s.getFilterCompanies(BigInt(pageParam), BigInt(10), getConvertedFilters()))
                 .catch((e) => console.error(e));
             if (isOk(response)) {
-                return response.ok;
+                const companies = response.ok;
+
+                return companies.map((company) => {
+                    return {
+                        'id': company.id,
+                        'social_medias': company.social_medias,
+                        'linkedin': company.linkedin,
+                        'job_posting_ids': company.job_posting_ids,
+                        'office_locations': company.office_locations,
+                        'name': company.name,
+                        'seen': company.seen,
+                        'company_manager_ids': company.company_manager_ids,
+                        'founded_year': company.founded_year,
+                        'reviews_ids': company.reviews_ids,
+                        'timestamp': company.timestamp,
+                        'image': company.image,
+                        'founded_country': company.founded_country,
+                        'profile': company.profile,
+                    } as Company;
+                });
             }
             return null;
         },

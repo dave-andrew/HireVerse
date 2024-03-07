@@ -52,6 +52,8 @@ export default function ManageCompanyPage() {
             }
             return prev;
         });
+
+        window.location.reload()
     };
 
     function getBgColor(industry: string, type: string = "bg") {
