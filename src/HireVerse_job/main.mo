@@ -95,6 +95,8 @@ actor Job {
 
    let jobs = TrieMap.TrieMap<Text, Job>(Text.equal, Text.hash);
 
+
+   // Create a job with default values
    public shared func generateJob(company_id : Text) : async () {
 
       let job : Job = {
@@ -117,6 +119,8 @@ actor Job {
       jobs.put(job.id, job);
    };
 
+
+   // Create job with user inputs
    public shared (msg) func createJob(newJob : CreateJobInput) : async Result.Result<Job, Text> {
       let id = await Helper.generateUUID();
 
@@ -172,6 +176,8 @@ actor Job {
       };
    };
 
+
+
    public shared (msg) func createJobForce(newJob : CreateJobInput) : async Result.Result<Job, Text> {
       let id = await Helper.generateUUID();
 
@@ -219,6 +225,8 @@ actor Job {
       return #ok(job);
    };
 
+
+   // Update job with user inputs
    public query (msg) func updateJob(id : Text, job : Job) : async Result.Result<(), Text> {
 
       if (Principal.isAnonymous(msg.caller)) {
@@ -229,6 +237,8 @@ actor Job {
       return #ok();
    };
 
+
+   // Delete job by id
    public shared (msg) func deleteJob(id : Text) : async Result.Result<?Job, Text> {
 
       if (Principal.isAnonymous(msg.caller)) {
@@ -238,6 +248,8 @@ actor Job {
       #ok(jobs.remove(id));
    };
 
+
+   // Get job by id
    public shared query (msg) func getJob(id : Text) : async Result.Result<Job, Text> {
 
       if (Principal.isAnonymous(msg.caller)) {
@@ -255,6 +267,8 @@ actor Job {
       };
    };
 
+
+   // Get full job by id
    public shared (msg) func getFullJob(id : Text) : async Result.Result<FullJob, Text> {
 
       let user_id = msg.caller;
@@ -308,10 +322,14 @@ actor Job {
       };
    };
 
+
+   // Get all jobs in the system
    public shared query func getAllJobs() : async Result.Result<[Job], Text> {
       return #ok(Iter.toArray(jobs.vals()));
    };
 
+
+   // Get all available industries in the system
    public shared query func getAllIndustry() : async Result.Result<[Text], Text> {
       let jobsList = Iter.toArray(jobs.vals());
       let industryList = Vector.Vector<Text>();
@@ -325,6 +343,8 @@ actor Job {
       return #ok(Vector.toArray<Text>(industryList));
    };
 
+
+   // Get job industries by company id
    public shared composite query func getCompanyJobIndustries(company_id : Text) : async Result.Result<[Text], Text> {
       let company = await Company.getCompany(company_id);
 
@@ -352,6 +372,8 @@ actor Job {
       };
    };
 
+
+   // Get jobs by company id
    public shared composite query func getJobs(startFrom : Nat, amount : Nat, jobFilters : JobFilterInput) : async Result.Result<[Job], Text> {
       var jobsList = Iter.toArray(jobs.vals());
 
@@ -525,6 +547,8 @@ actor Job {
       return #ok(Iter.toArray(Array.slice<Job>(jobsList, startFrom, startFrom + amount)));
    };
 
+
+   // Search jobs by position and country
    public shared query func searchJobs(position : Text, country : Text) : async Result.Result<[Job], Text> {
       let jobsList = Iter.toArray(jobs.vals());
 
@@ -547,6 +571,8 @@ actor Job {
       );
    };
 
+
+    // Get all jobs by company id and filter
    public shared composite query func getJobPostedByCompany(company_id : Text, startFrom : Nat, amount : Nat, filter : JobManagerFilterInput) : async Result.Result<[Job], Text> {
       let company = await Company.getCompany(company_id);
 
@@ -655,12 +681,17 @@ actor Job {
          };
       };
    };
+
+
+   // Delete all jobs in the system
    public shared func deleteAllJobs() : async () {
       for (job in jobs.vals()) {
          ignore jobs.remove(job.id);
       };
    };
 
+
+   // Toggle Job Visibility
    public shared (msg) func toggleJobVisibility(job_id : Text) : async Result.Result<(), Text> {
       let user_id = msg.caller;
 
@@ -722,6 +753,8 @@ actor Job {
       return #ok();
    };
 
+
+    // Get all jobs by filters
    public shared composite query func getFilterCompanies(startFrom : Nat, amount : Nat, companyFilters : FilterCompany) : async Result.Result<[Company.Company], Text> {
       let jobsList = Iter.toArray(jobs.vals());
       var companyList = Vector.Vector<Company.Company>();
