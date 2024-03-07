@@ -52,8 +52,6 @@ actor Company {
 
     type FilterCompany = {
         location: ?Text;
-        industries: ?Text;
-        experiences: ?Text;
     };
 
     type Invite = {
@@ -885,18 +883,6 @@ actor Company {
                     companyList,
                     func(c : Company) : Bool {
                         Array.find<Text>(c.office_locations, func(p : Text) : Bool { p == location }) != null;
-                    },
-                );
-            };
-        };
-
-        switch(companyFilters.experiences) {
-            case null {};
-            case (?experiences) {
-                companyList := Array.filter<Company>(
-                    companyList,
-                    func(c : Company) : Bool {
-                        Array.find<Text>(c.reviews_ids, func(p : Text) : Bool { p == experiences }) != null;
                     },
                 );
             };

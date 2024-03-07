@@ -6,9 +6,7 @@ import { useEffect } from "react";
 import handleKeyDown from "../../utils/handleKeyDown";
 
 export interface IFilterCompanyForm {
-   location: string,
-   industries: string,
-   experience: string
+   location: string
 }
 
 interface Props {
@@ -17,20 +15,21 @@ interface Props {
 
 export const defaultValues: IFilterCompanyForm = {
    location: "",
-   industries: "",
-   experience: ""
 };
 
 export default function CompanyFilter({ onApplyFilter }: Props) {
 
    const { data: industries, refetch: getIndustries } = getCompanies();
-   const { register, control, handleSubmit } = useForm<IFilterCompanyForm>({
+   const { register, control, getValues, handleSubmit } = useForm<IFilterCompanyForm>({
       defaultValues,
    });
 
-   const onSubmit = (data: IFilterCompanyForm) => {
-      onApplyFilter(data);
+   const onSubmit = () => {
+      console.log("hai")
+      onApplyFilter(getValues());
    };
+
+
 
    useEffect(() => {
       getIndustries();
@@ -41,25 +40,31 @@ export default function CompanyFilter({ onApplyFilter }: Props) {
          <CardLayout className="h-[70vh] flex w-72 flex-col gap-2 p-4">
             <div className="p-1 text-lg font-bold">Filter Companies</div>
             <hr />
-            <div className="flex flex-col gap-6 p-4">
-               <input
-                  {...register("location")}
-                  type="text"
-                  className="border-b border-gray-900 outline-0"
-                  onKeyDown={(e) => handleKeyDown(e.key, "Enter", onSubmit)}
-               />
-               <input
-                  {...register("industries")}
-                  type="text"
-                  className="border-b border-gray-900 outline-0"
-                  onKeyDown={(e) => handleKeyDown(e.key, "Enter", onSubmit)}
-               />
+            <div className="flex flex-col gap-6 p-4 w-full">
+               <label htmlFor="location" className="w-full">
+                  <div className="text-xs font-bold">Location</div>
+                  <input
+                     {...register("location")}
+                     type="text"
+                     className="border-b border-gray-900 outline-0 w-full"
+                     onKeyDown={(e) => handleKeyDown(e.key, "Enter", onSubmit)}
+                  />
+               </label>
+               <label htmlFor="industries" className="w-full">
+                  <div className="text-xs font-bold">Industries</div>
+                  <input
+                     type="text"
+                     name="industries"
+                     className="border-b border-gray-900 outline-0 w-full"
+                     // onKeyDown={(e) => handleKeyDown(e.key, "Enter", onSubmit)}
+                  />
+               </label>
             </div>
             <hr />
             <div className="flex flex-col gap-2 p-4">
                <div className="text-xs font-bold">Experience</div>
                <div className="grid grid-cols-2 gap-2">
-               <div className="flex items-center">
+                  <div className="flex items-center">
                      <input
                         type="checkbox"
                         value="full-time"

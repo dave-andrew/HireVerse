@@ -14,14 +14,10 @@ import { getFilterCompany } from "../../datas/queries/jobQueries";
 
 export interface IQueryCompanyFilter {
     location: string;
-    industries: string;
-    experience: string;
 }
 
 const defaultValue: IQueryCompanyFilter = {
     location: "",
-    industries: "",
-    experience: "",
 };
 
 export default function FindCompanyPage() {
@@ -29,15 +25,11 @@ export default function FindCompanyPage() {
     const { getCompanyService } = useService();
     const [shownCompanyId, setShownCompanyId] = useState<string>("");
     const [search, setSearch] = useState<string>("");
-    const [searchCompany, setSearchCompany] = useState<Company[] | undefined>([]);
-    const [popularCompanies, setPopularCompanies] = useState<Company[]>();
-    const [resultCompanies, setResultCompanies] = useState<Company[]>();
+    const [searchCompany, setSearchCompany] = useState<Company[] | null>();
+    const [resultCompanies, setResultCompanies] = useState<Company[] | null>();
     const [filter, setFilter] = useState<IFilterCompanyForm>(defaultValue);
     const { detector, isIntersecting } = useInfiniteScroll();
-    const { register, control, getValues, formState } = useForm<IQueryCompanyFilter>({
-        defaultValues: defaultValue,
-    });
-    const { data: company, refetch: reGetFilteredCompany, fetchNextPage, hasNextPage, isFetching } = getFilterCompany(filter, getValues);
+    const { data: company, refetch: reGetFilteredCompany, fetchNextPage, hasNextPage, isFetching } = getFilterCompany(filter);
 
     useEffect(() => {
         if (isIntersecting && !isFetching) {
@@ -46,18 +38,9 @@ export default function FindCompanyPage() {
     }, [isIntersecting]);
 
     useEffect(() => {
-        const searchJob = async () => {
-            const response = await getCompanyService().then((s) => s.getCompanies());
-            setResultCompanies(response);
-            setSearchCompany(response);
-        };
-        searchJob();
-    }, []);
-
-    useEffect(() => {
         if (search.length > 0) {
             const searched = resultCompanies?.filter((company) => {
-                return company.name.toLowerCase().includes(search.toLowerCase());
+                return company?.name.toLowerCase().includes(search.toLowerCase());
             });
 
             setSearchCompany(searched);
@@ -69,7 +52,11 @@ export default function FindCompanyPage() {
     useEffect(() => {
         if (company && company.pages[0] && !shownCompanyId) {
             setShownCompanyId(company.pages[0][0]?.id);
+        
+            
         }
+        setResultCompanies(company?.pages[0]);
+        setSearchCompany(company?.pages[0]);
     }, [company]);
 
     useEffect(() => {
@@ -88,24 +75,24 @@ export default function FindCompanyPage() {
                             </div>
                             <div className="flex w-full flex-row items-center gap-10">
                                 <div className="grid h-fit grid-cols-2 gap-4 py-8">
-                                    {resultCompanies?.slice(0, 4).map((company: Company) => {
+                                    {resultCompanies?.slice(0, 4).map((company: Company | null) => {
                                         return (
                                             <CardLayout
                                                 className="flex h-32 w-64 p-4 xl:w-80"
-                                                key={company.id}
+                                                key={company?.id}
                                                 onClick={() => {
-                                                    nav(`/company/detail/${company.id}`);
+                                                    nav(`/company/detail/${company?.id}`);
                                                 }}>
                                                 <div className="flex flex-row place-items-center">
                                                     <img
                                                         width="80rem"
                                                         height="auto"
                                                         className="mr-4 aspect-square rounded-xl object-cover"
-                                                        src={imageHandler(company.image)}
+                                                        src={imageHandler(company?.image)}
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">
-                                                        <div className="font-semibold">{company.name}</div>
+                                                        <div className="font-semibold">{company?.name}</div>
                                                         <div>
                                                             TODO: Taroh star disini TODO: Taroh jumlah
                                                             {/* {company.rating} */}
@@ -164,16 +151,16 @@ export default function FindCompanyPage() {
                                                 className="flex flex-col gap-2 rounded-md bg-white px-6 py-5 hover:cursor-pointer hover:bg-gray-100"
                                                 key={index}
                                                 onClick={() => {
-                                                    nav(`/company/detail/${cp.id}`);
+                                                    nav(`/company/detail/${cp?.id}`);
                                                 }}>
                                                 <div className="flex flex-row place-items-center">
                                                     <img
                                                         className="mr-4 aspect-square w-24 rounded-xl object-cover"
-                                                        src={imageHandler(cp.image)}
+                                                        src={imageHandler(cp?.image)}
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">
-                                                        <div className="font-bold">{cp.name}</div>
+                                                        <div className="font-bold">{cp?.name}</div>
                                                         <div>X X X X X 4.9</div>
                                                     </div>
                                                 </div>
@@ -181,22 +168,22 @@ export default function FindCompanyPage() {
                                                     <div className="grid grid-cols-3">
                                                         <div className="flex flex-col">
                                                             <div className="text-sm font-bold">Location:</div>
-                                                            <div>{cp.office_locations[0]}</div>
+                                                            <div>{cp?.office_locations[0]}</div>
                                                         </div>
                                                         <div className="flex flex-col">
                                                             <div className="text-sm font-bold">Country:</div>
-                                                            <div>{cp.founded_country}</div>
+                                                            <div>{cp?.founded_country}</div>
                                                         </div>
                                                         <div className="flex flex-col">
                                                             <div className="text-sm font-bold">Industry:</div>
-                                                            <div>{cp.founded_year.toString()}</div>
+                                                            <div>{cp?.founded_year.toString()}</div>
                                                         </div>
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <div className="text-sm font-bold">Linkedin:</div>
                                                         <div className="flex flex-row place-items-center gap-2">
                                                             <FaLinkedin />
-                                                            {cp.linkedin}
+                                                            {cp?.linkedin}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -204,7 +191,7 @@ export default function FindCompanyPage() {
                                         );
                                     })}
                                 </div>
-                                <div ref={detector}></div>
+                                <div ref={detector}>{hasNextPage}</div>
                             </div>
                         </div>
                     </div>
