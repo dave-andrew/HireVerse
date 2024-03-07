@@ -199,8 +199,9 @@ const jobSeeder = async (jobService: ActorSubclass<_SERVICE_JOB>, companyIds: st
     ];
 
     for (const job of newJobs) {
-        const response = await jobService.createJobForce(job);
+        const response = await jobService.createJobForce(job).catch((e) => console.error(e));
         if (isOk(response)) {
+            console.log(response);
             console.log("Job created");
         }
     }

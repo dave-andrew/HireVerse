@@ -86,7 +86,7 @@ export default function CompanyJobsPage() {
             </WrappedModal>
             {/*<div className="absolute z-0 h-96 w-full bg-[url(/backgrounds/sun-tornado.svg)] bg-cover opacity-50"></div>*/}
             <ManagementPageLayout>
-                <div className="z-10 flex flex-col gap-16 px-14 py-8 opacity-100">
+                <div className="z-10 flex h-full flex-col gap-16 px-14 py-8 opacity-100">
                     <div className="mt-8 text-4xl font-bold">Jobs</div>
                     <div className="flex flex-col gap-4">
                         <div className={"flex h-12 flex-row place-items-end justify-between gap-4"}>
@@ -144,11 +144,10 @@ export default function CompanyJobsPage() {
                                 />
                             ))}
                             {jobs && jobs.length === 0 && (
-                                <div className="col-span-3 flex h-full w-full flex-col items-center justify-center">
-                                    <img
-                                        className="w-1/4 object-cover pt-10"
-                                        src="storyset/empty-street-amico.png"
-                                    />
+                                <div className="col-span-3 flex h-full w-full flex-col items-center justify-center pt-20">
+                                    <iframe
+                                        className="hidden h-[350px] w-[350px] xl:block"
+                                        src="https://lottie.host/embed/57def831-fe52-4518-8ad6-6f77ccd58d31/9Nvm6fotjy.json"></iframe>
                                     <h3 className="m-2">No job found</h3>
                                     <p>Try changing your filter</p>
                                 </div>

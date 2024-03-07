@@ -50,11 +50,9 @@ export default function JobDetail({ jobId }: Props) {
         <CardLayout className="relative h-full overflow-auto">
             {!(jobId && fullJob) ? (
                 <div className="flex h-full w-full flex-col items-center justify-center">
-                    <img
-                        className="w-72"
-                        src="storyset/empty-bro.png"
-                        alt="empty"
-                    />
+                    <iframe
+                        className="hidden h-[200px] w-[200px] xl:block"
+                        src="https://lottie.host/embed/fc97f83d-253b-4e98-a7d5-659944b1e484/cyl5lNhDOU.json"></iframe>
                     <h3 className="m-2">Job not found</h3>
                     <p>Sorry, the job you are looking for is not found</p>
                 </div>
