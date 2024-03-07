@@ -1,7 +1,7 @@
 import CardLayout from "../../layouts/CardLayout";
-import { MdOutlineLocationOn, MdOutlinePeopleAlt, MdOutlineQueryBuilder } from "react-icons/md";
-import React, { useEffect, useRef, useState } from "react";
-import { Company } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import {MdOutlineLocationOn, MdOutlinePeopleAlt, MdOutlineQueryBuilder} from "react-icons/md";
+import React, {useEffect, useRef, useState} from "react";
+import {Company} from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import convertToDate from "../../utils/convertToDate";
 import ProfileEditButton from "../../components/form/ProfileEditButton";
@@ -10,21 +10,21 @@ import imageHandler from "../../utils/imageHandler";
 import EditCompanyModal from "../../components/modal/EditCompanyModal";
 import SocialMediaItem from "../../components/company/SocialMediaItem";
 import purifyDOM from "../../utils/purifyDOM";
-import { getCompanyIndustries } from "../../datas/queries/companyQueries";
+import {getCompanyIndustries} from "../../datas/queries/companyQueries";
 import CompanyDetailReview from "../../components/review/CompanyDetailReview";
-import { useUpdateCompany } from "../../datas/mutations/companyMutations";
-import { FaLinkedin } from "react-icons/fa";
+import {useUpdateCompany} from "../../datas/mutations/companyMutations";
+import {FaLinkedin} from "react-icons/fa";
 import LeaveCompanyModal from "../../components/modal/LeaveCompanyModal";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 interface IManageCompanyForm {
     image: FileList;
 }
 
 export default function ManageCompanyPage() {
-    const { convertImageToBlob } = useImageBlob();
+    const {convertImageToBlob} = useImageBlob();
     const [selectedCompany, setSelectedCompany] = useLocalStorage<Company | null>("selectedCompany", null);
-    const { data: companyIndustries } = getCompanyIndustries(selectedCompany?.id);
+    const {data: companyIndustries} = getCompanyIndustries(selectedCompany?.id);
     const mutation = useUpdateCompany();
     const [isModalShown, setIsModalShown] = useState(false);
     const [isConfirmationModalShown, setIsConfirmationModalShown] = useState(false);
@@ -48,11 +48,26 @@ export default function ManageCompanyPage() {
 
         setSelectedCompany((prev) => {
             if (prev) {
-                return { ...prev, image: blob };
+                return {...prev, image: blob};
             }
             return prev;
         });
     };
+
+    function getBgColor(industry: string, type: string = "bg") {
+        const firstChar = industry.charAt(0).toLowerCase();
+        const charCode = firstChar.charCodeAt(0);
+        if (charCode >= 97 && charCode <= 122) {
+            let hue = ((charCode - 97) / 26) * 360;
+            let lightness = 90;
+            if (type === "text" || type === "border") {
+                // hue = (hue + 180) % 360;
+                lightness -= 70;
+            }
+            return `hsl(${hue}, 100%, ${lightness}%)`;
+        }
+        return "hsl(0, 100%, 90%)";
+    }
 
     useEffect(() => {
         updateCompanyData();
@@ -104,9 +119,13 @@ export default function ManageCompanyPage() {
                                 <div className="flex flex-row place-items-center gap-2">
                                     {companyIndustries?.map((industry, i) => {
                                         return (
-                                            <div
-                                                key={i}
-                                                className="cursor-default rounded-3xl border border-green-400 bg-green-200 px-4 py-1 text-green-700">
+                                            <div key={i}
+                                                 className="cursor-default rounded-3xl border border-green-400 px-4 py-1 "
+                                                 style={{
+                                                     backgroundColor: getBgColor(industry),
+                                                     color: getBgColor(industry, "text"),
+                                                     borderColor: getBgColor(industry, "border"),
+                                                 }}>
                                                 {industry}
                                             </div>
                                         );
@@ -117,7 +136,7 @@ export default function ManageCompanyPage() {
                                         className="hover:bg-signature-gray flex w-fit flex-row items-center gap-3 rounded-md border-[1px] border-blue-500 p-2 pe-3 font-bold text-blue-500 transition-colors *:cursor-pointer"
                                         to={selectedCompany?.linkedin ?? ""}
                                         target="_blank">
-                                        <FaLinkedin />
+                                        <FaLinkedin/>
                                         {/*<div className="text-black">*/}
                                         {selectedCompany?.linkedin}
                                         {/*</div>*/}
@@ -136,7 +155,7 @@ export default function ManageCompanyPage() {
                             <div className="flex flex-col justify-evenly lg:flex-row">
                                 <div className="flex flex-row gap-3">
                                     <div className="flex aspect-square place-items-center rounded-3xl p-2">
-                                        <MdOutlineQueryBuilder size="2rem" />
+                                        <MdOutlineQueryBuilder size="2rem"/>
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-600">Founded</p>
@@ -145,7 +164,7 @@ export default function ManageCompanyPage() {
                                 </div>
                                 <div className="flex flex-row gap-3">
                                     <div className="flex aspect-square place-items-center rounded-3xl p-2">
-                                        <MdOutlineLocationOn size="2rem" />
+                                        <MdOutlineLocationOn size="2rem"/>
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-600">Location</p>
@@ -163,7 +182,7 @@ export default function ManageCompanyPage() {
                                 </div>
                                 <div className="flex flex-row gap-3">
                                     <div className="flex aspect-square place-items-center rounded-3xl p-2">
-                                        <MdOutlinePeopleAlt size="2rem" />
+                                        <MdOutlinePeopleAlt size="2rem"/>
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-600">Visitors</p>
@@ -181,7 +200,7 @@ export default function ManageCompanyPage() {
                                     }}
                                 />
                             </CardLayout>
-                            <CompanyDetailReview companyId={selectedCompany?.id ?? ""} />
+                            <CompanyDetailReview companyId={selectedCompany?.id ?? ""}/>
                         </div>
                     </div>
                 </div>
