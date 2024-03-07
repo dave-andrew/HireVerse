@@ -17,6 +17,7 @@ import TextX "mo:xtended-text/TextX";
 import CharX "mo:xtended-text/CharX";
 
 actor Job {
+    // Job Type Definition
     type Job = {
         id : Text;
         position : Text;
@@ -35,6 +36,7 @@ actor Job {
         status : Text;
     };
 
+    // Input type for creating a job
     type CreateJobInput = {
         position : Text;
         location : Text;
@@ -50,6 +52,7 @@ actor Job {
         employType : Text;
     };
 
+    // Full job type definition, includes company details
     type FullJob = {
         id : Text;
         position : Text;
@@ -68,6 +71,7 @@ actor Job {
         status : Text;
     };
 
+    // Input type for filtering jobs
     type JobFilterInput = {
         position : ?Text;
         country : ?Text;
@@ -86,8 +90,11 @@ actor Job {
         status : ?Text;
     };
 
+    // Storage to store all jobs
     let jobs = TrieMap.TrieMap<Text, Job>(Text.equal, Text.hash);
 
+
+    // Function to create a Job with default values
     public shared func generateJob(company_id : Text) : async () {
 
         let job : Job = {
@@ -110,6 +117,7 @@ actor Job {
         jobs.put(job.id, job);
     };
 
+    // Function to create a Job with user Input
     public shared (msg) func createJob(newJob : CreateJobInput) : async Result.Result<Job, Text> {
         let id = await Helper.generateUUID();
 
@@ -156,6 +164,7 @@ actor Job {
         ignore await Company.addJob(newJob.company_id, id);
         return #ok(job);
     };
+
 
     public shared (msg) func createJobForce(newJob : CreateJobInput) : async Result.Result<Job, Text> {
         let id = await Helper.generateUUID();
@@ -204,6 +213,8 @@ actor Job {
         return #ok(job);
     };
 
+
+    // Function to update a job
     public query (msg) func updateJob(id : Text, job : Job) : async Result.Result<(), Text> {
 
         if (Principal.isAnonymous(msg.caller)) {
@@ -214,6 +225,7 @@ actor Job {
         return #ok();
     };
 
+    // Function to delete a job
     public shared (msg) func deleteJob(id : Text) : async Result.Result<?Job, Text> {
 
         if (Principal.isAnonymous(msg.caller)) {
@@ -223,6 +235,8 @@ actor Job {
         #ok(jobs.remove(id));
     };
 
+
+    // Function to get a job by id
     public shared query (msg) func getJob(id : Text) : async Result.Result<Job, Text> {
 
         if (Principal.isAnonymous(msg.caller)) {
@@ -240,6 +254,8 @@ actor Job {
         };
     };
 
+
+    // Function to get a full job by id
     public shared (msg) func getFullJob(id : Text) : async Result.Result<FullJob, Text> {
 
         let user_id = msg.caller;
@@ -293,10 +309,12 @@ actor Job {
         };
     };
 
+    //  Function to get Full Jobs
     public shared query func getAllJobs() : async Result.Result<[Job], Text> {
         return #ok(Iter.toArray(jobs.vals()));
     };
 
+    // Function to get all available industries options
     public shared query func getAllIndustry() : async Result.Result<[Text], Text> {
         let jobsList = Iter.toArray(jobs.vals());
         let industryList = Vector.Vector<Text>();
@@ -310,6 +328,7 @@ actor Job {
         return #ok(Vector.toArray<Text>(industryList));
     };
 
+    // Function to get all company job industries
     public shared composite query func getCompanyJobIndustries(company_id : Text) : async Result.Result<[Text], Text> {
         let company = await Company.getCompany(company_id);
 
@@ -337,6 +356,8 @@ actor Job {
         };
     };
 
+
+    // Function to get all jobs with the filter
     public shared composite query func getJobs(startFrom : Nat, amount : Nat, jobFilters : JobFilterInput) : async Result.Result<[Job], Text> {
         var jobsList = Iter.toArray(jobs.vals());
 
@@ -511,6 +532,8 @@ actor Job {
         return #ok(Iter.toArray(Array.slice<Job>(jobsList, startFrom, startFrom + amount)));
     };
 
+
+    // Function to search jobs
     public shared query func searchJobs(position : Text, country : Text) : async Result.Result<[Job], Text> {
         let jobsList = Iter.toArray(jobs.vals());
 
@@ -533,6 +556,8 @@ actor Job {
         );
     };
 
+
+    // Function to get all job posted by a company id and filter
     public shared composite query func getJobPostedByCompany(company_id : Text, startFrom : Nat, amount : Nat, filter : JobManagerFilterInput) : async Result.Result<[Job], Text> {
         let company = await Company.getCompany(company_id);
 
@@ -634,12 +659,17 @@ actor Job {
             };
         };
     };
+
+
+    // Function to delete all jobs
     public shared func deleteAllJobs() : async () {
         for (job in jobs.vals()) {
             ignore jobs.remove(job.id);
         };
     };
 
+
+    // Function to toggle job visibility
     public shared (msg) func toggleJobVisibility(job_id : Text) : async Result.Result<(), Text> {
         let user_id = msg.caller;
 

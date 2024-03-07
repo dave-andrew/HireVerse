@@ -51,6 +51,7 @@ actor Review {
 
     let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
 
+    // Function to add a review
     public shared (msg) func addReview(user_id: Principal, newReview : CreateReviewInput) : async Result.Result<Text, Text> {
 
         if (Principal.isAnonymous(msg.caller)) {
@@ -79,6 +80,7 @@ actor Review {
         #ok(review.id);
     };
 
+    // Function to get all reviews posted by someone
     public shared query (msg) func getSelfReview(companyId : Text) : async Result.Result<Review, Text> {
             if (Principal.isAnonymous(msg.caller)) {
                 return #err("You must be logged in to view your review");
@@ -93,6 +95,7 @@ actor Review {
             return #err("Review not found");
     };
 
+    // Function to update review
     public shared (msg) func updateReview(review : Review) : async Result.Result<Text, Text> {
 
         if (Principal.isAnonymous(msg.caller)) {
@@ -107,6 +110,7 @@ actor Review {
         #ok(review.id);
     };
 
+    // Function to delete review
     public shared (msg) func deleteReview(id : Text) : async Result.Result<?Review, Text> {
 
         if (Principal.isAnonymous(msg.caller)) {
@@ -129,6 +133,7 @@ actor Review {
         #ok(reviews.remove(id));
     };
 
+    // Function to get review by id
     public func getReview(id : Text) : async Result.Result<Review, Text> {
         let data = reviews.get(id);
 
@@ -142,6 +147,7 @@ actor Review {
         };
     };
 
+    // Function to get all Reviews
     public query func getReviews(reviewsId : [Text], order : Text) : async Result.Result<[Review], Text> {
         let reviewsList = Vector.Vector<Review>();
 
@@ -218,6 +224,7 @@ actor Review {
         return #ok(Vector.toArray(reviewsList));
     };
 
+    // Function to get review summaries
     public query func getReviewSummaries(reviewIds : [Text]) : async Result.Result<ReviewSummary, Text> {
         var cultureRating = 0;
         var seniorManagementRating = 0;
@@ -257,6 +264,7 @@ actor Review {
         return #ok(summary);
     };
 
+    // Function to remove all reviews
     public shared (msg) func removeAllReviews() : async () {
 
         if (Principal.isAnonymous(msg.caller)) {

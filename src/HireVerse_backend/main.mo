@@ -11,8 +11,11 @@ import Helper "canister:HireVerse_helper";
 import Vector "mo:vector/Class";
 import TextX "mo:xtended-text/TextX";
 
+
+// The Database actor is responsible for managing the user data.
 actor Database {
 
+    // User type
     type User = {
         internet_identity : Principal;
         first_name : Text;
@@ -23,12 +26,13 @@ actor Database {
         timestamp : Time.Time;
     };
 
+    // TrieMap to store users, with Principal as the key and User as the value
     let users = TrieMap.TrieMap<Principal, User>(Principal.equal, Principal.hash);
 
     // Data Seeder
-
     public func seedUser() : async () {
 
+        // Get a test principal
         let id3 = await Helper.testPrincipal();
 
         let user3 = {
@@ -44,6 +48,7 @@ actor Database {
         users.put(user3.internet_identity, user3);
     };
 
+    // Register a new user
     public shared (msg) func register(first_name : Text, last_name : Text, email : Text, birth_date : Text) : async Result.Result<User, Text> {
 
         let user_id = msg.caller;
@@ -74,11 +79,14 @@ actor Database {
         return #ok(user);
     };
 
+    // Function to get a user by their principal
     public query (msg) func getUser(principal : Principal) : async ?User {
 
         return users.get(principal);
     };
 
+
+    // Function to update a user by their principal
     public query (msg) func updateUser(principal : Principal, user : User) : async () {
 
         if (principal != msg.caller) {
@@ -88,6 +96,7 @@ actor Database {
         users.put(principal, user);
     };
 
+    // Function to delete a user by their principal
     public query (msg) func deleteUser(principal : Principal) : async ?User {
 
         if (principal != msg.caller) {
@@ -101,11 +110,11 @@ actor Database {
         return "Hello, " # Principal.toText(message.caller) # "!";
     };
 
-
     public shared (msg) func greetFunction() : async Text {
         return "Hello, " # Principal.toText(msg.caller) # "!";
     };
 
+    // Function to get all users in the database
     public query func getAllUsers() : async Result.Result<[User], Text> {
 
         var allUsers = Vector.Vector<User>();
@@ -117,6 +126,7 @@ actor Database {
         return #ok(Vector.toArray(allUsers));
     };
 
+    // Function to get a user by their email
     public query func getUserByEmail(user_email : Text) : async Result.Result<Principal, Text> {
         for (user in users.vals()) {
             let tempEmail = TextX.toLower(user.email);
@@ -128,6 +138,7 @@ actor Database {
         return #err("User not found");
     };
 
+    // Function to get a user object by their email
     public query func getUserObjectByEmail(user_email : Text) : async Result.Result<User, Text> {
         for (user in users.vals()) {
             let tempEmail = TextX.toLower(user.email);
