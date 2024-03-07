@@ -51,7 +51,7 @@ export default function CompanyFilter({ onApplyFilter }: Props) {
                   />
                </label>
                <label htmlFor="industries" className="w-full">
-                  <div className="text-xs font-bold">Industries</div>
+                  <div className="text-xs font-bold">Industry</div>
                   <input
                      {...register("industries")}
                      type="text"
