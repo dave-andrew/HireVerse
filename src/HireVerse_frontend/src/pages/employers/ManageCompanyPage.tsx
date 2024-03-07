@@ -154,7 +154,7 @@ export default function ManageCompanyPage() {
                                         <div className="flex flex-row">
                                             {selectedCompany?.office_locations?.map((location, i) => {
                                                 return (
-                                                    <div key ={i}>
+                                                    <div key={i} className="flex flex-row gap-1 ">
                                                         {i !== 0 &&
                                                             <p className="font-semibold pr-1">, </p>}
                                                         <p className="font-semibold">{location}</p>
