@@ -71,9 +71,7 @@ export default function CompanyDetailPage() {
                                             to={company?.linkedin ?? ""}
                                             target="_blank">
                                             <FaLinkedin />
-                                            {/*<div className="text-black">*/}
                                             {company?.linkedin}
-                                            {/*</div>*/}
                                         </Link>
                                         {company?.social_medias?.map((contact, i) => {
                                             return (

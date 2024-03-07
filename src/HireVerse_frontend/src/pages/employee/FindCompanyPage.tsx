@@ -5,12 +5,14 @@ import CardLayout from "../../layouts/CardLayout";
 import { useEffect, useState } from "react";
 import useService from "../../hooks/useService";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import imageHandler from "../../utils/imageHandler";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { useForm } from "react-hook-form";
 import CompanyFilter, { IFilterCompanyForm } from "../../components/form/CompanyFilter";
 import { getFilterCompany } from "../../datas/queries/jobQueries";
+import BriefCompanyReview from "../../components/review/BriefCompanyReview";
+import StarReview from "../../components/review/StarReview";
 
 export interface IQueryCompanyFilter {
     location: string;
@@ -23,6 +25,9 @@ const defaultValue: IQueryCompanyFilter = {
 };
 
 export default function FindCompanyPage() {
+
+    const { getJobService } = useService();
+
     const nav = useNavigate();
     const [shownCompanyId, setShownCompanyId] = useState<string>("");
     const [search, setSearch] = useState<string>("");
@@ -53,8 +58,8 @@ export default function FindCompanyPage() {
     useEffect(() => {
         if (company && company.pages[0] && !shownCompanyId) {
             setShownCompanyId(company.pages[0][0]?.id);
-        
-            
+
+
         }
         setResultCompanies(company?.pages[0]);
         setSearchCompany(company?.pages[0]);
@@ -100,18 +105,8 @@ export default function FindCompanyPage() {
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">
-                                                        <div className="font-semibold">{company?.name}</div>
-                                                        <div>
-                                                            TODO: Taroh star disini TODO: Taroh jumlah
-                                                            {/* {company.rating} */}
-                                                        </div>
-                                                        <div className="text-xs">
-                                                            TODO: review count
-                                                            {/* {
-                                                                    company.reviewCount
-                                                                }{" "} */}
-                                                            Reviews
-                                                        </div>
+                                                        <div className="font-semibold mb-2">{company?.name}</div>
+                                                        <BriefCompanyReview company_id={company?.id || ""} />
                                                     </div>
                                                 </div>
                                             </CardLayout>
@@ -152,52 +147,62 @@ export default function FindCompanyPage() {
                             </div>
                             <div className="flex flex-row gap-4">
                                 <CompanyFilter onApplyFilter={(data) => setFilter(data)} />
-                                <div className="grid h-[70vh] grow grid-cols-2 gap-4 overflow-y-scroll pr-4">
-                                    {searchCompany?.map((cp, index) => {
-                                        return (
-                                            <CardLayout
-                                                className="flex flex-col gap-2 rounded-md bg-white px-6 py-5 hover:cursor-pointer hover:bg-gray-100"
-                                                key={index}
-                                                onClick={() => {
-                                                    nav(`/company/detail/${cp?.id}`);
-                                                }}>
-                                                <div className="flex flex-row place-items-center">
-                                                    <img
-                                                        className="mr-4 aspect-square w-24 rounded-xl object-cover"
-                                                        src={imageHandler(cp?.image)}
-                                                        alt="Company Image"
-                                                    />
-                                                    <div className="flex flex-col">
-                                                        <div className="font-bold">{cp?.name}</div>
-                                                        <div>X X X X X 4.9</div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col gap-4">
-                                                    <div className="grid grid-cols-3">
+                                <div className="grid h-[70vh] grow lg:grid-cols-2 md:grid-cols-1 gap-4 overflow-y-scroll pr-2">
+                                    {searchCompany?.length === 0 ? (
+                                        <div className="flex justify-center">
+                                            {/* TODO: Image movingnya klo companynya ga ketemu */}
+                                            Company ga ketemu
+                                        </div>
+                                    ) : (
+                                        searchCompany?.map((cp, index) => {
+                                            return (
+                                                <CardLayout
+                                                    className="h-fit flex flex-col gap-2 rounded-md bg-white px-6 py-5 hover:cursor-pointer hover:bg-gray-100"
+                                                    key={index}
+                                                    onClick={() => {
+                                                        nav(`/company/detail/${cp?.id}`);
+                                                    }}>
+                                                    <div className="flex flex-row place-items-center">
+                                                        <img
+                                                            className="mr-4 aspect-square w-24 rounded-xl object-cover"
+                                                            src={imageHandler(cp?.image)}
+                                                            alt="Company Image"
+                                                        />
                                                         <div className="flex flex-col">
-                                                            <div className="text-sm font-bold">Location:</div>
-                                                            <div>{cp?.office_locations[0]}</div>
-                                                        </div>
-                                                        <div className="flex flex-col">
-                                                            <div className="text-sm font-bold">Country:</div>
-                                                            <div>{cp?.founded_country}</div>
-                                                        </div>
-                                                        <div className="flex flex-col">
-                                                            <div className="text-sm font-bold">Industry:</div>
-                                                            <div>{cp?.founded_year.toString()}</div>
+                                                            <div className="font-bold mb-1">{cp?.name}</div>
+                                                            <StarReview company_id={cp?.id || ""} />
                                                         </div>
                                                     </div>
-                                                    <div className="flex flex-col">
-                                                        <div className="text-sm font-bold">Linkedin:</div>
-                                                        <div className="flex flex-row place-items-center gap-2">
-                                                            <FaLinkedin />
-                                                            {cp?.linkedin}
+                                                    <div className="flex flex-col gap-4">
+                                                        <div className="grid grid-cols-3">
+                                                            <div className="flex flex-col">
+                                                                <div className="text-sm font-bold">Location:</div>
+                                                                <div>{cp?.office_locations[0]}</div>
+                                                            </div>
+                                                            <div className="flex flex-col">
+                                                                <div className="text-sm font-bold">Country:</div>
+                                                                <div>{cp?.founded_country}</div>
+                                                            </div>
+                                                            <div className="flex flex-col">
+                                                                <div className="text-sm font-bold">Industry:</div>
+                                                                <div>{cp?.founded_year.toString()}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <div className="text-sm font-bold mb-2">Linkedin:</div>
+                                                            <Link
+                                                                className="hover:bg-signature-gray flex w-fit flex-row items-center gap-3 rounded-md border-[1px] border-blue-500 p-2 pt-1 pb-1 font-bold text-blue-500 transition-colors *:cursor-pointer text-xs"
+                                                                to={cp?.linkedin ?? ""}
+                                                                target="_blank">
+                                                                <FaLinkedin />
+                                                                {cp?.linkedin}
+                                                            </Link>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </CardLayout>
-                                        );
-                                    })}
+                                                </CardLayout>
+                                            );
+                                        })
+                                    )}
                                 </div>
                                 <div ref={detector}>{hasNextPage}</div>
                             </div>
