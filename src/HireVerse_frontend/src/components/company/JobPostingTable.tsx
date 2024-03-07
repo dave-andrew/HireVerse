@@ -1,5 +1,14 @@
 import { FaRegTrashAlt } from "react-icons/fa";
 
+
+/**
+ * Not used anymore!
+ * JobPostingTable is a functional component that renders a table of job postings.
+ * Each job posting includes details such as position, industry, location, short description, and salary.
+ * The table also includes an action button for each job posting, represented by a trash icon.
+ *
+ * @returns JSX.Element A table of job postings.
+ */
 export default function JobPostingTable() {
     let postingData = [
         {

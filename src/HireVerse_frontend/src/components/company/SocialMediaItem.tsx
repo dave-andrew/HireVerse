@@ -1,10 +1,20 @@
 import { FaDiscord, FaEnvelopeOpenText, FaFacebookF, FaInstagram, FaTwitter, FaWhatsapp, FaYoutube } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+
+/**
+ * Props interface for SocialMediaItem component
+ * @interface
+ * @property {string} url - The URL of the social media platform
+ */
 interface Props {
     url: string;
 }
 
+/**
+ * Icons object containing the social media icons
+ * @type {Object}
+ */
 const Icons = {
     facebook: <FaFacebookF />,
     twitter: <FaTwitter />,
@@ -16,6 +26,12 @@ const Icons = {
     default: <FaEnvelopeOpenText />,
 };
 
+
+/**
+ * SocialMediaItem component
+ * @param {Props} props - The properties passed to the component
+ * @returns {JSX.Element} - The rendered component
+ */
 export default function SocialMediaItem({ url }: Props) {
     const getIcon = (message: string) => {
         for (const key in Icons) {

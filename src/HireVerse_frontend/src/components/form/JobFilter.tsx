@@ -11,6 +11,17 @@ import { getJobIndustries } from "../../datas/queries/jobQueries";
 import { MdCurrencyExchange } from "react-icons/md";
 import WrappedAutoDropdown from "./WrappedAutoDropdown";
 
+
+/**
+ * Interface for the filter form
+ * @interface
+ * @property {number} salaryStart - The starting salary range
+ * @property {number} salaryEnd - The ending salary range
+ * @property {string} currency - The currency for the salary
+ * @property {string} industry - The industry of the job
+ * @property {string} experience - The experience level required for the job
+ * @property {string} datePosted - The date the job was posted
+ */
 export interface IFilterForm {
     salaryStart: number;
     salaryEnd: number;
@@ -20,10 +31,18 @@ export interface IFilterForm {
     datePosted: string;
 }
 
+
+/**
+ * Props interface for JobFilter component
+ * @interface
+ * @property {(data: IFilterForm) => void} onApplyFilter - The function to call when applying the filter
+ */
 interface Props {
     onApplyFilter: (data: IFilterForm) => void;
 }
 
+
+// Default values for the filter form
 const defaultValues: IFilterForm = {
     salaryStart: 0,
     salaryEnd: 0,
@@ -33,6 +52,12 @@ const defaultValues: IFilterForm = {
     datePosted: "",
 };
 
+
+/**
+ * JobFilter component
+ * @param {Props} props - The properties passed to the component
+ * @returns {JSX.Element} - The rendered component
+ */
 export default function JobFilter({ onApplyFilter }: Props) {
     const { data: industries, refetch: getIndustries } = getJobIndustries();
     const { register, control, handleSubmit } = useForm<IFilterForm>({

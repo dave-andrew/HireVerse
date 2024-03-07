@@ -6,6 +6,12 @@ import { Company, CreateCompanyInput } from "../../../../declarations/HireVerse_
 import useToaster from "../../hooks/useToaster";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
+
+/**
+ * useRegisterCompany function
+ * Handles the registration of a company
+ * @returns {object} - The mutation object from react-query
+ */
 export function useRegisterCompany() {
     const [selectedCompany, setSelectedCompany] = useLocalStorage<Company | null>("selectedCompany", null);
     const { getCompanyService } = useService();
@@ -38,6 +44,12 @@ export function useRegisterCompany() {
     });
 }
 
+
+/**
+ * useLeaveCompany function
+ * Handles the leaving of a company
+ * @returns {object} - The mutation object from react-query
+ */
 export function useLeaveCompany() {
     const { getCompanyService } = useService();
     return useMutation({
@@ -54,6 +66,12 @@ export function useLeaveCompany() {
     });
 }
 
+
+/**
+ * useRemoveInvitation function
+ * Handles the removal of an invitation
+ * @returns {object} - The mutation object from react-query
+ */
 export function useRemoveInvitation() {
     const { getCompanyService } = useService();
     return useMutation({
@@ -69,6 +87,12 @@ export function useRemoveInvitation() {
     });
 }
 
+
+/**
+ * useAcceptInvitation function
+ * Handles the acceptance of an invitation
+ * @returns {object} - The mutation object from react-query
+ */
 export function useAcceptInvitation() {
     const { getCompanyService } = useService();
     return useMutation({
@@ -84,6 +108,12 @@ export function useAcceptInvitation() {
     });
 }
 
+
+/**
+ * useCreateInvitation function
+ * Handles the creation of an invitation
+ * @returns {object} - The mutation object from react-query
+ */
 export function useCreateInvitation() {
     const { getCompanyService } = useService();
     return useMutation({
@@ -98,6 +128,12 @@ export function useCreateInvitation() {
     });
 }
 
+
+/**
+ * useUpdateCompany function
+ * Handles the updating of a company
+ * @returns {object} - The mutation object from react-query
+ */
 export function useUpdateCompany() {
     const queryClient = useQueryClient();
     const { getCompanyService } = useService();

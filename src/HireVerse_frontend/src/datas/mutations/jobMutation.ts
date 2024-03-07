@@ -4,6 +4,12 @@ import useService from "../../hooks/useService";
 import { isOk } from "../../utils/resultGuarder";
 import useToaster from "../../hooks/useToaster";
 
+
+/**
+ * useCreateNewJob function
+ * Handles the creation of a new job
+ * @returns {object} - The mutation object from react-query
+ */
 export function useCreateNewJob() {
     const queryClient = useQueryClient();
     const { getJobService } = useService();
@@ -32,6 +38,12 @@ export function useCreateNewJob() {
     });
 }
 
+
+/**
+ * useDeleteJob function
+ * Handles the deletion of a job
+ * @returns {object} - The mutation object from react-query
+ */
 export function useDeleteJob() {
     const queryClient = useQueryClient();
     const { getJobService } = useService();
@@ -66,6 +78,12 @@ export function useDeleteJob() {
     });
 }
 
+
+/**
+ * useToggleJobVisibility function
+ * Handles the toggling of job visibility
+ * @returns {object} - The mutation object from react-query
+ */
 export function useToggleJobVisibility() {
     const queryClient = useQueryClient();
     const { getJobService } = useService();

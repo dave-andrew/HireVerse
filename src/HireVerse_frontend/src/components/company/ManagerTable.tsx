@@ -7,6 +7,20 @@ import {
     UserInvitation,
 } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 
+/**
+ * ManagerTable is a functional component that renders a table of managers.
+ * Each manager includes details such as UID, Full Name, Email, Birth Date, and Status.
+ * The table also includes an action button for each manager, represented by a trash icon.
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {UserInvitation[] | undefined} props.companyInvitation - The company invitations.
+ * @param {Company | null} props.selectedCompany - The selected company.
+ * @param {boolean} props.isFetchingInvitation - The state of fetching invitations.
+ * @param {Function} props.refetchInvitation - The function to refetch invitations.
+ * @param {User[] | null | undefined} props.managerData - The manager data.
+ * @returns JSX.Element A table of managers.
+ */
+
 export default function ManagerTable({
                                          companyInvitation,
                                          selectedCompany,

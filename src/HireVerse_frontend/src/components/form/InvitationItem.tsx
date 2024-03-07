@@ -8,10 +8,28 @@ import { toast } from "react-toastify";
 import { defaultToastOptions } from "../../layouts/ManagementPageLayout";
 import { CompanyInvitation } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 
-export default function InvitationItem({ invitation, refetch }: { invitation: CompanyInvitation; refetch: () => void }) {
+
+/**
+ * Props interface for InvitationItem component
+ * @interface
+ * @property {CompanyInvitation} invitation - The invitation object
+ * @property {() => void} refetch - The refetch function
+ */
+interface InvitationItemProps {
+    invitation: CompanyInvitation;
+    refetch: () => void;
+}
+
+/**
+ * InvitationItem component
+ * @param {InvitationItemProps} props - The properties passed to the component
+ * @returns {JSX.Element} - The rendered component
+ */
+export default function InvitationItem({ invitation, refetch }: InvitationItemProps) {
     const removeMutation = useRemoveInvitation();
     const acceptMutation = useAcceptInvitation();
     const [isLoading, setIsLoading] = useState(false);
+
     const removeInvitation = () => {
         setIsLoading(true);
         removeMutation.mutate(invitation.invite.id, {
@@ -44,8 +62,9 @@ export default function InvitationItem({ invitation, refetch }: { invitation: Co
     };
 
     return (
-        <div className="relative flex h-80 w-64 flex-col justify-center gap-2 rounded-md border border-gray-200 shadow-md">
-            <div className="absolute top-0 z-[-10] h-24 w-full bg-[url(backgrounds/subtle-prism.svg)]"> </div>
+        <div
+            className="relative flex h-80 w-64 flex-col justify-center gap-2 rounded-md border border-gray-200 shadow-md">
+            <div className="absolute top-0 z-[-10] h-24 w-full bg-[url(backgrounds/subtle-prism.svg)]"></div>
             <div className="flex w-full place-items-center justify-center pt-6 text-center">
                 {/* Company Profile Image */}
                 <img
@@ -58,7 +77,8 @@ export default function InvitationItem({ invitation, refetch }: { invitation: Co
             </div>
             <div className="flex flex-col gap-6 p-4">
                 <div className="flex flex-col gap-2">
-                    <div className="overflow-hidden overflow-ellipsis whitespace-nowrap text-center text-xl font-bold">{invitation.company.name}</div>
+                    <div
+                        className="overflow-hidden overflow-ellipsis whitespace-nowrap text-center text-xl font-bold">{invitation.company.name}</div>
                     <div className="flex flex-col place-items-center">
                         <div className="flex flex-row place-items-center justify-center gap-2 text-sm font-bold">
                             <div className="text-blue-800">

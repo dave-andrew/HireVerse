@@ -4,12 +4,30 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { Fragment } from "react";
 import { FaCheck } from "react-icons/fa";
 
+
+/**
+ * Interface for the items in the dropdown
+ * @interface
+ * @property {string} value - The value of the dropdown item
+ * @property {string} label - The label of the dropdown item
+ * @property {string} [img] - The image URL of the dropdown item
+ */
 export interface DropdownItems {
     value: string;
     label: string;
     img?: string;
 }
 
+
+/**
+ * Props interface for ImageLabeledDropdown component
+ * @interface
+ * @property {DropdownItems[]} [states] - The items in the dropdown
+ * @property {string} [className] - The CSS classes for the component
+ * @property {Control<any>} control - The control object from react-hook-form
+ * @property {string} name - The name of the field
+ * @property {(value: string) => void} [onChange] - The onChange event handler
+ */
 interface Props {
     states?: DropdownItems[];
     className?: string;
@@ -18,6 +36,12 @@ interface Props {
     onChange?: (value: string) => void;
 }
 
+
+/**
+ * ImageLabeledDropdown component
+ * @param {Props} props - The properties passed to the component
+ * @returns {JSX.Element} - The rendered component
+ */
 export default function ImageLabeledDropdown({ states, className, control, name, onChange }: Props) {
     return (
         <>

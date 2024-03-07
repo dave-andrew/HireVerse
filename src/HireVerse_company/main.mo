@@ -22,6 +22,7 @@ import Review "canister:HireVerse_review";
 
 actor Company {
 
+    // Represents a company in the system
     type Company = {
         id : Text;
         name : Text;
@@ -39,6 +40,7 @@ actor Company {
         seen : Nat;
     };
 
+    // Input for creating a company
     type CreateCompanyInput = {
         name : Text;
         founded_year : Nat;
@@ -49,6 +51,7 @@ actor Company {
         linkedin : Text;
     };
 
+    // Represents an invitation to a company
     type Invite = {
         id : Text;
         company_id : Text;
@@ -57,9 +60,13 @@ actor Company {
         timestamp : Time.Time;
     };
 
+
+    // Stores all companies and invitations in the system
     let companies = TrieMap.TrieMap<Text, Company>(Text.equal, Text.hash);
     let invitations = TrieMap.TrieMap<Text, Invite>(Text.equal, Text.hash);
 
+
+    // Generates a company with default values
     public shared func generateCompany() : async Text {
         let company = {
             id = await Helper.generateUUID();
@@ -83,6 +90,7 @@ actor Company {
         return company.id;
     };
 
+    // Generates a company with user Input
     public shared (msg) func registerCompany(newCompany : CreateCompanyInput) : async Result.Result<Company, Text> {
 
         let id = await Helper.generateUUID();
@@ -109,6 +117,7 @@ actor Company {
         return #ok(company);
     };
 
+    // Updates a company with user Input
     public shared (msg) func updateCompany(id : Text, company : Company) : async Result.Result<(), Text> {
 
         if (Principal.isAnonymous(msg.caller)) {
@@ -141,6 +150,8 @@ actor Company {
         };
     };
 
+
+    // Deletes a company with user Input
     public shared (msg) func deleteCompany(id : Text) : async Result.Result<?Company, Text> {
 
         if (Principal.isAnonymous(msg.caller)) {
@@ -166,6 +177,8 @@ actor Company {
         };
     };
 
+
+    // Returns all companies in the database
     public shared query func getCompanies() : async [Company] {
         let companies_array : [Company] = Iter.toArray(companies.vals());
 
@@ -178,6 +191,7 @@ actor Company {
         return sorted_companies;
     };
 
+    // Returns all companies in the database which the user is a manager of
     public shared query (msg) func getManagedCompanies() : async Result.Result<[Company], Text> {
         let user_id = msg.caller;
 
@@ -214,6 +228,7 @@ actor Company {
         return #ok(Vector.toArray(countries));
     };
 
+    // Returns all countries where companies are located
     public shared query func getCompanyCountries() : async [Text] {
         let companyList : [Company] = Iter.toArray(companies.vals());
         let countries = Vector.Vector<Text>();
@@ -227,6 +242,7 @@ actor Company {
         return Vector.toArray(countries);
     };
 
+    // Get company by its ID
     public query func getCompany(id : Text) : async Result.Result<Company, Text> {
         let company = companies.get(id);
 
@@ -261,6 +277,7 @@ actor Company {
         };
     };
 
+    // Check if a user is a manager of a company
     public shared func checkCompanyManager(company : Company, user_id : Principal) : async Bool {
         let company_manager_ids : [Text] = company.company_manager_ids;
 
@@ -272,6 +289,7 @@ actor Company {
         ) != null;
     };
 
+    // Create an invitation to a company
     public shared (msg) func createInvitation(user_id : Principal, company_id : Text) : async Result.Result<Invite, Text> {
         let inviter_id = msg.caller;
 
@@ -317,6 +335,7 @@ actor Company {
         };
     };
 
+    // Invite a user to a company as a manager
     public shared (msg) func inviteManager(user_email : Text, company_id : Text) : async Result.Result<Invite, Text> {
 
         if (Principal.isAnonymous(msg.caller)) {
@@ -344,7 +363,9 @@ actor Company {
         };
     };
 
+    // Add a job to a company
     public shared (msg) func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+
 
         let user_id = msg.caller;
 
@@ -388,6 +409,7 @@ actor Company {
         };
     };
 
+    // Remove an invitation from a company
     public shared (msg) func removeInvite(id : Text) : async Result.Result<?Invite, Text> {
 
         let user_id = msg.caller;
@@ -411,6 +433,7 @@ actor Company {
         };
     };
 
+    // Add a manager to a company
     public shared (msg) func addManager(company_id : Text) : async Result.Result<(), Text> {
         let user_id = msg.caller;
 
@@ -458,6 +481,7 @@ actor Company {
         };
     };
 
+    // Add a manager to a company from an invitation
     public shared func addManagerInvitation(company_id : Text, user_id : Principal) : async Result.Result<(), Text> {
         let company = await getCompany(company_id);
 
@@ -498,6 +522,7 @@ actor Company {
         };
     };
 
+    // Accept an invitation to a company
     public shared (msg) func acceptInvitation(invitation_id : Text) : async Result.Result<(), Text> {
         let user_id = msg.caller;
 
@@ -524,6 +549,7 @@ actor Company {
         };
     };
 
+    // Get all managers of a company
     public shared composite query func getManagersFromCompany(company_id : Text) : async Result.Result<[User.User], Text> {
         let companies = await getCompany(company_id);
         switch (companies) {
@@ -551,6 +577,7 @@ actor Company {
         };
     };
 
+    // Search Company by their name
     public shared (msg) func searchCompany(name : Text) : async Result.Result<[Company], Text> {
         let companyList : [Company] = Iter.toArray(companies.vals());
         var searchResult = Vector.Vector<Company>();
@@ -565,6 +592,8 @@ actor Company {
         return #ok(Vector.toArray(searchResult));
     };
 
+
+    // Leave a company with the company ID
     public shared (msg) func leaveCompany(company_id : Text) : async Result.Result<(), Text> {
 
         let user_id = msg.caller;
@@ -622,7 +651,7 @@ actor Company {
         image : Blob;
     };
 
-
+    // Get name and image of companies by their IDs
     public shared query func getCompanyNameAndImages(company_ids : [Text]) : async Result.Result<[CompanyNameImage], Text> {
         let companyDatas = Vector.Vector<CompanyNameImage>();
 
@@ -644,6 +673,8 @@ actor Company {
         return #ok(Vector.toArray(companyDatas));
     };
 
+
+    // Get all companies that a user is a manager of
     public shared func getUserCompanies(user_id : Principal) : async Result.Result<[Company], Text> {
         let user : ?User.User = await User.getUser(user_id);
         var companies = Vector.Vector<Company>();
@@ -668,12 +699,14 @@ actor Company {
         return #ok(Vector.toArray(companies));
     };
 
+    // Delete all companies
     public shared func deleteAllCompany() : async () {
         for (company in companies.vals()) {
             ignore companies.remove(company.id);
         };
     };
 
+    // Add a review to a company
     public shared (msg) func addReview(review : Review.CreateReviewInput) : async Result.Result<(), Text> {
         let user_id = msg.caller;
 
@@ -723,6 +756,8 @@ actor Company {
         };
     };
 
+
+    // Delete a review from a company
     public shared (msg) func deleteReview(company_id: Text, id: Text) : async Result.Result<(), Text>{
         let user_id = msg.caller;
 
@@ -792,6 +827,7 @@ actor Company {
         invite : Invite;
     };
 
+    // Get all invitations to a company
     public shared (msg) func getCompanyInvitations(company_id : Text) : async Result.Result<[UserInvitation], Text> {
         let user_id = msg.caller;
 
@@ -840,6 +876,8 @@ actor Company {
         };
     };
 
+
+    // Get all invitations to a user
     public shared (msg) func getUserInvitations() : async Result.Result<[CompanyInvitation], Text> {
         let user_id = msg.caller;
 
