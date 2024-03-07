@@ -6,7 +6,8 @@ import { useEffect } from "react";
 import handleKeyDown from "../../utils/handleKeyDown";
 
 export interface IFilterCompanyForm {
-   location: string
+   location: string,
+   industries: string
 }
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
 
 export const defaultValues: IFilterCompanyForm = {
    location: "",
+   industries: ""
 };
 
 export default function CompanyFilter({ onApplyFilter }: Props) {
@@ -28,8 +30,6 @@ export default function CompanyFilter({ onApplyFilter }: Props) {
       console.log("hai")
       onApplyFilter(getValues());
    };
-
-
 
    useEffect(() => {
       getIndustries();
@@ -53,10 +53,11 @@ export default function CompanyFilter({ onApplyFilter }: Props) {
                <label htmlFor="industries" className="w-full">
                   <div className="text-xs font-bold">Industries</div>
                   <input
+                     {...register("industries")}
                      type="text"
                      name="industries"
                      className="border-b border-gray-900 outline-0 w-full"
-                     // onKeyDown={(e) => handleKeyDown(e.key, "Enter", onSubmit)}
+                     onKeyDown={(e) => handleKeyDown(e.key, "Enter", onSubmit)}
                   />
                </label>
             </div>

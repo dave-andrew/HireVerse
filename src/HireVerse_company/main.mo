@@ -50,10 +50,6 @@ actor Company {
         linkedin : Text;
     };
 
-    type FilterCompany = {
-        location: ?Text;
-    };
-
     type Invite = {
         id : Text;
         company_id : Text;
@@ -875,31 +871,5 @@ actor Company {
         };
 
         return #ok(Vector.toArray(userInvitation));
-    };
-
-    public shared composite query func getFilterCompanies(startFrom : Nat, amount : Nat, companyFilters : FilterCompany) : async Result.Result<[Company], Text> {
-        var companyList = Iter.toArray(companies.vals());
-
-        switch(companyFilters.location) {
-            case null {};
-            case (?location) {
-                companyList := Array.filter<Company>(
-                    companyList,
-                    func(c : Company) : Bool {
-                        Array.find<Text>(c.office_locations, func(p : Text) : Bool { p == location }) != null;
-                    },
-                );
-            };
-        };
-
-        if (startFrom > companyList.size()) {
-            return #err("No more company");
-        };
-
-        if (startFrom + amount > companyList.size()) {
-            return #ok(Iter.toArray(Array.slice<Company>(companyList, startFrom, companyList.size())));
-        };
-
-        return #ok(Iter.toArray(Array.slice<Company>(companyList, startFrom, startFrom + amount)));
     };
 };

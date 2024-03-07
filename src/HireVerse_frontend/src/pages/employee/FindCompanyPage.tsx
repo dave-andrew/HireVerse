@@ -14,15 +14,16 @@ import { getFilterCompany } from "../../datas/queries/jobQueries";
 
 export interface IQueryCompanyFilter {
     location: string;
+    industries: string;
 }
 
 const defaultValue: IQueryCompanyFilter = {
     location: "",
+    industries: "",
 };
 
 export default function FindCompanyPage() {
     const nav = useNavigate();
-    const { getCompanyService } = useService();
     const [shownCompanyId, setShownCompanyId] = useState<string>("");
     const [search, setSearch] = useState<string>("");
     const [searchCompany, setSearchCompany] = useState<Company[] | null>();
