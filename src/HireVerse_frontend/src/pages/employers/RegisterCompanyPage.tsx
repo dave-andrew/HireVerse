@@ -6,9 +6,7 @@ import CustomTextField from "../../components/form/CustomTextField";
 import { CustomCheckBox } from "../../components/form/CustomCheckBox";
 import { useForm } from "react-hook-form";
 import useService from "../../hooks/useService";
-import useImageBlob from "../../hooks/useImageBlob";
 import { CreateCompanyInput } from "../../../../../.dfx/local/canisters/HireVerse_company/service.did";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface IRegisterCompanyForm {
@@ -22,7 +20,6 @@ interface IRegisterCompanyForm {
 }
 
 export default function RegisterCompanyPage() {
-    const [isLoading, setIsLoading] = useState(false);
     const {
         register,
         handleSubmit,
@@ -30,12 +27,9 @@ export default function RegisterCompanyPage() {
     } = useForm<IRegisterCompanyForm>();
 
     const { getCompanyService } = useService();
-    const { convertImageToBlob } = useImageBlob();
     const navigate = useNavigate();
 
     const handleFormSubmit = async (data: IRegisterCompanyForm) => {
-        setIsLoading(true);
-        const imageBlob = await convertImageToBlob(data.companyLogo[0]);
         const companyData: CreateCompanyInput = {
             name: data.companyName,
             founded_year: BigInt(data.foundedYear),
@@ -44,12 +38,10 @@ export default function RegisterCompanyPage() {
             office_locations: [data.location],
             social_medias: [], //TODO ADD SOCIAL MEDIAS
 
-            image: imageBlob,
             linkedin: data.linkedInProfile,
         };
-        await getCompanyService().then((s) => s.registerCompanies(companyData));
+        await getCompanyService().then((s) => s.registerCompany(companyData));
 
-        setIsLoading(false);
         navigate("/employer", { replace: true });
     };
 
@@ -183,8 +175,7 @@ export default function RegisterCompanyPage() {
                             </div>
                             <div className="flex flex-row items-center justify-center">
                                 <button
-                                    className={`main-button ${isLoading ? "cursor-not-allowed !bg-gray-600" : ""}`}
-                                    disabled={isLoading}
+                                    className="main-button text-md mt-5 !h-fit !px-8"
                                     onClick={handleSubmit(handleFormSubmit)}>
                                     Register Company
                                 </button>

@@ -11,6 +11,7 @@ import useImageBlob from "../../hooks/useImageBlob";
 import InvitationModal from "../modal/InvitationModal";
 import { getManagedCompanies } from "../../datas/queries/companyQueries";
 import { BsBuilding } from "react-icons/bs";
+import RegisterCompanyModal from "../modal/RegisterCompanyModal";
 
 type Menu = {
     name: string;
@@ -56,7 +57,8 @@ export default function ManagementBars({ children }: Props) {
     const [selectedCompany, setSelectedCompany] = useLocalStorage<Company | null>("selectedCompany", null);
     const [dropdownItems, setDropdownItems] = useState<DropdownItems[]>([]);
     const [isHovered, setIsHovered] = useState(false);
-    const [isModalShown, setIsModalShown] = useState(false);
+    const [isInviteModalShown, setIsInviteModalShown] = useState(false);
+    const [isRegisterModalShown, setIsRegisterModalShown] = useState(false);
     const { control, setValue } = useForm<IDropdownForm>({
         defaultValues: {
             value: "",
@@ -101,9 +103,8 @@ export default function ManagementBars({ children }: Props) {
         }
     };
 
-    const toggleModal = () => {
-        setIsModalShown(!isModalShown);
-    };
+    const toggleInviteModal = () => setIsInviteModalShown(!isInviteModalShown);
+    const toggleRegisterModal = () => setIsRegisterModalShown(!isRegisterModalShown);
 
     const isActive = (menu: string[]) => menu.includes(location.pathname);
 
@@ -120,7 +121,7 @@ export default function ManagementBars({ children }: Props) {
                             name="label"
                             states={dropdownItems}
                             control={control}
-                            className="w-52"
+                            className="w-[20rem]"
                             onChange={changeCompany}
                         />
                     </div>
@@ -139,7 +140,7 @@ export default function ManagementBars({ children }: Props) {
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                     className={`fixed z-50 flex h-full flex-col place-items-center justify-between bg-white px-2 pb-6 pt-4 shadow-md ${isHovered ? "w-[18rem]" : "w-[5rem]"} transition-all duration-500 ease-in-out`}>
-                    <div className="flex w-full flex-col gap-8">
+                    <div className="flex h-full w-full flex-col gap-8">
                         <div className="text-blue-primary flex flex-row justify-center text-center align-middle font-bebas text-5xl">
                             <div className="flex flex-col">
                                 <span>
@@ -154,37 +155,39 @@ export default function ManagementBars({ children }: Props) {
                                 </span>
                             </div>
                         </div>
-                        <div className="flex flex-col text-lg text-gray-500">
-                            {menus.map((menu, index) => {
-                                if (selectedCompany === null && index > 0) {
-                                    return;
-                                }
-                                return (
-                                    <Link
-                                        to={menu.redirectUrl ?? ""}
-                                        key={index}>
-                                        <div
-                                            key={index}
-                                            className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
-                                            <menu.icon className="min-w-[1.5rem]" />
-                                            <span className={`overflow-hidden`}>{menu.name}</span>
-                                        </div>
-                                    </Link>
-                                );
-                            })}
-                            <hr className="my-8" />
-                            <button
-                                onClick={toggleModal}
-                                className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 rounded-md border-l-2 border-transparent p-3">
-                                <RiMailOpenLine className="min-w-[1.5rem]" />
-                                <span className={`overflow-hidden`}>Invitations</span>
-                            </button>
-                            <Link
-                                to="/employer/register"
-                                className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 rounded-md border-l-2 border-transparent p-3">
-                                <BsBuilding className="min-w-[1.5rem]" />
-                                <span className={`overflow-hidden`}>Register</span>
-                            </Link>
+                        <div className="flex h-full flex-col justify-between text-lg text-gray-500">
+                            <div className="flex h-full flex-col text-lg text-gray-500">
+                                {menus.map((menu, index) => {
+                                    if (selectedCompany === null && index > 0) {
+                                        return;
+                                    }
+                                    return (
+                                        <Link
+                                            to={menu.redirectUrl ?? ""}
+                                            key={index}>
+                                            <div
+                                                key={index}
+                                                className={`hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-4 border-l-2 border-transparent p-3 ${isActive(menu.activeUrl) ? "text-blue-primary bg-signature-gray border-color-blue-primary" : ""}`}>
+                                                <menu.icon className="min-w-[1.5rem]" />
+                                                <span className={`overflow-hidden`}>{menu.name}</span>
+                                            </div>
+                                        </Link>
+                                    );
+                                })}
+                                <hr className="my-8" />
+                                <button
+                                    onClick={toggleInviteModal}
+                                    className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 rounded-md border-l-2 border-transparent p-3">
+                                    <RiMailOpenLine className="min-w-[1.5rem]" />
+                                    <span className={`overflow-hidden`}>Invitations</span>
+                                </button>
+                                <button
+                                    onClick={toggleRegisterModal}
+                                    className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 overflow-hidden whitespace-nowrap rounded-md border-l-2 border-transparent p-3">
+                                    <BsBuilding className="min-w-[1.5rem]" />
+                                    <span className={`overflow-hidden`}>Register Company</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -195,8 +198,12 @@ export default function ManagementBars({ children }: Props) {
                 </div>
             </div>
             <InvitationModal
-                openState={isModalShown}
-                setOpenState={setIsModalShown}
+                openState={isInviteModalShown}
+                setOpenState={setIsInviteModalShown}
+            />
+            <RegisterCompanyModal
+                openState={isRegisterModalShown}
+                setOpenState={setIsRegisterModalShown}
             />
         </>
     );
