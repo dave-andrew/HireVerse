@@ -16,6 +16,8 @@ import { useUpdateCompany } from "../../datas/mutations/companyMutations";
 import { FaLinkedin } from "react-icons/fa";
 import LeaveCompanyModal from "../../components/modal/LeaveCompanyModal";
 import { Link } from "react-router-dom";
+import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
+import EditReviewModal from "../../components/modal/EditReviewModal";
 
 interface IManageCompanyForm {
     image: FileList;
@@ -23,10 +25,12 @@ interface IManageCompanyForm {
 
 export default function ManageCompanyPage() {
     const { convertImageToBlob } = useImageBlob();
+    const [editReview, setEditReview] = useState<Review | null>(null);
     const [selectedCompany, setSelectedCompany] = useLocalStorage<Company | null>("selectedCompany", null);
     const { data: companyIndustries } = getCompanyIndustries(selectedCompany?.id);
     const mutation = useUpdateCompany();
-    const [isModalShown, setIsModalShown] = useState(false);
+    const [isEditCompanyModalShown, setIsEditCompanyModalShown] = useState(false);
+    const [isEditReviewModalOpen, setIsEditModalOpen] = useState(false);
     const [isConfirmationModalShown, setIsConfirmationModalShown] = useState(false);
     let imageRef = useRef<HTMLInputElement>(null);
 
@@ -36,6 +40,11 @@ export default function ManageCompanyPage() {
         }
 
         mutation.mutate(selectedCompany);
+    };
+
+    const handleEditReview = (review: Review) => {
+        setEditReview(review);
+        setIsEditModalOpen(true);
     };
 
     const handleImageEdit = async () => {
@@ -102,7 +111,7 @@ export default function ManageCompanyPage() {
                             <div className="flex flex-col gap-2 font-semibold">
                                 <button
                                     className="w-full rounded-md bg-gray-300 p-2 hover:bg-gray-400"
-                                    onClick={() => setIsModalShown(true)}>
+                                    onClick={() => setIsEditCompanyModalShown(true)}>
                                     Edit Profile
                                 </button>
                                 <button
@@ -112,7 +121,7 @@ export default function ManageCompanyPage() {
                                 </button>
                             </div>
                         </div>
-                        <div className="flex h-auto w-full flex-col gap-8 md:w-[70%]">
+                        <div className="flex h-auto w-full flex-col gap-2 md:w-[70%]">
                             {/* Header Section */}
                             <div className="flex flex-col gap-4 px-4">
                                 <h2 className="relative m-0 p-0 text-5xl font-semibold">
@@ -203,16 +212,21 @@ export default function ManageCompanyPage() {
                                 />
                             </CardLayout>
                             <CompanyDetailReview
-                                setEditModalOpen={setIsConfirmationModalShown}
+                                setEditable={handleEditReview}
                                 companyId={selectedCompany?.id ?? ""}
                             />
                         </div>
                     </div>
                 </div>
             </div>
+            <EditReviewModal
+                isOpen={isEditReviewModalOpen}
+                setIsOpen={setIsEditModalOpen}
+                review={editReview}
+            />
             <EditCompanyModal
-                openState={isModalShown}
-                setOpenState={setIsModalShown}
+                openState={isEditCompanyModalShown}
+                setOpenState={setIsEditCompanyModalShown}
                 // onEditFinished={onJobCreated}
             />
             <LeaveCompanyModal
