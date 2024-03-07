@@ -71,15 +71,17 @@ export const Card = ({ rotate, scale, translate }: { rotate: any; scale: any; tr
                 boxShadow: "0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003",
             }}
             className="mx-auto -mt-12 h-[20rem] w-full max-w-5xl rounded-[30px] border-4 border-[#6C6C6C] bg-[#222222] p-6 shadow-2xl md:h-[30rem]">
-            <div className="grid h-full w-full grid-cols-1 gap-4 overflow-hidden rounded-2xl bg-gray-100 md:grid-cols-3 lg:grid-cols-5">
+            <div
+                className="grid h-full w-full grid-cols-1 gap-4 overflow-hidden rounded-2xl bg-gray-100 md:grid-cols-3 lg:grid-cols-5">
                 <img
                     className="col-span-1 h-full w-full rounded-2xl object-cover md:col-span-3 lg:col-span-5"
                     alt="Preview"
                     src={canisterInjector(
-                        "https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg",
+                        "default/web-preview.png",
                     )}
-                />
-            </div>
-        </motion.div>
-    );
+            />
+        </div>
+</motion.div>
+)
+    ;
 };
