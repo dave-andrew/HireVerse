@@ -112,7 +112,7 @@ export default function ManageCompanyPage() {
                                 </button>
                             </div>
                         </div>
-                        <div className="flex h-auto w-full flex-col gap-12 md:w-[70%]">
+                        <div className="flex h-auto w-full flex-col gap-8 md:w-[70%]">
                             {/* Header Section */}
                             <div className="flex flex-col gap-4 px-4">
                                 <h2 className="relative m-0 p-0 text-5xl font-semibold">
@@ -152,46 +152,47 @@ export default function ManageCompanyPage() {
                                         );
                                     })}
                                 </div>
-                            </div>
-
-                            <div className="flex flex-col justify-evenly lg:flex-row">
-                                <div className="flex flex-row gap-3">
-                                    <div className="flex aspect-square place-items-center rounded-3xl p-2">
-                                        <MdOutlineQueryBuilder size="2rem"/>
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <p className="text-gray-600">Founded</p>
-                                        <p className="font-semibold">{convertToDate(Number(selectedCompany?.timestamp)).toLocaleDateString()}</p>
-                                    </div>
-                                </div>
-                                <div className="flex flex-row gap-3">
-                                    <div className="flex aspect-square place-items-center rounded-3xl p-2">
-                                        <MdOutlineLocationOn size="2rem"/>
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <p className="text-gray-600">Location</p>
-                                        <div className="flex flex-row">
-                                            {selectedCompany?.office_locations?.map((location, i) => {
-                                                return (
-                                                    <div key={i}>
-                                                        {i !== 0 && <p className="pr-1 font-semibold">, </p>}
-                                                        <p className="font-semibold">{location}</p>
-                                                    </div>
-                                                );
-                                            })}
+                                <div className="flex flex-col justify-evenly lg:flex-row">
+                                    <div className="flex flex-row gap-3">
+                                        <div className="flex aspect-square place-items-center rounded-3xl p-2">
+                                            <MdOutlineQueryBuilder size="2rem"/>
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <p className="text-gray-600">Founded</p>
+                                            <p className="font-semibold">{convertToDate(Number(selectedCompany?.timestamp)).toLocaleDateString()}</p>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="flex flex-row gap-3">
-                                    <div className="flex aspect-square place-items-center rounded-3xl p-2">
-                                        <MdOutlinePeopleAlt size="2rem"/>
+                                    <div className="flex flex-row gap-3">
+                                        <div className="flex aspect-square place-items-center rounded-3xl p-2">
+                                            <MdOutlineLocationOn size="2rem"/>
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <p className="text-gray-600">Location</p>
+                                            <div className="flex flex-row">
+                                                {selectedCompany?.office_locations?.map((location, i) => {
+                                                    return (
+                                                        <div key={i}>
+                                                            {i !== 0 && <span className="pr-1 font-semibold inline">, </span>}
+                                                            <span className="font-semibold inline">{location}</span>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col">
-                                        <p className="text-gray-600">Visitors</p>
-                                        {/*//TODO ADD VISITORS*/}
-                                        <p className="font-semibold">{Number(selectedCompany?.seen)}</p>
-                                    </div>
+                                        <div className="flex flex-row gap-3">
+                                            <div className="flex aspect-square place-items-center rounded-3xl p-2">
+                                                <MdOutlinePeopleAlt size="2rem"/>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <p className="text-gray-600">Visitors</p>
+                                                {/*//TODO ADD VISITORS*/}
+                                                <p className="font-semibold">{Number(selectedCompany?.seen)}</p>
+                                            </div>
+                                        </div>
                                 </div>
+
+
                             </div>
 
                             <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-lg p-10">
