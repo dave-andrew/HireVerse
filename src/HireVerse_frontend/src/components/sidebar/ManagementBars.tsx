@@ -113,7 +113,7 @@ export default function ManagementBars({ children }: Props) {
 
     return (
         <>
-            <div className="bg-gray flex h-full w-[100vw] flex-row">
+            <div className="bg-gray flex h-[100vh] w-[100vw] flex-row">
                 <div className="fixed z-50 flex h-16 w-full flex-row justify-between bg-white shadow-md">
                     <div className={`flex h-full flex-row place-items-center transition-all duration-500 ease-in-out ${isHovered ? "pl-80" : "pl-24"}`}>
                         <ImageLabeledDropdown

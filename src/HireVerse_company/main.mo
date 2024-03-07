@@ -351,7 +351,7 @@ actor Company {
         };
     };
 
-    public shared query(msg) func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+    public shared (msg) func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
 
         let user_id = msg.caller;
 
@@ -366,7 +366,11 @@ actor Company {
                 return #err("Company not found");
             };
             case (?company) {
-                let jobIds = company.job_posting_ids;
+                let jobIds = Array.append<Text>(company.job_posting_ids, [job_id]);
+
+                for (job in jobIds.vals()) {
+                    Debug.print(job);
+                };
 
                 let updatedCompany : Company = {
                     id = company_id;
@@ -379,7 +383,7 @@ actor Company {
                     image = company.image;
                     linkedin = company.linkedin;
                     company_manager_ids = company.company_manager_ids;
-                    job_posting_ids = Array.append<Text>(jobIds, [job_id]);
+                    job_posting_ids = jobIds;
                     reviews_ids = company.reviews_ids;
                     timestamp = company.timestamp;
                     seen = company.seen;

@@ -10,6 +10,7 @@ import Time "mo:base/Time";
 import Int "mo:base/Int";
 import Result "mo:base/Result";
 import Error "mo:base/Error";
+import Debug "mo:base/Debug";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
 import Vector "mo:vector/Class";
@@ -153,8 +154,16 @@ actor Job {
         };
 
         jobs.put(id, job);
-        ignore await Company.addJob(newJob.company_id, id);
-        return #ok(job);
+        let res = await Company.addJob(newJob.company_id, id);
+
+        switch (res) {
+            case (#err(errmsg)) {
+                return #err(errmsg);
+            };
+            case (#ok(_)) {
+                return #ok(job);
+            };
+        };
     };
 
     public shared (msg) func createJobForce(newJob : CreateJobInput) : async Result.Result<Job, Text> {
@@ -545,13 +554,15 @@ actor Job {
                 var jobPostings = Vector.Vector<Job>();
 
                 for (job_id in job_ids.vals()) {
-                    let jobPosting = await getJob(job_id);
+                    let jobPosting = jobs.get(job_id);
                     switch (jobPosting) {
-                        case (#err(errmsg)) {};
-                        case (#ok(jp)) {
+                        case (null) {};
+                        case (?jp) {
                             jobPostings.add(jp);
                         };
                     };
+
+                    Debug.print("di  a" # Nat.toText(jobPostings.size()));
                 };
 
                 switch (filter.position) {
@@ -567,6 +578,8 @@ actor Job {
                         };
 
                         jobPostings := newJobList;
+
+                        Debug.print("di  b" # Nat.toText(jobPostings.size()));
                     };
                 };
 
@@ -583,6 +596,7 @@ actor Job {
                         };
 
                         jobPostings := newJobList;
+                        Debug.print("di  c" # Nat.toText(jobPostings.size()));
                     };
                 };
 
@@ -627,6 +641,8 @@ actor Job {
                             );
                         };
                         jobPostings := Vector.fromArray(jobsList);
+
+                        Debug.print("di  d" # Nat.toText(jobPostings.size()));
                     };
                 };
 
