@@ -35,7 +35,13 @@ export default function FindCompanyPage() {
     const [resultCompanies, setResultCompanies] = useState<Company[] | null>();
     const [filter, setFilter] = useState<IFilterCompanyForm>(defaultValue);
     const { detector, isIntersecting } = useInfiniteScroll();
-    const { data: company, refetch: reGetFilteredCompany, fetchNextPage, hasNextPage, isFetching } = getFilterCompany(filter);
+    const {
+        data: company,
+        refetch: reGetFilteredCompany,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+    } = getFilterCompany(filter);
 
     useEffect(() => {
         if (isIntersecting && !isFetching) {
@@ -74,7 +80,7 @@ export default function FindCompanyPage() {
     useEffect(() => {
         setResultCompanies(company?.pages[0]);
         setSearchCompany(resultCompanies);
-    }, [])
+    }, []);
 
     return (
         <FrontPageLayout>
@@ -84,7 +90,8 @@ export default function FindCompanyPage() {
                         <div className="flex flex-col items-center justify-center">
                             <div className="flex w-full flex-col gap-3 self-start">
                                 <h3 className="text-4xl font-bold lg:text-5xl">Popular Companies</h3>
-                                <p className="text-lg leading-6 lg:text-xl">These companies have the largest visitor count this month.</p>
+                                <p className="text-lg leading-6 lg:text-xl">These companies have the largest visitor
+                                    count this month.</p>
                             </div>
                             <div className="flex w-full flex-row items-center gap-10">
                                 <div className="grid h-fit grid-cols-2 gap-4 py-8">
@@ -147,14 +154,19 @@ export default function FindCompanyPage() {
                             </div>
                             <div className="flex flex-row gap-4">
                                 <CompanyFilter onApplyFilter={(data) => setFilter(data)} />
-                                <div className="grid h-[70vh] grow lg:grid-cols-2 md:grid-cols-1 gap-4 overflow-y-scroll pr-2">
-                                    {searchCompany?.length === 0 ? (
-                                        <div className="flex justify-center">
-                                            {/* TODO: Image movingnya klo companynya ga ketemu */}
-                                            Company ga ketemu
-                                        </div>
-                                    ) : (
-                                        searchCompany?.map((cp, index) => {
+                                {searchCompany?.length === 0 ? (
+                                    <div
+                                        className="flex flex-col place-items-center justify-center gap-2 bg-red-100 grow text-xl font-bold">
+                                        <iframe
+                                            src="https://lottie.host/embed/5f39d49f-6200-47c8-a2fa-1ee1546baa76/WGdU5jzKs1.json"
+                                            className="w-96 h-96"></iframe>
+                                        Company not found
+                                    </div>
+                                ) : (
+
+                                    <div
+                                        className="grid h-[70vh] grow lg:grid-cols-2 md:grid-cols-1 gap-4 overflow-y-scroll bg-blue-100 justify-center">
+                                        {searchCompany?.map((cp, index) => {
                                             return (
                                                 <CardLayout
                                                     className="h-fit flex flex-col gap-2 rounded-md bg-white px-6 py-5 hover:cursor-pointer hover:bg-gray-100"
@@ -201,9 +213,9 @@ export default function FindCompanyPage() {
                                                     </div>
                                                 </CardLayout>
                                             );
-                                        })
-                                    )}
-                                </div>
+                                        })}
+                                    </ div>
+                                )}
                                 <div ref={detector}>{hasNextPage}</div>
                             </div>
                         </div>
