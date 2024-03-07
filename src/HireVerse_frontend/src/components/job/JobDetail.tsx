@@ -42,6 +42,8 @@ export default function JobDetail({ jobId }: Props) {
         refetch();
     }, [jobId]);
 
+    console.log(fullJob);
+
     if (isLoading) {
         return <JobDetailSkeleton />;
     }
@@ -62,7 +64,7 @@ export default function JobDetail({ jobId }: Props) {
                         <div className="flex h-full flex-row items-center gap-4">
                             <Link
                                 className="aspect-square h-full object-cover"
-                                to={`company/detail/${fullJob.company.id}`}>
+                                to={`/company/detail/${fullJob.company.id}`}>
                                 <img
                                     onError={handleDefaultImage}
                                     src={convertBlobToImage(fullJob?.company.image ?? [])}
@@ -76,7 +78,7 @@ export default function JobDetail({ jobId }: Props) {
                                 <p className="text-base">
                                     On{" "}
                                     <span className="font-bold">
-                                        <Link to={`company/detail/${fullJob.id}`}>{fullJob?.company.name}</Link>
+                                        <Link to={`/company/detail/${fullJob.company.id}`}>{fullJob?.company.name}</Link>
                                         {" - "}
                                     </span>
                                     {fullJob?.location}
