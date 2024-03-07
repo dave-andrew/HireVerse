@@ -69,7 +69,7 @@ export default function FindJobs() {
     return (
         <FrontPageLayout>
             <div className="flex snap-y flex-col place-items-center gap-20 pb-20">
-                <div className={`w-full snap-center bg-[url(backgrounds/subtle-prism1.svg)] shadow-md md:h-[360px] lg:h-[640px]`}>
+                <div className={`w-full snap-center bg-[url(backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[640px]`}>
                     <div className="flex h-full w-full flex-row items-center justify-center gap-20">
                         <div className="flex w-full flex-col gap-5 p-8 md:w-2/6">
                             <h3 className="m-0 p-0 text-4xl font-bold lg:text-5xl">Find Your Dream Job Now.</h3>

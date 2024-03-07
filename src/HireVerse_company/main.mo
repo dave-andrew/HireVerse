@@ -46,7 +46,6 @@ actor Company {
         founded_country : Text;
         office_locations : [Text];
         social_medias : [Text];
-        image : Blob;
         linkedin : Text;
     };
 
@@ -90,7 +89,7 @@ actor Company {
         return company.id;
     };
 
-    public shared (msg) func registerCompanies(newCompany : CreateCompanyInput) : async Company {
+    public shared (msg) func registerCompany(newCompany : CreateCompanyInput) : async Result.Result<Company, Text> {
 
         let id = await Helper.generateUUID();
 
@@ -102,7 +101,7 @@ actor Company {
             founded_country = newCompany.founded_country;
             office_locations = newCompany.office_locations;
             social_medias = newCompany.social_medias;
-            image = newCompany.image;
+            image = Blob.fromArray([0]);
             linkedin = newCompany.linkedin;
             company_manager_ids = [Principal.toText(msg.caller)];
             job_posting_ids = [];
@@ -113,7 +112,7 @@ actor Company {
 
         companies.put(company.id, company);
 
-        return company;
+        return #ok(company);
     };
 
     public shared (msg) func updateCompany(id : Text, company : Company) : async Result.Result<(), Text> {

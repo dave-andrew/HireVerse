@@ -21,7 +21,6 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         {
             name: `Company 1`,
             linkedin: "https://www.linkedin.com",
-            image: [1],
             office_locations: ["Lagos", "Abuja"],
             social_medias: ["facebook.com", "twitter.com"],
             founded_country: "Nigeria",
@@ -31,7 +30,6 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         {
             name: `Company 2`,
             linkedin: "https://www.linkedin.com",
-            image: [1],
             founded_country: "USA",
             social_medias: ["facebook.com", "twitter.com"],
             office_locations: ["New York", "California"],
@@ -41,7 +39,6 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         {
             name: `Company 3`,
             linkedin: "https://www.linkedin.com",
-            image: [1],
             founded_country: "UK",
             office_locations: ["London", "Manchester"],
             social_medias: ["facebook.com", "twitter.com"],
@@ -51,7 +48,6 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         {
             name: `Company 4`,
             linkedin: "https://www.linkedin.com",
-            image: [1],
             founded_country: "Canada",
             social_medias: ["facebook.com", "twitter.com"],
             office_locations: ["Toronto", "Vancouver"],
@@ -60,11 +56,18 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         },
     ];
 
-    const promises = newCompanies.map(async (c) => companyService.registerCompanies(c));
+    const promises = newCompanies.map(async (c) => companyService.registerCompany(c));
 
-    const companies = await Promise.all(promises);
+    const responses = await Promise.all(promises);
     console.log("Finished seeding companies");
-    return companies.map((c) => c.id);
+
+    const companies = responses.map((r) => {
+        if (isOk(r)) {
+            return r.ok;
+        }
+        return null;
+    });
+    return companies.map((c) => c!.id!);
 }
 
 const jobSeeder = async (jobService: ActorSubclass<_SERVICE_JOB>, companyIds: string[]) => {
