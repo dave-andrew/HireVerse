@@ -11,7 +11,7 @@ import { IJobItem } from "../../components/job/JobItem";
 import { IJobDetail } from "../../components/job/JobDetail";
 import { IFilterCompanyForm } from "../../components/form/CompanyFilter";
 import { IQueryCompanyFilter } from "../../pages/employee/FindCompanyPage";
-import { FilterCompany } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import { FilterCompany } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 
 export function getJobDetails(jobId: string | undefined) {
     const { getJobService, getCompanyService } = useService();
@@ -158,12 +158,13 @@ export function getFilteredJobs(filters: IFilterForm, getQueryFilters: () => IQu
 }
 
 export function getFilterCompany(filter: IFilterCompanyForm) {
-    const { getCompanyService } = useService();
+    const { getJobService } = useService();
 
     const getConvertedFilters = () => {
         console.log(filter)
         const companyFilter: FilterCompany = {
             location: convertNullFormat(filter.location, ""),
+            industries: convertNullFormat(filter.industries, ""),
         };
         return companyFilter;
     };
@@ -171,7 +172,7 @@ export function getFilterCompany(filter: IFilterCompanyForm) {
     return useInfiniteQuery({
         queryKey: [],
         queryFn: async ({ pageParam }) => {
-            const response = await getCompanyService()
+            const response = await getJobService()
                 .then((s) => s.getFilterCompanies(BigInt(pageParam), BigInt(10), getConvertedFilters()))
                 .catch((e) => console.error(e));
             if (isOk(response)) {

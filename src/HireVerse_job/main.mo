@@ -11,6 +11,7 @@ import Int "mo:base/Int";
 import Result "mo:base/Result";
 import Error "mo:base/Error";
 import Debug "mo:base/Debug";
+import Bool "mo:base/Bool";
 import Helper "canister:HireVerse_helper";
 import Company "canister:HireVerse_company";
 import Vector "mo:vector/Class";
@@ -722,62 +723,54 @@ actor Job {
    };
 
    public shared composite query func getFilterCompanies(startFrom : Nat, amount : Nat, companyFilters : FilterCompany) : async Result.Result<[Company.Company], Text> {
-
-      let companyList = Vector.Vector<Company.Company>();
+      let jobsList = Iter.toArray(jobs.vals());
+      var companyList = Vector.Vector<Company.Company>();
+      let filteredJob = Vector.Vector<Job>();
 
       switch (companyFilters.industries) {
          case null {
-            companyList := await Company.getAllCompanies();
+            companyList := Vector.fromArray(await Company.getCompanies());
          };
          case (?industries) {
-            let jobs = Iter.toArray(jobs.vals());
-            let companyIds = Vector.Vector<Text>();
-
-            jobs := Array.filter<Job>(
-               jobs,
-               func(job) {
-                  Array.find<Text>(industries, func(p : Text) : Bool { p == job.industry }) != null;
-               },
-            );
-
-            for (job in Iter.fromArray(jobs)) {
-               if (not Vector.contains(companyIds, job.company_id, Text.equal)) {
-                  companyIds.add(job.company_id);
+            label l for (job in Iter.fromArray(jobsList)) {
+               if (job.status != "active" or job.industry != industries) {
+                  continue l;
                };
-            };
 
-            for (companyId in companyIds.vals()) {
-               let company = await Company.getCompany(companyId);
+               let company = await Company.getCompany(job.company_id);
+
                switch (company) {
                   case (#err(errmsg)) {};
-                  case (#ok(c)) {
-                     companyList.add(c);
+                  case (#ok(actualCompany)) {
+                     companyList.add(actualCompany);
                   };
                };
             };
          };
       };
 
+      var companies = Vector.toArray<Company.Company>(companyList);
+
       switch (companyFilters.location) {
          case null {};
          case (?location) {
-            companyList := Array.filter<Company.Company>(
-               companyList,
-               func(c : Company.Company) : Bool {
-                  Array.find<Text>(c.office_locations, func(p : Text) : Bool { p == location }) != null;
+            companies := Array.filter<Company.Company>(
+               companies,
+               func(company) : Bool {
+                  Array.find<Text>(company.office_locations, func(p : Text) : Bool { p == location }) != null;
                },
             );
          };
       };
 
-      if (startFrom > companyList.size()) {
-         return #err("No more company");
+      if (startFrom > companies.size()) {
+         return #err("No more companies");
       };
 
-      if (startFrom + amount > companyList.size()) {
-         return #ok(Iter.toArray(Array.slice<Company.Company>(companyList, startFrom, companyList.size())));
+      if (startFrom + amount > companies.size()) {
+         return #ok(companies);
       };
 
-      return #ok(Iter.toArray(Array.slice<Company.Company>(companyList, startFrom, startFrom + amount)));
+      return #ok(Iter.toArray(Array.slice(companies, startFrom, startFrom + amount)));
    };
 };
