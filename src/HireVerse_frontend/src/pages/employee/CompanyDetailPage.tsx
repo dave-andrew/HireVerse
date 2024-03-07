@@ -11,18 +11,27 @@ import React, { useState } from "react";
 import CompanyDetailReview from "../../components/review/CompanyDetailReview";
 import purifyDOM from "../../utils/purifyDOM";
 import { FaLinkedin } from "react-icons/fa";
+import EditReviewModal from "../../components/modal/EditReviewModal";
+import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 
 export interface IReviewSortForm {
     orderBy: string;
 }
 
 export default function CompanyDetailPage() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editReview, setEditReview] = useState<Review | null>(null);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const nav = useNavigate();
     const { id } = useParams<string>();
     const { data: company, isLoading: companyLoading } = getCompany(id);
     const { data: industries, isLoading: industriesLoading } = getCompanyIndustries(id);
+
+    const handleEditReview = (review: Review) => {
+        setEditReview(review);
+        setIsEditModalOpen(true);
+    };
 
     if (!id) {
         nav(-1);
@@ -48,7 +57,7 @@ export default function CompanyDetailPage() {
                                     />
                                 </div>
                             </div>
-                            <div className="flex h-auto w-full flex-col gap-12 md:w-[70%]">
+                            <div className="flex h-auto w-full flex-col gap-2 md:w-[70%]">
                                 {/* Header Section */}
                                 <div className="flex flex-col gap-4 px-4">
                                     <h2 className="relative m-0 p-0 text-5xl font-semibold">
@@ -144,9 +153,8 @@ export default function CompanyDetailPage() {
                                 </CardLayout>
                                 <CompanyDetailReview
                                     companyId={company?.id ?? ""}
-                                    onCreateReviewClick={() => {
-                                        setIsModalOpen(!isModalOpen);
-                                    }}
+                                    onCreateReviewClick={() => setIsCreateModalOpen(!isCreateModalOpen)}
+                                    setEditable={handleEditReview}
                                 />
                             </div>
                         </div>
@@ -154,8 +162,13 @@ export default function CompanyDetailPage() {
                 </div>
             </FrontPageLayout>
             <CreateReviewModal
-                isOpen={isModalOpen}
-                setIsOpen={setIsModalOpen}
+                isOpen={isCreateModalOpen}
+                setIsOpen={setIsCreateModalOpen}
+            />
+            <EditReviewModal
+                review={editReview}
+                isOpen={isEditModalOpen}
+                setIsOpen={setIsEditModalOpen}
             />
         </>
     );

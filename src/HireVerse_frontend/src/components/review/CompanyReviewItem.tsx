@@ -3,39 +3,40 @@ import { FaCheck, FaRegEdit } from "react-icons/fa";
 import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import purifyDOM from "../../utils/purifyDOM";
 import { ImCross } from "react-icons/im";
-import useService from "../../hooks/useService";
 import { convertTimeInterval } from "../../utils/convertTimeInterval";
 
 interface Props {
     review: Review;
-    editable?: boolean;
+    setEditable?: (value: Review) => void;
 }
 
-export default function CompanyReviewItem({ review, editable }: Props) {
-    const { getBackendService } = useService();
-
+export default function CompanyReviewItem({ review, setEditable }: Props) {
     return (
         <>
-            <div className="flex w-full flex-col border-[1px] border-gray-200 bg-white rounded-lg p-5">
-                <div className="flex flex-row justify-between">
-                    <div className="flex flex-row items-center gap-5">
-                        <h2 className="my-0 !py-0 text-4xl">{review.title}</h2>
-                        {review.recommendToFriend ? (
-                            <span className="text-md inline-flex h-8 items-center gap-2 rounded-full bg-green-100 px-2.5 py-0.5 font-medium text-green-500">
-                                <FaCheck />
-                                Recommended
-                            </span>
-                        ) : (
-                            <span className="text-md inline-flex h-8 items-center gap-2 rounded-full bg-red-100 px-2.5 py-0.5 font-medium text-red-500">
-                                <ImCross />
-                                Not Recommended
-                            </span>
-                        )}
+            <div className="flex w-full flex-col rounded-lg border-[1px] border-gray-200 bg-white p-5">
+                <div className="flex w-full flex-row items-center justify-between gap-5">
+                    <div className="flex w-full flex-row items-center justify-between gap-5">
+                        <div className="flex flex-row items-center gap-5">
+                            <h2 className="my-0 !py-0 text-4xl">{review.title}</h2>
+                            {review.recommendToFriend ? (
+                                <span className="text-md inline-flex h-8 items-center gap-2 rounded-full bg-green-100 px-2.5 py-0.5 font-medium text-green-500">
+                                    <FaCheck />
+                                    Recommended
+                                </span>
+                            ) : (
+                                <span className="text-md inline-flex h-8 items-center gap-2 rounded-full bg-red-100 px-2.5 py-0.5 font-medium text-red-500">
+                                    <ImCross />
+                                    Not Recommended
+                                </span>
+                            )}
+                        </div>
+                        <div>{convertTimeInterval(review.timestamp)}</div>
                     </div>
-                    <div>{convertTimeInterval(review.timestamp)}</div>
-                    {editable && (
+                    {setEditable && (
                         <div>
-                            <button className="text-md inline-flex h-8 items-center gap-2 rounded-full bg-red-100 px-2.5 py-0.5 font-medium text-red-500">
+                            <button
+                                onClick={() => setEditable(review)}
+                                className="text-md text-black-500 flex h-8 flex-row items-center justify-center gap-2 rounded-full px-2.5 py-0.5 font-medium hover:bg-gray-200">
                                 <FaRegEdit />
                             </button>
                         </div>
@@ -44,12 +45,6 @@ export default function CompanyReviewItem({ review, editable }: Props) {
                 <div className="flex flex-col gap-5">
                     <div className="flex flex-row items-center gap-2">
                         <span>
-                            {/*{console.log(*/}
-                            {/*    review.userId,*/}
-                            {/*    getIdentity().then((r) =>*/}
-                            {/*        console.log(r.getPrincipal().toText()),*/}
-                            {/*    ),*/}
-                            {/*)}*/}
                             By<b> {review.userId}</b>
                         </span>
                     </div>

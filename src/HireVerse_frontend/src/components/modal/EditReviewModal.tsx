@@ -1,5 +1,5 @@
 import WrappedModal from "../form/WrappedModal";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { IoCloseSharp } from "react-icons/io5";
 import WrappedRichText from "../form/WrappedRichText";
@@ -10,12 +10,11 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import WrappedControlledStarReview from "../form/WrappedControlledStarReview";
 import { CONSTANTS } from "../../utils/constants";
 import WrappedRadioGroup from "../form/WrappedRadioGroup";
-import { useAddReview } from "../../datas/mutations/reviewMutations";
 import useToaster from "../../hooks/useToaster";
-import { CreateReviewInput } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
-import { useParams } from "react-router-dom";
+import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
+import { useUpdateReview } from "../../datas/mutations/reviewMutations";
 
-interface INewReviewForm {
+interface IEditReviewForm {
     title: string;
     pros: {
         message: string;
@@ -35,40 +34,31 @@ interface INewReviewForm {
 interface Props {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
+    review: Review | null;
 }
 
-const defaultValues = {
+const defaultValues: IEditReviewForm = {
     title: "",
-    pros: [
-        {
-            message: "",
-            placeholder: "e.g. The company culture is great",
-        },
-    ],
-    cons: [
-        {
-            message: "",
-            placeholder: "e.g. The toilet is dirty",
-        },
-    ],
+    pros: [{ message: "", placeholder: "e.g. The company culture is great" }],
+    cons: [{ message: "", placeholder: "e.g. The toilet is dirty" }],
     cultureRating: 0,
-    recommendToFriend: null,
-    seniorManagementRating: 0,
     workLifeBalanceRating: 0,
+    seniorManagementRating: 0,
+    recommendToFriend: null,
     anonymous: false,
 };
 
-export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
-    const mutation = useAddReview();
-    const { id } = useParams<string>();
+export default function EditReviewModal({ isOpen, setIsOpen, review }: Props) {
+    const mutation = useUpdateReview();
     const {
         control,
         register,
         handleSubmit,
         setError,
         reset,
-        formState: { errors, isValid },
-    } = useForm<INewReviewForm>({ defaultValues });
+        setValue,
+        formState: { errors },
+    } = useForm<IEditReviewForm>({ defaultValues });
     const {
         fields: fieldsPros,
         append: appendPros,
@@ -85,13 +75,34 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
         name: "cons",
         control,
     });
-    const editor = useRichTextEditor();
+    const editor = useRichTextEditor({
+        content: review?.generalComments ?? "",
+    });
     const { errorToast } = useToaster();
+
+    useEffect(() => {
+        if (review) {
+            setValue("title", review.title);
+            editor?.commands.setContent(review.generalComments);
+            setValue(
+                "pros",
+                review.pros.map((pro) => ({ message: pro, placeholder: "e.g. The company culture is great" })),
+            );
+            setValue(
+                "cons",
+                review.cons.map((con) => ({ message: con, placeholder: "e.g. The toilet is dirty" })),
+            );
+            setValue("cultureRating", Number(review.cultureRating));
+            setValue("workLifeBalanceRating", Number(review.workLifeBalanceRating));
+            setValue("seniorManagementRating", Number(review.seniorManagementRating));
+            setValue("recommendToFriend", review.recommendToFriend ? (review.recommendToFriend ? "Yes" : "No") : null);
+            setValue("anonymous", review.isAnonymous);
+        }
+    }, [review]);
 
     const checkError = () => {
         for (const error in errors) {
-            console.log(errors[error as keyof INewReviewForm]?.message);
-            const errorMessage = errors[error as keyof INewReviewForm]?.message;
+            const errorMessage = errors[error as keyof IEditReviewForm]?.message;
 
             if (errorMessage) {
                 errorToast({
@@ -102,8 +113,11 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
         }
     };
 
-    const createReview = async (data: INewReviewForm) => {
+    const updateReview = async (data: IEditReviewForm) => {
         const generalComments = editor?.getHTML();
+        if (!review) {
+            return;
+        }
         if (generalComments === "<p></p>" || generalComments === undefined) {
             errorToast({
                 message: "General comments is required",
@@ -168,13 +182,9 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
             return;
         }
 
-        if (!id) {
-            return;
-        }
-
-        const newReview: CreateReviewInput = {
+        const updatedReview: Review = {
+            ...review,
             title: data.title,
-            companyId: id,
             generalComments: generalComments,
             pros: data.pros.map((pro) => pro.message) ?? [],
             cons: data.cons.map((con) => con.message) ?? [],
@@ -185,14 +195,14 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
             recommendToFriend: data.recommendToFriend === "Yes",
         };
 
-        mutation.mutate(newReview);
+        mutation.mutate(updatedReview);
 
         reset();
         setIsOpen(false);
     };
 
     const handleSubmitForm = () => {
-        handleSubmit(createReview)();
+        handleSubmit(updateReview)();
         checkError();
     };
 
@@ -201,7 +211,7 @@ export default function CreateReviewModal({ isOpen, setIsOpen }: Props) {
             panelClassName="!max-w-none !rounded-xl !w-[52vw] !p-10 !mt-20"
             title={
                 <div className="flex w-full flex-row items-center justify-between pb-5">
-                    <div className="text-4xl font-semibold">Post a new review</div>
+                    <div className="text-4xl font-semibold">Update current review</div>
                     <button
                         className="h-fit w-fit rounded-full text-end text-xl"
                         type="button"

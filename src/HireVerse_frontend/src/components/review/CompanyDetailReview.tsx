@@ -4,18 +4,20 @@ import CardLayout from "../../layouts/CardLayout";
 import TextDropdown from "../form/TextDropdown";
 import { CONSTANTS } from "../../utils/constants";
 import CompanyReviewItem from "./CompanyReviewItem";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IReviewSortForm } from "../../pages/employee/CompanyDetailPage";
 import { useQueryGetSelfReview, useQueryReviews } from "../../datas/queries/reviewQueries";
 import WrappedPaginationSelection, { Pagination } from "../form/WrappedPaginationSelection";
+import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 
 interface Props {
     companyId: string;
     onCreateReviewClick?: () => void;
+    setEditable: (value: Review) => void;
 }
 
-export default function CompanyDetailReview({ companyId, onCreateReviewClick }: Props) {
+export default function CompanyDetailReview({ companyId, onCreateReviewClick, setEditable }: Props) {
     const [pagination, setPagination] = useState<Pagination>({
         totalPage: 1,
         currentPage: 1,
@@ -47,7 +49,7 @@ export default function CompanyDetailReview({ companyId, onCreateReviewClick }: 
             <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-lg p-10">
                 <div className="flex w-full flex-row justify-between">
                     <h3 className="m-0 flex flex-row justify-between p-0 text-4xl font-semibold">Reviews</h3>
-                    {onCreateReviewClick && (
+                    {onCreateReviewClick && !myReview && (
                         <button
                             onClick={onCreateReviewClick}
                             className="bg-signature-yellow hover:bg-signature-yellow flex w-fit flex-row items-center justify-center gap-3 rounded-md px-5 py-3 text-lg font-semibold text-black transition-colors">
@@ -61,7 +63,7 @@ export default function CompanyDetailReview({ companyId, onCreateReviewClick }: 
                     <CompanyReviewSummary companyId={companyId} />
                 </div>
             </CardLayout>
-            {myReview && <CompanyReviewItem review={myReview} />}
+
             {reviews && reviews.length > 0 && (
                 <CardLayout className="flex flex-row items-center justify-between gap-5 rounded-lg p-4">
                     <div>
@@ -82,7 +84,14 @@ export default function CompanyDetailReview({ companyId, onCreateReviewClick }: 
 
             <div className="flex flex-1 flex-row">
                 <div className="flex w-full flex-col gap-2">
+                    {myReview && (
+                        <CompanyReviewItem
+                            review={myReview}
+                            setEditable={setEditable}
+                        />
+                    )}
                     {reviews?.slice(getReviewStart(), getReviewEnd()).map((review, i) => {
+                        if (review.id === myReview?.id) return;
                         return (
                             <CompanyReviewItem
                                 key={i}
@@ -90,10 +99,12 @@ export default function CompanyDetailReview({ companyId, onCreateReviewClick }: 
                             />
                         );
                     })}
-                    <WrappedPaginationSelection
-                        pagination={pagination}
-                        setPagination={changePage}
-                    />
+                    {reviews && reviews.length > 10 && (
+                        <WrappedPaginationSelection
+                            pagination={pagination}
+                            setPagination={changePage}
+                        />
+                    )}
                 </div>
             </div>
         </>
