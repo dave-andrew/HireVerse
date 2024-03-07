@@ -63,7 +63,7 @@ export default function StarReview({ company_id }: { company_id: string }) {
             />
 
             <div>
-                {rating.averageRating}{" / 5"}
+                {rating.averageRating.toFixed(1)}{" / 5"}
             </div>
 
         </div>
