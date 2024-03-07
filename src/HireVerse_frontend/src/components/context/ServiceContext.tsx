@@ -15,6 +15,15 @@ interface Props {
     children: ReactNode;
 }
 
+
+/**
+ * ServiceContextType interface for the context
+ * @interface
+ * @property {Function} getJobService - Function to get the job service
+ * @property {Function} getCompanyService - Function to get the company service
+ * @property {Function} getBackendService - Function to get the backend service
+ * @property {Function} getReviewService - Function to get the review service
+ */
 export type ServiceContextType = {
     getJobService: () => Promise<ActorSubclass<_SERVICE_JOB>>;
     getCompanyService: () => Promise<ActorSubclass<_SERVICE_COMPANY>>;
@@ -22,6 +31,10 @@ export type ServiceContextType = {
     getReviewService: () => Promise<ActorSubclass<_SERVICE_REVIEW>>;
 };
 
+/**
+ * ServiceContext for the application
+ * @type {React.Context<ServiceContextType>}
+ */
 export const ServiceContext = createContext<ServiceContextType>({
     getJobService: null!,
     getCompanyService: null!,
@@ -29,6 +42,11 @@ export const ServiceContext = createContext<ServiceContextType>({
     getReviewService: null!,
 });
 
+/**
+ * ServiceContextProvider component
+ * @param {Props} props - The properties passed to the component
+ * @returns {JSX.Element} - The rendered component
+ */
 export default function ServiceContextProvider({ children }: Props) {
     const [jobService, setJobService] = useState<ActorSubclass<_SERVICE_JOB>>();
     const [companyService, setCompanyService] = useState<ActorSubclass<_SERVICE_COMPANY>>();
@@ -37,6 +55,11 @@ export default function ServiceContextProvider({ children }: Props) {
     const [agent, setAgent] = useState<HttpAgent>();
     const { getIdentity } = useAuth();
 
+
+    /**
+     * createHttpAgent function
+     * @returns {HttpAgent} - The created HttpAgent
+     */
     const createHttpAgent = useThrottleCallback(() => {
         const identity = getIdentity();
         if (!agent) {
@@ -47,6 +70,11 @@ export default function ServiceContextProvider({ children }: Props) {
         return agent;
     }, 1000);
 
+
+    /**
+     * getHttpAgent function
+     * @returns {Promise<HttpAgent>} - The HttpAgent
+     */
     const getHttpAgent = async () => {
         if (!agent) {
             const newAgent = createHttpAgent();
@@ -56,6 +84,11 @@ export default function ServiceContextProvider({ children }: Props) {
         return agent;
     };
 
+
+    /**
+     * getJobService function
+     * @returns {Promise<ActorSubclass<_SERVICE_JOB>>} - The job service
+     */
     const getJobService = async () => {
         while (!jobService) {
             const agent = await getHttpAgent();
@@ -74,6 +107,11 @@ export default function ServiceContextProvider({ children }: Props) {
         return jobService;
     };
 
+
+    /**
+     * getCompanyService function
+     * @returns {Promise<ActorSubclass<_SERVICE_COMPANY>>} - The company service
+     */
     const getCompanyService = async () => {
         while (!companyService) {
             const agent = await getHttpAgent();
@@ -94,6 +132,11 @@ export default function ServiceContextProvider({ children }: Props) {
         return companyService;
     };
 
+
+    /**
+     * getBackendService function
+     * @returns {Promise<ActorSubclass<_SERVICE_BACKEND>>} - The backend service
+     */
     const getBackendService = async () => {
         while (!backendService) {
             const agent = await getHttpAgent();
@@ -113,6 +156,11 @@ export default function ServiceContextProvider({ children }: Props) {
         return backendService;
     };
 
+
+    /**
+     * getReviewService function
+     * @returns {Promise<ActorSubclass<_SERVICE_REVIEW>>} - The review service
+     */
     const getReviewService = async () => {
         while (!reviewService) {
             const agent = await getHttpAgent();

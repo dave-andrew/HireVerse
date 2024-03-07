@@ -1,6 +1,16 @@
 import {FaCheck, FaRegEdit} from "react-icons/fa";
 import {Dispatch, SetStateAction} from "react";
 
+
+/**
+ * Props interface for ProfileEditButton component
+ * @interface
+ * @property {string} [className] - The CSS classes for the component
+ * @property {object} [editStateProps] - The state and setter for the edit state
+ * @property {boolean} editStateProps.editState - The current edit state
+ * @property {Dispatch<SetStateAction<boolean>>} editStateProps.setEditState - The setter for the edit state
+ * @property {() => void} [onClick] - The onClick event handler
+ */
 interface Props {
     className?: string;
     editStateProps?: {
@@ -10,6 +20,12 @@ interface Props {
     onClick?: () => void;
 }
 
+
+/**
+ * ProfileEditButton component
+ * @param {Props} props - The properties passed to the component
+ * @returns {JSX.Element} - The rendered component
+ */
 export default function ProfileEditButton({className, editStateProps, onClick}: Props) {
     const handleOnClick = () => {
         if (onClick) {
