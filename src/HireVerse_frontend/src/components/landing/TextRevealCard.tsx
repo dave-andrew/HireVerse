@@ -1,16 +1,16 @@
 "use client";
-import React, { useEffect, useRef, useState, memo } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import cn from "../../utils/cn";
 import { FaGithub, FaHeart, FaLinkedin } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export const TextRevealCard = ({
-                                   text,
-                                   revealText,
-                                   children,
-                                   className,
-                               }: {
+    text,
+    revealText,
+    children,
+    className,
+}: {
     text: string;
     revealText: string;
     children?: React.ReactNode;
@@ -24,8 +24,7 @@ export const TextRevealCard = ({
 
     useEffect(() => {
         if (cardRef.current) {
-            const { left, width: localWidth } =
-                cardRef.current.getBoundingClientRect();
+            const { left, width: localWidth } = cardRef.current.getBoundingClientRect();
             setLeft(left);
             setLocalWidth(localWidth);
             console.log("left", left, "localWidth", localWidth);
@@ -58,17 +57,10 @@ export const TextRevealCard = ({
             onMouseLeave={mouseLeaveHandler}
             onMouseMove={mouseMoveHandler}
             ref={cardRef}
-            className={cn(
-                "bg-[#1d1c20] w-full py-24 relative overflow-hidden flex flex-col gap-5",
-                className,
-            )}
-        >
-
-            <div className="px-24 flex flex-col text-white">
-                <div className="text-xl font-semibold">
-                    Created for:
-                </div>
-                <div className="snap-center relative flex items-center overflow-hidden">
+            className={cn("relative flex w-full flex-col gap-5 overflow-hidden bg-[#1d1c20] py-24", className)}>
+            <div className="flex flex-col px-24 text-white">
+                <div className="text-xl font-semibold">Created for:</div>
+                <div className="relative flex snap-center items-center overflow-hidden">
                     <motion.div
                         style={{
                             width: "100%",
@@ -76,22 +68,20 @@ export const TextRevealCard = ({
                         animate={
                             isMouseOver
                                 ? {
-                                    opacity: widthPercentage > 0 ? 1 : 0,
-                                    clipPath: `inset(0 ${100 - widthPercentage}% 0 0)`,
-                                }
+                                      opacity: widthPercentage > 0 ? 1 : 0,
+                                      clipPath: `inset(0 ${100 - widthPercentage}% 0 0)`,
+                                  }
                                 : {
-                                    clipPath: `inset(0 ${100 - widthPercentage}% 0 0)`,
-                                }
+                                      clipPath: `inset(0 ${100 - widthPercentage}% 0 0)`,
+                                  }
                         }
                         transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
-                        className="absolute bg-[#1d1c20] z-20  will-change-transform"
-                    >
+                        className="absolute z-20 bg-[#1d1c20]  will-change-transform">
                         <p
                             style={{
                                 textShadow: "4px 4px 15px rgba(0,0,0,0.5)",
                             }}
-                            className="text-base sm:text-[3rem] py-10 font-bold text-white bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-300"
-                        >
+                            className="bg-gradient-to-b from-white to-neutral-300 bg-clip-text py-10 text-base font-bold text-transparent text-white sm:text-[3rem]">
                             {revealText}
                         </p>
                     </motion.div>
@@ -102,66 +92,67 @@ export const TextRevealCard = ({
                             opacity: widthPercentage > 0 ? 1 : 0,
                         }}
                         transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
-                        className="h-40 w-[8px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent absolute z-50 will-change-transform"
-                    ></motion.div>
+                        className="absolute z-50 h-40 w-[8px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent will-change-transform"></motion.div>
 
-                    <div
-                        className=" overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
-                        <p className="text-base sm:text-[3rem] py-10 font-bold bg-clip-text text-transparent bg-[#323238]">
-                            {text}
-                        </p>
+                    <div className=" overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
+                        <p className="bg-[#323238] bg-clip-text py-10 text-base font-bold text-transparent sm:text-[3rem]">{text}</p>
                         <MemoizedStars />
                     </div>
                 </div>
             </div>
 
-            <div className="px-24 mt-24 flex flex-col gap-4 text-gray-500">
-                <div className="text-xl font-semibold flex flex-row gap-2 place-items-center">
+            <div className="mt-24 flex flex-col gap-4 px-24 text-gray-500">
+                <div className="flex flex-row place-items-center gap-2 text-xl font-semibold">
                     Developed with <FaHeart /> by:
                 </div>
-                <div className="grid grid-cols-3 py-8 gap-4">
-                    <a
+                <div className="grid grid-cols-3 gap-4 py-8">
+                    <Link
                         target="_blank"
-                        href="https://github.com/dave-andrew"
-                        className="hover:bg-[#27262d] cursor-pointer p-6 text-center rounded-lg flex flex-col gap-4 place-items-center justify-center">
+                        to="https://github.com/dave-andrew"
+                        className="flex cursor-pointer flex-col place-items-center justify-center gap-4 rounded-lg p-6 text-center hover:bg-[#27262d]">
                         <div className="text-5xl">Dave Andrew Nathaniel</div>
-                        <div className="flex flex-col gap-1 text-center place-items-center">
-                            <div className="flex flex-row gap-2 place-items-center">
+                        <div className="flex flex-col place-items-center gap-1 text-center">
+                            <div className="flex flex-row place-items-center gap-2">
                                 <FaLinkedin /> dave-andrew-nathaniel-54a99b251
                             </div>
-                            <div className="flex flex-row gap-2 place-items-center"><FaGithub /> dave-andrew</div>
-                        </div>
-                    </a>
-                    <a
-                        target="_blank"
-                        href="https://github.com/yahkerobertkertasnya"
-                        className="hover:bg-[#27262d] cursor-pointer p-6 text-center rounded-lg flex flex-col gap-4 place-items-center justify-center">
-                        <div className="text-5xl">Robert William</div>
-                        <div className="flex flex-col gap-1 text-center place-items-center">
-                            <div className="flex flex-row gap-2 place-items-center">
-                                <FaLinkedin /> in/robert-wiliam-b1a69b252
-                            </div>
-                            <div className="flex flex-row gap-2 place-items-center"><FaGithub /> yahkerobertkertasnya
+                            <div className="flex flex-row place-items-center gap-2">
+                                <FaGithub /> dave-andrew
                             </div>
                         </div>
                     </Link>
                     <Link
                         target="_blank"
-                        href="https://github.com/vncnttan"
-                        className="hover:bg-[#27262d] cursor-pointer p-6 text-center rounded-lg flex flex-col gap-4 place-items-center justify-center">
-                        <div className="text-5xl">Vincent Tanjaya</div>
-                        <div className="flex flex-col gap-1 text-center place-items-center">
-                            <div className="flex flex-row gap-2 place-items-center"><FaLinkedin /> in/vincent-tanjaya
+                        to="https://github.com/yahkerobertkertasnya"
+                        className="flex cursor-pointer flex-col place-items-center justify-center gap-4 rounded-lg p-6 text-center hover:bg-[#27262d]">
+                        <div className="text-5xl">Robert William</div>
+                        <div className="flex flex-col place-items-center gap-1 text-center">
+                            <div className="flex flex-row place-items-center gap-2">
+                                <FaLinkedin /> in/robert-wiliam-b1a69b252
                             </div>
-                            <div className="flex flex-row gap-2 place-items-center"><FaGithub /> vncnttan</div>
+                            <div className="flex flex-row place-items-center gap-2">
+                                <FaGithub /> yahkerobertkertasnya
+                            </div>
                         </div>
-                    </a>
+                    </Link>
+                    <Link
+                        target="_blank"
+                        to="https://github.com/vncnttan"
+                        className="flex cursor-pointer flex-col place-items-center justify-center gap-4 rounded-lg p-6 text-center hover:bg-[#27262d]">
+                        <div className="text-5xl">Vincent Tanjaya</div>
+                        <div className="flex flex-col place-items-center gap-1 text-center">
+                            <div className="flex flex-row place-items-center gap-2">
+                                <FaLinkedin /> in/vincent-tanjaya
+                            </div>
+                            <div className="flex flex-row place-items-center gap-2">
+                                <FaGithub /> vncnttan
+                            </div>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>
     );
 };
-
 
 const Stars = () => {
     const randomMove = () => Math.random() * 4 - 2;
@@ -193,8 +184,7 @@ const Stars = () => {
                         borderRadius: "50%",
                         zIndex: 1,
                     }}
-                    className="inline-block"
-                ></motion.span>
+                    className="inline-block"></motion.span>
             ))}
         </div>
     );

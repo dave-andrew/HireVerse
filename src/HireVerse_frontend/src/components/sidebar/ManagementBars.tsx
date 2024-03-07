@@ -179,12 +179,12 @@ export default function ManagementBars({ children }: Props) {
                                 <RiMailOpenLine className="min-w-[1.5rem]" />
                                 <span className={`overflow-hidden`}>Invitations</span>
                             </button>
-                            <a
-                                href="/employer/register"
+                            <Link
+                                to="/employer/register"
                                 className="hover:bg-signature-hover-gray m-1 flex cursor-pointer flex-row place-items-center gap-2 rounded-md border-l-2 border-transparent p-3">
                                 <BsBuilding className="min-w-[1.5rem]" />
                                 <span className={`overflow-hidden`}>Register</span>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import { createBrowserRouter, HashRouter, Route, RouteObject, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import FindJobs from "./pages/employee/FindJobsPage";
 import RegisterCompanyPage from "./pages/employers/RegisterCompanyPage";
 import FindCompanyPage from "./pages/employee/FindCompanyPage";
@@ -18,70 +18,75 @@ import EmployerHomePage from "./pages/employers/EmployerHomePage";
 import { useLayoutEffect } from "react";
 import canisterInjector from "./utils/canisterInjector";
 
-const guestRoutes: RouteObject[] = [
+const guestRoutes = [
     {
         path: "/",
-        Component: LandingPage,
+        element: <LandingPage />,
     },
 ];
 
-const frontRoutes: RouteObject[] = [
+const frontRoutes = [
     {
         path: "/find-job",
-        Component: FindJobs,
+        element: <FindJobs />,
     },
     {
         path: "/find-company",
-        Component: FindCompanyPage,
+        element: <FindCompanyPage />,
     },
     {
         path: "/company/detail/:id",
-        Component: CompanyDetailPage,
+        element: <CompanyDetailPage />,
     },
 ];
 
-const backRoutes: RouteObject[] = [
+const backRoutes = [
     {
         path: "/employer",
-        Component: EmployerHomePage,
+        element: <EmployerHomePage />,
     },
     {
         path: "/employer/managers",
-        Component: CompanyManagersPage,
+        element: <CompanyManagersPage />,
     },
     {
         path: "/employer/register",
-        Component: RegisterCompanyPage,
+        element: <RegisterCompanyPage />,
     },
     {
         path: "/employer/jobs",
-        Component: CompanyJobsPage,
+        element: <CompanyJobsPage />,
     },
     {
         path: "/employer/invitations",
-        Component: CompanyInvitation,
+        element: <CompanyInvitation />,
     },
 ];
 
-const otherRoutes: RouteObject[] = [
+const otherRoutes = [
     {
         path: "*",
-        Component: NotFoundPage,
+        element: <NotFoundPage />,
     },
     {
         path: "/seeder",
-        Component: Seeder,
+        element: <Seeder />,
     },
 ];
 
-const unregisteredProtectedRoutes: RouteObject[] = [
+const unregisteredProtectedRoutes = [
     {
         path: "/complete-registration",
-        Component: CompleteRegistrationPage,
+        element: <CompleteRegistrationPage />,
     },
 ];
 
-const router = createBrowserRouter([
+interface RouterProtector {
+    element: JSX.Element;
+    children?: { path: string; element: JSX.Element }[];
+}
+
+const protector: RouterProtector[] = [
     {
         element: <UnauthenticatedProtectedRoutes />,
         children: guestRoutes,
@@ -99,7 +104,7 @@ const router = createBrowserRouter([
         children: backRoutes,
     },
     ...otherRoutes,
-]);
+];
 
 const fonts = [
     {
@@ -143,9 +148,6 @@ const fontLoader = () => {
 };
 
 function App() {
-    // TODO: Disabling all console logs for production
-    // console.log = () => {};
-
     useLayoutEffect(() => {
         fontLoader();
     }, []);
@@ -153,54 +155,19 @@ function App() {
     return (
         <HashRouter>
             <Routes>
-                <Route
-                    path="/"
-                    element={<LandingPage />}
-                />
-                <Route
-                    path="/*"
-                    element={<NotFoundPage />}
-                />
-                <Route
-                    path="seeder"
-                    element={<Seeder />}
-                />
-                <Route
-                    path="/find-job"
-                    element={<FindJobs />}
-                />
-                <Route
-                    path="/find-company"
-                    element={<FindCompanyPage />}
-                />
-                <Route
-                    path="/company/detail/:id"
-                    element={<CompanyDetailPage />}
-                />
-                <Route
-                    path="/employer"
-                    element={<EmployerHomePage />}
-                />
-                <Route
-                    path="employer/managers"
-                    element={<CompanyManagersPage />}
-                />
-                <Route
-                    path="/employer/register"
-                    element={<RegisterCompanyPage />}
-                />
-                <Route
-                    path="/employer/jobs"
-                    element={<CompanyJobsPage />}
-                />
-                <Route
-                    path="/employer/invitations"
-                    element={<CompanyInvitation />}
-                />
-                <Route
-                    path="/complete-registration"
-                    element={<CompleteRegistrationPage />}
-                />
+                {protector.map((route, index) => (
+                    <Route
+                        key={index}
+                        element={route.element}>
+                        {route.children?.map((childRoute, childIndex) => (
+                            <Route
+                                key={childIndex}
+                                path={childRoute.path}
+                                element={childRoute.element}
+                            />
+                        ))}
+                    </Route>
+                ))}
             </Routes>
         </HashRouter>
     );
