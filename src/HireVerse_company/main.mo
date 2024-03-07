@@ -48,7 +48,6 @@ actor Company {
         founded_country : Text;
         office_locations : [Text];
         social_medias : [Text];
-        image : Blob;
         linkedin : Text;
     };
 
@@ -92,7 +91,7 @@ actor Company {
     };
 
     // Generates a company with user Input
-    public shared (msg) func registerCompanies(newCompany : CreateCompanyInput) : async Company {
+    public shared (msg) func registerCompany(newCompany : CreateCompanyInput) : async Result.Result<Company, Text> {
 
         let id = await Helper.generateUUID();
 
@@ -104,7 +103,7 @@ actor Company {
             founded_country = newCompany.founded_country;
             office_locations = newCompany.office_locations;
             social_medias = newCompany.social_medias;
-            image = newCompany.image;
+            image = Blob.fromArray([0]);
             linkedin = newCompany.linkedin;
             company_manager_ids = [Principal.toText(msg.caller)];
             job_posting_ids = [];
@@ -115,7 +114,7 @@ actor Company {
 
         companies.put(company.id, company);
 
-        return company;
+        return #ok(company);
     };
 
     // Updates a company with user Input
@@ -212,7 +211,6 @@ actor Company {
         return #ok(Vector.toArray(managedCompanies));
     };
 
-    //
     public shared query (msg) func getCompanyCountriesData(companyId : [Text]) : async Result.Result<[Text], Text> {
         let companyList = Iter.toArray(companies.vals());
         var countries = Vector.Vector<Text>();
@@ -365,9 +363,9 @@ actor Company {
         };
     };
 
-
     // Add a job to a company
-    public shared query(msg) func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+    public shared (msg) func addJob(company_id : Text, job_id : Text) : async Result.Result<(), Text> {
+
 
         let user_id = msg.caller;
 
@@ -382,7 +380,11 @@ actor Company {
                 return #err("Company not found");
             };
             case (?company) {
-                let jobIds = company.job_posting_ids;
+                let jobIds = Array.append<Text>(company.job_posting_ids, [job_id]);
+
+                for (job in jobIds.vals()) {
+                    Debug.print(job);
+                };
 
                 let updatedCompany : Company = {
                     id = company_id;
@@ -395,7 +397,7 @@ actor Company {
                     image = company.image;
                     linkedin = company.linkedin;
                     company_manager_ids = company.company_manager_ids;
-                    job_posting_ids = Array.append<Text>(jobIds, [job_id]);
+                    job_posting_ids = jobIds;
                     reviews_ids = company.reviews_ids;
                     timestamp = company.timestamp;
                     seen = company.seen;

@@ -3,9 +3,6 @@ import { CreateJobInput } from "../../../../.dfx/local/canisters/HireVerse_job/s
 import { isOk } from "./resultGuarder";
 import { ServiceContextType } from "../components/context/ServiceContext";
 import { CONSTANTS } from "./constants";
-
-// import { _SERVICE as _SERVICE_BACKEND } from "../../../../declarations/HireVerse_backend/HireVerse_backend.did";
-// import { _SERVICE as _SERVICE_REVIEW } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import { _SERVICE as _SERVICE_JOB } from "../../../declarations/HireVerse_job/HireVerse_job.did";
 import { ActorSubclass } from "@dfinity/agent";
 
@@ -24,7 +21,6 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         {
             name: `Company 1`,
             linkedin: "https://www.linkedin.com",
-            image: [1],
             office_locations: ["Lagos", "Abuja"],
             social_medias: ["facebook.com", "twitter.com"],
             founded_country: "Nigeria",
@@ -34,7 +30,6 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         {
             name: `Company 2`,
             linkedin: "https://www.linkedin.com",
-            image: [1],
             founded_country: "USA",
             social_medias: ["facebook.com", "twitter.com"],
             office_locations: ["New York", "California"],
@@ -44,7 +39,6 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         {
             name: `Company 3`,
             linkedin: "https://www.linkedin.com",
-            image: [1],
             founded_country: "UK",
             office_locations: ["London", "Manchester"],
             social_medias: ["facebook.com", "twitter.com"],
@@ -54,7 +48,6 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         {
             name: `Company 4`,
             linkedin: "https://www.linkedin.com",
-            image: [1],
             founded_country: "Canada",
             social_medias: ["facebook.com", "twitter.com"],
             office_locations: ["Toronto", "Vancouver"],
@@ -63,11 +56,18 @@ async function companySeeder(companyService: ActorSubclass<_SERVICE_COMPANY>) {
         },
     ];
 
-    const promises = newCompanies.map(async (c) => companyService.registerCompanies(c));
+    const promises = newCompanies.map(async (c) => companyService.registerCompany(c));
 
-    const companies = await Promise.all(promises);
+    const responses = await Promise.all(promises);
     console.log("Finished seeding companies");
-    return companies.map((c) => c.id);
+
+    const companies = responses.map((r) => {
+        if (isOk(r)) {
+            return r.ok;
+        }
+        return null;
+    });
+    return companies.map((c) => c!.id!);
 }
 
 const jobSeeder = async (jobService: ActorSubclass<_SERVICE_JOB>, companyIds: string[]) => {
@@ -202,8 +202,9 @@ const jobSeeder = async (jobService: ActorSubclass<_SERVICE_JOB>, companyIds: st
     ];
 
     for (const job of newJobs) {
-        const response = await jobService.createJobForce(job);
+        const response = await jobService.createJobForce(job).catch((e) => console.error(e));
         if (isOk(response)) {
+            console.log(response);
             console.log("Job created");
         }
     }

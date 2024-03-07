@@ -7,7 +7,7 @@ export default function FooterSection() {
 
             </div>
             <TextRevealCard
-                text="Taroh text apa yah?"
+                text="Codefest Hackathon 2024"
                 revealText="Codefest Hackathon 2024"
             >
             </TextRevealCard>

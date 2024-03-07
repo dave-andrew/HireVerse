@@ -35,23 +35,21 @@ export default function JobItem({ job, onClick }: Props) {
                         alt={job.companyName}
                         width="50rem"
                         height="auto"
-                        className="aspect-square object-cover rounded-full w-12 h-12"
+                        className="aspect-square h-12 w-12 rounded-full object-cover"
                         src={convertBlobToImage(job.companyImage)}
                     />
                     <span className="font-bold">{job.companyName}</span>
                 </div>
-                <div className="text-sm">
-                    {convertShortTimeInterval(job.timestamp)}
-                </div>
+                <div className="text-sm">{convertShortTimeInterval(job.timestamp)}</div>
             </div>
-            <div className="text-2xl font-bold pt-2">{job.position}</div>
+            <div className="pt-2 text-2xl font-bold">{job.position}</div>
             <div>
                 at <span className="font-semibold"> {job.location}</span>
             </div>
             <div className="py-2">
                 <span className="font-semibold">Salary:</span> {job.currency}
-                {job.salaryStart.toString()} - {job.currency}
-                {job.salaryEnd.toString()}
+                {job.salaryStart?.toString()} - {job.currency}
+                {job.salaryEnd?.toString()}
             </div>
             <div>
                 <EmployTypeIndicator employType={job.employType} />

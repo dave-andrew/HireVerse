@@ -3,117 +3,45 @@ import FrontPageLayout from "../../layouts/FrontPageLayout";
 import { IoIosSearch } from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
 import { useEffect, useState } from "react";
-import CustomTextField from "../../components/form/CustomTextField";
 import useService from "../../hooks/useService";
 import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import { useNavigate } from "react-router-dom";
 import imageHandler from "../../utils/imageHandler";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { useForm } from "react-hook-form";
+import CompanyFilter, { IFilterCompanyForm } from "../../components/form/CompanyFilter";
+import { getFilterCompany } from "../../datas/queries/jobQueries";
+
+export interface IQueryCompanyFilter {
+    location: string;
+    industries: string;
+}
+
+const defaultValue: IQueryCompanyFilter = {
+    location: "",
+    industries: "",
+};
 
 export default function FindCompanyPage() {
     const nav = useNavigate();
-
-    const { getCompanyService } = useService();
-
+    const [shownCompanyId, setShownCompanyId] = useState<string>("");
     const [search, setSearch] = useState<string>("");
-    const [searchCompany, setSearchCompany] = useState<Company[] | undefined>([]);
-
-    const [popularCompanies, setPopularCompanies] = useState<Company[]>();
-    // [
-    //     {
-    //         id: "1",
-    //         name: "BINUS University",
-
-    //         image: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-
-    //     },
-    //     {
-    //         id: "2",
-    //         name: "BINUS University",
-    //         rating: 4.05,
-    //         reviewCount: 12,
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //     },
-    //     {
-    //         id: "3",
-    //         name: "BINUS University",
-    //         rating: 4.05,
-    //         reviewCount: 12,
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //     },
-    //     {
-    //         id: "4",
-    //         name: "BINUS University",
-    //         rating: 4.05,
-    //         reviewCount: 12,
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //     },
-    // ]
-
-    const [resultCompanies, setResultCompanies] = useState<Company[]>();
-    // [
-    //     {
-    //         name: "Universitas Tarumanegara",
-    //         location: "Jakarta",
-    //         country: "Indonesia",
-    //         industry: "Education",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         linkedin: "in/untar",
-    //     },
-    //     {
-    //         name: "Universitas Airlangga",
-    //         location: "Jakarta",
-    //         country: "Indonesia",
-    //         industry: "Education",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         linkedin: "in/untar",
-    //     },
-    //     {
-    //         name: "Universitas 11 Maret",
-    //         location: "Surabaya",
-    //         country: "Indonesia",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         industry: "Education",
-    //         linkedin: "in/untar",
-    //     },
-    //     {
-    //         name: "Universitas 11 Maret",
-    //         location: "Surabaya",
-    //         country: "Indonesia",
-    //         industry: "Education",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         linkedin: "in/untar",
-    //     },
-    //     {
-    //         name: "Universitas 11 Maret",
-    //         location: "Surabaya",
-    //         country: "Indonesia",
-    //         industry: "Education",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         linkedin: "in/untar",
-    //     },
-    //     {
-    //         name: "Universitas 11 Maret",
-    //         location: "Surabaya",
-    //         country: "Indonesia",
-    //         logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0a/Logo_Binus_University.svg/1200px-Logo_Binus_University.svg.png",
-    //         industry: "Education",
-    //         linkedin: "in/untar",
-    //     },
-    // ]
+    const [searchCompany, setSearchCompany] = useState<Company[] | null>();
+    const [resultCompanies, setResultCompanies] = useState<Company[] | null>();
+    const [filter, setFilter] = useState<IFilterCompanyForm>(defaultValue);
+    const { detector, isIntersecting } = useInfiniteScroll();
+    const { data: company, refetch: reGetFilteredCompany, fetchNextPage, hasNextPage, isFetching } = getFilterCompany(filter);
 
     useEffect(() => {
-        const searchJob = async () => {
-            const response = await getCompanyService().then((s) => s.getCompanies());
-            setResultCompanies(response);
-            setSearchCompany(response);
-        };
-        searchJob();
-    }, []);
+        if (isIntersecting && !isFetching) {
+            fetchNextPage();
+        }
+    }, [isIntersecting]);
 
     useEffect(() => {
         if (search.length > 0) {
             const searched = resultCompanies?.filter((company) => {
-                return company.name.toLowerCase().includes(search.toLowerCase());
+                return company?.name.toLowerCase().includes(search.toLowerCase());
             });
 
             setSearchCompany(searched);
@@ -122,11 +50,32 @@ export default function FindCompanyPage() {
         }
     }, [search]);
 
+    useEffect(() => {
+        if (company && company.pages[0] && !shownCompanyId) {
+            setShownCompanyId(company.pages[0][0]?.id);
+        
+            
+        }
+        setResultCompanies(company?.pages[0]);
+        setSearchCompany(company?.pages[0]);
+
+        console.log(company?.pages[0]);
+    }, [company]);
+
+    useEffect(() => {
+        reGetFilteredCompany();
+    }, [filter]);
+
+    useEffect(() => {
+        setResultCompanies(company?.pages[0]);
+        setSearchCompany(resultCompanies);
+    }, [])
+
     return (
         <FrontPageLayout>
-            <div className="flex flex-col">
-                <div className="h-fit w-full place-items-center bg-[url(src/HireVerse_frontend/backgrounds/subtle-prism.svg)] shadow-md">
-                    <div className="flex flex-col place-items-center gap-8 p-8">
+            <div className="flex flex-col overflow-hidden">
+                <div className="h-fit w-full place-items-center bg-[url(backgrounds/subtle-prism.svg)] shadow-md">
+                    <div className="flex h-[100vh] flex-col place-items-center gap-8">
                         <div className="flex flex-col items-center justify-center">
                             <div className="flex w-full flex-col gap-3 self-start">
                                 <h3 className="text-4xl font-bold lg:text-5xl">Popular Companies</h3>
@@ -134,24 +83,24 @@ export default function FindCompanyPage() {
                             </div>
                             <div className="flex w-full flex-row items-center gap-10">
                                 <div className="grid h-fit grid-cols-2 gap-4 py-8">
-                                    {resultCompanies?.slice(0, 4).map((company: Company) => {
+                                    {resultCompanies?.slice(0, 4).map((company: Company | null) => {
                                         return (
                                             <CardLayout
                                                 className="flex h-32 w-64 p-4 xl:w-80"
-                                                key={company.id}
+                                                key={company?.id}
                                                 onClick={() => {
-                                                    nav(`/company/detail/${company.id}`);
+                                                    nav(`/company/detail/${company?.id}`);
                                                 }}>
                                                 <div className="flex flex-row place-items-center">
                                                     <img
                                                         width="80rem"
                                                         height="auto"
                                                         className="mr-4 aspect-square rounded-xl object-cover"
-                                                        src={imageHandler(company.image)}
+                                                        src={imageHandler(company?.image)}
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">
-                                                        <div className="font-semibold">{company.name}</div>
+                                                        <div className="font-semibold">{company?.name}</div>
                                                         <div>
                                                             TODO: Taroh star disini TODO: Taroh jumlah
                                                             {/* {company.rating} */}
@@ -184,7 +133,8 @@ export default function FindCompanyPage() {
                     <div
                         style={{
                             width: "min(1000px, 100%)",
-                        }}>
+                        }}
+                        className="h-[85vh]">
                         <div className="flex w-full flex-col gap-8">
                             <div className="flex flex-col gap-2">
                                 Find your dream company
@@ -201,80 +151,24 @@ export default function FindCompanyPage() {
                                 </CardLayout>
                             </div>
                             <div className="flex flex-row gap-4">
-                                <CardLayout className="flex h-fit w-72 flex-col gap-2 p-4">
-                                    <div className="p-1 text-lg font-bold">Filter Companies</div>
-                                    <hr />
-                                    <div className="flex flex-col gap-6 p-4">
-                                        <CustomTextField
-                                            label="Location"
-                                            type="Location"
-                                        />
-                                        <CustomTextField
-                                            label="Industries"
-                                            type="Industries"
-                                        />
-                                        <CustomTextField
-                                            label="Job Titles"
-                                            type="Job Titles"
-                                        />
-                                    </div>
-                                    <hr />
-                                    <div className="flex flex-col gap-2 p-4">
-                                        <div className="text-xs font-bold">Experience</div>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            <div className="flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    value=""
-                                                    defaultChecked={true}
-                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                                                />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Full-Time</label>
-                                            </div>
-                                            <div className="flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    value=""
-                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                                                />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Part-Time</label>
-                                            </div>
-                                            <div className="flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    value=""
-                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                                                />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Internship</label>
-                                            </div>
-                                            <div className="flex items-center">
-                                                <input
-                                                    type="checkbox"
-                                                    value=""
-                                                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                                                />
-                                                <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Volunteer</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </CardLayout>
-                                <div className="grid grow grid-cols-2 gap-4">
+                                <CompanyFilter onApplyFilter={(data) => setFilter(data)} />
+                                <div className="grid h-[70vh] grow grid-cols-2 gap-4 overflow-y-scroll pr-4">
                                     {searchCompany?.map((cp, index) => {
                                         return (
                                             <CardLayout
                                                 className="flex flex-col gap-2 rounded-md bg-white px-6 py-5 hover:cursor-pointer hover:bg-gray-100"
                                                 key={index}
                                                 onClick={() => {
-                                                    nav(`/company/detail/${cp.id}`);
+                                                    nav(`/company/detail/${cp?.id}`);
                                                 }}>
                                                 <div className="flex flex-row place-items-center">
                                                     <img
                                                         className="mr-4 aspect-square w-24 rounded-xl object-cover"
-                                                        src={imageHandler(cp.image)}
+                                                        src={imageHandler(cp?.image)}
                                                         alt="Company Image"
                                                     />
                                                     <div className="flex flex-col">
-                                                        <div className="font-bold">{cp.name}</div>
+                                                        <div className="font-bold">{cp?.name}</div>
                                                         <div>X X X X X 4.9</div>
                                                     </div>
                                                 </div>
@@ -282,22 +176,22 @@ export default function FindCompanyPage() {
                                                     <div className="grid grid-cols-3">
                                                         <div className="flex flex-col">
                                                             <div className="text-sm font-bold">Location:</div>
-                                                            <div>{cp.office_locations[0]}</div>
+                                                            <div>{cp?.office_locations[0]}</div>
                                                         </div>
                                                         <div className="flex flex-col">
                                                             <div className="text-sm font-bold">Country:</div>
-                                                            <div>{cp.founded_country}</div>
+                                                            <div>{cp?.founded_country}</div>
                                                         </div>
                                                         <div className="flex flex-col">
                                                             <div className="text-sm font-bold">Industry:</div>
-                                                            <div>{cp.founded_year.toString()}</div>
+                                                            <div>{cp?.founded_year.toString()}</div>
                                                         </div>
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <div className="text-sm font-bold">Linkedin:</div>
                                                         <div className="flex flex-row place-items-center gap-2">
                                                             <FaLinkedin />
-                                                            {cp.linkedin}
+                                                            {cp?.linkedin}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -305,6 +199,7 @@ export default function FindCompanyPage() {
                                         );
                                     })}
                                 </div>
+                                <div ref={detector}>{hasNextPage}</div>
                             </div>
                         </div>
                     </div>

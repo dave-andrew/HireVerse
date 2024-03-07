@@ -35,4 +35,8 @@ actor Helper {
         return principals[0];
     };
 
+    private func test() : async Text {
+        return "Hello, World!";
+    };
+
 };

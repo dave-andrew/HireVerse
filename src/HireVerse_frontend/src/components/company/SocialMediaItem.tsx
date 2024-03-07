@@ -1,12 +1,5 @@
-import {
-    FaDiscord,
-    FaEnvelopeOpenText,
-    FaFacebookF,
-    FaInstagram,
-    FaTwitter,
-    FaWhatsapp,
-    FaYoutube,
-} from "react-icons/fa";
+import { FaDiscord, FaEnvelopeOpenText, FaFacebookF, FaInstagram, FaTwitter, FaWhatsapp, FaYoutube } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 interface Props {
     url: string;
@@ -34,11 +27,11 @@ export default function SocialMediaItem({ url }: Props) {
     };
 
     return (
-        <a
-            href={`https://${url}`}
+        <Link
+            to={`https://${url}`}
             className="hover:bg-signature-gray flex w-fit flex-row items-center gap-3 rounded-md border-[1px] border-blue-500 p-2 pe-3 font-bold text-blue-500 transition-colors *:cursor-pointer">
             {getIcon(url)}
             <label>{url}</label>
-        </a>
+        </Link>
     );
 }

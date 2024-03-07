@@ -1,8 +1,6 @@
 import {useEffect, useState} from "react";
 import {animated, useSpring, useTrail} from "@react-spring/web";
 import useMobile from "../../hooks/useMobile";
-import {LiaLongArrowAltUpSolid} from "react-icons/lia";
-
 
 export default function BenefitSection({parentRef}: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
     const upperTriggerPoint = 500;
@@ -20,40 +18,36 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
         return () => parentRef?.current?.removeEventListener("scroll", handleScroll);
     }, [upperTriggerPoint, parentRef, lowerTriggerPoint]);
 
-
     const benefitItem = [
-        (<div className="translate-x-[10%] flex flex-col place-items-start w-full">
-            <div className="text-2xl md:text-4xl font-bebas ">
-                Decentralized Hiring
+        <div className="flex w-full translate-x-[10%] flex-col place-items-start">
+            <div className="font-bebas text-2xl md:text-4xl ">Decentralized Hiring</div>
+            <div className="justify-center text-sm text-gray-600 2xl:text-base">
+                Embrace a faster, more cost-effective hiring experience. <b>Cut out the middleman</b> and take control
+                of your recruitment process with <b className="text-blue-primary">Internet
+                Computer </b>. This innovative technology allows you to directly connect with talent, eliminating
+                dependence
+                on third-party platforms and ensuring
+                your data remains under your <b> complete control </b>.
             </div>
-            <div className="text-gray-600 text-sm 2xl:text-base justify-center">
-                Embrace a faster, more cost-effective hiring experience. Cut out the middleman and take control
-                of your recruitment process with Internet Computer. This innovative technology allows you to
-                directly connect with talent, eliminating dependence on third-party platforms and ensuring your
-                data remains under your complete control.
-            </div>
-        </div>),
-        (<div className="snap-center flex flex-col place-items-start w-full mb-12 justify-center">
-            <div className="text-2xl md:text-4xl font-bebas ">
-                Credible Reviews
-            </div>
-            <div className="text-gray-600 text-sm 2xl:text-base">
-                Boost your confidence in your next career move. Our platform empowers you with credible and
-                trustworthy reviews from both employees and employers. Internet Identity ensures the authenticity of
-                every user, guaranteeing that the valuable
+        </div>,
+        <div className="mb-12 flex w-full snap-center flex-col place-items-start justify-center">
+            <div className="font-bebas text-2xl md:text-4xl ">Credible Reviews</div>
+            <div className="text-sm text-gray-600 2xl:text-base">
+                Boost your confidence in your next career move. Our platform empowers you with <b> credible and
+                trustworthy reviews </b>from employees. <b className="text-blue-primary"> Internet
+                Identity </b> ensures <b> the authenticity </b> of every user, guaranteeing that the valuable
                 insights you encounter come from verified individuals with genuine experiences.
             </div>
-        </div>),
-        (<div className="translate-x-[-10%] flex flex-col place-items-start w-full justify-center">
-            <div className="text-2xl md:text-4xl font-bebas ">
-                Secure and Private
+        </div>,
+        <div className="flex w-full translate-x-[-10%] flex-col place-items-start justify-center">
+            <div className="font-bebas text-2xl md:text-4xl ">Secure and Private</div>
+            <div className="text-sm text-gray-600 2xl:text-base">
+                Maintain complete control over your information. <b className="text-blue-primary"> Internet
+                Identity </b> empowers you with <b> unparalleled data security and privacy </b>. Your information
+                remains exclusively accessible to you, ensuring your personal details are never shared without your
+                explicit consent.
             </div>
-            <div className="text-gray-600 text-sm 2xl:text-base">
-                Maintain complete control over your information. Internet Identity empowers you with
-                unparalleled data security and privacy. Your information remains exclusively accessible to you,
-                ensuring your personal details are never shared without your explicit consent.
-            </div>
-        </div>),
+        </div>,
     ];
 
     const trail = useTrail(benefitItem.length, {
@@ -72,28 +66,24 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
 
     return (
         <div
-            className={`grow grid z-10 grid-cols-1 xl:grid-cols-2 place-items-center justify-center gap-16 
-            py-14 px-[10vh] md:px-[20vh] transition-all ease-in-out duration-1000 min-h-[1000px] `}>
-
-
-            <animated.div
-                style={fadeAnimation}
-            >
+            className={`z-10 grid min-h-[1000px] grow grid-cols-1 place-items-center justify-center gap-16 
+            px-[10vh] py-14 transition-all duration-1000 ease-in-out md:px-[20vh] xl:grid-cols-2 `}>
+            <animated.div style={fadeAnimation}>
                 <iframe
-                    className=" w-[500px] h-[500px] hidden xl:block"
-                    src="https://lottie.host/embed/7761944a-3364-4bfe-b7db-bc3ae9475dd6/Ex2qyJXCQZ.json"></iframe>
+                    className=" hidden h-[500px] w-[500px] xl:block"
+                    src="https://lottie.host/embed/7761944a-3364-4bfe-b7db-bc3ae9475dd6/Ex2qyJXCQZ.json"
+                />
             </animated.div>
-            <div className="flex flex-col place-items-start w-full gap-5">
+            <div className="flex w-full flex-col place-items-start gap-5">
                 {trail.map(({x, height, ...rest}, index) => (
                     <animated.div
                         key={index}
                         className="w-full"
-                        style={{...rest, transform: x.to(x => `translate3d(0,${x}px,0)`)}}>
+                        style={{...rest, transform: x.to((x) => `translate3d(0,${x}px,0)`)}}>
                         <animated.div style={{height}}>{benefitItem[index]}</animated.div>
                     </animated.div>
                 ))}
             </div>
-
         </div>
     );
 }

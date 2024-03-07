@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import FindJobs from "./pages/employee/FindJobsPage";
 import RegisterCompanyPage from "./pages/employers/RegisterCompanyPage";
 import FindCompanyPage from "./pages/employee/FindCompanyPage";
@@ -15,71 +15,78 @@ import EmployerProtectedRoutes from "./components/protected/EmployerProtectedRou
 import AuthorizedProtectedRoutes from "./components/protected/AuthorizedProtectedRoutes";
 import CompanyInvitation from "./pages/employers/CompanyInvitation";
 import EmployerHomePage from "./pages/employers/EmployerHomePage";
+import { useLayoutEffect } from "react";
+import canisterInjector from "./utils/canisterInjector";
 
-const guestRoutes: RouteObject[] = [
+const guestRoutes = [
     {
         path: "/",
-        Component: LandingPage,
+        element: <LandingPage />,
     },
 ];
 
-const frontRoutes: RouteObject[] = [
+const frontRoutes = [
     {
         path: "/find-job",
-        Component: FindJobs,
+        element: <FindJobs />,
     },
     {
         path: "/find-company",
-        Component: FindCompanyPage,
+        element: <FindCompanyPage />,
     },
     {
         path: "/company/detail/:id",
-        Component: CompanyDetailPage,
+        element: <CompanyDetailPage />,
     },
 ];
 
-const backRoutes: RouteObject[] = [
+const backRoutes = [
     {
         path: "/employer",
-        Component: EmployerHomePage,
+        element: <EmployerHomePage />,
     },
     {
         path: "/employer/managers",
-        Component: CompanyManagersPage,
+        element: <CompanyManagersPage />,
     },
     {
         path: "/employer/register",
-        Component: RegisterCompanyPage,
+        element: <RegisterCompanyPage />,
     },
     {
         path: "/employer/jobs",
-        Component: CompanyJobsPage,
+        element: <CompanyJobsPage />,
     },
     {
         path: "/employer/invitations",
-        Component: CompanyInvitation,
+        element: <CompanyInvitation />,
     },
 ];
 
-const otherRoutes: RouteObject[] = [
+const otherRoutes = [
     {
         path: "*",
-        Component: NotFoundPage,
+        element: <NotFoundPage />,
     },
     {
         path: "/seeder",
-        Component: Seeder,
+        element: <Seeder />,
     },
 ];
 
-const unregisteredProtectedRoutes: RouteObject[] = [
+const unregisteredProtectedRoutes = [
     {
         path: "/complete-registration",
-        Component: CompleteRegistrationPage,
+        element: <CompleteRegistrationPage />,
     },
 ];
 
-const router = createBrowserRouter([
+interface RouterProtector {
+    element: JSX.Element;
+    children?: { path: string; element: JSX.Element }[];
+}
+
+const protector: RouterProtector[] = [
     {
         element: <UnauthenticatedProtectedRoutes />,
         children: guestRoutes,
@@ -96,13 +103,80 @@ const router = createBrowserRouter([
         element: <EmployerProtectedRoutes />,
         children: backRoutes,
     },
-    ...otherRoutes,
-]);
+];
+
+const fonts = [
+    {
+        fontFamily: "Bebas Neue",
+        src: `url(${canisterInjector("/fonts/Bebas_Neue/BebasNeue-Regular.ttf")}) format("truetype")`,
+    },
+    {
+        fontFamily: "Lato",
+        src: `url(${canisterInjector("/fonts/Lato/Lato-Regular.ttf")}) format("truetype")`,
+    },
+    {
+        fontFamily: "Lato",
+        fontWeight: "bold",
+        src: `url(${canisterInjector("/fonts/Lato/Lato-Bold.ttf")}) format("truetype")`,
+    },
+    {
+        fontFamily: "Lato",
+        fontWeight: 300,
+        src: `url(${canisterInjector("/fonts/Lato/Lato-Light.ttf")}) format("truetype")`,
+    },
+    {
+        fontFamily: "Lato",
+        fontWeight: 400,
+        src: `url(${canisterInjector("/fonts/Lato/Lato-Regular.ttf")}) format("truetype")`,
+    },
+];
+
+const fontLoader = () => {
+    for (const font of fonts) {
+        const style = document.createElement("style");
+        style.innerHTML = `
+            @font-face {
+                font-family: '${font.fontFamily}';
+                src: ${font.src};
+                font-weight: ${font.fontWeight || 400};
+                font-style: normal;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+};
 
 function App() {
-    // TODO: Disabling all console logs for production
-    // console.log = () => {};
-    return <RouterProvider router={router} />;
+    useLayoutEffect(() => {
+        fontLoader();
+    }, []);
+
+    return (
+        <BrowserRouter>
+            <Routes>
+                {protector.map((route, index) => (
+                    <Route
+                        key={index}
+                        element={route.element}>
+                        {route.children?.map((childRoute, childIndex) => (
+                            <Route
+                                key={childIndex}
+                                path={childRoute.path}
+                                element={childRoute.element}
+                            />
+                        ))}
+                    </Route>
+                ))}
+                {otherRoutes.map((route, index) => (
+                    <Route
+                        key={index}
+                        path={route.path}
+                        element={route.element}
+                    />
+                ))}
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
