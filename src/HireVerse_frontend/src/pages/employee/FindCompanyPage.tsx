@@ -99,7 +99,7 @@ export default function FindCompanyPage() {
                                     {resultCompanies?.slice(0, 4).map((company: Company | null) => {
                                         return (
                                             <CardLayout
-                                                className="flex h-32 w-64 p-4 xl:w-80"
+                                                className="flex h-32 w-64 p-4 xl:w-80 hover:bg-gray-200 cursor-pointer"
                                                 key={company?.id}
                                                 onClick={() => {
                                                     nav(`/company/detail/${company?.id}`);

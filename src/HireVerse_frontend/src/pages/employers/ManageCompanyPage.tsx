@@ -166,14 +166,15 @@ export default function ManageCompanyPage() {
                                         <div className="flex flex-col">
                                             <p className="text-gray-600">Location</p>
                                             <div className="flex flex-row">
-                                                {selectedCompany?.office_locations?.map((location, i) => {
-                                                    return (
-                                                        <div key={i}>
-                                                            {i !== 0 && <span className="inline pr-1 font-semibold">, </span>}
-                                                            <span className="inline font-semibold">{location}</span>
-                                                        </div>
-                                                    );
-                                                })}
+                                                {/*{selectedCompany?.office_locations?.map((location, i) => {*/}
+                                                {/*    return (*/}
+                                                {/*        <div key={i}>*/}
+                                                {/*            {i !== 0 && <span className="inline pr-1 font-semibold">, </span>}*/}
+                                                {/*            <span className="inline font-semibold">{location}</span>*/}
+                                                {/*        </div>*/}
+                                                {/*    );*/}
+                                                {/*})}*/}
+                                                {selectedCompany?.founded_country}
                                             </div>
                                         </div>
                                     </div>
