@@ -18,7 +18,7 @@ import LeaveCompanyModal from "../../components/modal/LeaveCompanyModal";
 import { Link } from "react-router-dom";
 import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import EditReviewModal from "../../components/modal/EditReviewModal";
-import handleDefaultImage from "../../utils/handleDefaultImage";
+import getIndustryColor from "../../utils/industryColor";
 
 interface IManageCompanyForm {
     image: FileList;
@@ -66,20 +66,6 @@ export default function ManageCompanyPage() {
         window.location.reload();
     };
 
-    function getBgColor(industry: string, type: string = "bg") {
-        const firstChar = industry.charAt(0).toLowerCase();
-        const charCode = firstChar.charCodeAt(0);
-        if (charCode >= 97 && charCode <= 122) {
-            let hue = ((charCode - 97) / 26) * 360;
-            let lightness = 90;
-            if (type === "text" || type === "border") {
-                // hue = (hue + 180) % 360;
-                lightness -= 70;
-            }
-            return `hsl(${hue}, 100%, ${lightness}%)`;
-        }
-        return "hsl(0, 100%, 90%)";
-    }
 
     useEffect(() => {
         updateCompanyData();
@@ -89,13 +75,12 @@ export default function ManageCompanyPage() {
         <>
             <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
                 <div className="flex flex-col place-items-center gap-2 px-4 md:px-0 xl:w-[calc(100%-1rem)] 2xl:w-4/5">
-                    <div className="mt-12 flex w-full flex-col gap-8 md:flex-row">
+                    <div className="my-12 flex w-full flex-col gap-8 md:flex-row">
                         <div className="flex h-fit w-full flex-col gap-4 px-32 md:sticky md:top-20 md:w-[30%] md:px-0">
                             <div className="relative">
                                 <img
                                     className="border-signature-gray aspect-square w-full rounded-xl border-[1px] object-cover"
                                     src={imageHandler(selectedCompany?.image)}
-                                    onError={handleDefaultImage}
                                     alt=""
                                 />
                                 <ProfileEditButton
@@ -136,16 +121,16 @@ export default function ManageCompanyPage() {
                                                 key={i}
                                                 className="cursor-default rounded-xl border border-green-400 px-4 py-1 "
                                                 style={{
-                                                    backgroundColor: getBgColor(industry),
-                                                    color: getBgColor(industry, "text"),
-                                                    borderColor: getBgColor(industry, "border"),
+                                                    backgroundColor: getIndustryColor(industry),
+                                                    color: getIndustryColor(industry, "text"),
+                                                    borderColor: getIndustryColor(industry, "border"),
                                                 }}>
                                                 {industry}
                                             </div>
                                         );
                                     })}
                                 </div>
-                                <div className="flex flex-row place-items-start gap-2">
+                                <div className="flex flex-row place-items-start flex-wrap gap-2">
                                     <Link
                                         className="hover:bg-signature-gray flex w-fit flex-row items-center gap-3 rounded-md border-[1px] border-blue-500 p-2 pe-3 font-bold text-blue-500 transition-colors *:cursor-pointer"
                                         to={selectedCompany?.linkedin ?? ""}
@@ -164,7 +149,7 @@ export default function ManageCompanyPage() {
                                         );
                                     })}
                                 </div>
-                                <div className="flex flex-col justify-evenly lg:flex-row">
+                                <div className="flex flex-col justify-evenly lg:flex-row mt-8">
                                     <div className="flex flex-row gap-3">
                                         <div className="flex aspect-square place-items-center rounded-3xl p-2">
                                             <MdOutlineQueryBuilder size="2rem" />
@@ -181,14 +166,15 @@ export default function ManageCompanyPage() {
                                         <div className="flex flex-col">
                                             <p className="text-gray-600">Location</p>
                                             <div className="flex flex-row">
-                                                {selectedCompany?.office_locations?.map((location, i) => {
-                                                    return (
-                                                        <div key={i}>
-                                                            {i !== 0 && <span className="inline pr-1 font-semibold">, </span>}
-                                                            <span className="inline font-semibold">{location}</span>
-                                                        </div>
-                                                    );
-                                                })}
+                                                {/*{selectedCompany?.office_locations?.map((location, i) => {*/}
+                                                {/*    return (*/}
+                                                {/*        <div key={i}>*/}
+                                                {/*            {i !== 0 && <span className="inline pr-1 font-semibold">, </span>}*/}
+                                                {/*            <span className="inline font-semibold">{location}</span>*/}
+                                                {/*        </div>*/}
+                                                {/*    );*/}
+                                                {/*})}*/}
+                                                {selectedCompany?.founded_country}
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +191,7 @@ export default function ManageCompanyPage() {
                                 </div>
                             </div>
 
-                            <CardLayout className="mt-6 flex flex-col gap-5 rounded-lg p-10">
+                            <CardLayout className="flex flex-col gap-5 rounded-lg p-10 mt-6">
                                 <h3 className="m-0 p-0 text-4xl font-semibold">Company Profile</h3>
                                 <div
                                     dangerouslySetInnerHTML={{

@@ -7,6 +7,7 @@ import useAuth from "../../hooks/useAuth";
 import {defaultToastOptions} from "../../layouts/ManagementPageLayout";
 import {toast} from "react-toastify";
 import {useState} from "react";
+import useMobile from "../../hooks/useMobile";
 
 interface ICompleteRegisterForm {
     firstName: string;
@@ -47,15 +48,17 @@ export default function CompleteRegistrationPage() {
     const minDate = new Date(currentDate.getFullYear() - 17, currentDate.getMonth(), currentDate.getDate());
     const minDateValue = minDate.toISOString().split("T")[0];
 
+    const {isMobile} = useMobile()
+
     return (
         <FrontPageLayout>
             <div
-                className="relative flex h-[calc(100vh-4rem)] w-full place-items-center justify-center bg-gradient-to-br from-cyan-100 via-white to-pink-200">
-                <div className="absolute bottom-0 left-0">
+                className="relative flex py-12 min-h-[calc(100vh-4rem)] w-full place-items-center justify-center bg-gradient-to-br from-cyan-100 via-white to-pink-200">
+                {!isMobile && (<div className="absolute bottom-0 left-0">
                     <iframe
                         className="h-96"
                         src="https://lottie.host/embed/19081eaa-1ac5-4a21-b8a6-fb0f49790d47/srpS9AML6B.json"></iframe>
-                </div>
+                </div>) }
                 <div className="flex w-[40vw] min-w-[500px] flex-col gap-10 rounded-lg bg-white p-12 shadow-md border border-gray-300">
                     <div className="font-bebas text-5xl">Complete Registration</div>
 
