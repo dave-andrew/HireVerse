@@ -1,16 +1,16 @@
-import { FaLinkedin } from "react-icons/fa";
+import {FaLinkedin} from "react-icons/fa";
 import FrontPageLayout from "../../layouts/FrontPageLayout";
-import { IoIosSearch } from "react-icons/io";
+import {IoIosSearch} from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import useService from "../../hooks/useService";
-import { Company } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
-import { Link, useNavigate } from "react-router-dom";
+import {Company} from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import {Link, useNavigate} from "react-router-dom";
 import imageHandler from "../../utils/imageHandler";
-import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
-import { useForm } from "react-hook-form";
-import CompanyFilter, { IFilterCompanyForm } from "../../components/form/CompanyFilter";
-import { getFilterCompany } from "../../datas/queries/jobQueries";
+import {useInfiniteScroll} from "../../hooks/useInfiniteScroll";
+import {useForm} from "react-hook-form";
+import CompanyFilter, {IFilterCompanyForm} from "../../components/form/CompanyFilter";
+import {getFilterCompany} from "../../datas/queries/jobQueries";
 import BriefCompanyReview from "../../components/review/BriefCompanyReview";
 import StarReview from "../../components/review/StarReview";
 
@@ -26,7 +26,7 @@ const defaultValue: IQueryCompanyFilter = {
 
 export default function FindCompanyPage() {
 
-    const { getJobService } = useService();
+    const {getJobService} = useService();
 
     const nav = useNavigate();
     const [shownCompanyId, setShownCompanyId] = useState<string>("");
@@ -34,7 +34,7 @@ export default function FindCompanyPage() {
     const [searchCompany, setSearchCompany] = useState<Company[] | null>();
     const [resultCompanies, setResultCompanies] = useState<Company[] | null>();
     const [filter, setFilter] = useState<IFilterCompanyForm>(defaultValue);
-    const { detector, isIntersecting } = useInfiniteScroll();
+    const {detector, isIntersecting} = useInfiniteScroll();
     const {
         data: company,
         refetch: reGetFilteredCompany,
@@ -85,12 +85,13 @@ export default function FindCompanyPage() {
     return (
         <FrontPageLayout>
             <div className="flex flex-col overflow-hidden">
-                <div className="h-fit w-full place-items-center bg-[url(backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[640px]">
+                <div
+                    className="h-fit w-full place-items-center flex justify-center bg-[url(backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[640px]">
                     <div className="flex flex-col place-items-center gap-8">
-                        <div className="flex flex-col items-center justify-center">
-                            <div className="flex w-full flex-col gap-3 self-start">
-                                <h3 className="text-4xl font-bold lg:text-5xl">Popular Companies</h3>
-                                <p className="text-lg leading-6 lg:text-xl">These companies have the largest visitor
+                        <div className="flex flex-col place-items-center justify-center">
+                            <div className="flex w-full flex-col gap-2">
+                                <div className="text-4xl font-bold lg:text-5xl">Popular Companies</div>
+                                <p className="text-lg lg:text-xl ">These companies have the largest visitor
                                     count this month.</p>
                             </div>
                             <div className="flex w-full flex-row items-center gap-10">
@@ -113,7 +114,7 @@ export default function FindCompanyPage() {
                                                     />
                                                     <div className="flex flex-col">
                                                         <div className="font-semibold mb-2">{company?.name}</div>
-                                                        <BriefCompanyReview company_id={company?.id || ""} />
+                                                        <BriefCompanyReview company_id={company?.id || ""}/>
                                                     </div>
                                                 </div>
                                             </CardLayout>
@@ -121,11 +122,10 @@ export default function FindCompanyPage() {
                                     })}
                                 </div>
                                 <div className="hidden xl:block">
-                                    <img
-                                        className="w-[25rem]"
-                                        src="/storyset/job-offers-bro.png"
-                                        alt=""
-                                    />
+                                    <iframe
+                                        src="https://lottie.host/embed/e8ce368f-94fe-4c57-9674-8099787f007f/7HttWRful3.json"
+                                        className="w-[25rem] h-[25rem]"
+                                    > </iframe>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +141,7 @@ export default function FindCompanyPage() {
                             <div className="flex flex-col gap-2">
                                 Find your dream company
                                 <CardLayout className="flex w-full flex-row items-center gap-2 p-2">
-                                    <IoIosSearch size="1.5rem" />
+                                    <IoIosSearch size="1.5rem"/>
                                     <input
                                         type="text"
                                         className="outline-0 w-full"
@@ -153,7 +153,7 @@ export default function FindCompanyPage() {
                                 </CardLayout>
                             </div>
                             <div className="flex flex-row gap-4">
-                                <CompanyFilter onApplyFilter={(data) => setFilter(data)} />
+                                <CompanyFilter onApplyFilter={(data) => setFilter(data)}/>
                                 {searchCompany?.length === 0 ? (
                                     <div
                                         className="flex flex-col place-items-center justify-center gap-2 grow text-xl font-bold">
@@ -181,8 +181,9 @@ export default function FindCompanyPage() {
                                                             alt="Company Image"
                                                         />
                                                         <div className="flex flex-col">
-                                                            <div className="font-bold mb-1 w-[12rem] overflow-ellipsis overflow-hidden whitespace-nowrap ">{cp?.name}</div>
-                                                            <StarReview company_id={cp?.id || ""} />
+                                                            <div
+                                                                className="font-bold mb-1 w-[12rem] overflow-ellipsis overflow-hidden whitespace-nowrap ">{cp?.name}</div>
+                                                            <StarReview company_id={cp?.id || ""}/>
                                                         </div>
                                                     </div>
                                                     <div className="flex flex-col gap-4">
@@ -206,7 +207,7 @@ export default function FindCompanyPage() {
                                                                 className="hover:bg-signature-gray flex w-fit flex-row items-center gap-3 rounded-md border-[1px] border-blue-500 p-2 pt-1 pb-1 font-bold text-blue-500 transition-colors *:cursor-pointer text-xs"
                                                                 to={cp?.linkedin ?? ""}
                                                                 target="_blank">
-                                                                <FaLinkedin />
+                                                                <FaLinkedin/>
                                                                 {cp?.linkedin}
                                                             </Link>
                                                         </div>
@@ -223,5 +224,5 @@ export default function FindCompanyPage() {
                 </div>
             </div>
         </FrontPageLayout>
-    );
+);
 }
