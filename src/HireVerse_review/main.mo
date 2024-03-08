@@ -104,7 +104,7 @@ actor Review {
 
             ignore reviews.remove(r.id);
 
-            // ignore await Company.removeReviewFromCompany(r.companyId r.id);
+            ignore await Company.deleteReviewFromCompany(r.companyId, r.id);
          };
       };
 

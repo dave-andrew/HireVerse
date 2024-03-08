@@ -23,9 +23,4 @@ actor Helper {
       let g = Source.Source();
       return UUID.toText(await g.new());
    };
-
-   private func test() : async Text {
-      return "Hello, World!";
-   };
-
 };

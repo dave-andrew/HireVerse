@@ -21,7 +21,7 @@ export default function CompanyDetailReview({ companyId, onCreateReviewClick, se
     const [pagination, setPagination] = useState<Pagination>({
         totalPage: 1,
         currentPage: 1,
-        amountPerPage: 10,
+        amountPerPage: 5,
     });
     const { control, getValues: getFilters } = useForm<IReviewSortForm>({
         defaultValues: {
@@ -99,7 +99,7 @@ export default function CompanyDetailReview({ companyId, onCreateReviewClick, se
                             />
                         );
                     })}
-                    {reviews && reviews.length > 10 && (
+                    {reviews && reviews.length > 5 && (
                         <WrappedPaginationSelection
                             pagination={pagination}
                             setPagination={changePage}

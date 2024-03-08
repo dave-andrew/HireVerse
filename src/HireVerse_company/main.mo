@@ -125,34 +125,6 @@ actor Company {
         };
     };
 
-
-    // Deletes a company with user Input
-    public shared (msg) func deleteCompany(id : Text) : async Result.Result<?Company, Text> {
-
-        if (Principal.isAnonymous(msg.caller)) {
-            return #err("Not authorized");
-        };
-
-        let company = companies.get(id);
-
-        switch (company) {
-            case null {
-                return #err("Company not found");
-            };
-            case (?c) {
-
-                let isManager : Bool = await checkCompanyManager(c, msg.caller);
-
-                if (not isManager) {
-                    return #err("User is not a manager of the company");
-                };
-
-                return #ok(companies.remove(id));
-            };
-        };
-    };
-
-
     // Returns all companies in the database
     public shared query func getCompanies() : async Result.Result<[Company], Text> {
         let companies_array : [Company] = Iter.toArray(companies.vals());
@@ -186,23 +158,6 @@ actor Company {
         return #ok(Vector.toArray(managedCompanies));
     };
 
-    public shared query (msg) func getCompanyCountriesData(companyId : [Text]) : async Result.Result<[Text], Text> {
-        let companyList = Iter.toArray(companies.vals());
-        var countries = Vector.Vector<Text>();
-
-        for (company in companyList.vals()) {
-            let data = Array.find<Text>(companyId, func(p : Text) : Bool { p == company.id });
-            switch (data) {
-                case null {};
-                case (?c) {
-                    countries.add(company.founded_country);
-                };
-            };
-        };
-
-        return #ok(Vector.toArray(countries));
-    };
-
     // Returns all countries where companies are located
     public shared query func getCompanyCountries() : async [Text] {
         let companyList : [Company] = Iter.toArray(companies.vals());
@@ -226,27 +181,6 @@ actor Company {
                 return #err("Company not found");
             };
             case (?c) {
-
-                // TODO: Pindahin ke fungsi lain aja
-                // let updatedCompany = {
-                //     id = c.id;
-                //     name = c.name;
-                //     founded_year = c.founded_year;
-                //     profile = c.profile;
-                //     founded_country = c.founded_country;
-                //     office_locations = c.office_locations;
-                //     social_medias = c.social_medias;
-                //     image = c.image;
-                //     linkedin = c.linkedin;
-                //     company_manager_ids = c.company_manager_ids;
-                //     job_posting_ids = c.job_posting_ids;
-                //     reviews_ids = c.reviews_ids;
-                //     timestamp = c.timestamp;
-                //     seen = c.seen + 1;
-                // };
-
-                // companies.put(c.id, updatedCompany);
-
                 return #ok(c);
             };
         };
@@ -586,22 +520,6 @@ actor Company {
         };
     };
 
-    // Search Company by their name
-    public shared (msg) func searchCompany(name : Text) : async Result.Result<[Company], Text> {
-        let companyList : [Company] = Iter.toArray(companies.vals());
-        var searchResult = Vector.Vector<Company>();
-
-        for (company in companyList.vals()) {
-            let tempName = TextX.toLower(name);
-            if (Text.contains(TextX.toLower(company.name), #text tempName)) {
-                searchResult.add(company);
-            };
-        };
-
-        return #ok(Vector.toArray(searchResult));
-    };
-
-
     // Leave a company with the company ID
     public shared (msg) func leaveCompany(company_id : Text) : async Result.Result<(), Text> {
 
@@ -682,31 +600,6 @@ actor Company {
         return #ok(Vector.toArray(companyDatas));
     };
 
-
-    // Get all companies that a user is a manager of
-    public shared func getUserCompanies(user_id : Principal) : async Result.Result<[Company], Text> {
-        let user : ?User.User = await User.getUser(user_id);
-        var companies = Vector.Vector<Company>();
-
-        switch (user) {
-            case (?user) {
-                let company_ids : [Text] = user.company_ids;
-                for (company_id in company_ids.vals()) {
-                    let fetched_company = await Company.getCompany(company_id);
-                    switch (fetched_company) {
-                        case (#err(msg)) {};
-                        case (#ok(c)) {
-                            companies.add(c);
-                        };
-                    };
-                };
-            };
-            case null {
-                return #err("User not found");
-            };
-        };
-        return #ok(Vector.toArray(companies));
-    };
 
     public shared (msg) func addReviewToCompany(companyId : Text, reviewId: Text) : async Result.Result<(), Text> {
         if(Principal.isAnonymous(msg.caller)) {
@@ -939,71 +832,5 @@ actor Company {
         };      
 
         return #ok("All companies deleted");
-    };
-
-    public shared (msg) func add_all_users_to_manager() : async Result.Result<Text, Text> {
-        if(Principal.isAnonymous(msg.caller)) {
-            return #err("Not authorized");
-        };
-
-        let companyList : [Company] = Iter.toArray(companies.vals());
-        let response = await User.getAllUsers();
-
-        var userList = Vector.Vector<User.User>();
-
-        switch (response) {
-            case (#err(msg)) {
-                return #err(msg);
-            };
-            case (#ok(users)) {
-                userList := Vector.fromArray(users);
-            };
-        };
-
-        var companyCount = 1;
-        for (company in companyList.vals()) {
-            var userCount = 1;
-            for (user in Iter.fromArray(Vector.toArray(userList))){
-                if(Array.find<Text>(company.company_manager_ids, func(p : Text) : Bool { p == Principal.toText(user.internet_identity) }) == null) {
-                    let managerIds = Array.append<Text>(company.company_manager_ids, [Principal.toText(user.internet_identity)]);
-                    let updatedCompany = {
-                        id = company.id;
-                        name = company.name;
-                        founded_year = company.founded_year;
-                        profile = company.profile;
-                        founded_country = company.founded_country;
-                        office_locations = company.office_locations;
-                        social_medias = company.social_medias;
-                        image = company.image;
-                        linkedin = company.linkedin;
-                        company_manager_ids = managerIds;
-                        job_posting_ids = company.job_posting_ids;
-                        reviews_ids = company.reviews_ids;
-                        timestamp = company.timestamp;
-                        seen = company.seen;
-                    };
-
-                    companies.put(company.id, updatedCompany);
-
-                    let updatedUser = {
-                        internet_identity = user.internet_identity;
-                        email = user.email;
-                        first_name = user.first_name;
-                        last_name = user.last_name;
-                        company_ids = Array.append<Text>(user.company_ids, [company.id]);
-                        timestamp = user.timestamp;
-                        birth_date = user.birth_date;
-                    };
-
-                    await User.updateUser(user.internet_identity, updatedUser);
-
-                    Debug.print("Added user " # Nat.toText(userCount) # " out of " # Nat.toText(userList.size()) # " to company " # Nat.toText(companyCount) # " out of " # Nat.toText(companyList.size()));
-                    userCount += 1;
-                };
-            };
-            companyCount += 1;
-        };
-
-        return #ok("Added to manager");
     };
 };

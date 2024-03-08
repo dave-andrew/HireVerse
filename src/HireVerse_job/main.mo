@@ -152,68 +152,6 @@ actor Job {
       };
    };
 
-
-
-   public shared (msg) func createJobForce(newJob : CreateJobInput) : async Result.Result<Job, Text> {
-      let id = await Helper.generateUUID();
-
-      let user_id = msg.caller;
-
-      if (Principal.isAnonymous(user_id)) {
-         return #err("Unauthorized");
-      };
-
-      let company = await Company.getCompany(newJob.company_id);
-
-      switch company {
-         case (#err(errmsg)) {
-            return #err("Company not found");
-         };
-         case (#ok(actualCompany)) {
-            let manager_ids : [Text] = actualCompany.company_manager_ids;
-
-            if (Array.find<Text>(manager_ids, func(p : Text) : Bool { p == Principal.toText(user_id) }) == null) {
-               return #err("Unauthorized");
-            };
-         };
-      };
-
-      let job : Job = {
-         id = id;
-         position = newJob.position;
-         location = newJob.location;
-         industry = newJob.industry;
-         salary_start = newJob.salary_start;
-         salary_end = newJob.salary_end;
-         currency = newJob.currency;
-         short_description = newJob.short_description;
-         job_description = newJob.job_description;
-         requirements = newJob.requirements;
-         company_id = newJob.company_id;
-         timestamp = Time.now();
-         status = "active";
-         employType = newJob.employType;
-         contacts = newJob.contacts;
-      };
-
-      jobs.put(id, job);
-      let test = Company.addJob(newJob.company_id, id);
-      return #ok(job);
-   };
-
-
-   // Update job with user inputs
-   public query (msg) func updateJob(id : Text, job : Job) : async Result.Result<(), Text> {
-
-      if (Principal.isAnonymous(msg.caller)) {
-         return #err("Unauthorized");
-      };
-
-      jobs.put(id, job);
-      return #ok();
-   };
-
-
    // Delete job by id
    public shared (msg) func deleteJob(id : Text) : async Result.Result<?Job, Text> {
 
@@ -524,30 +462,6 @@ actor Job {
    };
 
 
-   // Search jobs by position and country
-   public shared query func searchJobs(position : Text, country : Text) : async Result.Result<[Job], Text> {
-      let jobsList = Iter.toArray(jobs.vals());
-
-      let filteredJobs = Array.filter<Job>(
-         jobsList,
-         func(job) {
-            let tempPosition = TextX.toLower(position);
-            return Text.contains(TextX.toLower(job.position), #text tempPosition);
-         },
-      );
-
-      return #ok(
-         Array.filter<Job>(
-            filteredJobs,
-            func(job) {
-               let tempPosition = TextX.toLower(country);
-               return Text.contains(TextX.toLower(job.location), #text tempPosition);
-            },
-         )
-      );
-   };
-
-
     // Get all jobs by company id and filter
    public shared composite query func getJobPostedByCompany(company_id : Text, startFrom : Nat, amount : Nat, filter : JobManagerFilterInput) : async Result.Result<[Job], Text> {
       let company = await Company.getCompany(company_id);
@@ -650,8 +564,6 @@ actor Job {
          };
       };
    };
-
-
 
    // Toggle Job Visibility
    public shared (msg) func toggleJobVisibility(job_id : Text) : async Result.Result<(), Text> {

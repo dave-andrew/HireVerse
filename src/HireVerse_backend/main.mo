@@ -63,7 +63,7 @@ actor Database {
    };
 
     // Function to get a user by their principal
-   public query (msg) func getUser(principal : Principal) : async ?User {
+   public query func getUser(principal : Principal) : async ?User {
 
       return users.get(principal);
    };

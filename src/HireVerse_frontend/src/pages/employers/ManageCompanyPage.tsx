@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import EditReviewModal from "../../components/modal/EditReviewModal";
 import getIndustryColor from "../../utils/industryColor";
+import handleDefaultImage from "../../utils/handleDefaultImage";
 
 interface IManageCompanyForm {
     image: FileList;
@@ -66,7 +67,6 @@ export default function ManageCompanyPage() {
         window.location.reload();
     };
 
-
     useEffect(() => {
         updateCompanyData();
     }, [selectedCompany]);
@@ -81,6 +81,7 @@ export default function ManageCompanyPage() {
                                 <img
                                     className="border-signature-gray aspect-square w-full rounded-xl border-[1px] object-cover"
                                     src={imageHandler(selectedCompany?.image)}
+                                    onError={handleDefaultImage}
                                     alt=""
                                 />
                                 <ProfileEditButton
@@ -130,7 +131,7 @@ export default function ManageCompanyPage() {
                                         );
                                     })}
                                 </div>
-                                <div className="flex flex-row place-items-start flex-wrap gap-2">
+                                <div className="flex flex-row flex-wrap place-items-start gap-2">
                                     <Link
                                         className="hover:bg-signature-gray flex w-fit flex-row items-center gap-3 rounded-md border-[1px] border-blue-500 p-2 pe-3 font-bold text-blue-500 transition-colors *:cursor-pointer"
                                         to={selectedCompany?.linkedin ?? ""}
@@ -149,7 +150,7 @@ export default function ManageCompanyPage() {
                                         );
                                     })}
                                 </div>
-                                <div className="flex flex-col justify-evenly lg:flex-row mt-8">
+                                <div className="mt-8 flex flex-col justify-evenly lg:flex-row">
                                     <div className="flex flex-row gap-3">
                                         <div className="flex aspect-square place-items-center rounded-3xl p-2">
                                             <MdOutlineQueryBuilder size="2rem" />
@@ -191,7 +192,7 @@ export default function ManageCompanyPage() {
                                 </div>
                             </div>
 
-                            <CardLayout className="flex flex-col gap-5 rounded-lg p-10 mt-6">
+                            <CardLayout className="mt-6 flex flex-col gap-5 rounded-lg p-10">
                                 <h3 className="m-0 p-0 text-4xl font-semibold">Company Profile</h3>
                                 <div
                                     dangerouslySetInnerHTML={{
