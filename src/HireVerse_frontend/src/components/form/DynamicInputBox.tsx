@@ -15,9 +15,9 @@ interface Props {
 
 export default function DynamicInputBox({ className, inputClassName, fields, register, addButton, removeButton, remove, inputObject, inputName }: Props) {
     return (
-        <Fragment key="t">
+        <Fragment>
             {fields.map((field, index) => (
-                <div className={className}>
+                <div key={field.id} className={className}>
                     <input
                         key={field.id}
                         {...register(`${inputObject}.${index}.${inputName}`)}

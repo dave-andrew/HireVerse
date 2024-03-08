@@ -35,7 +35,7 @@ scalable. It is also designed to be easy to use and accessible to everyone.
 10. Run command ``dfx start --background`` to start the internet computer
 11. Run command ``dfx deploy -y --no-wallet`` to deploy the canisters
 12. (Optional) Run command ``npm run seed`` to seed the database with dummy data
-13. Open a new powershell/cmd window and run ``npm run inner-install`` to install the required packages for the frontend
+13. Open a new powershell/cmd window and run ``cd src/Hireverse_frontend``, then ``npm run inner-install`` to install the required packages for the frontend
 14. Run ``npm run start`` to start the frontend
 15. Open a web browser and go to ``http://localhost:8000`` to view the website
 
@@ -47,8 +47,9 @@ scalable. It is also designed to be easy to use and accessible to everyone.
 - Easy to use and accessible to everyone
 
 ## Preview
-
-Nanti masukkin SS Image disini
+![Image Preview](assets\Preview1.png)
+![Image Preview](assets\Preview2.png)
+![Image Preview](assets\Preview3.png)
 
 ## Video Installation Guide & Demo
 
