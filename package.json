@@ -9,7 +9,9 @@
     "prebuild": "npm run prebuild --workspaces --if-present",
     "pretest": "npm run prebuild --workspaces --if-present",
     "start": "npm start --workspaces --if-present",
-    "test": "npm test --workspaces --if-present"
+    "test": "npm test --workspaces --if-present",
+    "seed": "dfx canister call HireVerse_company seed_companies && dfx canister call HireVerse_job seed_jobs && dfx canister call HireVerse_backend seed_users && dfx canister call HireVerse_review seed_reviews",
+    "clear": "dfx canister call HireVerse_company clean_companies && dfx canister call HireVerse_job clean_jobs && dfx canister call HireVerse_backend clean_users && dfx canister call HireVerse_review clean_reviews"
   },
   "type": "module",
   "workspaces": [

@@ -17,6 +17,7 @@ import Company "canister:HireVerse_company";
 import Vector "mo:vector/Class";
 import TextX "mo:xtended-text/TextX";
 import CharX "mo:xtended-text/CharX";
+import Fuzz "mo:fuzz";
 
 actor Job {
    type Job = {
@@ -94,31 +95,6 @@ actor Job {
    };
 
    let jobs = TrieMap.TrieMap<Text, Job>(Text.equal, Text.hash);
-
-
-   // Create a job with default values
-   public shared func generateJob(company_id : Text) : async () {
-
-      let job : Job = {
-         id = await Helper.generateUUID();
-         position = "Software Engineer";
-         location = "San Francisco, CA";
-         industry = "Technology";
-         salary_start = 100000;
-         salary_end = 150000;
-         currency = "Rp";
-         short_description = "We are looking for a software engineer to join our team!";
-         job_description = "We are looking for a software engineer to join our team! We are a fast growing company and are looking for someone who is passionate about technology and is a team player.";
-         requirements = "3+ years of experience in software engineering";
-         company_id = company_id;
-         timestamp = Time.now();
-         status = "public";
-         employType = "Full-time";
-         contacts = [];
-      };
-      jobs.put(job.id, job);
-   };
-
 
    // Create job with user inputs
    public shared (msg) func createJob(newJob : CreateJobInput) : async Result.Result<Job, Text> {
@@ -676,13 +652,6 @@ actor Job {
    };
 
 
-   // Delete all jobs in the system
-   public shared func deleteAllJobs() : async () {
-      for (job in jobs.vals()) {
-         ignore jobs.remove(job.id);
-      };
-   };
-
 
    // Toggle Job Visibility
    public shared (msg) func toggleJobVisibility(job_id : Text) : async Result.Result<(), Text> {
@@ -755,7 +724,14 @@ actor Job {
 
       switch (companyFilters.industries) {
          case null {
-            companyList := Vector.fromArray(await Company.getCompanies());
+            let response = await Company.getCompanies();
+
+            switch (response) {
+               case (#err(errmsg)) {};
+               case (#ok(companies)) {
+                  companyList := Vector.fromArray(companies);
+               };
+            };
          };
          case (?industries) {
             label l for (job in Iter.fromArray(jobsList)) {
@@ -798,5 +774,76 @@ actor Job {
       };
 
       return #ok(Iter.toArray(Array.slice(companies, startFrom, startFrom + amount)));
+   };
+
+   public shared (msg) func seed_jobs() : async Result.Result<Text, Text> {
+      if(Principal.isAnonymous(msg.caller)) {
+         return #err("Not authorized");
+      };
+
+      let fuzz = Fuzz.Fuzz();
+      let response = await Company.getCompanies();
+
+      var companies : [Company.Company] = [];
+      switch (response) {
+         case (#err(errmsg)) {
+            return #err(errmsg);
+         };
+         case (#ok(c)) {
+            companies := c;
+         };
+      };
+
+      let currency = ["$", "Rp", "£", "€", "¥", "₹", "₽", "₩", "₴", "₪", "₦", "₱", "₮", "₸", "₺", "₼", "₽", "₾", "₿"];
+      let employType = ["Full-time", "Part-time", "Internship", "Contract", "Freelance"];
+      let industries = ["Healthcare", "Renewable Energy", "Banking and Finance", "Software Development", "Manufacturing", "Information Technology", "Automotive", "Artificial Intelligence", "Agriculture", "Aerospace"];
+
+      let companyIds = Array.map<Company.Company, Text>(companies, func(c) : Text { c.id });
+
+      var currCompany = 1;
+
+      for (companyId in Iter.fromArray(companyIds)) {
+         for(i in Iter.range(0, fuzz.nat.randomRange(1, 3))) {
+            let id = await Helper.generateUUID();
+
+            let job = {
+               id = id;
+               position = fuzz.text.randomText(fuzz.nat.randomRange(10, 20));
+               location = fuzz.text.randomText(fuzz.nat.randomRange(10, 20));
+               industry = industries[fuzz.nat.randomRange(0, industries.size() - 1)];
+               salary_start = fuzz.nat.randomRange(10000, 50000);
+               salary_end = fuzz.nat.randomRange(50000, 100000);
+               currency = currency[fuzz.nat.randomRange(0, currency.size() - 1)];
+               short_description = fuzz.text.randomText(fuzz.nat.randomRange(25, 150));
+               job_description = fuzz.text.randomText(fuzz.nat.randomRange(150, 750));
+               requirements = fuzz.text.randomText(fuzz.nat.randomRange(150, 750));
+               company_id = companyId;
+               timestamp = Time.now();
+               status = "active";
+               employType = employType[fuzz.nat.randomRange(0, employType.size() - 1)];
+               contacts = fuzz.array.randomArray(fuzz.nat.randomRange(1, 5), func() : Text { return fuzz.text.randomText(fuzz.nat.randomRange(10, 20)) });
+            };
+            
+            jobs.put(id, job);
+
+            let res = await Company.addJob(companyId, id);
+            
+            Debug.print("Seeded " # Nat.toText(i + 1) # " jobs for company " # Nat.toText(currCompany) # " out of " # Nat.toText(companyIds.size()));
+         };
+
+         currCompany += 1;         
+      };
+      return #ok("Jobs seeded");
+   };
+
+   public shared (msg) func clean_jobs() : async Result.Result<Text, Text> {
+      if(Principal.isAnonymous(msg.caller)) {
+         return #err("Not authorized");
+      };
+
+      for (job in jobs.vals()) {
+         ignore jobs.remove(job.id);
+      };
+      return #ok("All jobs deleted");
    };
 };

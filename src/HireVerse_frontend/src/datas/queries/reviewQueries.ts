@@ -91,9 +91,6 @@ export function useQueryGetSelfReview(companyId: string) {
             if (!companyId) {
                 return null;
             }
-
-            await getBackendService().then((s) => console.log(s.greet()));
-            await getBackendService().then((s) => console.log(s.greetFunction()));
             console.log("hahaha", companyId);
             const response = await getReviewService()
                 .then((s) => s.getSelfReview(companyId))

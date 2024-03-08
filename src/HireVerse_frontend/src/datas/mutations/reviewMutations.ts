@@ -11,7 +11,7 @@ import useToaster from "../../hooks/useToaster";
  */
 export function useAddReview() {
     const queryClient = useQueryClient();
-    const { getCompanyService } = useService();
+    const { getReviewService } = useService();
     const { successToast } = useToaster();
     return useMutation({
         /**
@@ -21,7 +21,7 @@ export function useAddReview() {
          * @returns {Promise<string | null>} - The ID of the company for which the review was added, or null if the operation was not successful
          */
         mutationFn: async (newReview: CreateReviewInput) => {
-            const response = await getCompanyService()
+            const response = await getReviewService()
                 .then((s) => s.addReview(newReview))
                 .catch((e) => console.error(e));
 

@@ -7,9 +7,11 @@ import Array "mo:base/Array";
 import Time "mo:base/Time";
 import Iter "mo:base/Iter";
 import Result "mo:base/Result";
+import Debug "mo:base/Debug";
 import Helper "canister:HireVerse_helper";
 import Vector "mo:vector/Class";
 import TextX "mo:xtended-text/TextX";
+import Fuzz "mo:fuzz";
 
 
 // The Database actor is responsible for managing the user data.
@@ -28,25 +30,6 @@ actor Database {
 
     // TrieMap to store users, with Principal as the key and User as the value
    let users = TrieMap.TrieMap<Principal, User>(Principal.equal, Principal.hash);
-
-   // Data Seeder
-   public func seedUser() : async () {
-
-        // Get a test principal
-      let id3 = await Helper.testPrincipal();
-
-      let user3 = {
-         internet_identity = id3;
-         first_name = "John";
-         last_name = "Smith";
-         email = "JohnSmith@gmail.com";
-         birth_date = "01/01/1990";
-         company_ids = [];
-         timestamp = Time.now();
-      };
-
-      users.put(user3.internet_identity, user3);
-   };
 
     // Register a new user
    public shared (msg) func register(first_name : Text, last_name : Text, email : Text, birth_date : Text) : async Result.Result<User, Text> {
@@ -106,13 +89,6 @@ actor Database {
       return users.remove(principal);
    };
 
-   public query (message) func greet() : async Text {
-      return "Hello, " # Principal.toText(message.caller) # "!";
-   };
-   public shared (msg) func greetFunction() : async Text {
-      return "Hello, " # Principal.toText(msg.caller) # "!";
-   };
-
     // Function to get all users in the database
    public query func getAllUsers() : async Result.Result<[User], Text> {
 
@@ -147,5 +123,46 @@ actor Database {
       };
 
       return #err("User not found");
+   };
+
+   public shared (msg) func seed_users() : async Result.Result<Text, Text> {
+      if(Principal.isAnonymous(msg.caller)) {
+         return #err("Unauthorized");
+      };
+
+      let fuzz = Fuzz.Fuzz();
+
+      let generateAmount = fuzz.nat.randomRange(4, 10);
+
+      for (i in Iter.range(0, generateAmount)) {
+         let id = fuzz.principal.randomPrincipal(10);
+
+         let user = {
+            internet_identity = id;
+            first_name = fuzz.text.randomText(fuzz.nat.randomRange(5, 25));
+            last_name = fuzz.text.randomText(fuzz.nat.randomRange(5, 25));
+            email = fuzz.text.randomText(fuzz.nat.randomRange(5, 25)) # "@gmail.com";
+            birth_date = "01/01/1990";
+            company_ids = [];
+            timestamp = Time.now();
+         };
+
+         users.put(user.internet_identity, user);
+         Debug.print("Seeded " # Nat.toText(i + 1) # " users out of " # Nat.toText(generateAmount));
+      };
+
+      return #ok("Users seeded");
+   };
+
+   public shared (msg) func clean_users() : async Result.Result<Text, Text> {
+      if(Principal.isAnonymous(msg.caller)) {
+         return #err("Unauthorized");
+      };
+
+      for(user in users.vals()) {
+         ignore users.remove(user.internet_identity);
+      };
+
+      return #ok("Users cleaned");
    };
 };

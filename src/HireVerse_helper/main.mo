@@ -24,17 +24,6 @@ actor Helper {
       return UUID.toText(await g.new());
    };
 
-    // Generate a test principal
-   public shared func testPrincipal() : async Principal {
-      let principals = Array.tabulate<Principal>(
-         10,
-         func(i) {
-            Principal.fromBlob(Blob.fromArray([Nat8.fromNat(i)]));
-         },
-      );
-      return principals[0];
-   };
-
    private func test() : async Text {
       return "Hello, World!";
    };

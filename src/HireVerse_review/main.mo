@@ -9,7 +9,10 @@ import Array "mo:base/Array";
 import Int "mo:base/Int";
 import Debug "mo:base/Debug";
 import Helper "canister:HireVerse_helper";
+import User "canister:HireVerse_backend";
 import Vector "mo:vector/Class";
+import Company "canister:HireVerse_company";
+import Fuzz "mo:fuzz";
 
 actor Review {
    type Review = {
@@ -51,35 +54,6 @@ actor Review {
 
    let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
 
-    // Function to add a review
-   public shared (msg) func addReview(user_id : Principal, newReview : CreateReviewInput) : async Result.Result<Text, Text> {
-
-      if (Principal.isAnonymous(msg.caller)) {
-         return #err("You must be logged in to add a review");
-      };
-
-      let id = await Helper.generateUUID();
-
-      let review = {
-         id = id;
-         userId = Principal.toText(user_id);
-         title = newReview.title;
-         isAnonymous = newReview.isAnonymous;
-         cultureRating = newReview.cultureRating;
-         seniorManagementRating = newReview.seniorManagementRating;
-         workLifeBalanceRating = newReview.workLifeBalanceRating;
-         recommendToFriend = newReview.recommendToFriend;
-         generalComments = newReview.generalComments;
-         pros = newReview.pros;
-         cons = newReview.cons;
-         companyId = newReview.companyId;
-         timestamp = Time.now();
-      };
-
-      reviews.put(review.id, review);
-      #ok(review.id);
-   };
-
     // Function to get all reviews posted by someone
    public shared query (msg) func getSelfReview(companyId : Text) : async Result.Result<Review, Text> {
       if (Principal.isAnonymous(msg.caller)) {
@@ -111,26 +85,30 @@ actor Review {
    };
 
     // Function to delete review
-   public shared (msg) func deleteReview(id : Text) : async Result.Result<?Review, Text> {
+   public shared (msg) func deleteReview(reviewId : Text) : async Result.Result<?Review, Text> {
 
       if (Principal.isAnonymous(msg.caller)) {
          return #err("You must be logged in to delete a review");
       };
 
-      let review : ?Review = reviews.get(id);
+      let review : ?Review = reviews.get(reviewId);
 
       switch (review) {
-         case (?r) {
-            if (r.userId != Principal.toText(msg.caller)) {
-               return #err("You are not authorized to update this review");
-            };
-         };
          case (null) {
             return #err("Review not found");
          };
+         case (?r) {
+            if (r.userId != Principal.toText(msg.caller)) {
+               return #err("You are not authorized to delete this review");
+            };
+
+            ignore reviews.remove(r.id);
+
+            // ignore await Company.removeReviewFromCompany(r.companyId r.id);
+         };
       };
 
-      #ok(reviews.remove(id));
+      return #ok(review);
    };
 
     // Function to get review by id
@@ -264,15 +242,134 @@ actor Review {
       return #ok(summary);
    };
 
-    // Function to remove all reviews
-   public shared (msg) func removeAllReviews() : async () {
+   // Add a review to a company
+    public shared (msg) func addReview(newReview : CreateReviewInput) : async Result.Result<(), Text> {
+        let user_id = msg.caller;
 
-      if (Principal.isAnonymous(msg.caller)) {
-         return;
+        if (Principal.isAnonymous(user_id)) {
+            return #err("Not authorized");
+        };
+
+        let company = await Company.getCompany(newReview.companyId);
+
+        switch (company) {
+            case (#err(msg)) {
+                return #err("Company not found");
+            };
+            case (#ok(company)) {
+                let reviews_ids = company.reviews_ids;
+
+                let id = await Helper.generateUUID();
+
+               let review = {
+                  id = id;
+                  userId = Principal.toText(user_id);
+                  title = newReview.title;
+                  isAnonymous = newReview.isAnonymous;
+                  cultureRating = newReview.cultureRating;
+                  seniorManagementRating = newReview.seniorManagementRating;
+                  workLifeBalanceRating = newReview.workLifeBalanceRating;
+                  recommendToFriend = newReview.recommendToFriend;
+                  generalComments = newReview.generalComments;
+                  pros = newReview.pros;
+                  cons = newReview.cons;
+                  companyId = newReview.companyId;
+                  timestamp = Time.now();
+               };
+
+               reviews.put(review.id, review);
+               ignore await Company.addReviewToCompany(review.companyId, review.id);
+               return #ok();
+            };
+        };
+    };
+
+
+   
+   public shared (msg) func seed_reviews() : async Result.Result<Text, Text> {
+      if(Principal.isAnonymous(msg.caller)) {
+         return #err("Not authorized");
+      };
+
+      let response = await User.getAllUsers();
+
+      var userIds = Vector.Vector<Principal>();
+
+      switch(response) {
+         case (#err(e)) {};
+         case (#ok(users)) {
+            for (user in Iter.fromArray(users)) {
+               userIds.add(user.internet_identity);
+            }
+         }
+      };
+
+      let companies = await Company.getCompanies();
+
+      var companyIds = Vector.Vector<Text>();
+
+      switch(companies) {
+         case (#err(e)) {};
+         case (#ok(companies)) {
+            for (company in Iter.fromArray(companies)) {
+               companyIds.add(company.id);
+            }
+         }
+      };
+
+      let fuzz = Fuzz.Fuzz();
+
+      var companyCount = 0;
+      for (company in Iter.fromArray(Vector.toArray(companyIds))) {
+
+         var userCount = 0;
+         for (user in Iter.fromArray(Vector.toArray(userIds))) {
+            let id = await Helper.generateUUID();
+
+            let review = {
+               id = id;
+               userId = Principal.toText(user);
+               title = fuzz.text.randomText(fuzz.nat.randomRange(5, 30));
+               isAnonymous = fuzz.bool.random();
+               cultureRating = fuzz.nat.randomRange(1, 5);
+               seniorManagementRating = fuzz.nat.randomRange(1, 5);
+               workLifeBalanceRating = fuzz.nat.randomRange(1, 5);
+               recommendToFriend = fuzz.bool.random();
+               generalComments = fuzz.text.randomText(fuzz.nat.randomRange(25, 300));
+               pros = fuzz.array.randomArray(fuzz.nat.randomRange(1, 5), func() : Text {
+                  return fuzz.text.randomText(fuzz.nat.randomRange(5, 50));
+               });
+               cons = fuzz.array.randomArray(fuzz.nat.randomRange(1, 5), func() : Text {
+                  return fuzz.text.randomText(fuzz.nat.randomRange(5, 50));
+               });
+               companyId = company;
+               timestamp = Time.now();
+            };
+
+            reviews.put(review.id, review);
+            ignore await Company.addReviewToCompany(review.companyId, review.id);   
+            userCount += 1;
+
+            Debug.print("Seeding " # Nat.toText(userCount) # "reviews out of " # Nat.toText(userIds.size()) # " for company " # Nat.toText(companyCount) # " out of " # Nat.toText(companyIds.size()));
+         };
+
+         companyCount += 1;
+      };
+
+
+
+      return #ok("Reviews seeded");
+   };
+
+   public shared (msg) func clean_reviews() : async Result.Result<Text, Text> {
+      if(Principal.isAnonymous(msg.caller)) {
+         return #err("Not authorized");
       };
 
       for (review in reviews.vals()) {
          ignore reviews.remove(review.id);
       };
+
+      return #ok("Reviews cleaned");
    };
 };
