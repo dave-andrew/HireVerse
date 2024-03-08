@@ -10,17 +10,18 @@ Hireverse is a decentralized hiring platform that allows users to create and app
 - View open job listings and contact person to apply for them
 
 
-## Getting Started
-1. ``npm install``
-2. ``npm i -g ic-mops``
-3. ``mops install`` ``NEW``
-4. ``dfx deps pull``
-5. ``dfx start --background`` ``EDIT``
-6. ``dfx deps deploy``
-7. ``mo-dev --generate --deploy -y``
-8. copy link ke internet_identity, di env buat II_URL='<link>'
-9. ``npm run start`` ``DI POWERSHELL``
-10. Semangat dep
+## Getting Started (for Windows)
+1. Run command ``bash git clone https://github.com/dave-andrew/HireVerse.git`` to clone the repository
+2. On windows, make sure you have downloaded the Windows Subsystem for Linux (WSL2), to check if you have it installed, run ``wsl --list --verbose`` on powershell/cmd. If you don't have it installed, follow the instructions on this link: https://docs.microsoft.com/en-us/windows/wsl/install (The recommended version is Ubuntu-22.04 LTS)
+3. Switch to wsl by running ``wsl`` on powershell/cmd
+4. Run command ``npm install`` to install the required packages
+5. Run command ``npm run mops`` to install the mops package
+6. Run command ``dfx start --background`` to start the internet computer
+7. Run command ``dfx deploy -y --no-wallet`` to deploy the canisters
+8. (Optional) Run command ``npm run seed`` to seed the database with dummy data
+9. Open a new powershell/cmd window and run ``npm run inner-install`` to install the required packages for the frontend
+10. Run ``npm run start`` to start the frontend
+11. Open a web browser and go to ``http://localhost:8000`` to view the website
 
 
 ## What separates HireVerse?
