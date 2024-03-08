@@ -32,7 +32,7 @@ export default function FrontPageLayout({children, className}: Props) {
     return (
         <>
             <ToastContainer/>
-            <div className="bg-signature-gray h-fit flex w-full snap-y flex-col">
+            <div className="bg-signature-gray h-fit flex w-full flex-col">
                 <Navbar/>
                 <div className={`mt-16 w-full rounded-xl bg-white ${className}`}>{children}</div>
             </div>
