@@ -121,7 +121,7 @@ export default function ManagementBars({ children }: Props) {
                             name="label"
                             states={dropdownItems}
                             control={control}
-                            className="w-[20rem]"
+                            className="!w-[20rem]"
                             onChange={changeCompany}
                         />
                     </div>
@@ -145,7 +145,8 @@ export default function ManagementBars({ children }: Props) {
                             <div className="flex flex-col">
                                 <span>
                                     H
-                                    <span className={`${isHovered ? "static opacity-100" : "absolute opacity-0"} transition-opacity duration-300 ease-linear`}>
+                                    <span
+                                        className={`${isHovered ? "static opacity-100" : "absolute opacity-0"} pointer-events-none transition-opacity duration-300 ease-linear`}>
                                         IREVERSE
                                     </span>
                                 </span>

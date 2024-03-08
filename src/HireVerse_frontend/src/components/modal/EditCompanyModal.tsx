@@ -35,13 +35,25 @@ interface IEditCompanyForm {
     }[];
 }
 
-export default function EditCompanyModal({
-    openState,
-    setOpenState,
-    onJobCreated,
-}: Props) {
-    const [selectedCompany, setSelectedCompany] =
-        useLocalStorage<Company | null>("selectedCompany", null);
+const handleFormDefault = (company: Company | null) => {
+    return {
+        name: company?.name,
+        linkedin: company?.linkedin,
+        foundedYear: Number(company?.founded_year),
+        foundedCountry: company?.founded_country ?? "Select a Country",
+        locations: company?.office_locations?.map((l) => ({
+            name: l,
+            placeholder: l,
+        })),
+        socialMedias: company?.social_medias?.map((s) => ({
+            url: s,
+            placeholder: s,
+        })),
+    };
+};
+
+export default function EditCompanyModal({ openState, setOpenState, onJobCreated }: Props) {
+    const [selectedCompany, setSelectedCompany] = useLocalStorage<Company | null>("selectedCompany", null);
     const {
         control,
         register,
@@ -50,21 +62,7 @@ export default function EditCompanyModal({
         reset,
         formState: { errors, isValid },
     } = useForm<IEditCompanyForm, string>({
-        defaultValues: {
-            name: selectedCompany?.name,
-            linkedin: selectedCompany?.linkedin,
-            foundedYear: Number(selectedCompany?.founded_year),
-            foundedCountry:
-                selectedCompany?.founded_country ?? "Select a Country",
-            locations: selectedCompany?.office_locations?.map((l) => ({
-                name: l,
-                placeholder: l,
-            })),
-            socialMedias: selectedCompany?.social_medias?.map((s) => ({
-                url: s,
-                placeholder: s,
-            })),
-        },
+        defaultValues: handleFormDefault(selectedCompany),
     });
     const {
         fields: fieldsLocation,
@@ -90,8 +88,7 @@ export default function EditCompanyModal({
 
     const checkError = () => {
         for (const error in errors) {
-            const errorMessage =
-                errors[error as keyof IEditCompanyForm]?.message;
+            const errorMessage = errors[error as keyof IEditCompanyForm]?.message;
 
             if (errorMessage) {
                 errorToast({
@@ -128,8 +125,7 @@ export default function EditCompanyModal({
 
         if (!editor) {
             errorToast({
-                message:
-                    "An error occurred while updating the company profile. Please try again.",
+                message: "An error occurred while updating the company profile. Please try again.",
             });
             return;
         }
@@ -185,7 +181,7 @@ export default function EditCompanyModal({
                 <div className="flex w-full flex-row items-center justify-between pb-10">
                     <div className="text-4xl font-bold">Edit your company</div>
                     <button
-                        className="h-fit w-fit rounded-md text-end text-xl p-1 hover:bg-gray-100 transition-colors"
+                        className="h-fit w-fit rounded-md p-1 text-end text-xl transition-colors hover:bg-gray-100"
                         type="button"
                         onClick={() => setOpenState(false)}>
                         <IoCloseSharp size="2rem" />
@@ -195,9 +191,7 @@ export default function EditCompanyModal({
             <div className="grid grid-cols-2">
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Company Name</div>
-                    <div className="text-sm">
-                        Input the name of the company.
-                    </div>
+                    <div className="text-sm">Input the name of the company.</div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="h-full rounded-md">
@@ -213,9 +207,7 @@ export default function EditCompanyModal({
                 </div>
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">LinkedIn Profile</div>
-                    <div className="text-sm">
-                        Input the username of the company's LinkedIn profile.
-                    </div>
+                    <div className="text-sm">Input the username of the company's LinkedIn profile.</div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="h-full rounded-md">
@@ -224,16 +216,14 @@ export default function EditCompanyModal({
                                 required: "LinkedIn profile is required",
                             })}
                             type="text"
-                            placeholder="e.g. google"
+                            placeholder="e.g. https://www.linkedin.com/in/username"
                             className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
                 </div>
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Founded Year</div>
-                    <div className="text-sm">
-                        Input the year the company was founded.
-                    </div>
+                    <div className="text-sm">Input the year the company was founded.</div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="h-full rounded-md">
@@ -253,9 +243,7 @@ export default function EditCompanyModal({
                 </div>
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Country</div>
-                    <div className="text-sm">
-                        Input the country where the company is founded.
-                    </div>
+                    <div className="text-sm">Input the country where the company is founded.</div>
                 </div>
                 <div className="border-b border-gray-400 border-opacity-30 py-5">
                     <div className="h-full">
@@ -270,9 +258,7 @@ export default function EditCompanyModal({
                 </div>
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Company Profile</div>
-                    <div className="text-sm">
-                        Input the profile description of the company.
-                    </div>
+                    <div className="text-sm">Input the profile description about the company.</div>
                 </div>
                 <div className="border-b border-gray-400 border-opacity-30 py-5 ">
                     <div className="has-[:focus]:ring-signature-primary relative h-full rounded-md has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
@@ -284,9 +270,7 @@ export default function EditCompanyModal({
                 </div>
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Office Locations</div>
-                    <div className="text-sm">
-                        Input the office locations of the company.
-                    </div>
+                    <div className="text-sm">Input the office locations of the company.</div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="flex h-full flex-col gap-2 rounded-md">
@@ -305,8 +289,7 @@ export default function EditCompanyModal({
                                         onClick={() =>
                                             appendLocation({
                                                 name: "",
-                                                placeholder:
-                                                    "e.g. New York, USA",
+                                                placeholder: "e.g. New York, USA",
                                             })
                                         }>
                                         <MdAdd className="bg-blue-primary rounded-full text-white" />
@@ -324,9 +307,7 @@ export default function EditCompanyModal({
                 </div>
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Social Media</div>
-                    <div className="text-sm">
-                        Input the social media links of the company.
-                    </div>
+                    <div className="text-sm">Input the social media links of the company.</div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="flex h-full flex-col gap-2 rounded-md">
@@ -345,8 +326,7 @@ export default function EditCompanyModal({
                                         onClick={() =>
                                             appendSocialMedia({
                                                 url: "",
-                                                placeholder:
-                                                    "e.g. https://www.linkedin.com/company/google",
+                                                placeholder: "e.g. https://www.instagram.com/username",
                                             })
                                         }>
                                         <MdAdd className="bg-blue-primary rounded-full text-white" />

@@ -8,7 +8,6 @@ import CompanyDetailPage from "./pages/employee/CompanyDetailPage";
 import CompanyManagersPage from "./pages/employers/CompanyManagersPage";
 import CompanyJobsPage from "./pages/employers/CompanyJobsPage";
 import NotFoundPage from "./pages/others/NotFoundPage";
-import Seeder from "./pages/others/Seeder";
 import UnregisteredProtectedRoutes from "./components/protected/UnregisteredProtectedRoutes";
 import UnauthenticatedProtectedRoutes from "./components/protected/UnauthenticatedProtectedRoutes";
 import EmployerProtectedRoutes from "./components/protected/EmployerProtectedRoutes";
@@ -67,10 +66,6 @@ const otherRoutes = [
     {
         path: "*",
         element: <NotFoundPage />,
-    },
-    {
-        path: "/seeder",
-        element: <Seeder />,
     },
 ];
 

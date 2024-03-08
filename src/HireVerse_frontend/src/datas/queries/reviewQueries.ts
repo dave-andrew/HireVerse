@@ -3,6 +3,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { isOk } from "../../utils/resultGuarder";
 import { IReviewSortForm } from "../../pages/employee/CompanyDetailPage";
 
+
+
+/**
+ * Fetches the reviews of a specific company.
+ * @param {string | undefined} companyId - The ID of the company.
+ * @param {(() => IReviewSortForm) | null} getFilters - A function that returns the query filters to apply.
+ * @returns {QueryObserverResult} A query observer result containing the company's reviews or null if the company ID is not provided.
+ */
 export function useQueryReviews(companyId: string | undefined, getFilters: (() => IReviewSortForm) | null) {
     const { getReviewService, getCompanyService } = useService();
     const queryClient = useQueryClient();
@@ -41,6 +49,12 @@ export function useQueryReviews(companyId: string | undefined, getFilters: (() =
     });
 }
 
+
+/**
+ * Fetches the review summary of a specific company.
+ * @param {string} companyId - The ID of the company.
+ * @returns {QueryObserverResult} A query observer result containing the company's review summary or null if the company ID is not provided.
+ */
 export function useQueryReviewSummary(companyId: string) {
     const { getReviewService, getCompanyService } = useService();
     const queryClient = useQueryClient();
@@ -83,6 +97,12 @@ export function useQueryReviewSummary(companyId: string) {
     });
 }
 
+
+/**
+ * Fetches the self review of a specific company.
+ * @param {string} companyId - The ID of the company.
+ * @returns {QueryObserverResult} A query observer result containing the company's self review or null if the company ID is not provided.
+ */
 export function useQueryGetSelfReview(companyId: string) {
     const { getReviewService, getBackendService } = useService();
     return useQuery({
@@ -91,9 +111,6 @@ export function useQueryGetSelfReview(companyId: string) {
             if (!companyId) {
                 return null;
             }
-
-            await getBackendService().then((s) => console.log(s.greet()));
-            await getBackendService().then((s) => console.log(s.greetFunction()));
             console.log("hahaha", companyId);
             const response = await getReviewService()
                 .then((s) => s.getSelfReview(companyId))

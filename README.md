@@ -1,85 +1,82 @@
 # HireVerse
 
-# Notes (Temp)
+## Introduction
+Hireverse is a decentralized hiring platform that allows users to create and apply for job listings. It is built on the
+Internet Computer and uses the Motoko programming language. The platform is designed to be decentralized, secure, and
+scalable. It is also designed to be easy to use and accessible to everyone.
 
-1. ``npm install``
-2. ``npm i -g ic-mops``
-3. ``mops install`` ``NEW``
-4. ``dfx deps pull``
-5. ``dfx start --background`` ``EDIT``
-6. ``dfx deps deploy``
-7. ``mo-dev --generate --deploy -y``
-8. copy link ke internet_identity, di env buat II_URL='<link>'
-9. ``npm run start`` ``DI POWERSHELL``
-10. Semangat dep
+## Features
+- Create and apply for job listings
+- Manage company profiles and managers
+- Review and rate companies and employees
+- View open job listings and contact person to apply for them
 
-### Tailwind Cleanup
 
-``npx prettier --write --plugin=prettier-plugin-tailwindcss **/*.tsx``
+## Pre-requisites
+- Node.js (v20)
+- DFX (v0.17.0)
+- NPM (v7.24.0)
+- WSL2 (Windows Subsystem for Linux)
+- Ubuntu-22.04 LTS (WSL2)
 
-### Motoko Cleanup
 
-``npx prettier --write --plugin=prettier-plugin-motoko **/*.mo``
-Welcome to your new HireVerse project and to the internet computer development community. By default, creating a new
-project adds this README and some template files to your project directory. You can edit these template files to
-customize your project and to include your own code to speed up the development cycle.
+## Getting Started (for Windows)
+1. Run command ``git clone https://github.com/dave-andrew/HireVerse.git`` to clone the repository
+2. Run command ``cd HireVerse`` to navigate to the project directory
+3. On windows, make sure you have downloaded the Windows Subsystem for Linux (WSL2), to check if you have it installed,
+   run ``wsl --list --verbose`` on powershell/cmd. If you don't have it installed, follow the instructions on this
+   link: https://docs.microsoft.com/en-us/windows/wsl/install (The recommended version is Ubuntu-22.04 LTS)
+4. Switch to wsl by running ``wsl`` on powershell/cmd
+5. Run command ``DFX_VERSION=0.17.0 sh -ci "$(curl -fsSL https://raw.githubusercontent.com/dfinity/sdk/dfxvm-install-script/install.sh)"`` to install the internet computer version 0.17.0
+6. Check installed dfx version by running ``dfx --version`` on wsl (make sure it outputted 0.17.0, if not maybe try to set the default of the dfx using ``dfxvm default 0.17.0``)
+7. Use npm version 20 using ``nvm use 20`` (Install node if you haven't installed it yet by following the instructions on this link: https://nodejs.org/en/download/)
+8. Run command ``npm install`` to install the required packages
+9. Run command ``npm run mops`` to install the mops package
+10. Run command ``dfx start --background`` to start the internet computer
+11. Run command ``dfx deploy -y --no-wallet`` to deploy the canisters
+12. (Optional) Run command ``npm run seed`` to seed the database with dummy data
+13. Open a new powershell/cmd window and run ``npm run inner-install`` to install the required packages for the frontend
+14. Run ``npm run start`` to start the frontend
+15. Open a web browser and go to ``http://localhost:8000`` to view the website
 
-To get started, you might want to explore the project directory structure and the default configuration file. Working
-with this project in your development environment will not affect any production deployment or identity tokens.
+## What separates HireVerse?
 
-To learn more before you start working with HireVerse, see the following documentation available online:
+- Transparency from salary, reviews, and company ratings
+- Authentic and verified job listings, companies, and reviews with internet identity
+- Decentralized and secure platform
+- Easy to use and accessible to everyone
 
-- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
-- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
-- [Motoko Programming Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
-- [Motoko Language Quick Reference](https://internetcomputer.org/docs/current/motoko/main/language-manual)
+## Preview
 
-If you want to start working on your project right away, you might want to try the following commands:
+Nanti masukkin SS Image disini
 
-```bash
-cd HireVerse/
-dfx help
-dfx canister --help
-```
+## Video Installation Guide & Demo
 
-## Running the project locally
+Nanti masukkin link youtubenya disini
 
-If you want to test your project locally, you can use the following commands:
+## FAQ
 
-```bash
-# Starts the replica, running in the background
-dfx start --background
+- **Why seed the database?**
+    - Seeding the database is optional, it is only used to populate the database with dummy data for testing purposes.
+      Currently, when it is not deployed on the main net, the database will be empty. Seeding the database will populate
+      the database with dummy data so that you can test the platform.
+- **Why there is a demo testing alert in the internet identity login?**
+    - Because currently HireVerse is not deployed on the mainnet, the official internet identity login
+      at https://identity.ic0.app will have a forbidden signature failure. To prevent this, for temporary, HireVerse
+      will use the local replica of the internet identity login. This is only for testing purposes and will not be used
+      in the final version.
 
-# Deploys your canisters to the replica and generates your candid interface
-dfx deploy
-```
+## Future Development
 
-Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
+- Collaborate with the government to verify company registration. This guarantees all the companies listed on the
+  platform are legitimate and trustworthy. With the government verification, companies will have the option to display
+  the verified badge on their profile (to apply manager need to pay a specified price). This will increase the
+  trustworthiness of the platform and can be another source of income for HireVerse.
+- Create premium accounts for companies to access additional features such as advanced analytics and priority listing.
+- Implement a premium subscription model for users to access additional features such as advanced analytics and priority
+  listing.
 
-If you have made changes to your backend canister, you can generate a new candid interface with
+## Contact
 
-```bash
-npm run generate
-```
-
-at any time. This is recommended before starting the frontend development server, and will be run automatically any time
-you run `dfx deploy`.
-
-If you are making frontend changes, you can start a development server with
-
-```bash
-npm start
-```
-
-Which will start a server at `http://localhost:8080`, proxying API requests to the replica at port 4943.
-
-### Note on frontend environment variables
-
-If you are hosting frontend code somewhere without using DFX, you may need to make one of the following adjustments to
-ensure your project does not fetch the root key in production:
-
-- set`DFX_NETWORK` to `ic` if you are using Webpack
-- use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
-    - Setting `canisters -> {asset_canister_id} -> declarations -> env_override to a string` in `dfx.json` will
-      replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
-- Write your own `createActor` constructor
+If you have any questions or want to discuss HireVerse further, please feel free to reach out to us at:
+- Email: vincent.tanjaya@binus.edu

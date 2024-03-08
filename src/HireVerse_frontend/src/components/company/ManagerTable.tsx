@@ -55,98 +55,90 @@ export default function ManagerTable({
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="w-full text-left text-sm text-gray-500 rtl:text-right">
-                <thead className="bg-gray-50 text-xs uppercase text-gray-700">
-                <tr>
-                    <th
-                        scope="col"
-                        className="flex justify-center px-4 py-3">
-                        No
-                    </th>
-                    <th
-                        scope="col"
-                        className="w-fit px-2 py-3">
-                        UID
-                    </th>
-                    <th
-                        scope="col"
-                        className="py-3">
-                        Full Name
-                    </th>
-                    <th
-                        scope="col"
-                        className="py-3 lg:table-cell hidden">
-                        Email
-                    </th>
-                    <th
-                        scope="col"
-                        className="md:table-cell hidden py-3">
-                        Birth Date
-                    </th>
-                    <th
-                        scope="col"
-                        className="py-3">
-                        Status
-                    </th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {managerData ? managerData.map((manager, index) => {
-                    return (
-                        <tr
-                            key={index}
-                            className="border-b odd:bg-white even:bg-gray-50">
-                            <th className="whitespace-nowrap px-2 py-4 text-center font-medium text-black">
-                                {index + 1}
-                            </th>
-                            <th className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap w-1/12 pr-4">
-                                {manager.internet_identity.toText()}
-                            </th>
-                            <td className="font-bold text-black">
-                                {manager.first_name} {manager.last_name}
-                            </td>
-                            <td className="lg:table-cell hidden">
-                                {manager.email}
-                            </td>
-                            <td className="md:table-cell hidden 2xl:pr-24">
-                                {new Date(
-                                    manager.birth_date,
-                                ).toLocaleDateString("en-US", {
-                                    month: "long",
-                                    day: "numeric",
-                                    year: "numeric",
-                                })}
-                            </td>
-                            <td
-                                className={
-                                    "pr-4 font-semibold text-green-600"
-                                    // : manager.status == "Pending"
-                                    //     ? "text-yellow-600"
-                                    //     : "text-red-600")
-                                }>
-                                Active
-                            </td>
-                            <td className="px-3">
-                                {/*<div className="w-fit rounded-md bg-red-700 p-2 text-white">*/}
-                                {/*    <FaRegTrashAlt />*/}
-                                {/*</div>*/}
-                            </td>
-                        </tr>
-                    );
-                }) : (
-                    <tr
-                        role="status"
-                        className="w-full h-12 bg-gray-600">
+            {(managerData && !isFetchingInvitation) ?
+                <table className="w-full text-left text-sm text-gray-500 rtl:text-right">
+                    <thead className="bg-gray-50 text-xs uppercase text-gray-700">
+                    <tr>
+                        <th
+                            scope="col"
+                            className="flex justify-center px-4 py-3">
+                            No
+                        </th>
+                        <th
+                            scope="col"
+                            className="w-fit px-2 py-3">
+                            UID
+                        </th>
+                        <th
+                            scope="col"
+                            className="py-3">
+                            Full Name
+                        </th>
+                        <th
+                            scope="col"
+                            className="py-3 lg:table-cell hidden">
+                            Email
+                        </th>
+                        <th
+                            scope="col"
+                            className="md:table-cell hidden py-3">
+                            Birth Date
+                        </th>
+                        <th
+                            scope="col"
+                            className="py-3">
+                            Status
+                        </th>
+                        <th scope="col">Actions</th>
                     </tr>
-                )}
-                {isFetchingInvitation ? (
-                    <tr
-                        role="status"
-                        className="w-full h-12 bg-gray-600">
-                    </tr>
-                ) : (
-                    companyInvitation?.map((invitation, index) => {
+                    </thead>
+                    <tbody>
+                    {managerData.map((manager, index) => {
+                        console.log("LOADING MANAGER DATA, ", managerData);
+                        return (
+                            <tr
+                                key={index}
+                                className="border-b odd:bg-white even:bg-gray-50">
+                                <th className="whitespace-nowrap px-2 py-4 text-center font-medium text-black">
+                                    {index + 1}
+                                </th>
+                                <th className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap w-1/12 pr-4">
+                                    {manager.internet_identity.toText()}
+                                </th>
+                                <td className="font-bold text-black">
+                                    {manager.first_name} {manager.last_name}
+                                </td>
+                                <td className="lg:table-cell hidden">
+                                    {manager.email}
+                                </td>
+                                <td className="md:table-cell hidden 2xl:pr-24">
+                                    {new Date(
+                                        manager.birth_date,
+                                    ).toLocaleDateString("en-US", {
+                                        month: "long",
+                                        day: "numeric",
+                                        year: "numeric",
+                                    })}
+                                </td>
+                                <td
+                                    className={
+                                        "pr-4 font-semibold text-green-600"
+                                        // : manager.status == "Pending"
+                                        //     ? "text-yellow-600"
+                                        //     : "text-red-600")
+                                    }>
+                                    Active
+                                </td>
+                                <td className="px-3">
+                                    {/*<div className="w-fit rounded-md bg-red-700 p-2 text-white">*/}
+                                    {/*    <FaRegTrashAlt />*/}
+                                    {/*</div>*/}
+                                </td>
+                            </tr>
+                        );
+                    })}
+
+                    {companyInvitation?.map((invitation, index) => {
                         return (
                             <tr
                                 key={index}
@@ -194,11 +186,17 @@ export default function ManagerTable({
                                     </button>
                                 </td>
                             </tr>
-                        );
+                        )
                     })
-                )}
-                </tbody>
-            </table>
+                    }
+                    </tbody>
+                </table>
+                : (<div className="w-full text-left bg-white  rounded-md h-24">
+                    <div className="bg-gray-400 animate-pulse h-full w-full">
+
+                    </div>
+                </div>)}
+
         </div>
     );
 }

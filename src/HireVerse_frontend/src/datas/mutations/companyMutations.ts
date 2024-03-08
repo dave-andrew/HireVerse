@@ -13,7 +13,7 @@ import useLocalStorage from "../../hooks/useLocalStorage";
  * @returns {object} - The mutation object from react-query
  */
 export function useRegisterCompany() {
-    const [selectedCompany, setSelectedCompany] = useLocalStorage<Company | null>("selectedCompany", null);
+    const [_, setSelectedCompany] = useLocalStorage<Company | null>("selectedCompany", null);
     const { getCompanyService } = useService();
     const queryClient = useQueryClient();
     const { successToast } = useToaster();
@@ -36,7 +36,9 @@ export function useRegisterCompany() {
             successToast({
                 message: "Company registered successfully",
             });
+
             setSelectedCompany(data);
+
             await queryClient.invalidateQueries({
                 queryKey: ["managedCompanies"],
             });
