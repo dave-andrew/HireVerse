@@ -216,7 +216,7 @@ export default function EditCompanyModal({ openState, setOpenState, onJobCreated
                                 required: "LinkedIn profile is required",
                             })}
                             type="text"
-                            placeholder="e.g. google"
+                            placeholder="e.g. https://www.linkedin.com/in/username"
                             className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                     </div>
@@ -258,7 +258,7 @@ export default function EditCompanyModal({ openState, setOpenState, onJobCreated
                 </div>
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Company Profile</div>
-                    <div className="text-sm">Input the profile description of the company.</div>
+                    <div className="text-sm">Input the profile description about the company.</div>
                 </div>
                 <div className="border-b border-gray-400 border-opacity-30 py-5 ">
                     <div className="has-[:focus]:ring-signature-primary relative h-full rounded-md has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
@@ -326,7 +326,7 @@ export default function EditCompanyModal({ openState, setOpenState, onJobCreated
                                         onClick={() =>
                                             appendSocialMedia({
                                                 url: "",
-                                                placeholder: "e.g. https://www.linkedin.com/company/google",
+                                                placeholder: "e.g. https://www.instagram.com/username",
                                             })
                                         }>
                                         <MdAdd className="bg-blue-primary rounded-full text-white" />
