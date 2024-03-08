@@ -66,7 +66,7 @@ export default function BenefitSection() {
 
     return (
         <div
-            className={`z-10 grid min-h-[1000px] grow grid-cols-1 place-items-center justify-center gap-16 
+            className={`z-10 grid min-h-[1000px] grow grid-cols-1 place-items-center justify-center gap-16 snap-center
             px-[10vh] py-14 transition-all duration-1000 ease-in-out md:px-[20vh] xl:grid-cols-2 `}>
             <animated.div style={fadeAnimation}>
                 <iframe

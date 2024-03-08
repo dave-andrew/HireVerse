@@ -21,8 +21,8 @@ export default function FrontPageLayout({children, className}: Props) {
         const html = document.documentElement;
 
         if (currentPage === "/") {
-            body.style.scrollSnapType = "y proximity";
-            html.style.scrollSnapType = "y proximity";
+            body.style.scrollSnapType = "y mandatory";
+            html.style.scrollSnapType = "y mandatory";
         } else {
             body.style.scrollSnapType = "auto"
             html.style.scrollSnapType = "auto";
