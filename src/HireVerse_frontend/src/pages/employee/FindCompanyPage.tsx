@@ -85,8 +85,8 @@ export default function FindCompanyPage() {
     return (
         <FrontPageLayout>
             <div className="flex flex-col overflow-hidden">
-                <div className="h-fit w-full place-items-center bg-[url(backgrounds/subtle-prism.svg)] shadow-md">
-                    <div className="flex h-[100vh] flex-col place-items-center gap-8">
+                <div className="h-fit w-full place-items-center bg-[url(backgrounds/subtle-prism.svg)] shadow-md md:h-[360px] lg:h-[640px]">
+                    <div className="flex flex-col place-items-center gap-8">
                         <div className="flex flex-col items-center justify-center">
                             <div className="flex w-full flex-col gap-3 self-start">
                                 <h3 className="text-4xl font-bold lg:text-5xl">Popular Companies</h3>

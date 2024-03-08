@@ -130,7 +130,7 @@ export default function ManageCompanyPage() {
                                         );
                                     })}
                                 </div>
-                                <div className="flex flex-row place-items-start gap-2">
+                                <div className="flex flex-row place-items-start flex-wrap gap-2">
                                     <Link
                                         className="hover:bg-signature-gray flex w-fit flex-row items-center gap-3 rounded-md border-[1px] border-blue-500 p-2 pe-3 font-bold text-blue-500 transition-colors *:cursor-pointer"
                                         to={selectedCompany?.linkedin ?? ""}
