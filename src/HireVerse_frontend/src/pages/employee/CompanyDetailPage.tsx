@@ -13,6 +13,7 @@ import purifyDOM from "../../utils/purifyDOM";
 import { FaLinkedin } from "react-icons/fa";
 import EditReviewModal from "../../components/modal/EditReviewModal";
 import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
+import handleDefaultImage from "../../utils/handleDefaultImage";
 
 export interface IReviewSortForm {
     orderBy: string;
@@ -53,6 +54,7 @@ export default function CompanyDetailPage() {
                                     <img
                                         className="border-signature-gray aspect-square w-full rounded-xl border-[1px] object-cover"
                                         src={imageHandler(company?.image)}
+                                        onError={handleDefaultImage}
                                         alt=""
                                     />
                                 </div>
@@ -93,7 +95,7 @@ export default function CompanyDetailPage() {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col justify-evenly lg:flex-row pt-7">
+                                <div className="flex flex-col justify-evenly pt-7 lg:flex-row">
                                     <div className="flex flex-row gap-3">
                                         <div className="flex aspect-square place-items-center rounded-3xl p-2">
                                             <MdOutlineQueryBuilder size="2rem" />
@@ -143,7 +145,7 @@ export default function CompanyDetailPage() {
                                     </div>
                                 </div>
 
-                                <CardLayout className="flex min-h-[5rem] flex-col gap-5 rounded-lg p-10 mt-6">
+                                <CardLayout className="mt-6 flex min-h-[5rem] flex-col gap-5 rounded-lg p-10">
                                     <h3 className="m-0 p-0 text-4xl font-semibold">Company Profile</h3>
                                     <div
                                         dangerouslySetInnerHTML={{

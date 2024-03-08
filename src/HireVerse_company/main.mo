@@ -887,7 +887,7 @@ actor Company {
 
         let fuzz = Fuzz.Fuzz();
 
-        let amount = fuzz.nat.randomRange(10, 20);
+        let amount = fuzz.nat.randomRange(5, 12);
 
         var curr = 0;
 
@@ -900,7 +900,7 @@ actor Company {
 
             let company = {
                 id = id;
-                name = fuzz.text.randomText(fuzz.nat.randomRange(5, 30));
+                name = fuzz.text.randomText(fuzz.nat.randomRange(5, 12));
                 founded_year = fuzz.nat.randomRange(2000, 2023);
                 profile = fuzz.text.randomText(fuzz.nat.randomRange(75, 500));
                 founded_country = countries[fuzz.nat.randomRange(0, countries.size() - 1)];
@@ -919,7 +919,6 @@ actor Company {
                 seen = fuzz.nat.randomRange(0, 100);
             };
             companies.put(company.id, company);
-
             curr += 1;
 
             Debug.print("Seeded company " # Nat.toText(curr) # " out of " # Nat.toText(amount));
@@ -937,8 +936,74 @@ actor Company {
 
         for (company in companies.vals()) {
             ignore companies.remove(company.id);
-        };
+        };      
 
         return #ok("All companies deleted");
+    };
+
+    public shared (msg) func add_all_users_to_manager() : async Result.Result<Text, Text> {
+        if(Principal.isAnonymous(msg.caller)) {
+            return #err("Not authorized");
+        };
+
+        let companyList : [Company] = Iter.toArray(companies.vals());
+        let response = await User.getAllUsers();
+
+        var userList = Vector.Vector<User.User>();
+
+        switch (response) {
+            case (#err(msg)) {
+                return #err(msg);
+            };
+            case (#ok(users)) {
+                userList := Vector.fromArray(users);
+            };
+        };
+
+        var companyCount = 1;
+        for (company in companyList.vals()) {
+            var userCount = 1;
+            for (user in Iter.fromArray(Vector.toArray(userList))){
+                if(Array.find<Text>(company.company_manager_ids, func(p : Text) : Bool { p == Principal.toText(user.internet_identity) }) == null) {
+                    let managerIds = Array.append<Text>(company.company_manager_ids, [Principal.toText(user.internet_identity)]);
+                    let updatedCompany = {
+                        id = company.id;
+                        name = company.name;
+                        founded_year = company.founded_year;
+                        profile = company.profile;
+                        founded_country = company.founded_country;
+                        office_locations = company.office_locations;
+                        social_medias = company.social_medias;
+                        image = company.image;
+                        linkedin = company.linkedin;
+                        company_manager_ids = managerIds;
+                        job_posting_ids = company.job_posting_ids;
+                        reviews_ids = company.reviews_ids;
+                        timestamp = company.timestamp;
+                        seen = company.seen;
+                    };
+
+                    companies.put(company.id, updatedCompany);
+
+                    let updatedUser = {
+                        internet_identity = user.internet_identity;
+                        email = user.email;
+                        first_name = user.first_name;
+                        last_name = user.last_name;
+                        company_ids = Array.append<Text>(user.company_ids, [company.id]);
+                        timestamp = user.timestamp;
+                        birth_date = user.birth_date;
+                    };
+
+                    await User.updateUser(user.internet_identity, updatedUser);
+
+                    Debug.print("Added user " # Nat.toText(userCount) # " out of " # Nat.toText(userList.size()) # " to company " # Nat.toText(companyCount) # " out of " # Nat.toText(companyList.size()));
+                    userCount += 1;
+                };
+            };
+            companyCount += 1;
+        };
+
+        return #ok("Added to manager");
     };
 };

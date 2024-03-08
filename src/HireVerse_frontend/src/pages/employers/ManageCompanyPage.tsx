@@ -18,6 +18,7 @@ import LeaveCompanyModal from "../../components/modal/LeaveCompanyModal";
 import { Link } from "react-router-dom";
 import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import EditReviewModal from "../../components/modal/EditReviewModal";
+import handleDefaultImage from "../../utils/handleDefaultImage";
 
 interface IManageCompanyForm {
     image: FileList;
@@ -94,6 +95,7 @@ export default function ManageCompanyPage() {
                                 <img
                                     className="border-signature-gray aspect-square w-full rounded-xl border-[1px] object-cover"
                                     src={imageHandler(selectedCompany?.image)}
+                                    onError={handleDefaultImage}
                                     alt=""
                                 />
                                 <ProfileEditButton
@@ -203,7 +205,7 @@ export default function ManageCompanyPage() {
                                 </div>
                             </div>
 
-                            <CardLayout className="flex flex-col gap-5 rounded-lg p-10 mt-6">
+                            <CardLayout className="mt-6 flex flex-col gap-5 rounded-lg p-10">
                                 <h3 className="m-0 p-0 text-4xl font-semibold">Company Profile</h3>
                                 <div
                                     dangerouslySetInnerHTML={{

@@ -70,17 +70,12 @@ actor Database {
 
 
     // Function to update a user by their principal
-   public query (msg) func updateUser(principal : Principal, user : User) : async () {
-
-      if (principal != msg.caller) {
-         return;
-      };
-
+   public shared func updateUser(principal : Principal, user : User) : async () {
       users.put(principal, user);
    };
 
     // Function to delete a user by their principal
-   public query (msg) func deleteUser(principal : Principal) : async ?User {
+   public shared (msg) func deleteUser(principal : Principal) : async ?User {
 
       if (principal != msg.caller) {
          return null;
@@ -132,7 +127,7 @@ actor Database {
 
       let fuzz = Fuzz.Fuzz();
 
-      let generateAmount = fuzz.nat.randomRange(4, 10);
+      let generateAmount = fuzz.nat.randomRange(4, 11);
 
       for (i in Iter.range(0, generateAmount)) {
          let id = fuzz.principal.randomPrincipal(10);
@@ -148,7 +143,7 @@ actor Database {
          };
 
          users.put(user.internet_identity, user);
-         Debug.print("Seeded " # Nat.toText(i + 1) # " users out of " # Nat.toText(generateAmount));
+         Debug.print("Seeded " # Nat.toText(i + 1) # " users out of " # Nat.toText(generateAmount + 1));
       };
 
       return #ok("Users seeded");

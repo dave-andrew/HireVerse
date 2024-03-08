@@ -350,7 +350,7 @@ actor Review {
             ignore await Company.addReviewToCompany(review.companyId, review.id);   
             userCount += 1;
 
-            Debug.print("Seeding " # Nat.toText(userCount) # "reviews out of " # Nat.toText(userIds.size()) # " for company " # Nat.toText(companyCount) # " out of " # Nat.toText(companyIds.size()));
+            Debug.print("Seeding " # Nat.toText(userCount) # " reviews out of " # Nat.toText(userIds.size()) # " for company " # Nat.toText(companyCount + 1) # " out of " # Nat.toText(companyIds.size()));
          };
 
          companyCount += 1;

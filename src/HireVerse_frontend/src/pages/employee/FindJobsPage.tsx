@@ -12,7 +12,7 @@ import { CONSTANTS } from "../../utils/constants";
 import handleKeyDown from "../../utils/handleKeyDown";
 import JobItemSkeleton from "../../components/job/JobItemSkeleton";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
-import { InfiniteData } from "@tanstack/react-query";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { getFilteredJobs } from "../../datas/queries/jobQueries";
 import WrappedAutoDropdown from "../../components/form/WrappedAutoDropdown";
 import { getCompanyCountries } from "../../datas/queries/companyQueries";
@@ -39,9 +39,10 @@ const defaultQueryFilterSort: IQueryFilterSortForm = {
 };
 
 export default function FindJobs() {
+    const queryClient = useQueryClient();
     const [shownJobId, setShownJobId] = useState<string>("");
     const [filter, setFilter] = useState<IFilterForm>(defaultFilter);
-    const { register, control, getValues, formState } = useForm<IQueryFilterSortForm>({
+    const { register, control, getValues, setValue } = useForm<IQueryFilterSortForm>({
         defaultValues: defaultQueryFilterSort,
     });
     const { data: countries } = getCompanyCountries();
@@ -61,6 +62,13 @@ export default function FindJobs() {
             setShownJobId(jobs.pages[0][0]?.id);
         }
     }, [jobs]);
+
+    useEffect(() => {
+        if (countries) {
+            setValue("country", countries[0]);
+            setTimeout(() => reGetFilteredJobs(), 100);
+        }
+    }, [countries]);
 
     useEffect(() => {
         reGetFilteredJobs();
