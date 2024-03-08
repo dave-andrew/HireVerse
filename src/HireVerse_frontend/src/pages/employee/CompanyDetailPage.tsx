@@ -47,7 +47,7 @@ export default function CompanyDetailPage() {
             <FrontPageLayout>
                 <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
                     <div className="flex flex-col place-items-center gap-2 px-4 md:px-0 xl:w-[calc(100%-1rem)] 2xl:w-4/5">
-                        <div className="mt-12 flex w-full flex-col gap-8 md:flex-row">
+                        <div className="my-12 flex w-full flex-col gap-8 md:flex-row">
                             <div className="flex h-fit w-full flex-col gap-4 px-32 md:sticky md:top-10 md:w-[30%] md:px-0">
                                 <div className="relative">
                                     <img
@@ -93,7 +93,7 @@ export default function CompanyDetailPage() {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col justify-evenly lg:flex-row">
+                                <div className="flex flex-col justify-evenly lg:flex-row pt-7">
                                     <div className="flex flex-row gap-3">
                                         <div className="flex aspect-square place-items-center rounded-3xl p-2">
                                             <MdOutlineQueryBuilder size="2rem" />
@@ -143,7 +143,7 @@ export default function CompanyDetailPage() {
                                     </div>
                                 </div>
 
-                                <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-lg p-10">
+                                <CardLayout className="flex min-h-[5rem] flex-col gap-5 rounded-lg p-10 mt-6">
                                     <h3 className="m-0 p-0 text-4xl font-semibold">Company Profile</h3>
                                     <div
                                         dangerouslySetInnerHTML={{

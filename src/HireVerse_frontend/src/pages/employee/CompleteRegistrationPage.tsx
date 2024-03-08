@@ -1,12 +1,12 @@
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import FrontPageLayout from "../../layouts/FrontPageLayout";
 import CardLayout from "../../layouts/CardLayout";
-import { BsPersonVcard } from "react-icons/bs";
-import { MdOutlineDateRange, MdOutlineEmail } from "react-icons/md";
+import {BsPersonVcard} from "react-icons/bs";
+import {MdOutlineDateRange, MdOutlineEmail} from "react-icons/md";
 import useAuth from "../../hooks/useAuth";
-import { defaultToastOptions } from "../../layouts/ManagementPageLayout";
-import { toast } from "react-toastify";
-import { useState } from "react";
+import {defaultToastOptions} from "../../layouts/ManagementPageLayout";
+import {toast} from "react-toastify";
+import {useState} from "react";
 
 interface ICompleteRegisterForm {
     firstName: string;
@@ -17,11 +17,11 @@ interface ICompleteRegisterForm {
 }
 
 export default function CompleteRegistrationPage() {
-    const { getPrincipal, register: registerNewUser } = useAuth();
+    const {getPrincipal, register: registerNewUser} = useAuth();
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
     } = useForm<ICompleteRegisterForm>();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -49,13 +49,14 @@ export default function CompleteRegistrationPage() {
 
     return (
         <FrontPageLayout>
-            <div className="bg-signature-blue relative flex h-[calc(100vh-4rem)] w-full place-items-center justify-center bg-gradient-to-r from-cyan-600">
+            <div
+                className="relative flex h-[calc(100vh-4rem)] w-full place-items-center justify-center bg-gradient-to-br from-cyan-100 via-white to-pink-200">
                 <div className="absolute bottom-0 left-0">
                     <iframe
                         className="h-96"
                         src="https://lottie.host/embed/19081eaa-1ac5-4a21-b8a6-fb0f49790d47/srpS9AML6B.json"></iframe>
                 </div>
-                <div className="flex w-[40vw] min-w-[500px] flex-col gap-10 rounded-lg bg-white p-12">
+                <div className="flex w-[40vw] min-w-[500px] flex-col gap-10 rounded-lg bg-white p-12 shadow-md border border-gray-300">
                     <div className="font-bebas text-5xl">Complete Registration</div>
 
                     <div className="flex w-full flex-col gap-4">
@@ -66,13 +67,15 @@ export default function CompleteRegistrationPage() {
                                 <div>Input the first name of your name.</div>
                             </div>
                             <div className="border-signature-gray border-t-[1px] pt-4">
-                                <CardLayout className={`rounded-md ${errors.firstName ? "border-red-500" : "border-signature-gray"}`}>
-                                    <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
+                                <CardLayout
+                                    className={`rounded-md ${errors.firstName ? "border-red-500" : "border-signature-gray"}`}>
+                                    <div
+                                        className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                         <span
                                             className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
                                                 errors.firstName ? "border-red-500" : "border-signature-gray"
                                             }`}>
-                                            <BsPersonVcard size="1.5rem" />
+                                            <BsPersonVcard size="1.5rem"/>
                                         </span>
                                         <input
                                             {...register("firstName", {
@@ -84,7 +87,8 @@ export default function CompleteRegistrationPage() {
                                         />
                                     </div>
                                 </CardLayout>
-                                <div className={`text-sm ${errors.firstName ? "text-red-500" : "h-5"}`}>{errors.firstName?.message}</div>
+                                <div
+                                    className={`text-sm ${errors.firstName ? "text-red-500" : "h-5"}`}>{errors.firstName?.message}</div>
                             </div>
                             {/* Last Name Field */}
                             <div className="border-signature-gray flex flex-col border-t-[1px] pb-4 pr-4 pt-2">
@@ -92,13 +96,15 @@ export default function CompleteRegistrationPage() {
                                 <div>Input the last name of your name.</div>
                             </div>
                             <div className="border-signature-gray border-t-[1px] pt-4">
-                                <CardLayout className={`rounded-md ${errors.lastName ? "border-red-500" : "border-signature-gray"}`}>
-                                    <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
+                                <CardLayout
+                                    className={`rounded-md ${errors.lastName ? "border-red-500" : "border-signature-gray"}`}>
+                                    <div
+                                        className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                         <span
                                             className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
                                                 errors.lastName ? "border-red-500" : "border-signature-gray"
                                             }`}>
-                                            <BsPersonVcard size="1.5rem" />
+                                            <BsPersonVcard size="1.5rem"/>
                                         </span>
                                         <input
                                             {...register("lastName", {
@@ -110,7 +116,8 @@ export default function CompleteRegistrationPage() {
                                         />
                                     </div>
                                 </CardLayout>
-                                <div className={`text-sm ${errors.lastName ? "text-red-500" : "h-5"}`}>{errors.lastName?.message}</div>
+                                <div
+                                    className={`text-sm ${errors.lastName ? "text-red-500" : "h-5"}`}>{errors.lastName?.message}</div>
                             </div>
                             {/* Email Field */}
                             <div className="border-signature-gray flex flex-col border-t-[1px]  pb-4 pr-4 pt-2">
@@ -118,13 +125,15 @@ export default function CompleteRegistrationPage() {
                                 <div>Provide your personal email.</div>
                             </div>
                             <div className="border-signature-gray border-t-[1px] pt-4">
-                                <CardLayout className={`rounded-md ${errors.email ? "border-red-500" : "border-signature-gray"}`}>
-                                    <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
+                                <CardLayout
+                                    className={`rounded-md ${errors.email ? "border-red-500" : "border-signature-gray"}`}>
+                                    <div
+                                        className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                         <span
                                             className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
                                                 errors.email ? "border-red-500" : "border-signature-gray"
                                             }`}>
-                                            <MdOutlineEmail size="1.5rem" />
+                                            <MdOutlineEmail size="1.5rem"/>
                                         </span>
                                         <input
                                             {...register("email", {
@@ -140,7 +149,8 @@ export default function CompleteRegistrationPage() {
                                         />
                                     </div>
                                 </CardLayout>
-                                <div className={`text-sm ${errors.email ? "text-red-500" : "h-5"}`}>{errors.email?.message}</div>
+                                <div
+                                    className={`text-sm ${errors.email ? "text-red-500" : "h-5"}`}>{errors.email?.message}</div>
                             </div>
                             {/* Birth Date Field */}
                             <div className="border-signature-gray flex flex-col border-y-[1px] pb-4 pr-4 pt-2">
@@ -148,13 +158,15 @@ export default function CompleteRegistrationPage() {
                                 <div>Provide the date of your birth.</div>
                             </div>
                             <div className="border-signature-gray border-y-[1px] pt-3">
-                                <CardLayout className={`rounded-md ${errors.birthDate ? "border-red-500" : "border-signature-gray"}`}>
-                                    <div className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
+                                <CardLayout
+                                    className={`rounded-md ${errors.birthDate ? "border-red-500" : "border-signature-gray"}`}>
+                                    <div
+                                        className="flex flex-1 flex-row gap-2 rounded-md transition-colors has-[:focus]:bg-gray-100">
                                         <span
                                             className={`h-full rounded-l-md border-r-[1px] bg-gray-100 p-3 ${
                                                 errors.birthDate ? "border-red-500" : "border-signature-gray"
                                             }`}>
-                                            <MdOutlineDateRange size="1.5rem" />
+                                            <MdOutlineDateRange size="1.5rem"/>
                                         </span>
                                         <input
                                             {...register("birthDate", {
@@ -170,7 +182,8 @@ export default function CompleteRegistrationPage() {
                                         />
                                     </div>
                                 </CardLayout>
-                                <div className={`text-sm ${errors.birthDate ? "text-red-500" : "h-5"}`}>{errors.birthDate?.message}</div>
+                                <div
+                                    className={`text-sm ${errors.birthDate ? "text-red-500" : "h-5"}`}>{errors.birthDate?.message}</div>
                             </div>
                         </div>
                         <div className="flex w-full items-center justify-center gap-2">

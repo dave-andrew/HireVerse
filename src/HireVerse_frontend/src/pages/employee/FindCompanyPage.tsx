@@ -144,7 +144,7 @@ export default function FindCompanyPage() {
                                     <IoIosSearch size="1.5rem" />
                                     <input
                                         type="text"
-                                        className="outline-0"
+                                        className="outline-0 w-full"
                                         placeholder="Search Company"
                                         onChange={(e) => {
                                             setSearch(e.target.value);
@@ -156,7 +156,7 @@ export default function FindCompanyPage() {
                                 <CompanyFilter onApplyFilter={(data) => setFilter(data)} />
                                 {searchCompany?.length === 0 ? (
                                     <div
-                                        className="flex flex-col place-items-center justify-center gap-2 bg-red-100 grow text-xl font-bold">
+                                        className="flex flex-col place-items-center justify-center gap-2 grow text-xl font-bold">
                                         <iframe
                                             src="https://lottie.host/embed/5f39d49f-6200-47c8-a2fa-1ee1546baa76/WGdU5jzKs1.json"
                                             className="w-96 h-96"></iframe>
@@ -165,7 +165,7 @@ export default function FindCompanyPage() {
                                 ) : (
 
                                     <div
-                                        className="grid h-[70vh] grow lg:grid-cols-2 md:grid-cols-1 gap-4 overflow-y-scroll bg-blue-100 justify-center">
+                                        className="grid h-[70vh] grow lg:grid-cols-2 md:grid-cols-1 gap-4 overflow-y-scroll justify-center">
                                         {searchCompany?.map((cp, index) => {
                                             return (
                                                 <CardLayout

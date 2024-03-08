@@ -203,7 +203,7 @@ export default function ManageCompanyPage() {
                                 </div>
                             </div>
 
-                            <CardLayout className="flex min-h-[25rem] flex-col gap-5 rounded-lg p-10">
+                            <CardLayout className="flex flex-col gap-5 rounded-lg p-10 mt-6">
                                 <h3 className="m-0 p-0 text-4xl font-semibold">Company Profile</h3>
                                 <div
                                     dangerouslySetInnerHTML={{
