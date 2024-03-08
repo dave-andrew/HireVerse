@@ -1,7 +1,7 @@
 import ManagementPageLayout from "../../layouts/ManagementPageLayout";
 import {IoIosSearch} from "react-icons/io";
 import CardLayout from "../../layouts/CardLayout";
-import {useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import ManagerTable from "../../components/company/ManagerTable";
 import InviteManagerModal from "../../components/modal/InviteManagerModal";
 import {getGetCompanyInvitations} from "../../datas/queries/companyQueries";
@@ -36,7 +36,7 @@ export default function CompanyManagersPage() {
     }
 
     useEffect(() => {
-        onSearch()
+        onSearch({target: {value: ""}})
         getCompanyInvitation();
     }, [selectedCompany]);
 
@@ -44,31 +44,30 @@ export default function CompanyManagersPage() {
         selectedCompany?.id,
     );
 
-    const {register, getValues} = useForm<IQuerySortForm>({
+    const {register, getValues, watch} = useForm<IQuerySortForm>({
         defaultValues: {
             query: "",
         },
     });
 
+    // const query = watch("query", "")
     const [managerData, setManagerData] = useState<User[]>([...rawManagerData ?? []]);
     const [companyInvitation, setCompanyInvitation] = useState(rawCompanyInvitation ?? []);
-    const onSearch = () => {
-        const query = getValues("query");
+    const onSearch = (e: { target: { value: string } }) => {
+        const query = e?.target?.value ?? "";
+
+        console.log(query)
         if (query === "") {
             setManagerData(rawManagerData ?? []);
             setCompanyInvitation(rawCompanyInvitation ?? []);
             return;
         }
         setManagerData(rawManagerData?.filter((manager) => (
-            manager.first_name.toLowerCase().includes(query.toLowerCase()) ||
-            manager.last_name.toLowerCase().includes(query.toLowerCase()) ||
-            manager.email.toLowerCase().includes(query.toLowerCase())
+            (manager.first_name + " " + manager.last_name).toLowerCase().includes(query.toLowerCase())
         )) ?? []);
 
         setCompanyInvitation(rawCompanyInvitation?.filter((invitation) => (
-            invitation.user.first_name.toLowerCase().includes(query.toLowerCase()) ||
-            invitation.user.last_name.toLowerCase().includes(query.toLowerCase()) ||
-            invitation.user.email.toLowerCase().includes(query.toLowerCase())
+            (invitation.user.first_name + " " + invitation.user.last_name).toLowerCase().includes(query.toLowerCase())
         )) ?? []);
     }
 
@@ -102,7 +101,9 @@ export default function CompanyManagersPage() {
                                         type="text"
                                         className="w-full bg-transparent outline-0"
                                         placeholder="Search Company Managers"
-                                        onKeyDown={(e) => handleKeyDown(e.key, "Enter", onSearch)}
+                                        onChange={(e) => {
+                                            onSearch(e)
+                                        }}
                                     />
                                 </span>
                             </CardLayout>
