@@ -165,7 +165,7 @@ export default function FindCompanyPage() {
                                 ) : (
 
                                     <div
-                                        className="grid h-[70vh] grow lg:grid-cols-2 md:grid-cols-1 gap-4 overflow-y-scroll justify-center">
+                                        className="grid h-[70vh] max-w-[46rem] grow lg:grid-cols-2 md:grid-cols-1 gap-4 overflow-y-scroll justify-center">
                                         {searchCompany?.map((cp, index) => {
                                             return (
                                                 <CardLayout
@@ -181,12 +181,12 @@ export default function FindCompanyPage() {
                                                             alt="Company Image"
                                                         />
                                                         <div className="flex flex-col">
-                                                            <div className="font-bold mb-1">{cp?.name}</div>
+                                                            <div className="font-bold mb-1 w-[12rem] overflow-ellipsis overflow-hidden whitespace-nowrap ">{cp?.name}</div>
                                                             <StarReview company_id={cp?.id || ""} />
                                                         </div>
                                                     </div>
                                                     <div className="flex flex-col gap-4">
-                                                        <div className="grid grid-cols-3">
+                                                        <div className="grid grid-cols-3 gap-2">
                                                             <div className="flex flex-col">
                                                                 <div className="text-sm font-bold">Location:</div>
                                                                 <div>{cp?.office_locations[0]}</div>

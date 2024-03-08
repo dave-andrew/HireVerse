@@ -13,6 +13,7 @@ import purifyDOM from "../../utils/purifyDOM";
 import { FaLinkedin } from "react-icons/fa";
 import EditReviewModal from "../../components/modal/EditReviewModal";
 import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
+import getIndustryColor from "../../utils/industryColor";
 
 export interface IReviewSortForm {
     orderBy: string;
@@ -47,8 +48,8 @@ export default function CompanyDetailPage() {
             <FrontPageLayout>
                 <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
                     <div className="flex flex-col place-items-center gap-2 px-4 md:px-0 xl:w-[calc(100%-1rem)] 2xl:w-4/5">
-                        <div className="my-12 flex w-full flex-col gap-8 md:flex-row">
-                            <div className="flex h-fit w-full flex-col gap-4 px-32 md:sticky md:top-10 md:w-[30%] md:px-0">
+                        <div className="my-12 flex w-full flex-col gap-8 md:flex-row ">
+                            <div className="sticky top-20 flex h-fit w-full flex-col gap-4 px-32 md:sticky md:top-10 md:w-[30%] md:px-0">
                                 <div className="relative">
                                     <img
                                         className="border-signature-gray aspect-square w-full rounded-xl border-[1px] object-cover"
@@ -67,9 +68,15 @@ export default function CompanyDetailPage() {
                                         {industries?.map((industry, i) => {
                                             return (
                                                 <div
-                                                    key={i}
-                                                    className="cursor-default rounded-3xl border border-green-400 bg-green-200 px-4 py-1 text-green-700">
+                                                key={i}
+                                                    style={{
+                                                        backgroundColor: getIndustryColor(industry),
+                                                        color: getIndustryColor(industry, "text"),
+                                                        borderColor: getIndustryColor(industry, "border"),
+                                                    }}
+                                                    className="cursor-default rounded-3xl px-4 py-1 border">
                                                     {industry}
+
                                                 </div>
                                             );
                                         })}

@@ -18,6 +18,7 @@ import LeaveCompanyModal from "../../components/modal/LeaveCompanyModal";
 import { Link } from "react-router-dom";
 import { Review } from "../../../../declarations/HireVerse_review/HireVerse_review.did";
 import EditReviewModal from "../../components/modal/EditReviewModal";
+import getIndustryColor from "../../utils/industryColor";
 
 interface IManageCompanyForm {
     image: FileList;
@@ -65,20 +66,6 @@ export default function ManageCompanyPage() {
         window.location.reload();
     };
 
-    function getBgColor(industry: string, type: string = "bg") {
-        const firstChar = industry.charAt(0).toLowerCase();
-        const charCode = firstChar.charCodeAt(0);
-        if (charCode >= 97 && charCode <= 122) {
-            let hue = ((charCode - 97) / 26) * 360;
-            let lightness = 90;
-            if (type === "text" || type === "border") {
-                // hue = (hue + 180) % 360;
-                lightness -= 70;
-            }
-            return `hsl(${hue}, 100%, ${lightness}%)`;
-        }
-        return "hsl(0, 100%, 90%)";
-    }
 
     useEffect(() => {
         updateCompanyData();
@@ -88,7 +75,7 @@ export default function ManageCompanyPage() {
         <>
             <div className="bg-signature-gray flex h-fit w-full flex-row items-center justify-center">
                 <div className="flex flex-col place-items-center gap-2 px-4 md:px-0 xl:w-[calc(100%-1rem)] 2xl:w-4/5">
-                    <div className="mt-12 flex w-full flex-col gap-8 md:flex-row">
+                    <div className="my-12 flex w-full flex-col gap-8 md:flex-row">
                         <div className="flex h-fit w-full flex-col gap-4 px-32 md:sticky md:top-20 md:w-[30%] md:px-0">
                             <div className="relative">
                                 <img
@@ -134,9 +121,9 @@ export default function ManageCompanyPage() {
                                                 key={i}
                                                 className="cursor-default rounded-xl border border-green-400 px-4 py-1 "
                                                 style={{
-                                                    backgroundColor: getBgColor(industry),
-                                                    color: getBgColor(industry, "text"),
-                                                    borderColor: getBgColor(industry, "border"),
+                                                    backgroundColor: getIndustryColor(industry),
+                                                    color: getIndustryColor(industry, "text"),
+                                                    borderColor: getIndustryColor(industry, "border"),
                                                 }}>
                                                 {industry}
                                             </div>
@@ -162,7 +149,7 @@ export default function ManageCompanyPage() {
                                         );
                                     })}
                                 </div>
-                                <div className="flex flex-col justify-evenly lg:flex-row">
+                                <div className="flex flex-col justify-evenly lg:flex-row mt-8">
                                     <div className="flex flex-row gap-3">
                                         <div className="flex aspect-square place-items-center rounded-3xl p-2">
                                             <MdOutlineQueryBuilder size="2rem" />

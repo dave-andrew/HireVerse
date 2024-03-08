@@ -120,7 +120,7 @@ export default function JobDetail({ jobId }: Props) {
                             <h3 className="m-0 p-0">Contacts</h3>
                             <p>
                                 {/*{console.log(fullJob)}*/}
-                                {fullJob.contacts?.map((contact, index) => <span key={index}>{contact}</span>)}
+                                {fullJob.contacts?.map((contact, index) => <a href={`mailto:${contact}`} key={index}>{contact}</a>)}
                             </p>
                         </div>
                     </div>

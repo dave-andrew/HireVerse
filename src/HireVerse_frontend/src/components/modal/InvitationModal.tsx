@@ -31,8 +31,8 @@ export default function InvitationModal({
                 <div className="flex w-full flex-row items-center justify-between pb-10">
                     <div className="flex flex-col gap-1">
                         <div className="text-4xl font-bold">Invitations</div>
-                        <div className="text-gray-600">Your information will be shared to the whole manager if you
-                            accept their invitations.
+                        <div className="text-gray-600">Your information will be shared to all manager in the company if
+                            you accept their invitations.
                         </div>
                     </div>
                     <button

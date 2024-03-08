@@ -13,7 +13,7 @@ interface Props {
 export default function CompanyReviewItem({ review, setEditable }: Props) {
     return (
         <>
-            <div className="flex w-full flex-col rounded-lg border-[1px] border-gray-200 bg-white p-5">
+            <div className="flex w-full flex-col rounded-lg border-[1px] border-gray-200 bg-white p-12">
                 <div className="flex w-full flex-row items-center justify-between gap-5">
                     <div className="flex w-full flex-row items-center justify-between gap-5">
                         <div className="flex flex-row items-center gap-5">
