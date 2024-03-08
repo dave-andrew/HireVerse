@@ -13,6 +13,12 @@ import { IFilterCompanyForm } from "../../components/form/CompanyFilter";
 import { IQueryCompanyFilter } from "../../pages/employee/FindCompanyPage";
 import { FilterCompany } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 
+
+/**
+ * Fetches the details of a specific job.
+ * @param {string | undefined} jobId - The ID of the job.
+ * @returns {QueryObserverResult} A query observer result containing the job's details or null if the job ID is not provided.
+ */
 export function getJobDetails(jobId: string | undefined) {
     const { getJobService, getCompanyService } = useService();
     return useQuery({
@@ -65,6 +71,12 @@ export function getJobDetails(jobId: string | undefined) {
     });
 }
 
+
+/**
+ * Fetches the full details of a specific job.
+ * @param {string | undefined} jobId - The ID of the job.
+ * @returns {QueryObserverResult} A query observer result containing the full job details or null if the job ID is not provided.
+ */
 export function getFullJob(jobId: string | undefined) {
     const { getJobService } = useService();
     return useQuery({
@@ -86,6 +98,13 @@ export function getFullJob(jobId: string | undefined) {
     });
 }
 
+
+/**
+ * Fetches jobs based on provided filters.
+ * @param {IFilterForm} filters - The filters to apply.
+ * @param {() => IQueryFilterSortForm} getQueryFilters - A function that returns the query filters to apply.
+ * @returns {InfiniteQueryObserverResult} An infinite query observer result containing the filtered jobs.
+ */
 export function getFilteredJobs(filters: IFilterForm, getQueryFilters: () => IQueryFilterSortForm) {
     const { getJobService, getCompanyService } = useService();
 
@@ -157,6 +176,12 @@ export function getFilteredJobs(filters: IFilterForm, getQueryFilters: () => IQu
     });
 }
 
+
+/**
+ * Fetches companies based on provided filters.
+ * @param {IFilterCompanyForm} filter - The filters to apply.
+ * @returns {InfiniteQueryObserverResult} An infinite query observer result containing the filtered companies.
+ */
 export function getFilterCompany(filter: IFilterCompanyForm) {
     const { getJobService } = useService();
 
@@ -209,6 +234,13 @@ export function getFilterCompany(filter: IFilterCompanyForm) {
     });
 }
 
+
+/**
+ * Fetches the names of specific companies.
+ * @param {string[]} companyIds - The IDs of the companies.
+ * @param {boolean} autoFetch - Whether to automatically fetch the data.
+ * @returns {QueryObserverResult} A query observer result containing the companies' names or null if autoFetch is false.
+ */
 export function getCompanyNames(companyIds: string[], autoFetch: boolean = false) {
     const { getCompanyService } = useService();
     return useQuery({
@@ -226,6 +258,11 @@ export function getCompanyNames(companyIds: string[], autoFetch: boolean = false
     });
 }
 
+
+/**
+ * Fetches all job industries.
+ * @returns {QueryObserverResult} A query observer result containing all job industries.
+ */
 export function getJobIndustries() {
     const { getJobService } = useService();
     return useQuery({
@@ -242,6 +279,11 @@ export function getJobIndustries() {
     });
 }
 
+
+/**
+ * Fetches all companies.
+ * @returns {QueryObserverResult} A query observer result containing all companies.
+ */
 export function getCompanies() {
     const { getCompanyService } = useService();
     return useQuery({
@@ -258,6 +300,12 @@ export function getCompanies() {
     });
 }
 
+
+/**
+ * Fetches a user object by email.
+ * @param {string} email - The email of the user.
+ * @returns {QueryObserverResult} A query observer result containing the user object or null if the email is not provided.
+ */
 export function getUserObjectByEmail(email: string) {
     const { getBackendService } = useService();
     return useQuery({
@@ -278,6 +326,12 @@ export function getUserObjectByEmail(email: string) {
     });
 }
 
+
+/**
+ * Fetches the managers of a specific company.
+ * @param {string | undefined} companyId - The ID of the company.
+ * @returns {QueryObserverResult} A query observer result containing the company's managers or null if the company ID is not provided.
+ */
 export function getManagersFromCompany(
     companyId: string | undefined,
     // getValues: () => IQuerySortForm
@@ -302,6 +356,13 @@ export function getManagersFromCompany(
     });
 }
 
+
+/**
+ * Fetches the jobs posted by a specific company.
+ * @param {string | undefined} companyId - The ID of the company.
+ * @param {() => IQuerySortForm} getValues - A function that returns the query filters to apply.
+ * @returns {QueryObserverResult} A query observer result containing the jobs posted by the company or null if the company ID is not provided.
+ */
 export function getJobPostedByCompany(companyId: string | undefined, getValues: () => IQuerySortForm) {
     const { getJobService } = useService();
 
