@@ -52,8 +52,7 @@ scalable. It is also designed to be easy to use and accessible to everyone.
 ![Image Preview](assets\Preview3.png)
 
 ## Video Installation Guide & Demo
-
-Nanti masukkin link youtubenya disini
+[Project Installation Guide](https://youtu.be/gPCakF4NUjo)
 
 ## FAQ
 
