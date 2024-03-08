@@ -6,14 +6,11 @@ import canisterInjector from "../../utils/canisterInjector";
 
 export const ContainerScroll = ({
     titleComponent,
-    parentRef,
 }: {
     titleComponent: string | React.ReactNode;
-    parentRef: React.MutableRefObject<HTMLElement | null>;
 }) => {
     const containerRef = useRef<any>(null);
     const { scrollYProgress } = useScroll({
-        container: parentRef,
         target: containerRef,
     });
 

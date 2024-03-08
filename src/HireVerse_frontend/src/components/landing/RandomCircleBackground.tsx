@@ -1,28 +1,28 @@
-import {RefObject, useEffect, useRef} from "react";
+import { useEffect, useRef} from "react";
 
-export default function RandomCircleBackground({parentRef}: { parentRef: RefObject<HTMLElement> }) {
+export default function RandomCircleBackground() {
     const circleSetRef: React.MutableRefObject<null | HTMLDivElement> = useRef(null);
 
     function handleScroll() {
-        const viewportHeight = parentRef?.current?.clientHeight || 0;
+        const viewportHeight = window.innerHeight || 0;
 
         Array.from(circleSetRef?.current?.children || []).map((child: Element) => {
             const scrollSpeed = child.classList.contains("circle1") ? 0.002 :
                 child.classList.contains("circle2") ? 0.0015 :
                    -0.001;
 
-            const newTop = (parentRef?.current?.scrollTop || 0) * scrollSpeed * viewportHeight;
+            const newTop = (window.scrollY || 0) * scrollSpeed * viewportHeight;
             (child as HTMLElement).style.transform = `translateY(${newTop}px)`;
         });
     }
 
     useEffect(() => {
-        parentRef?.current?.addEventListener("scroll", handleScroll);
-        return () => parentRef?.current?.removeEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
     }, [circleSetRef]);
 
     return (
-        <div className="absolute h-[3000px] w-full z-0 overflow-hidden"
+        <div className="absolute h-[2000px] w-full z-0 overflow-hidden"
              ref={circleSetRef}>
             <div
                 className="circle1 relative left-[10vw] top-20 z-50 h-96 w-96 rounded-full bg-gradient-to-bl from-pink-300 to-purple-950 opacity-30 blur-md">

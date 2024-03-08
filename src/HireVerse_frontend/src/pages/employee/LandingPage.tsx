@@ -16,9 +16,9 @@ export default function LandingPage() {
             {/*<WorldMap />*/}
 
             <div ref={parentRef}
-                 className="relative flex h-[100vh] snap-y snap-mandatory flex-col overflow-scroll bg-gradient-to-br from-cyan-100 via-white to-pink-200">
-                <RandomCircleBackground parentRef={parentRef}/>
-                <HeaderSection parentRef={parentRef}/>
+                 className="relative flex flex-col bg-gradient-to-br from-cyan-100 via-white to-pink-200">
+                <RandomCircleBackground />
+                <HeaderSection/>
                 {/*<button*/}
                 {/*    className="cursor-pointer sticky z-0 flex flex-col gap-10 place-items-center rounded-full top-10 ms-auto text-xl animate-bounce">*/}
                 {/*    <LiaLongArrowAltUpSolid*/}
@@ -27,7 +27,7 @@ export default function LandingPage() {
                 {/*        Scroll Up*/}
                 {/*    </div>*/}
                 {/*</button>*/}
-                <BenefitSection parentRef={parentRef}/>
+                <BenefitSection/>
 
                 {/*<div*/}
                 {/*    className="sticky z-0 flex flex-col gap-10 place-items-center rounded-full top-0 left-9 text-xl animate-bounce">*/}
@@ -37,7 +37,7 @@ export default function LandingPage() {
                 {/*    <LiaLongArrowAltDownSolid*/}
                 {/*        className="h-10 w-10" />*/}
                 {/*</div>*/}
-                <SponsorSection parentRef={parentRef}/>
+                <SponsorSection/>
                 <FooterSection/>
             </div>
         </FrontPageLayout>
