@@ -1,7 +1,7 @@
 # HireVerse
 
 ## Introduction
-Hireverse is a decentralized hiring platform that allows users to create and apply for job listings. It is built on the
+HireVerse is a decentralized hiring platform that allows users to create and apply for job listings. It is built on the
 Internet Computer and uses the Motoko programming language. The platform is designed to be decentralized, secure, and
 scalable. It is also designed to be easy to use and accessible to everyone.
 
