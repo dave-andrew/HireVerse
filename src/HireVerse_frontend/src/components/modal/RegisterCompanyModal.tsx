@@ -87,6 +87,7 @@ export default function RegisterCompanyModal({ openState, setOpenState, onJobCre
     };
 
     const registerCompany = async (data: IRegisterCompanyForm) => {
+        console.log("Check ");
         if (data.locations.length === 0) {
             errorToast({
                 message: "Please input at least one location",

@@ -1,6 +1,6 @@
-import React, { ReactNode, useEffect, useLayoutEffect, useState } from "react";
+import React, {ReactNode, useEffect, useLayoutEffect, useState} from "react";
 import Navbar from "../components/navbar/Navbar";
-import { ToastContainer } from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
     className?: string;
 }
 
-export default function FrontPageLayout({ children, className }: Props) {
+export default function FrontPageLayout({children, className}: Props) {
     const [currentPage, setCurrentPage] = useState("home");
 
     useEffect(() => {
@@ -20,25 +20,20 @@ export default function FrontPageLayout({ children, className }: Props) {
         const body = document.body;
         const html = document.documentElement;
 
-        body.style.height = "auto";
-        body.style.overflow = "auto";
-        html.style.height = "auto";
-        html.style.overflow = "auto";
-        console.log(currentPage);
-
         if (currentPage === "/") {
-            body.style.height = "100vh";
-            body.style.overflow = "hidden";
-            html.style.height = "100vh";
-            html.style.overflow = "hidden";
+            body.style.scrollSnapType = "y mandatory";
+            html.style.scrollSnapType = "y mandatory";
+        } else {
+            body.style.scrollSnapType = "auto"
+            html.style.scrollSnapType = "auto";
         }
     }, [currentPage]);
 
     return (
         <>
-            <ToastContainer />
-            <div className="bg-signature-gray h-fit flex w-full snap-y flex-col">
-                <Navbar />
+            <ToastContainer/>
+            <div className="bg-signature-gray h-fit flex w-full flex-col">
+                <Navbar/>
                 <div className={`mt-16 w-full rounded-xl bg-white ${className}`}>{children}</div>
             </div>
         </>

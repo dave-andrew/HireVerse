@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {animated, useSpring, useTrail} from "@react-spring/web";
 import useMobile from "../../hooks/useMobile";
 
-export default function BenefitSection({parentRef}: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
+export default function BenefitSection() {
     const upperTriggerPoint = 500;
     const lowerTriggerPoint = 900;
     const [open, setOpen] = useState(false);
@@ -11,12 +11,12 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
 
     useEffect(() => {
         const handleScroll = () => {
-            const scrollY = parentRef?.current?.scrollTop || 0;
+            const scrollY = window.scrollY || 0;
             setOpen(scrollY >= upperTriggerPoint && scrollY <= lowerTriggerPoint);
         };
-        parentRef?.current?.addEventListener("scroll", handleScroll);
-        return () => parentRef?.current?.removeEventListener("scroll", handleScroll);
-    }, [upperTriggerPoint, parentRef, lowerTriggerPoint]);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [upperTriggerPoint, lowerTriggerPoint]);
 
     const benefitItem = [
         <div className="flex w-full translate-x-[10%] flex-col place-items-start">
@@ -30,7 +30,7 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
                 your data remains under your <b> complete control </b>.
             </div>
         </div>,
-        <div className="mb-12 flex w-full snap-center flex-col place-items-start justify-center">
+        <div className="mb-12 flex w-full flex-col place-items-start justify-center">
             <div className="font-bebas text-2xl md:text-4xl ">Credible Reviews</div>
             <div className="text-sm text-gray-600 2xl:text-base">
                 Boost your confidence in your next career move. Our platform empowers you with <b> credible and
@@ -54,7 +54,7 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
         config: {mass: 5, tension: 2000, friction: 200},
         opacity: open ? 1 : 0,
         x: open ? 0 : 20,
-        height: open ? (isMobile ? 140 : 200) : 0,
+        height: open ? (isMobile ? 140 : 180) : 0,
         from: {opacity: 0, x: 20, height: 0},
     });
 
@@ -66,7 +66,7 @@ export default function BenefitSection({parentRef}: { parentRef: React.MutableRe
 
     return (
         <div
-            className={`z-10 grid min-h-[1000px] grow grid-cols-1 place-items-center justify-center gap-16 
+            className={`z-10 grid min-h-[1000px] grow grid-cols-1 place-items-center justify-center gap-16 snap-center
             px-[10vh] py-14 transition-all duration-1000 ease-in-out md:px-[20vh] xl:grid-cols-2 `}>
             <animated.div style={fadeAnimation}>
                 <iframe

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
 import useMobile from "../../hooks/useMobile";
 
-export default function HeaderSection({ parentRef }: { parentRef: React.MutableRefObject<HTMLElement | null> }) {
+export default function HeaderSection() {
     const { user, authState, login, logout } = useAuth();
     const navigate = useNavigate();
 
@@ -26,13 +26,13 @@ export default function HeaderSection({ parentRef }: { parentRef: React.MutableR
 
     useEffect(() => {
         const handleScroll = () => {
-            const scrollY = parentRef?.current?.scrollTop || 0;
+            const scrollY = window.scrollY || 0;
             setIsVisible(scrollY <= triggerPoint);
         };
         handleScroll();
-        parentRef?.current?.addEventListener("scroll", handleScroll);
-        return () => parentRef?.current?.removeEventListener("scroll", handleScroll);
-    }, [triggerPoint, parentRef]);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [triggerPoint]);
 
     const fadeAnimation = useSpring({
         opacity: isVisible ? 1 : 0,
