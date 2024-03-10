@@ -135,7 +135,7 @@ actor Job {
          company_id = newJob.company_id;
          timestamp = Time.now();
          status = "active";
-         employType = "Full-time";
+         employType = newJob.employType;
          contacts = [];
       };
 

@@ -33,6 +33,8 @@ export default function JobItemManagement({ job, setConfirmationState, onClick }
         });
     };
 
+    console.log("JobItemManagement", job);
+
     return (
         <CardLayout
             onClick={onClick}

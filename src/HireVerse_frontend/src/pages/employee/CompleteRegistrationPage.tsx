@@ -31,7 +31,9 @@ export default function CompleteRegistrationPage() {
     const handleFormSubmit = async (data: ICompleteRegisterForm) => {
         setIsLoading(true);
         const principal = await getPrincipal();
-        if (principal.toString() === "2vxsx-fae") return;
+        if (principal.toString() === "2vxsx-fae") {
+            return;
+        }
         const result = await registerNewUser(data.firstName, data.lastName, data.email, data.birthDate);
 
         setIsLoading(false);

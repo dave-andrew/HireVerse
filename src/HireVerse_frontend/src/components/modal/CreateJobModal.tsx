@@ -8,10 +8,7 @@ import DynamicInputBox from "../form/DynamicInputBox";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { MdAdd } from "react-icons/md";
 import useToaster from "../../hooks/useToaster";
-import {
-    Company,
-    CreateJobInput,
-} from "../../../../declarations/HireVerse_job/HireVerse_job.did";
+import { Company, CreateJobInput } from "../../../../declarations/HireVerse_job/HireVerse_job.did";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { useCreateNewJob } from "../../datas/mutations/jobMutation";
 import WrappedAutoDropdown from "../form/WrappedAutoDropdown";
@@ -52,10 +49,7 @@ const defaultValues = {
 };
 
 export default function CreateJobModal({ openState, setOpenState }: Props) {
-    const [selectedCompany, _] = useLocalStorage<Company | null>(
-        "selectedCompany",
-        null,
-    );
+    const [selectedCompany, _] = useLocalStorage<Company | null>("selectedCompany", null);
     const {
         control,
         register,
@@ -71,24 +65,21 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
     const shortDescriptionEditor = useRichTextEditor({
         addExtensions: [
             Placeholder.configure({
-                placeholder:
-                    "e.g. We are looking for a software engineer to join our team.",
+                placeholder: "e.g. We are looking for a software engineer to join our team.",
             }),
         ],
     });
     const jobDescriptionEditor = useRichTextEditor({
         addExtensions: [
             Placeholder.configure({
-                placeholder:
-                    "e.g. You will be responsible for developing software applications.",
+                placeholder: "e.g. You will be responsible for developing software applications.",
             }),
         ],
     });
     const requirementsEditor = useRichTextEditor({
         addExtensions: [
             Placeholder.configure({
-                placeholder:
-                    "e.g. 5 years of experience in software engineering",
+                placeholder: "e.g. 5 years of experience in software engineering",
             }),
         ],
     });
@@ -97,8 +88,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
 
     const checkError = () => {
         for (const error in errors) {
-            const errorMessage =
-                errors[error as keyof IEditCompanyForm]?.message;
+            const errorMessage = errors[error as keyof IEditCompanyForm]?.message;
 
             if (errorMessage) {
                 errorToast({
@@ -110,31 +100,21 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
     };
 
     const createJob = async (data: IEditCompanyForm) => {
-        if (data.salaryStart > data.salaryEnd) {
-            setError("salaryStart", {
-                type: "manual",
-                message: "Salary start cannot be higher than salary end",
-            });
+        console.log(data);
+        // return;
+        if (BigInt(data.salaryStart) > BigInt(data.salaryEnd)) {
             errorToast({
                 message: "Salary start cannot be higher than salary end",
             });
             return;
         }
         if (data.employmentType === "") {
-            setError("employmentType", {
-                type: "manual",
-                message: "Please select an employment type",
-            });
             errorToast({
                 message: "Please select an employment type",
             });
             return;
         }
         if (data.industry === "") {
-            setError("industry", {
-                type: "manual",
-                message: "Please select an industry",
-            });
             errorToast({
                 message: "Please select an industry",
             });
@@ -176,6 +156,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
             return;
         }
 
+        console.log(data.employmentType);
         const newJob: CreateJobInput = {
             industry: data.industry,
             position: data.name,
@@ -210,7 +191,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 <div className="flex w-full flex-row items-center justify-between pb-10">
                     <div className="text-4xl font-bold">Post a New Job</div>
                     <button
-                        className="h-fit w-fit rounded-md text-end text-xl p-1 hover:bg-gray-100 transition-colors"
+                        className="h-fit w-fit rounded-md p-1 text-end text-xl transition-colors hover:bg-gray-100"
                         type="button"
                         onClick={() => setOpenState(false)}>
                         <IoCloseSharp size="2rem" />
@@ -221,9 +202,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 {/* Position Name Field */}
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Position Name</div>
-                    <div className="text-sm">
-                        Input the position name for this job.
-                    </div>
+                    <div className="text-sm">Input the position name for this job.</div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="h-full rounded-md">
@@ -240,9 +219,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 {/* Employment Type Field */}
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Employment Type</div>
-                    <div className="text-sm">
-                        Choose the employment type for this job.
-                    </div>
+                    <div className="text-sm">Choose the employment type for this job.</div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="h-full">
@@ -259,10 +236,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 {/* Salary Field */}
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Salary</div>
-                    <div className="text-sm">
-                        Input the salary range for this position in your
-                        company.
-                    </div>
+                    <div className="text-sm">Input the salary range for this position in your company.</div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="flex h-full flex-row items-center gap-2 rounded-md">
@@ -290,9 +264,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 {/* Industries Field */}
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Industry</div>
-                    <div className="text-sm">
-                        Choose the industry for this job.
-                    </div>
+                    <div className="text-sm">Choose the industry for this job.</div>
                 </div>
                 <div className="border-b border-gray-400 border-opacity-30 py-5">
                     <div className="h-full ">
@@ -309,9 +281,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 {/* Short Description Field */}
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Short Description</div>
-                    <div className="text-sm">
-                        Input the short description of this job.
-                    </div>
+                    <div className="text-sm">Input the short description of this job.</div>
                 </div>
                 <div className="border-b border-gray-400 border-opacity-30 py-5 ">
                     <div className="has-[:focus]:ring-signature-primary relative h-full rounded-md has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
@@ -324,9 +294,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 {/* Job Description Field */}
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Job Description</div>
-                    <div className="text-sm">
-                        Describe what this role does in detail.
-                    </div>
+                    <div className="text-sm">Describe what this role does in detail.</div>
                 </div>
                 <div className="border-b border-gray-400 border-opacity-30 py-5 ">
                     <div className="has-[:focus]:ring-signature-primary relative h-full rounded-md has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
@@ -339,9 +307,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 {/* Requirements Field */}
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Requirements</div>
-                    <div className="text-sm">
-                        Input the requirements to get this role.
-                    </div>
+                    <div className="text-sm">Input the requirements to get this role.</div>
                 </div>
                 <div className="border-b border-gray-400 border-opacity-30 py-5 ">
                     <div className="has-[:focus]:ring-signature-primary relative h-full rounded-md has-[:focus]:bg-gray-100 has-[:focus]:ring-2">
@@ -354,9 +320,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 {/* Salary Field */}
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Location</div>
-                    <div className="text-sm">
-                        Input the location for this job.
-                    </div>
+                    <div className="text-sm">Input the location for this job.</div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="flex h-full flex-row items-center gap-2 rounded-md">
@@ -373,10 +337,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                 {/* Apply Website Field */}
                 <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
                     <div className="font-bold">Apply Contacts</div>
-                    <div className="text-sm">
-                        Input the website, contact, or email to apply for this
-                        job.
-                    </div>
+                    <div className="text-sm">Input the website, contact, or email to apply for this job.</div>
                 </div>
                 <div className="border-b border-gray-400  border-opacity-30 py-5">
                     <div className="flex h-full flex-col gap-2 rounded-md">
@@ -395,8 +356,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                                         onClick={() =>
                                             append({
                                                 contact: "",
-                                                placeholder:
-                                                    "e.g. shane: sen@gmail.com",
+                                                placeholder: "e.g. shane: sen@gmail.com",
                                             })
                                         }>
                                         <MdAdd className="bg-blue-primary rounded-full text-white" />
@@ -421,14 +381,12 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                     type="checkbox"
                     className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                 />
-                <label className="font-medium text-black">
-                    I accept all the terms and requirements
-                </label>
+                <label className="font-medium text-black">I accept all the terms and requirements</label>
             </div>
             <div className="flex w-full items-center justify-center gap-2">
                 <button
                     onClick={handleSubmitForm}
-                    className="w-fit rounded-md bg-signature-yellow hover:bg-signature-yellow px-10 py-3 text-lg font-semibold text-black transition-colors">
+                    className="bg-signature-yellow hover:bg-signature-yellow w-fit rounded-md px-10 py-3 text-lg font-semibold text-black transition-colors">
                     Post Job
                 </button>
             </div>

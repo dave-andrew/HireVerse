@@ -108,6 +108,18 @@ actor Database {
       return #err("User not found");
    };
 
+   public query func getUserName(userId : Text) : async Result.Result<Text, Text> {
+      let user = users.get(Principal.fromText(userId));
+      switch (user) {
+         case (?user) {
+            return #ok(user.first_name # " " # user.last_name);
+         };
+         case null {
+            return #err("User not found");
+         };
+      };
+   };
+
     // Function to get a user object by their email
    public query func getUserObjectByEmail(user_email : Text) : async Result.Result<User, Text> {
       for (user in users.vals()) {

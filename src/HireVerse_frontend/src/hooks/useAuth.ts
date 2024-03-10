@@ -16,10 +16,7 @@ export enum AuthState {
 export default function useAuth() {
     const queryClient = useQueryClient();
     const { getBackendService } = useService();
-    const [authState, setAuthState] = useLocalStorage<AuthState>(
-        "authState",
-        AuthState.Loading,
-    );
+    const [authState, setAuthState] = useLocalStorage<AuthState>("authState", AuthState.Loading);
     const [user, setUser] = useLocalStorage<User | null>("user", null);
 
     const fetchUserData = useCallback(async () => {
@@ -27,10 +24,7 @@ export default function useAuth() {
         const authClient = await AuthClient.create();
         const identity = authClient.getIdentity();
 
-        if (
-            (await authClient.isAuthenticated()) &&
-            identity.getPrincipal().toText() !== "2vxsx-fae"
-        ) {
+        if ((await authClient.isAuthenticated()) && identity.getPrincipal().toText() !== "2vxsx-fae") {
             if (!getBackendService) return;
 
             setAuthState(AuthState.Loading);
@@ -39,10 +33,7 @@ export default function useAuth() {
             // const agent = new HttpAgent({ identity: identity }) as Agent;
             // await agent.fetchRootKey();
 
-            const getUserFunc = async () =>
-                await getBackendService().then((s) =>
-                    s.getUser(identity.getPrincipal()),
-                );
+            const getUserFunc = async () => await getBackendService().then((s) => s.getUser(identity.getPrincipal()));
 
             const userData = await queryClient.fetchQuery({
                 queryKey: ["user", identity.getPrincipal()],
@@ -71,22 +62,14 @@ export default function useAuth() {
         }
     }, [getBackendService]);
 
-    const register = useCallback(
-        async (
-            first_name: string,
-            last_name: string,
-            email: string,
-            date: string,
-        ) => {
-            const returnValue = await getBackendService().then((s) =>
-                s.register(first_name, last_name, email, date),
-            );
+    const register = useCallback(async (first_name: string, last_name: string, email: string, date: string) => {
+        const returnValue = await getBackendService()
+            .then((s) => s.register(first_name, last_name, email, date))
+            .catch((e) => console.error(e));
 
-            await fetchUserData();
-            return returnValue;
-        },
-        [],
-    );
+        await fetchUserData();
+        return returnValue;
+    }, []);
 
     const getPrincipal = useCallback(async () => {
         const authClient = await AuthClient.create();
