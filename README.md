@@ -1,5 +1,8 @@
 # HireVerse
 
+
+![Hireverse Logo](https://github.com/dave-andrew/HireVerse/blob/master/assets/Logo.png)
+
 ## Introduction
 HireVerse is a decentralized hiring platform that allows users to create and apply for job listings. It is built on the
 Internet Computer and uses the Motoko programming language. The platform is designed to be decentralized, secure, and
@@ -47,9 +50,9 @@ scalable. It is also designed to be easy to use and accessible to everyone.
 - Easy to use and accessible to everyone
 
 ## Preview
-![Image Preview](assets\Preview1.png)
-![Image Preview](assets\Preview2.png)
-![Image Preview](assets\Preview3.png)
+![Image Preview](https://github.com/dave-andrew/HireVerse/blob/master/assets/Preview1.png)
+![Image Preview](https://github.com/dave-andrew/HireVerse/blob/master/assets/Preview2.png)
+![Image Preview](https://github.com/dave-andrew/HireVerse/blob/master/assets/Preview3.png)
 
 ## Video Installation Guide & Demo
 [Project Installation Guide](https://youtu.be/gPCakF4NUjo)
