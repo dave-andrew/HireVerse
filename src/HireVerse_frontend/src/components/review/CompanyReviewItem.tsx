@@ -4,6 +4,7 @@ import { Review } from "../../../../declarations/HireVerse_review/HireVerse_revi
 import purifyDOM from "../../utils/purifyDOM";
 import { ImCross } from "react-icons/im";
 import { convertTimeInterval } from "../../utils/convertTimeInterval";
+import { getUserName } from "../../datas/queries/authQueries";
 
 interface Props {
     review: Review;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function CompanyReviewItem({ review, setEditable }: Props) {
+    const { data: username } = getUserName(review.userId);
     return (
         <>
             <div className="flex w-full flex-col rounded-lg border-[1px] border-gray-200 bg-white p-12">
@@ -45,7 +47,7 @@ export default function CompanyReviewItem({ review, setEditable }: Props) {
                 <div className="flex flex-col gap-5">
                     <div className="flex flex-row items-center gap-2">
                         <span>
-                            By<b> {review.userId}</b>
+                            By<b> {review.userId === "Anonymous" ? "Anonymous" : username}</b>
                         </span>
                     </div>
                     <div className="flex flex-row items-center gap-3">

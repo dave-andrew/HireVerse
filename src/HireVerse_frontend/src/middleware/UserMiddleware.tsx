@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, Navigate, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 // import { AuthClient } from "@dfinity/auth-client";
 import { Principal } from "@dfinity/principal";
 // import { HireVerse_backend } from "../../../declarations/HireVerse_backend";
@@ -13,7 +13,6 @@ export const Authenticated = () => {
 
     useEffect(() => {
         const fetchPrincipal = async () => {
-            // TODO: Uncomment this when the backend is ready
             // const authClient = await AuthClient.create();
             // if (await authClient.isAuthenticated()) {
             //     const identity = authClient.getIdentity().getPrincipal();
@@ -36,8 +35,6 @@ export const Authenticated = () => {
             //     nav("/", { replace: true });
             //     return;
             // }
-
-            console.log(principal);
         };
         fetchPrincipal();
     }, []);

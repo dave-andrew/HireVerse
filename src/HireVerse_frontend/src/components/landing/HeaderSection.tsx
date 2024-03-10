@@ -1,9 +1,10 @@
 import { Typewriter } from "react-simple-typewriter";
-import useAuth, { AuthState } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
 import useMobile from "../../hooks/useMobile";
+import useAuth from "../../hooks/useAuth";
+import { AuthState } from "../context/AuthContext";
 
 export default function HeaderSection() {
     const { user, authState, login, logout } = useAuth();

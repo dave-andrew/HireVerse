@@ -2,7 +2,8 @@ import { Popover, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { PiSignOut } from "react-icons/pi";
-import useAuth, { AuthState } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
+import { AuthState } from "../context/AuthContext";
 
 export default function Profile() {
     const { login, logout, user, authState } = useAuth();
@@ -29,23 +30,14 @@ export default function Profile() {
                                         <span className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out">
                                             <div>
                                                 <p className="text-sm font-medium text-gray-900">
-                                                    {authState ==
-                                                    AuthState.Authenticated
-                                                        ? (`${user?.first_name} ${user?.last_name}`)
-                                                        : "Not Logged In"}
+                                                    {authState == AuthState.Authenticated ? `${user?.first_name} ${user?.last_name}` : "Not Logged In"}
                                                 </p>
-                                                <p className="text-sm text-gray-500">
-                                                    {authState ==
-                                                    AuthState.Authenticated
-                                                        ? user?.email.toString()
-                                                        : ""}
-                                                </p>
+                                                <p className="text-sm text-gray-500">{authState == AuthState.Authenticated ? user?.email.toString() : ""}</p>
                                             </div>
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-2 bg-gray-50 p-2">
-                                        {authState ==
-                                        AuthState.Authenticated ? (
+                                        {authState == AuthState.Authenticated ? (
                                             <span className="flow-root cursor-pointer rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-red-600 hover:text-white">
                                                 <span className="flex items-center justify-center">
                                                     <button

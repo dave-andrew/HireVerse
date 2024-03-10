@@ -126,8 +126,6 @@ export default function RegisterCompanyModal({ openState, setOpenState, onJobCre
             return;
         }
 
-        console.log("hahaha");
-
         const registerCompany: CreateCompanyInput = {
             profile: html,
             name: data.name,
@@ -146,7 +144,6 @@ export default function RegisterCompanyModal({ openState, setOpenState, onJobCre
 
     const handleSubmitForm = () => {
         checkError();
-        console.log("hihihah");
         handleSubmit(registerCompany)();
     };
 
@@ -194,7 +191,7 @@ export default function RegisterCompanyModal({ openState, setOpenState, onJobCre
                                 required: "LinkedIn profile is required",
                             })}
                             type="text"
-                            placeholder="e.g. google"
+                            placeholder="e.g. linkedin.com/company/google"
                             className="focus:ring-signature-primary h-full w-full rounded-md border-[1px] border-gray-200 px-3 outline-0 transition-all focus:bg-gray-100 focus:ring-2"
                         />
                     </div>

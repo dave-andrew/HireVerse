@@ -1,15 +1,12 @@
 // For pages that are only accessible to unauthenticated users -> Complete Registration
 import { Outlet, useNavigate } from "react-router-dom";
 import { ReactNode, useEffect } from "react";
-import useAuth, { AuthState } from "../../hooks/useAuth";
 import useToaster from "../../hooks/useToaster";
 import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
+import useAuth from "../../hooks/useAuth";
+import { AuthState } from "../context/AuthContext";
 
-export default function UnregisteredProtectedRoutes({
-    children,
-}: {
-    children?: ReactNode;
-}) {
+export default function UnregisteredProtectedRoutes({ children }: { children?: ReactNode }) {
     const { authState } = useAuth();
     const { warnToast } = useToaster();
     const navigate = useNavigate();
@@ -28,10 +25,5 @@ export default function UnregisteredProtectedRoutes({
         }
     }, [authState]);
 
-    return authState == AuthState.Unregistered ||
-        authState == AuthState.Loading ? (
-        children ?? <Outlet />
-    ) : (
-        <LoadingPagePlaceholder />
-    );
+    return authState == AuthState.Unregistered || authState == AuthState.Loading ? children ?? <Outlet /> : <LoadingPagePlaceholder />;
 }

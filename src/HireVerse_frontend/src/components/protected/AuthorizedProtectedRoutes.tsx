@@ -1,14 +1,11 @@
-import useAuth, { AuthState } from "../../hooks/useAuth";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ReactNode, useEffect } from "react";
 import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
 import useToaster from "../../hooks/useToaster";
+import useAuth from "../../hooks/useAuth";
+import { AuthState } from "../context/AuthContext";
 
-export default function AuthorizedProtectedRoutes({
-    children,
-}: {
-    children?: ReactNode;
-}) {
+export default function AuthorizedProtectedRoutes({ children }: { children?: ReactNode }) {
     const { authState } = useAuth();
     const { warnToast } = useToaster();
 
@@ -21,6 +18,7 @@ export default function AuthorizedProtectedRoutes({
                 onCloseActions: () => navigate("/"),
             });
         } else if (authState === AuthState.Unregistered) {
+            console.log("Unregistered");
             warnToast({
                 message: "You must complete your registration first",
                 onCloseActions: () => navigate("/complete-registration"),
@@ -29,10 +27,5 @@ export default function AuthorizedProtectedRoutes({
         console.log("Protection for: ", authState);
     }, [authState]);
 
-    return authState === AuthState.Loading ||
-        authState == AuthState.Authenticated ? (
-        children ?? <Outlet />
-    ) : (
-        <LoadingPagePlaceholder />
-    );
+    return authState === AuthState.Loading || authState == AuthState.Authenticated ? children ?? <Outlet /> : <LoadingPagePlaceholder />;
 }

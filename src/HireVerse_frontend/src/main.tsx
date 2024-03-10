@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DevSupport } from "@react-buddy/ide-toolbox";
 import { ComponentPreviews, useInitial } from "./dev";
 import { ToastContainer } from "react-toastify";
+import AuthContextProvider from "./components/context/AuthContext";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -21,12 +22,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <ServiceContextProvider>
-                <ToastContainer />
-                <DevSupport
-                    ComponentPreviews={ComponentPreviews}
-                    useInitialHook={useInitial}>
-                    <App />
-                </DevSupport>
+                <AuthContextProvider>
+                    <ToastContainer />
+                    <DevSupport
+                        ComponentPreviews={ComponentPreviews}
+                        useInitialHook={useInitial}>
+                        <App />
+                    </DevSupport>
+                </AuthContextProvider>
             </ServiceContextProvider>
         </QueryClientProvider>
     </React.StrictMode>,
