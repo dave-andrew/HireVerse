@@ -24,6 +24,7 @@ interface Props {
 interface IEditCompanyForm {
     name: string;
     employmentType: string;
+    currency: string;
     salaryStart: number;
     salaryEnd: number;
     industry: string;
@@ -40,6 +41,7 @@ const defaultValues = {
     name: "",
     employmentType: "",
     industry: "",
+    currency: "",
     salaryStart: 0,
     salaryEnd: 0,
     applyWebsite: "",
@@ -54,7 +56,6 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
         control,
         register,
         handleSubmit,
-        setError,
         reset,
         formState: { errors },
     } = useForm<IEditCompanyForm, string>({ defaultValues });
@@ -102,6 +103,12 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
     const createJob = async (data: IEditCompanyForm) => {
         console.log(data);
         // return;
+        if (data.currency === "") {
+            errorToast({
+                message: "Please choose a currency",
+            });
+            return;
+        }
         if (BigInt(data.salaryStart) > BigInt(data.salaryEnd)) {
             errorToast({
                 message: "Salary start cannot be higher than salary end",
@@ -155,8 +162,6 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
             });
             return;
         }
-
-        console.log(data.employmentType);
         const newJob: CreateJobInput = {
             industry: data.industry,
             position: data.name,
@@ -165,7 +170,7 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
             requirements: requirements ?? "",
             job_description: jobDescription ?? "",
             location: data.location,
-            currency: "IDR", //TODO change this to be dynamic
+            currency: data.currency.split(" ")[0],
             contacts: data.applyContacts.map((contact) => contact.contact),
             company_id: selectedCompany.id,
             salary_end: BigInt(data.salaryEnd),
@@ -230,6 +235,23 @@ export default function CreateJobModal({ openState, setOpenState }: Props) {
                             control={control}
                             rules={{ required: "Employment type is required" }}
                             name="employmentType"
+                        />
+                    </div>
+                </div>
+                {/* Currency Field */}
+                <div className="flex flex-col border-b border-gray-400 border-opacity-30 py-5">
+                    <div className="font-bold">Currency</div>
+                    <div className="text-sm">Input the currency for the salary of this job.</div>
+                </div>
+                <div className="border-b border-gray-400  border-opacity-30 py-5">
+                    <div className="h-full">
+                        <WrappedAutoDropdown
+                            data={CONSTANTS.JOB.CURRENCY}
+                            className="w-full !p-0"
+                            innerClassName="w-full flex-1 !h-full !ps-3 transition-all rounded-md border-[1px] focus:ring-2 focus:ring-signature-primary border-gray-200 focus:bg-gray-100 outline-0"
+                            control={control}
+                            name="currency"
+                            placeholder="e.g. Rp Rupiah"
                         />
                     </div>
                 </div>
