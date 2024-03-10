@@ -1,6 +1,6 @@
-<div align="center">![Hireverse Logo](https://github.com/dave-andrew/HireVerse/blob/master/assets/Logo.png)</div>
+<div style="{text-align: center}"> ![Hireverse Logo](https://github.com/dave-andrew/HireVerse/blob/master/assets/Logo.png) </div>
 
-<div align="center">![Hireverse Preview](https://github.com/dave-andrew/HireVerse/blob/master/assets/PreviewGIF.gif)</div>F
+<div  style="{text-align: center}"> ![Hireverse Preview](https://github.com/dave-andrew/HireVerse/blob/master/assets/PreviewGIF.gif) </div>
 
 ## Introduction
 
