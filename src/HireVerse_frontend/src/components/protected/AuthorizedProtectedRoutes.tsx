@@ -1,8 +1,9 @@
-import useAuth, { AuthState } from "../../hooks/useAuth";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ReactNode, useEffect } from "react";
 import LoadingPagePlaceholder from "./LoadingPagePlaceholder";
 import useToaster from "../../hooks/useToaster";
+import useAuth from "../../hooks/useAuth";
+import { AuthState } from "../context/AuthContext";
 
 export default function AuthorizedProtectedRoutes({ children }: { children?: ReactNode }) {
     const { authState } = useAuth();

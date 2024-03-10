@@ -4,7 +4,8 @@ import Profile from "./Profile";
 import { FaHome, FaSuitcase } from "react-icons/fa";
 import { IconType } from "react-icons";
 import { BsFillBuildingFill } from "react-icons/bs";
-import useAuth, { AuthState } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
+import { AuthState } from "../context/AuthContext";
 
 type Menu = {
     name: string;
