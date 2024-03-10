@@ -155,11 +155,6 @@ export default function CompanyJobsPage() {
                         </div>
                     </div>
                 </div>
-                {/*<Modal*/}
-                {/*    handleClose={toggleModal}*/}
-                {/*    show={isModalShown}*/}
-                {/*    modalTitle="Post Job Hiring"></Modal>*/}
-                {/*TODO CLOSE ANIMATION*/}
                 <CreateJobModal
                     openState={isModalShown}
                     setOpenState={setIsModalShown}

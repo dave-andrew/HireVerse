@@ -126,8 +126,6 @@ export default function RegisterCompanyModal({ openState, setOpenState, onJobCre
             return;
         }
 
-        console.log("hahaha");
-
         const registerCompany: CreateCompanyInput = {
             profile: html,
             name: data.name,
@@ -146,7 +144,6 @@ export default function RegisterCompanyModal({ openState, setOpenState, onJobCre
 
     const handleSubmitForm = () => {
         checkError();
-        console.log("hihihah");
         handleSubmit(registerCompany)();
     };
 

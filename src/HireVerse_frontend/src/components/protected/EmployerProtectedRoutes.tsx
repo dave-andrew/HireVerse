@@ -13,7 +13,6 @@ export default function EmployerProtectedRoutes({ children }: { children?: React
 
     useEffect(() => {
         if (authState === AuthState.Unauthenticated) {
-            // console.log("Unauthenticated");
             toast.warn("You must be logged in to use this feature", defaultToastOptions);
             navigate("/");
         } else if (authState === AuthState.Unregistered) {

@@ -1,10 +1,4 @@
-import {
-    Dispatch,
-    SetStateAction,
-    useCallback,
-    useEffect,
-    useState,
-} from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 
 // See: https://usehooks-ts.com/react-hook/use-event-listener
 import useEventListener from "./useEventListener";
@@ -18,10 +12,7 @@ declare global {
 
 type SetValue<T> = Dispatch<SetStateAction<T>>;
 
-export default function useLocalStorage<T>(
-    key: string,
-    initialValue: T,
-): [T, SetValue<T>] {
+export default function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
     const readValue = useCallback((): T => {
         if (typeof window === "undefined") {
             return initialValue;
@@ -41,14 +32,11 @@ export default function useLocalStorage<T>(
     const setValue: SetValue<T> = useCallback(
         (value) => {
             if (typeof window == "undefined") {
-                console.warn(
-                    `Tried setting localStorage key “${key}” even though environment is not a client`,
-                );
+                console.warn(`Tried setting localStorage key “${key}” even though environment is not a client`);
             }
 
             try {
-                const newValue =
-                    value instanceof Function ? value(storedValue) : value;
+                const newValue = value instanceof Function ? value(storedValue) : value;
 
                 window.localStorage.setItem(key, stringifyJSON(newValue));
 
@@ -90,8 +78,8 @@ const stringifyJSON = <T>(value: T): string => {
             return value;
         });
     } catch (e) {
-        console.log(e);
-        console.log("stringify error on", { value });
+        console.error(e);
+        console.error("stringify error on", { value });
         return "";
     }
 };
@@ -116,7 +104,7 @@ const parseJSON = <T>(value: string | null): T | undefined => {
             return value;
         });
     } catch {
-        console.log("parsing error on", { value });
+        console.error("parsing error on", { value });
         return undefined;
     }
 };

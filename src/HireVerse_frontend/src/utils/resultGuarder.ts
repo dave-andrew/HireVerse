@@ -3,7 +3,7 @@ export function isOk<T>(result: any): result is { ok: T } {
         return true;
     }
     if (result.hasOwnProperty("err")) {
-        console.log(result.err);
+        console.error(result.err);
     }
     return false;
 }

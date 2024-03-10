@@ -1,11 +1,7 @@
-import {FaRegTrashAlt} from "react-icons/fa";
-import {getManagersFromCompany} from "../../datas/queries/jobQueries";
-import {useState} from "react";
-import {useRemoveInvitation} from "../../datas/mutations/companyMutations";
-import {
-    Company, User,
-    UserInvitation,
-} from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { useState } from "react";
+import { useRemoveInvitation } from "../../datas/mutations/companyMutations";
+import { Company, User, UserInvitation } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
 
 /**
  * ManagerTable is a functional component that renders a table of managers.
@@ -22,20 +18,18 @@ import {
  */
 
 export default function ManagerTable({
-                                         companyInvitation,
-                                         selectedCompany,
-                                         isFetchingInvitation,
-                                         refetchInvitation,
-                                         managerData
-                                     }: {
+    companyInvitation,
+    selectedCompany,
+    isFetchingInvitation,
+    refetchInvitation,
+    managerData,
+}: {
     companyInvitation: UserInvitation[] | undefined;
     selectedCompany: Company | null;
     isFetchingInvitation: boolean;
     refetchInvitation: () => void;
     managerData: User[] | null | undefined;
 }) {
-
-
     const [isLoadingRemove, setIsLoadingRemove] = useState(false);
     const removeMutation = useRemoveInvitation();
     const removeInvitation = (invite_id: string) => {
@@ -55,66 +49,58 @@ export default function ManagerTable({
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            {(managerData && !isFetchingInvitation) ?
+            {managerData && !isFetchingInvitation ? (
                 <table className="w-full text-left text-sm text-gray-500 rtl:text-right">
                     <thead className="bg-gray-50 text-xs uppercase text-gray-700">
-                    <tr>
-                        <th
-                            scope="col"
-                            className="flex justify-center px-4 py-3">
-                            No
-                        </th>
-                        <th
-                            scope="col"
-                            className="w-fit px-2 py-3">
-                            UID
-                        </th>
-                        <th
-                            scope="col"
-                            className="py-3">
-                            Full Name
-                        </th>
-                        <th
-                            scope="col"
-                            className="py-3 lg:table-cell hidden">
-                            Email
-                        </th>
-                        <th
-                            scope="col"
-                            className="md:table-cell hidden py-3">
-                            Birth Date
-                        </th>
-                        <th
-                            scope="col"
-                            className="py-3">
-                            Status
-                        </th>
-                        <th scope="col">Actions</th>
-                    </tr>
+                        <tr>
+                            <th
+                                scope="col"
+                                className="flex justify-center px-4 py-3">
+                                No
+                            </th>
+                            <th
+                                scope="col"
+                                className="w-fit px-2 py-3">
+                                UID
+                            </th>
+                            <th
+                                scope="col"
+                                className="py-3">
+                                Full Name
+                            </th>
+                            <th
+                                scope="col"
+                                className="hidden py-3 lg:table-cell">
+                                Email
+                            </th>
+                            <th
+                                scope="col"
+                                className="hidden py-3 md:table-cell">
+                                Birth Date
+                            </th>
+                            <th
+                                scope="col"
+                                className="py-3">
+                                Status
+                            </th>
+                            <th scope="col">Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {managerData.map((manager, index) => {
-                        console.log("LOADING MANAGER DATA, ", managerData);
-                        return (
+                        {managerData.map((manager, index) => (
                             <tr
                                 key={index}
                                 className="border-b odd:bg-white even:bg-gray-50">
-                                <th className="whitespace-nowrap px-2 py-4 text-center font-medium text-black">
-                                    {index + 1}
-                                </th>
-                                <th className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap w-1/12 pr-4">
+                                <th className="whitespace-nowrap px-2 py-4 text-center font-medium text-black">{index + 1}</th>
+                                <th className="w-1/12 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap pr-4">
                                     {manager.internet_identity.toText()}
                                 </th>
                                 <td className="font-bold text-black">
                                     {manager.first_name} {manager.last_name}
                                 </td>
-                                <td className="lg:table-cell hidden">
-                                    {manager.email}
-                                </td>
-                                <td className="md:table-cell hidden 2xl:pr-24">
-                                    {new Date(
-                                        manager.birth_date,
-                                    ).toLocaleDateString("en-US", {
+                                <td className="hidden lg:table-cell">{manager.email}</td>
+                                <td className="hidden md:table-cell 2xl:pr-24">
+                                    {new Date(manager.birth_date).toLocaleDateString("en-US", {
                                         month: "long",
                                         day: "numeric",
                                         year: "numeric",
@@ -135,68 +121,51 @@ export default function ManagerTable({
                                     {/*</div>*/}
                                 </td>
                             </tr>
-                        );
-                    })}
+                        ))}
 
-                    {companyInvitation?.map((invitation, index) => {
-                        return (
-                            <tr
-                                key={index}
-                                className="border-b odd:bg-white even:bg-gray-50">
-                                <th className="whitespace-nowrap px-2 py-4 text-center font-medium text-black">
-                                    {managerData?.length
-                                        ? managerData?.length + index + 1
-                                        : index + 1}
-                                </th>
-                                <th className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap w-1/12 pr-4">
-                                    {invitation.user.internet_identity.toText()}
-                                </th>
-                                <td className="font-bold text-black">
-                                    {invitation.user.first_name}{" "}
-                                    {invitation.user.last_name}
-                                </td>
-                                <td className="lg:table-cell hidden">
-                                    {invitation.user.email}
-                                </td>
-                                <td className="md:table-cell hidden 2xl:pr-24">
-                                    {new Date(
-                                        invitation.user.birth_date,
-                                    ).toLocaleDateString("en-US", {
-                                        month: "long",
-                                        day: "numeric",
-                                        year: "numeric",
-                                    })}
-                                </td>
-                                <td
-                                    className={
-                                        "pr-4 font-semibold text-yellow-600"
-                                    }>
-                                    Pending
-                                </td>
-                                <td className="px-3">
-                                    <button
-                                        onClick={() => {
-                                            removeInvitation(
-                                                invitation.invite.id,
-                                            );
-                                        }}
-                                        disabled={isLoadingRemove}
-                                        className="disabled:bg-gray-400 hover:bg-red-800 disabled:cursor-not-allowed w-fit rounded-md bg-red-700 p-2 text-white">
-                                        <FaRegTrashAlt/>
-                                    </button>
-                                </td>
-                            </tr>
-                        )
-                    })
-                    }
+                        {companyInvitation?.map((invitation, index) => {
+                            return (
+                                <tr
+                                    key={index}
+                                    className="border-b odd:bg-white even:bg-gray-50">
+                                    <th className="whitespace-nowrap px-2 py-4 text-center font-medium text-black">
+                                        {managerData?.length ? managerData?.length + index + 1 : index + 1}
+                                    </th>
+                                    <th className="w-1/12 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap pr-4">
+                                        {invitation.user.internet_identity.toText()}
+                                    </th>
+                                    <td className="font-bold text-black">
+                                        {invitation.user.first_name} {invitation.user.last_name}
+                                    </td>
+                                    <td className="hidden lg:table-cell">{invitation.user.email}</td>
+                                    <td className="hidden md:table-cell 2xl:pr-24">
+                                        {new Date(invitation.user.birth_date).toLocaleDateString("en-US", {
+                                            month: "long",
+                                            day: "numeric",
+                                            year: "numeric",
+                                        })}
+                                    </td>
+                                    <td className={"pr-4 font-semibold text-yellow-600"}>Pending</td>
+                                    <td className="px-3">
+                                        <button
+                                            onClick={() => {
+                                                removeInvitation(invitation.invite.id);
+                                            }}
+                                            disabled={isLoadingRemove}
+                                            className="w-fit rounded-md bg-red-700 p-2 text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:bg-gray-400">
+                                            <FaRegTrashAlt />
+                                        </button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
-                : (<div className="w-full text-left bg-white  rounded-md h-24">
-                    <div className="bg-gray-400 animate-pulse h-full w-full">
-
-                    </div>
-                </div>)}
-
+            ) : (
+                <div className="h-24 w-full rounded-md  bg-white text-left">
+                    <div className="h-full w-full animate-pulse bg-gray-400"></div>
+                </div>
+            )}
         </div>
     );
 }

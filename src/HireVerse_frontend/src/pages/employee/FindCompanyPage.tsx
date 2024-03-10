@@ -60,8 +60,6 @@ export default function FindCompanyPage() {
         }
         setResultCompanies(company?.pages[0]);
         setSearchCompany(company?.pages[0]);
-
-        console.log(company?.pages[0]);
     }, [company]);
 
     useEffect(() => {

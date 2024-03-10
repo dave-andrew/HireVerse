@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import FindJobs from "./pages/employee/FindJobsPage";
-import RegisterCompanyPage from "./pages/employers/RegisterCompanyPage";
 import FindCompanyPage from "./pages/employee/FindCompanyPage";
 import LandingPage from "./pages/employee/LandingPage";
 import CompleteRegistrationPage from "./pages/employee/CompleteRegistrationPage";
@@ -47,10 +46,6 @@ const backRoutes = [
     {
         path: "/employer/managers",
         element: <CompanyManagersPage />,
-    },
-    {
-        path: "/employer/register",
-        element: <RegisterCompanyPage />,
     },
     {
         path: "/employer/jobs",

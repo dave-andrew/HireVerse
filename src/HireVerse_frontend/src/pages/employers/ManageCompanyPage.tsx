@@ -166,17 +166,7 @@ export default function ManageCompanyPage() {
                                         </div>
                                         <div className="flex flex-col">
                                             <p className="text-gray-600">Location</p>
-                                            <div className="flex flex-row">
-                                                {/*{selectedCompany?.office_locations?.map((location, i) => {*/}
-                                                {/*    return (*/}
-                                                {/*        <div key={i}>*/}
-                                                {/*            {i !== 0 && <span className="inline pr-1 font-semibold">, </span>}*/}
-                                                {/*            <span className="inline font-semibold">{location}</span>*/}
-                                                {/*        </div>*/}
-                                                {/*    );*/}
-                                                {/*})}*/}
-                                                {selectedCompany?.founded_country}
-                                            </div>
+                                            <div className="flex flex-row">{selectedCompany?.founded_country}</div>
                                         </div>
                                     </div>
                                     <div className="flex flex-row gap-3">
@@ -185,7 +175,6 @@ export default function ManageCompanyPage() {
                                         </div>
                                         <div className="flex flex-col">
                                             <p className="text-gray-600">Visitors</p>
-                                            {/*//TODO ADD VISITORS*/}
                                             <p className="font-semibold">{Number(selectedCompany?.seen)}</p>
                                         </div>
                                     </div>

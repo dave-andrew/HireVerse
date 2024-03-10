@@ -6,7 +6,6 @@ import { Company, CreateCompanyInput } from "../../../../declarations/HireVerse_
 import useToaster from "../../hooks/useToaster";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
-
 /**
  * useRegisterCompany function
  * Handles the registration of a company
@@ -46,7 +45,6 @@ export function useRegisterCompany() {
     });
 }
 
-
 /**
  * useLeaveCompany function
  * Handles the leaving of a company
@@ -57,7 +55,6 @@ export function useLeaveCompany() {
     return useMutation({
         mutationFn: async (company_id: string) => {
             const response = await getCompanyService().then((s) => s.leaveCompany(company_id));
-            console.log("LEAVE!!");
 
             if (isOk(response)) {
                 return null;
@@ -67,7 +64,6 @@ export function useLeaveCompany() {
         },
     });
 }
-
 
 /**
  * useRemoveInvitation function
@@ -89,7 +85,6 @@ export function useRemoveInvitation() {
     });
 }
 
-
 /**
  * useAcceptInvitation function
  * Handles the acceptance of an invitation
@@ -110,7 +105,6 @@ export function useAcceptInvitation() {
     });
 }
 
-
 /**
  * useCreateInvitation function
  * Handles the creation of an invitation
@@ -129,7 +123,6 @@ export function useCreateInvitation() {
         },
     });
 }
-
 
 /**
  * useUpdateCompany function

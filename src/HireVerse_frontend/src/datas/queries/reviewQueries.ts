@@ -3,8 +3,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { isOk } from "../../utils/resultGuarder";
 import { IReviewSortForm } from "../../pages/employee/CompanyDetailPage";
 
-
-
 /**
  * Fetches the reviews of a specific company.
  * @param {string | undefined} companyId - The ID of the company.
@@ -48,7 +46,6 @@ export function useQueryReviews(companyId: string | undefined, getFilters: (() =
         },
     });
 }
-
 
 /**
  * Fetches the review summary of a specific company.
@@ -97,7 +94,6 @@ export function useQueryReviewSummary(companyId: string) {
     });
 }
 
-
 /**
  * Fetches the self review of a specific company.
  * @param {string} companyId - The ID of the company.
@@ -111,7 +107,6 @@ export function useQueryGetSelfReview(companyId: string) {
             if (!companyId) {
                 return null;
             }
-            console.log("hahaha", companyId);
             const response = await getReviewService()
                 .then((s) => s.getSelfReview(companyId))
                 .catch((e) => console.error(e));
