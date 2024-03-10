@@ -7,6 +7,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { defaultToastOptions } from "../../layouts/ManagementPageLayout";
 import { CompanyInvitation } from "../../../../declarations/HireVerse_company/HireVerse_company.did";
+import handleDefaultImage from "../../utils/handleDefaultImage";
 
 
 /**
@@ -71,6 +72,7 @@ export default function InvitationItem({ invitation, refetch }: InvitationItemPr
                     alt="Company Logo"
                     width="120rem"
                     height="auto"
+                    onError={handleDefaultImage}
                     className="aspect-square overflow-hidden rounded-full border border-gray-200 bg-white shadow-md"
                     src={imageHandler(invitation.company.image)}
                 />

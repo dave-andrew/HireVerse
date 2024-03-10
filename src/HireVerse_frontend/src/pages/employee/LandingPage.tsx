@@ -40,9 +40,9 @@ export default function LandingPage() {
                     <LiaLongArrowAltDownSolid
                         className="h-10 w-10"/>
                 </button>
+                    <RandomCircleBackground/>
                 <div
                     className="grow relative flex flex-col">
-                    <RandomCircleBackground/>
                     <HeaderSection/>
                     <BenefitSection/>
                     <SponsorSection/>
