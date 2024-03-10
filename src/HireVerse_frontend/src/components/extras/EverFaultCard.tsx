@@ -21,17 +21,22 @@ export const EverFaultCard = ({
     const [randomString, setRandomString] = useState("");
 
     useEffect(() => {
-        let str = generateRandomString(1500);
+        let str = generateRandomString(10000);
         setRandomString(str);
     }, []);
 
     function onMouseMove({currentTarget, clientX, clientY}: any) {
         let {left, top} = currentTarget.getBoundingClientRect();
+
+        // if(Math.abs(mouseX.get() - (clientX - left))  > 50 || (mouseY.get() - (clientY - top)) > 50) {
+        //     const str = generateRandomString(10000);
+        //     setRandomString(str);
+        // }
+
+
         mouseX.set(clientX - left);
         mouseY.set(clientY - top);
 
-        const str = generateRandomString(1500);
-        setRandomString(str);
     }
 
     return (
@@ -59,7 +64,7 @@ export const EverFaultCard = ({
 };
 
 export function CardPattern({mouseX, mouseY, randomString}: any) {
-    let maskImage = useMotionTemplate`radial-gradient(500px at ${mouseX}px ${mouseY}px, white, transparent)`;
+    let maskImage = useMotionTemplate`radial-gradient(250px at ${mouseX}px ${mouseY}px, white, transparent)`;
     let style = {maskImage, WebkitMaskImage: maskImage};
 
     return (
@@ -74,7 +79,7 @@ export function CardPattern({mouseX, mouseY, randomString}: any) {
                 className="absolute inset-0 rounded-2xl opacity-0 mix-blend-overlay  group-hover/card:opacity-100"
                 style={style}
             >
-                <p className="absolute inset-x-0 text-5xl h-full break-words whitespace-pre-wrap text-white font-mono font-bold transition duration-500">
+                <p className="absolute inset-x-0 text-xl h-full break-words whitespace-pre-wrap text-white font-mono font-bold transition duration-500">
                     {randomString}
                 </p>
             </motion.div>

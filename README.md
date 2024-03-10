@@ -6,6 +6,7 @@ HireVerse is a decentralized hiring platform that allows users to create and app
 Internet Computer and uses the Motoko programming language. The platform is designed to be decentralized, secure, and
 scalable. It is also designed to be easy to use and accessible to everyone.
 
+
 <p align="center"><a href="https://identity.ic0.app" target="_blank" rel="noopener noreferrer"><img width="800" src="assets/PreviewGIF.gif" alt="Internet Identity"></a></p>
 
 
