@@ -1,6 +1,6 @@
-<div style="{text-align: center}"> ![Hireverse Logo](https://github.com/dave-andrew/HireVerse/blob/master/assets/Logo.png) </div>
+<p align="center"><a href="https://identity.ic0.app" target="_blank" rel="noopener noreferrer"><img src="./assets/Logo.png" alt="Internet Identity"></a></p>
+<p align="center"><a href="https://identity.ic0.app" target="_blank" rel="noopener noreferrer"><img width="800" src="assets/PreviewGIF.gif" alt="Internet Identity"></a></p>
 
-<div  style="{text-align: center}"> ![Hireverse Preview](https://github.com/dave-andrew/HireVerse/blob/master/assets/PreviewGIF.gif) </div>
 
 ## Introduction
 
