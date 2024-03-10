@@ -65,7 +65,9 @@ scalable. It is also designed to be easy to use and accessible to everyone.
 
 ## Video Installation Guide & Demo
 
+![Project Showcase](https://youtu.be/PT00fKtOCz8)
 [Project Installation Guide](https://youtu.be/gPCakF4NUjo)
+
 
 ## FAQ
 
